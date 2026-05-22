@@ -1,0 +1,134 @@
+/* ── SVG Plugin view container ─────────────────────────────────────────── */
+
+.svg-plugin-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Topbar (lives in Obsidian DOM so global shortcuts stay reachable) ─── */
+
+.svg-plugin-topbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+}
+
+.svg-plugin-topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--icon-color);
+  cursor: pointer;
+}
+
+.svg-plugin-topbar-btn:hover {
+  background: var(--background-modifier-hover);
+  color: var(--icon-color-hover);
+}
+
+.svg-plugin-topbar-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ── svgedit editor container ───────────────────────────────────────────── */
+
+.svg-plugin-editor-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* svgedit mounts a .svg_editor div directly into this container.
+   Absolute positioning gives it definite pixel dimensions regardless of
+   Obsidian's flex/height resolution, and !important overrides ensure
+   Obsidian's global stylesheet cannot break the svgedit grid layout. */
+.svg-plugin-editor-container .svg_editor {
+  position: absolute !important;
+  inset: 0 !important;
+  display: grid !important;
+  direction: ltr !important;
+  grid-template-rows: minmax(80px, auto) 15px 1fr 40px !important;
+  grid-template-columns: 40px 15px 50px 1fr 0 !important;
+  grid-template-areas:
+    "main main main top top"
+    "left corner rulerX rulerX side"
+    "left rulerY workarea workarea side"
+    "left bottom bottom bottom bottom" !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Force grid-area assignments so Obsidian rules can't override them */
+.svg-plugin-editor-container #tools_left   { grid-area: left !important; }
+.svg-plugin-editor-container #workarea     { grid-area: workarea !important; }
+.svg-plugin-editor-container #tools_top    { grid-area: top !important; }
+.svg-plugin-editor-container #tools_bottom { grid-area: bottom !important; }
+.svg-plugin-editor-container #sidepanels   { grid-area: side !important; }
+.svg-plugin-editor-container #main_button  { grid-area: main !important; }
+
+/* Side panel hidden by default; overflow clips any content */
+.svg-plugin-editor-container #sidepanels {
+  overflow: hidden;
+}
+
+/* Allow side panel column to expand when open */
+.svg-plugin-editor-container .svg_editor.open {
+  grid-template-columns: 34px 15px 50px 1fr 220px !important;
+}
+
+/* Restore flex layout on the top toolbar.
+   - #tools_top itself: !important needed because Obsidian overrides display.
+   - Children: NO !important so JS can still hide contextual panels with
+     element.style.display='none' (inline styles beat non-!important CSS, but
+     lose to !important). The ID-based selector gives us enough specificity to
+     beat Obsidian's class-based rules without !important. */
+.svg-plugin-editor-container #tools_top {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+}
+
+.svg-plugin-editor-container #tools_top > * {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+/* Light theme — SVG icons have been recolored to #333 so no filter tricks
+   are needed. We use a doubled class selector (.c.c) to win the cascade over
+   svgedit.css's :root rules, which have the same specificity as a single class
+   but are loaded later (source-order would otherwise make :root win). */
+.svg-plugin-editor-container.svg-plugin-editor-container {
+  --main-bg-color: #f0f0f0;
+  --icon-bg-color: #f0f0f0;
+  --icon-bg-color-hover: #d8d8d8;
+  --input-color: #f0f0f0;
+  --border-color: #cccccc;
+  --canvas-bg-color: #ffffff;
+  --ruler-color: #e8e8e8;
+  --text-color: #333333;
+}
+
+/* Explicit backgrounds for the main panel areas */
+.svg-plugin-editor-container .svg_editor,
+.svg-plugin-editor-container #tools_left,
+.svg-plugin-editor-container #tools_top,
+.svg-plugin-editor-container #tools_bottom,
+.svg-plugin-editor-container #sidepanels {
+  background-color: #f0f0f0 !important;
+  color: #333333 !important;
+}

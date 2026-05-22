@@ -1,0 +1,10 @@
+{
+  "id": "obsidian-svg-plugin",
+  "name": "SVG Draw",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Embed and edit SVG drawings inside your Obsidian notes using SVG-Edit.",
+  "author": "",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
