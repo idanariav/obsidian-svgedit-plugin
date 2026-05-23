@@ -10,7 +10,6 @@ import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg } from "../data/SvgData";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
-import { toggleOpenMd } from "../data/frontmatter";
 
 interface SvgEditorInstance {
   setConfig(cfg: Record<string, unknown>): void;
@@ -34,6 +33,8 @@ export class SvgView extends TextFileView {
   private currentData = "";
   private pendingSvg: string | null = null;
   private isLoading = false;
+  /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
+  private loadGen = 0;
 
   constructor(leaf: WorkspaceLeaf, plugin: SvgPlugin) {
     super(leaf);
@@ -137,8 +138,12 @@ export class SvgView extends TextFileView {
   private async switchToMarkdown(): Promise<void> {
     const file = this.file;
     if (!file) return;
-    await toggleOpenMd(this.app, file);
-    await this.leaf.openFile(file as TFile, { active: true });
+    // Persist the current drawing before leaving the SVG view.
+    await this.save();
+    // Bypass the setViewState patch for this one call so Obsidian opens the
+    // file as a plain markdown view instead of redirecting back to SVG.
+    this.plugin.bypassLeaves.add(this.leaf);
+    await this.leaf.setViewState({ type: "markdown", state: { file: file.path } });
   }
 
   // ── TextFileView interface ─────────────────────────────────────────────────
@@ -146,10 +151,16 @@ export class SvgView extends TextFileView {
   async setViewData(data: string, _clear: boolean): Promise<void> {
     this.currentData = data;
     const svg = extractSvg(data) ?? EMPTY_SVG;
+    const gen = ++this.loadGen; // uniquely identifies this load
 
     if (this.svgEditor) {
       this.isLoading = true;
-      try { await this.svgEditor.loadFromString(svg); } finally { this.isLoading = false; }
+      try {
+        await this.svgEditor.loadFromString(svg);
+      } finally {
+        // Only release the loading guard if a newer call hasn't already taken over.
+        if (this.loadGen === gen) this.isLoading = false;
+      }
     } else {
       this.pendingSvg = svg;
     }
@@ -162,12 +173,12 @@ export class SvgView extends TextFileView {
 
   clear(): void {
     this.currentData = "";
-    if (this.svgEditor) {
-      this.isLoading = true;
-      this.svgEditor.loadFromString(EMPTY_SVG).finally(() => { this.isLoading = false; });
-    } else {
-      this.pendingSvg = EMPTY_SVG;
-    }
+    // Do NOT call loadFromString here.  Obsidian guarantees that setViewData()
+    // is always called immediately after clear(), so we let setViewData own all
+    // canvas updates.  Calling loadFromString(EMPTY_SVG) here and letting it
+    // run un-awaited would race against setViewData's own loadFromString call
+    // and could overwrite the correct drawing with a blank canvas.
+    this.pendingSvg = EMPTY_SVG; // overridden by setViewData before init finishes
   }
 
   async save(clear?: boolean): Promise<void> {
@@ -185,6 +196,17 @@ export class SvgView extends TextFileView {
   }
 
   async onunload(): Promise<void> {
+    // Snapshot the live SVG into currentData *before* nulling the editor.
+    // This ensures getViewData() still returns the latest drawing if Obsidian
+    // calls save() after onunload, and also flushes any debounced requestSave()
+    // that hasn't fired yet (e.g. when the user closes the tab quickly).
+    if (this.svgEditor && this.file) {
+      this.currentData = replaceSvg(
+        this.currentData,
+        this.svgEditor.svgCanvas.getSvgString(),
+      );
+      try { await this.save(); } catch { /* best-effort */ }
+    }
     this.svgEditor = null;
     this.editorContainer?.empty();
   }

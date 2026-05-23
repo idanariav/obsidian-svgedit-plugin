@@ -2,7 +2,7 @@ import { Notice, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
-import { toggleOpenMd, isSvgDrawingFile } from "./data/frontmatter";
+import { isSvgDrawingFile } from "./data/frontmatter";
 import { exportSvg, exportPng } from "./export/exporter";
 import { extractSvg, replaceSvg } from "./data/SvgData";
 import {
@@ -150,14 +150,30 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
 }
 
 /**
- * Flip the svg-open-md frontmatter flag then reopen the file so Obsidian
- * re-evaluates which view to use (setViewState patch reads the flag).
+ * Switch the active leaf between SVG drawing view and markdown view without
+ * touching frontmatter.  The svg-open-md flag only controls the *default*
+ * view when a file is first opened; this command just flips the current view.
+ *
+ * SVG → markdown: save the drawing first, then bypass the setViewState patch
+ *   so Obsidian actually shows the markdown view.
+ * Markdown → SVG: set the view type directly (no patch bypass needed).
  */
 async function toggleViewMode(plugin: SvgPlugin, file: TFile): Promise<void> {
   try {
-    await toggleOpenMd(plugin.app, file);
     const leaf = getActiveLeaf(plugin);
-    await leaf.openFile(file, { active: true });
+    const view = leaf.view;
+
+    if (view?.getViewType() === VIEW_TYPE_SVG) {
+      // Currently in SVG view → switch to markdown.
+      // Save first so drawing changes are not lost.
+      await (view as SvgView).save();
+      // Bypass the redirect patch for this one setViewState call.
+      plugin.bypassLeaves.add(leaf);
+      await leaf.setViewState({ type: "markdown", state: { file: file.path } });
+    } else {
+      // Currently in markdown view → switch to SVG.
+      await leaf.setViewState({ type: VIEW_TYPE_SVG, state: { file: file.path } });
+    }
   } catch (e: unknown) {
     new Notice(`Toggle failed: ${(e as Error).message}`);
   }

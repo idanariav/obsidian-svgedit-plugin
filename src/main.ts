@@ -1,4 +1,4 @@
-import { Plugin } from "obsidian";
+import { Plugin, WorkspaceLeaf } from "obsidian";
 import { SvgView } from "./view/SvgView";
 import { SvgSettingsTab } from "./settings/SettingsTab";
 import { DEFAULT_SETTINGS, SvgPluginSettings } from "./settings/defaults";
@@ -14,6 +14,8 @@ const RIBBON_ICON = "pencil";
 export default class SvgPlugin extends Plugin {
   settings!: SvgPluginSettings;
   _loaded = false;
+  /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
+  bypassLeaves = new Set<WorkspaceLeaf>();
 
   private uninstallPatch: (() => void) | null = null;
 
@@ -48,6 +50,7 @@ export default class SvgPlugin extends Plugin {
     this.uninstallPatch = installViewStatePatch(
       this.app,
       () => this._loaded,
+      this.bypassLeaves,
     );
 
     // Commands

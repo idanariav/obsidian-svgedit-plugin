@@ -155,23 +155,6 @@ async function autoExport(app, file, svgString, settings) {
   await Promise.all(tasks);
 }
 
-// src/data/frontmatter.ts
-function isSvgDrawingFile(app, file) {
-  var _a;
-  const fm = (_a = app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter;
-  return (fm == null ? void 0 : fm[FRONTMATTER_KEY_PLUGIN]) === FRONTMATTER_PLUGIN_VALUE;
-}
-function shouldOpenAsMarkdown(app, file) {
-  var _a;
-  const fm = (_a = app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter;
-  return !!(fm == null ? void 0 : fm[FRONTMATTER_KEY_OPEN_MD]);
-}
-async function toggleOpenMd(app, file) {
-  await app.fileManager.processFrontMatter(file, (fm) => {
-    fm[FRONTMATTER_KEY_OPEN_MD] = !fm[FRONTMATTER_KEY_OPEN_MD];
-  });
-}
-
 // src/view/SvgView.ts
 var SCRIPT_LOADED_KEY = "__svgPluginEditorLoaded";
 var CSS_ELEM_ID = "svg-plugin-svgedit-css";
@@ -182,6 +165,8 @@ var SvgView = class extends import_obsidian2.TextFileView {
     this.currentData = "";
     this.pendingSvg = null;
     this.isLoading = false;
+    /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
+    this.loadGen = 0;
     this.plugin = plugin;
   }
   getViewType() {
@@ -275,20 +260,22 @@ var SvgView = class extends import_obsidian2.TextFileView {
   async switchToMarkdown() {
     const file = this.file;
     if (!file) return;
-    await toggleOpenMd(this.app, file);
-    await this.leaf.openFile(file, { active: true });
+    await this.save();
+    this.plugin.bypassLeaves.add(this.leaf);
+    await this.leaf.setViewState({ type: "markdown", state: { file: file.path } });
   }
   // ── TextFileView interface ─────────────────────────────────────────────────
   async setViewData(data, _clear) {
     var _a;
     this.currentData = data;
     const svg = (_a = extractSvg(data)) != null ? _a : EMPTY_SVG;
+    const gen = ++this.loadGen;
     if (this.svgEditor) {
       this.isLoading = true;
       try {
         await this.svgEditor.loadFromString(svg);
       } finally {
-        this.isLoading = false;
+        if (this.loadGen === gen) this.isLoading = false;
       }
     } else {
       this.pendingSvg = svg;
@@ -300,14 +287,7 @@ var SvgView = class extends import_obsidian2.TextFileView {
   }
   clear() {
     this.currentData = "";
-    if (this.svgEditor) {
-      this.isLoading = true;
-      this.svgEditor.loadFromString(EMPTY_SVG).finally(() => {
-        this.isLoading = false;
-      });
-    } else {
-      this.pendingSvg = EMPTY_SVG;
-    }
+    this.pendingSvg = EMPTY_SVG;
   }
   async save(clear) {
     await super.save(clear);
@@ -325,6 +305,16 @@ var SvgView = class extends import_obsidian2.TextFileView {
   }
   async onunload() {
     var _a;
+    if (this.svgEditor && this.file) {
+      this.currentData = replaceSvg(
+        this.currentData,
+        this.svgEditor.svgCanvas.getSvgString()
+      );
+      try {
+        await this.save();
+      } catch (e) {
+      }
+    }
     this.svgEditor = null;
     (_a = this.editorContainer) == null ? void 0 : _a.empty();
   }
@@ -428,6 +418,20 @@ var DEFAULT_SETTINGS = {
 
 // src/postprocessor/markdownPostProcessor.ts
 var import_obsidian4 = require("obsidian");
+
+// src/data/frontmatter.ts
+function isSvgDrawingFile(app, file) {
+  var _a;
+  const fm = (_a = app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter;
+  return (fm == null ? void 0 : fm[FRONTMATTER_KEY_PLUGIN]) === FRONTMATTER_PLUGIN_VALUE;
+}
+function shouldOpenAsMarkdown(app, file) {
+  var _a;
+  const fm = (_a = app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter;
+  return !!(fm == null ? void 0 : fm[FRONTMATTER_KEY_OPEN_MD]);
+}
+
+// src/postprocessor/markdownPostProcessor.ts
 async function markdownPostProcessor(el, ctx, app) {
   const embeds = el.querySelectorAll(".internal-embed");
   if (embeds.length === 0) return;
@@ -506,12 +510,19 @@ function around1(obj, method, createWrapper) {
 }
 
 // src/postprocessor/setViewStatePatch.ts
-function installViewStatePatch(app, isLoaded) {
+function installViewStatePatch(app, isLoaded, bypassLeaves) {
   return around(import_obsidian5.WorkspaceLeaf.prototype, {
     setViewState(next) {
       return function(state, eState) {
-        var _a;
+        var _a, _b;
+        if (bypassLeaves.has(this)) {
+          bypassLeaves.delete(this);
+          return next.call(this, state, eState);
+        }
         if (isLoaded() && state.type === "markdown" && typeof ((_a = state.state) == null ? void 0 : _a.file) === "string") {
+          if (((_b = this.view) == null ? void 0 : _b.getViewType()) === "markdown") {
+            return next.call(this, state, eState);
+          }
           const filepath = state.state.file;
           const file = app.vault.getAbstractFileByPath(filepath);
           if (file instanceof import_obsidian5.TFile && isSvgDrawingFile(app, file) && !shouldOpenAsMarkdown(app, file)) {
@@ -740,9 +751,15 @@ async function convertNoteToDrawing(plugin, file) {
 }
 async function toggleViewMode(plugin, file) {
   try {
-    await toggleOpenMd(plugin.app, file);
     const leaf = getActiveLeaf(plugin);
-    await leaf.openFile(file, { active: true });
+    const view = leaf.view;
+    if ((view == null ? void 0 : view.getViewType()) === VIEW_TYPE_SVG) {
+      await view.save();
+      plugin.bypassLeaves.add(leaf);
+      await leaf.setViewState({ type: "markdown", state: { file: file.path } });
+    } else {
+      await leaf.setViewState({ type: VIEW_TYPE_SVG, state: { file: file.path } });
+    }
   } catch (e) {
     new import_obsidian8.Notice(`Toggle failed: ${e.message}`);
   }
@@ -758,6 +775,8 @@ var SvgPlugin = class extends import_obsidian9.Plugin {
   constructor() {
     super(...arguments);
     this._loaded = false;
+    /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
+    this.bypassLeaves = /* @__PURE__ */ new Set();
     this.uninstallPatch = null;
   }
   async onload() {
@@ -782,7 +801,8 @@ var SvgPlugin = class extends import_obsidian9.Plugin {
     );
     this.uninstallPatch = installViewStatePatch(
       this.app,
-      () => this._loaded
+      () => this._loaded,
+      this.bypassLeaves
     );
     registerCommands(this);
     this.addSettingTab(new SvgSettingsTab(this.app, this));
