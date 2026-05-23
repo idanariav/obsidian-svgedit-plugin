@@ -132,3 +132,35 @@
   background-color: #f0f0f0 !important;
   color: #333333 !important;
 }
+
+/* Restore flex layout on the bottom toolbar.
+   Same rationale as #tools_top: Obsidian can override display, so !important
+   is needed on the container. Children use no !important so svgedit JS can
+   still use inline display:'none' to hide contextual controls (inline styles
+   beat non-!important CSS, but lose to !important). */
+.svg-plugin-editor-container #tools_bottom {
+  display: flex !important;
+  align-items: center !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+/* Ensure every direct child custom element is visible and participates in
+   the flex row. No !important — JS contextual show/hide still works. */
+.svg-plugin-editor-container #tools_bottom > se-zoom,
+.svg-plugin-editor-container #tools_bottom > se-colorpicker,
+.svg-plugin-editor-container #tools_bottom > se-spin-input,
+.svg-plugin-editor-container #tools_bottom > se-select,
+.svg-plugin-editor-container #tools_bottom > se-list,
+.svg-plugin-editor-container #tools_bottom > se-palette {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* svgedit.css adds margin-bottom: 8px to se-list and se-select, which can
+   push them below the 40px container boundary (clipped by overflow-y:hidden).
+   Reset to zero to keep them vertically centered. */
+.svg-plugin-editor-container #tools_bottom > se-list,
+.svg-plugin-editor-container #tools_bottom > se-select {
+  margin-bottom: 0 !important;
+}
