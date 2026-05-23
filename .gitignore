@@ -4,3 +4,4 @@ node_modules/
 svgedit-dist/tests/
 svgedit-dist/*.map
 .svgedit-tmp/
+CLAUDE.md
