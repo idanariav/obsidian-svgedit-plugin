@@ -1,12 +1,15 @@
 import { App, TFile, ViewState, WorkspaceLeaf } from "obsidian";
 import { around } from "monkey-around";
-import { isSvgDrawingFile, shouldOpenAsMarkdown } from "../data/frontmatter";
+import { isSvgDrawingFile, resolveEffectiveSettings } from "../data/frontmatter";
 import { VIEW_TYPE_SVG } from "../constants";
+import type { SvgPluginSettings } from "../settings/defaults";
 
 /**
  * Monkey-patch WorkspaceLeaf.setViewState so that opening a markdown file that
  * is an SVG drawing (svg-plugin: parsed frontmatter) forces the SVG view type
- * instead of the default markdown view — unless svg-open-md is true.
+ * instead of the default markdown view — unless the resolved effective settings
+ * say to open as markdown (via per-file frontmatter, folder config, or global
+ * default).
  *
  * bypassLeaves: leaves in this set skip the redirect for one call (used when
  * the plugin itself explicitly switches a leaf from SVG → markdown view).
@@ -17,6 +20,7 @@ export function installViewStatePatch(
   app: App,
   isLoaded: () => boolean,
   bypassLeaves: Set<WorkspaceLeaf>,
+  getSettings: () => SvgPluginSettings,
 ): () => void {
   return around(WorkspaceLeaf.prototype, {
     setViewState(next) {
@@ -46,12 +50,11 @@ export function installViewStatePatch(
 
           const filepath = (state as ViewState & { state: { file: string } }).state.file;
           const file = app.vault.getAbstractFileByPath(filepath);
-          if (
-            file instanceof TFile &&
-            isSvgDrawingFile(app, file) &&
-            !shouldOpenAsMarkdown(app, file)
-          ) {
-            return next.call(this, { ...state, type: VIEW_TYPE_SVG }, eState);
+          if (file instanceof TFile && isSvgDrawingFile(app, file)) {
+            const effective = resolveEffectiveSettings(app, file, getSettings());
+            if (!effective.openAsMarkdown) {
+              return next.call(this, { ...state, type: VIEW_TYPE_SVG }, eState);
+            }
           }
         }
         return next.call(this, state, eState);

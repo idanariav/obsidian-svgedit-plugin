@@ -10,6 +10,7 @@ import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg } from "../data/SvgData";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
+import { resolveEffectiveSettings } from "../data/frontmatter";
 
 interface SvgEditorInstance {
   setConfig(cfg: Record<string, unknown>): void;
@@ -224,10 +225,12 @@ export class SvgView extends TextFileView {
     await super.save(clear);
     if (!this.svgEditor || !this.file) return;
     try {
+      const effective = resolveEffectiveSettings(this.app, this.file, this.plugin.settings);
       await autoExport(
         this.app, this.file,
         this.svgEditor.svgCanvas.getSvgString(),
         this.plugin.settings,
+        effective,
       );
     } catch (e) {
       console.error("[SVG Draw] auto-export failed:", e);

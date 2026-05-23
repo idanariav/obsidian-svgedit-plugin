@@ -1,13 +1,27 @@
-/** Convert an SVG string to a PNG ArrayBuffer by drawing into an offscreen canvas. */
+/**
+ * Convert an SVG string to a PNG ArrayBuffer by drawing into an offscreen canvas.
+ *
+ * @param svgString  The SVG source to rasterise.
+ * @param scale      Pixel-density multiplier (default 1).
+ * @param transparent When false (default) a white rectangle is painted behind
+ *                    the SVG so the PNG has a solid white background.  Pass
+ *                    true to keep the PNG fully transparent where the SVG has
+ *                    no content.
+ */
 export async function svgToPngArrayBuffer(
   svgString: string,
   scale = 1,
+  transparent = false,
 ): Promise<ArrayBuffer> {
-  const blob = await svgToPngBlob(svgString, scale);
+  const blob = await svgToPngBlob(svgString, scale, transparent);
   return blob.arrayBuffer();
 }
 
-async function svgToPngBlob(svgString: string, scale: number): Promise<Blob> {
+async function svgToPngBlob(
+  svgString: string,
+  scale: number,
+  transparent: boolean,
+): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
@@ -38,6 +52,10 @@ async function svgToPngBlob(svgString: string, scale: number): Promise<Blob> {
 
     const img = new Image();
     img.onload = () => {
+      if (!transparent) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+      }
       ctx.drawImage(img, 0, 0);
       URL.revokeObjectURL(url);
       canvas.toBlob((b) => {

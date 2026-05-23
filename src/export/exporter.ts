@@ -1,6 +1,6 @@
 import { App, TFile, normalizePath } from "obsidian";
 import { svgToPngArrayBuffer } from "./raster";
-import { SvgPluginSettings } from "../settings/defaults";
+import type { SvgPluginSettings, EffectiveDrawingSettings } from "../settings/defaults";
 
 export function getCompanionPath(
   sourceFile: TFile,
@@ -24,9 +24,10 @@ export async function exportPng(
   sourceFile: TFile,
   svgString: string,
   scale: number,
+  transparent = false,
 ): Promise<void> {
   const path = getCompanionPath(sourceFile, "png");
-  const buf = await svgToPngArrayBuffer(svgString, scale);
+  const buf = await svgToPngArrayBuffer(svgString, scale, transparent);
   await app.vault.adapter.writeBinary(path, buf);
 }
 
@@ -35,10 +36,11 @@ export async function autoExport(
   file: TFile,
   svgString: string,
   settings: SvgPluginSettings,
+  effective: EffectiveDrawingSettings,
 ): Promise<void> {
   const tasks: Promise<void>[] = [];
   if (settings.autoExportSvg) tasks.push(exportSvg(app, file, svgString));
-  if (settings.autoExportPng)
-    tasks.push(exportPng(app, file, svgString, settings.pngScale));
+  if (effective.autoExportPng)
+    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground));
   await Promise.all(tasks);
 }

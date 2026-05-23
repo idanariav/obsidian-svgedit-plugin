@@ -51,6 +51,7 @@ export default class SvgPlugin extends Plugin {
       this.app,
       () => this._loaded,
       this.bypassLeaves,
+      () => this.settings,
     );
 
     // Commands

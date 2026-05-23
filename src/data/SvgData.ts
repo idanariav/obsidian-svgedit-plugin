@@ -4,7 +4,6 @@ import {
   DRAWING_FENCE_CLOSE,
   DRAWING_SECTION_END,
   EMPTY_SVG,
-  FRONTMATTER_KEY_OPEN_MD,
   FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
   SWITCH_NOTICE,
@@ -42,7 +41,6 @@ export function createDrawingTemplate(svg?: string): string {
   const content = svg ?? EMPTY_SVG;
   return `---
 ${FRONTMATTER_KEY_PLUGIN}: ${FRONTMATTER_PLUGIN_VALUE}
-${FRONTMATTER_KEY_OPEN_MD}: false
 tags:
   - svg
 ---

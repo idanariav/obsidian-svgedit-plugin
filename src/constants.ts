@@ -3,6 +3,8 @@ export const PLUGIN_ID = "obsidian-svg-plugin";
 
 export const FRONTMATTER_KEY_PLUGIN = "svg-plugin";
 export const FRONTMATTER_KEY_OPEN_MD = "svg-open-md";
+export const FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
+export const FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
 export const FRONTMATTER_PLUGIN_VALUE = "parsed";
 
 export const DRAWING_SECTION_HEADING = "## Drawing";

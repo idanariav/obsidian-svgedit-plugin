@@ -1,5 +1,19 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
+import type { FolderConfig } from "./defaults";
+
+/** "inherit" maps to undefined; "true"/"false" map to the matching boolean. */
+type TriState = "inherit" | "true" | "false";
+
+function toTriState(value: boolean | undefined): TriState {
+  if (value === undefined) return "inherit";
+  return value ? "true" : "false";
+}
+
+function fromTriState(value: TriState): boolean | undefined {
+  if (value === "inherit") return undefined;
+  return value === "true";
+}
 
 export class SvgSettingsTab extends PluginSettingTab {
   plugin: SvgPlugin;
@@ -15,7 +29,24 @@ export class SvgSettingsTab extends PluginSettingTab {
 
     containerEl.createEl("h2", { text: "SVG Draw" });
 
-    // ── Export ───────────────────────────────────────────────────────────────
+    // ── Open mode ────────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Open mode");
+
+    new Setting(containerEl)
+      .setName("Open as Markdown by default")
+      .setDesc(
+        "When no per-file or per-folder override exists, open drawings in Markdown view instead of the SVG editor.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.openAsMarkdown)
+          .onChange(async (v) => {
+            this.plugin.settings.openAsMarkdown = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");
 
     new Setting(containerEl)
@@ -38,6 +69,20 @@ export class SvgSettingsTab extends PluginSettingTab {
           .setValue(this.plugin.settings.autoExportPng)
           .onChange(async (v) => {
             this.plugin.settings.autoExportPng = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Transparent PNG background")
+      .setDesc(
+        "Export PNGs with a transparent background. When off, a white fill is painted behind the drawing.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.transparentBackground)
+          .onChange(async (v) => {
+            this.plugin.settings.transparentBackground = v;
             await this.plugin.saveSettings();
           }),
       );
@@ -97,6 +142,121 @@ export class SvgSettingsTab extends PluginSettingTab {
           .setValue(this.plugin.settings.drawingsFolder)
           .onChange(async (v) => {
             this.plugin.settings.drawingsFolder = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    // ── Folder overrides ─────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Folder overrides");
+
+    containerEl.createEl("p", {
+      text: "Per-folder settings override the global defaults above. "
+        + "Use \"Inherit\" to fall back to the global value. "
+        + "Individual file frontmatter (svg-open-md, svg-auto-export-png, svg-transparent-bg) takes highest priority.",
+      cls: "setting-item-description",
+    });
+
+    // "Add folder" button
+    new Setting(containerEl)
+      .addButton((btn) =>
+        btn
+          .setButtonText("+ Add folder")
+          .setCta()
+          .onClick(async () => {
+            this.plugin.settings.folderConfigs.push({ folder: "" });
+            await this.plugin.saveSettings();
+            this.display(); // re-render
+          }),
+      );
+
+    // Render one block per folder config
+    for (let i = 0; i < this.plugin.settings.folderConfigs.length; i++) {
+      this.renderFolderBlock(containerEl, i);
+    }
+  }
+
+  private renderFolderBlock(containerEl: HTMLElement, index: number): void {
+    const cfg = this.plugin.settings.folderConfigs[index];
+
+    const wrapper = containerEl.createDiv("svg-plugin-folder-block");
+    wrapper.style.cssText =
+      "border: 1px solid var(--background-modifier-border); " +
+      "border-radius: 6px; padding: 8px 12px; margin-bottom: 12px;";
+
+    // Folder path + remove button
+    new Setting(wrapper)
+      .setName("Folder path")
+      .setDesc("Vault-relative path, e.g. Drawings/work")
+      .addText((t) =>
+        t
+          .setPlaceholder("Folder/Path")
+          .setValue(cfg.folder)
+          .onChange(async (v) => {
+            this.plugin.settings.folderConfigs[index].folder = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      )
+      .addButton((btn) =>
+        btn
+          .setIcon("trash")
+          .setTooltip("Remove this folder override")
+          .onClick(async () => {
+            this.plugin.settings.folderConfigs.splice(index, 1);
+            await this.plugin.saveSettings();
+            this.display();
+          }),
+      );
+
+    // Open as
+    new Setting(wrapper)
+      .setName("Open as")
+      .setDesc("How to open drawings in this folder by default.")
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            inherit: "Inherit (global default)",
+            "false": "SVG editor",
+            "true": "Markdown view",
+          })
+          .setValue(toTriState(cfg.openAsMarkdown))
+          .onChange(async (v) => {
+            this.plugin.settings.folderConfigs[index].openAsMarkdown = fromTriState(v as TriState);
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    // Auto-export PNG
+    new Setting(wrapper)
+      .setName("Auto-export PNG")
+      .setDesc("Whether to write a companion .png file on save.")
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            inherit: "Inherit (global default)",
+            "true": "Yes",
+            "false": "No",
+          })
+          .setValue(toTriState(cfg.autoExportPng))
+          .onChange(async (v) => {
+            this.plugin.settings.folderConfigs[index].autoExportPng = fromTriState(v as TriState);
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    // Transparent background
+    new Setting(wrapper)
+      .setName("Transparent PNG background")
+      .setDesc("Whether exported PNGs use a transparent background.")
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            inherit: "Inherit (global default)",
+            "true": "Yes — transparent",
+            "false": "No — white fill",
+          })
+          .setValue(toTriState(cfg.transparentBackground))
+          .onChange(async (v) => {
+            this.plugin.settings.folderConfigs[index].transparentBackground = fromTriState(v as TriState);
             await this.plugin.saveSettings();
           }),
       );
