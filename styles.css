@@ -164,3 +164,29 @@
 .svg-plugin-editor-container #tools_bottom > se-select {
   margin-bottom: 0 !important;
 }
+
+/* ── Input text-color fix ────────────────────────────────────────────────── */
+/* Force dark text on every custom-element host so that color is inherited
+   correctly into their shadow DOMs.  Shadow DOM inherits `color` from the
+   host's *computed* value; if Obsidian's theme sets a light color directly
+   on these elements (beating our parent-level rule via specificity), shadow
+   DOM children would inherit that light color instead.  Adding !important
+   here ensures the host's computed color is always #333333. */
+.svg-plugin-editor-container se-input,
+.svg-plugin-editor-container se-spin-input,
+.svg-plugin-editor-container se-zoom,
+.svg-plugin-editor-container se-select,
+.svg-plugin-editor-container se-list,
+.svg-plugin-editor-container se-text,
+.svg-plugin-editor-container se-colorpicker,
+.svg-plugin-editor-container se-menu {
+  color: #333333 !important;
+}
+
+/* Plain <input> elements in the light DOM (dialogs, legacy toolbar inputs)
+   need an explicit dark text color in case Obsidian overrides them.
+   Do NOT set background-color here — shadow-DOM inputs already get the
+   correct gray via var(--input-color), and forcing white would break those. */
+.svg-plugin-editor-container input {
+  color: #333333 !important;
+}

@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
-    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "sync-svgedit": "node scripts/fetch-svgedit-dist.mjs",
+    "prepare": "node scripts/fetch-svgedit-dist.mjs"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +21,7 @@
     "typescript": "^5.3.0"
   },
   "dependencies": {
-    "@svgedit/svgcanvas": "^7.4.1",
+    "@svgedit/svgcanvas": "file:/Users/idanariav/GitProjects/svgedit/packages/svgcanvas",
     "monkey-around": "^2.3.0"
   }
 }

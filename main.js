@@ -243,6 +243,7 @@ var SvgView = class extends import_obsidian2.TextFileView {
       imgPath
     });
     await this.svgEditor.init();
+    this.injectThemeGuard();
     this.svgEditor.svgCanvas.bind("changed", () => {
       if (!this.isLoading) this.requestSave();
     });
@@ -256,6 +257,38 @@ var SvgView = class extends import_obsidian2.TextFileView {
         this.isLoading = false;
       }
     }
+  }
+  /** Inject a document-level CSS firewall (inspired by Excalidraw's StylesManager)
+   *  that re-declares every svgedit CSS variable with correct light-theme values
+   *  using !important, scoped to .svg-plugin-editor-container.
+   *
+   *  Why: Obsidian's dark theme globally redefines variables like --text-color to
+   *  a light/white value — sometimes with !important.  Shadow DOM elements inherit
+   *  these variables from their host elements, so even our container-level override
+   *  can be beaten if Obsidian uses !important on an ancestor selector.  Injecting
+   *  from JavaScript (vs. styles.css) lets us use a high-specificity rule at
+   *  document load time, matching Excalidraw's proven approach. */
+  injectThemeGuard() {
+    const GUARD_ID = "svg-plugin-theme-guard";
+    if (document.getElementById(GUARD_ID)) return;
+    const style = document.createElement("style");
+    style.id = GUARD_ID;
+    style.textContent = `
+      .svg-plugin-editor-container {
+        --text-color:          #333333 !important;
+        --text-normal:         #333333 !important;
+        --text-muted:          #666666 !important;
+        --text-faint:          #888888 !important;
+        --main-bg-color:       #f0f0f0 !important;
+        --input-color:         #f0f0f0 !important;
+        --icon-bg-color:       #f0f0f0 !important;
+        --icon-bg-color-hover: #d8d8d8 !important;
+        --border-color:        #cccccc !important;
+        --canvas-bg-color:     #ffffff !important;
+        --ruler-color:         #e8e8e8 !important;
+      }
+    `;
+    document.head.appendChild(style);
   }
   async switchToMarkdown() {
     const file = this.file;

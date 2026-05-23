@@ -1,3 +1,6 @@
 node_modules/
 *.tgz
 .claude
+svgedit-dist/tests/
+svgedit-dist/*.map
+.svgedit-tmp/
