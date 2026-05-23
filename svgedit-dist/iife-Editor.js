@@ -231,7 +231,7 @@ var Editor=(function(){"use strict";const Vt=o=>typeof o=="string",cA=()=>{let o
   input{
     border:unset;
     background-color:var(--input-color);
-    color:#333333;
+    color: var(--text-color, #333333);
     min-width:unset;
     width:40px;
     height:23px;
@@ -306,13 +306,13 @@ var Editor=(function(){"use strict";const Vt=o=>typeof o=="string",cA=()=>{let o
     display:flex;
     flex-direction:column;
     background-color:var(--icon-bg-color);
-    border:solid 1px white;
+    border:solid 1px var(--border-color, #cccccc);
     box-shadow:0 0px 10px rgb(0 0 0 / 50%);
   }
   ::slotted(*) {
     margin:2px;
     padding:3px;
-    color:white;
+    color: var(--text-color, #333333);
   }
   ::slotted(*:hover) {
     background-color: rgb(43, 60, 69);
@@ -366,13 +366,12 @@ See https://elix.org/documentation/ReactiveMixin.`);const{state:i,changed:a}=fF(
           font: inherit;
           outline: none;
           text-align: inherit;
-          color: #333333;
         }
       </style>
     `),e}get value(){return this[ue].value}set value(e){this[At]({value:String(e)})}}function sU(o){return class extends o{get[Ut](){const t=super[Ut];return t.content.append(vr.html`
         <style>
           :host {
-            background: var(--input-color, #e8e8e8);
+            background: white;
             border: 1px solid gray;
             box-sizing: border-box;
           }
@@ -399,13 +398,13 @@ See https://elix.org/documentation/ReactiveMixin.`);const{state:i,changed:a}=fF(
     right: -4px;
     position: relative;
     margin-right: 4px;
-    color: #333333;
+    color: var(--text-color, #333333);
   }
   elix-input {
     background-color: var(--input-color);
+    color: var(--text-color, #333333);
     border-radius: 3px;
     height: 24px;
-    color: #333333;
   }
   </style>
   <div>
@@ -449,7 +448,7 @@ See https://elix.org/documentation/ReactiveMixin.`);const{state:i,changed:a}=fF(
       `),t}}}class _U extends b0(gU){}function fU(o){return class extends o{get[Ke](){return Object.assign(super[Ke]||{},{buttonPartType:_U,inputPartType:h0})}get[Ut](){const t=super[Ut],r=t.content.getElementById("upButton");r.textContent="▲";const n=t.content.getElementById("downButton");return n.textContent="▼",t.content.append(vr.html`
         <style>
           :host {
-            background: var(--input-color, #e8e8e8);
+            background: white;
             border: 1px solid gray;
             box-sizing: border-box;
           }
@@ -521,7 +520,7 @@ See https://elix.org/documentation/ReactiveMixin.`);const{state:i,changed:a}=fF(
     position: relative;
     margin-left: -4px;
     margin-right: 1px;
-    color: #333333;
+    color: var(--text-color, #333333);
   }
   elix-number-spin-box {
     background-color: var(--input-color);
@@ -535,7 +534,7 @@ See https://elix.org/documentation/ReactiveMixin.`);const{state:i,changed:a}=fF(
   }
   elix-number-spin-box::part(input) {
     width: 3em;
-    color: #333333;
+    color: var(--text-color, #333333);
   }
   elix-number-spin-box{
     width: 54px;
@@ -906,19 +905,18 @@ See https://elix.org/documentation/SlotContentMixin.`),r}get[Ke](){return Object
   }
   elix-menu-button::part(menu) {
     background-color: var(--icon-bg-color) !important;
-    color: #333333;
+    color: #fff;
   }
   elix-menu-button::part(popup-toggle) {
     padding: 0.25em 0.30em !important
   }
   :host ::slotted([current]){
     background-color: var(--icon-bg-color-hover) !important;
-    color: #333333;
+    color: #fff;
   }
   :host ::slotted(*){
     padding: 0.25em 1.25em 0.25em 0.25em !important;
     margin: 2px;
-    color: #333333;
   }
   </style>
 
@@ -937,6 +935,10 @@ See https://elix.org/documentation/SlotContentMixin.`),r}get[Ke](){return Object
   </elix-menu-item>
 `;class HN extends HTMLElement{constructor(){super(),this._shadowRoot=this.attachShadow({mode:"open"}),this._shadowRoot.append(J0.content.cloneNode(!0)),this.$img=this._shadowRoot.querySelector("img"),this.$label=this._shadowRoot.querySelector("span"),this.$menuitem=this._shadowRoot.querySelector("elix-menu-item"),this.$svg=this.$menuitem.shadowRoot.querySelector("#checkmark"),this.$svg.setAttribute("style","display: none;"),this.imgPath=svgEditor.configObj.curConfig.imgPath}static get observedAttributes(){return["label","src"]}attributeChangedCallback(e,t,r){let n="";if(t!==r)switch(e){case"src":this.$img.style.display="inline-block",this.$img.setAttribute("src",this.imgPath+"/"+r);break;case"label":n=this.getAttribute("shortcut"),this.$label.textContent=`${Jr(r)} ${n?`(${n})`:""}`;break;default:console.error(`unknown attribute: ${e}`);break}}get label(){return this.getAttribute("label")}set label(e){this.setAttribute("label",e)}get src(){return this.getAttribute("src")}set src(e){this.setAttribute("src",e)}connectedCallback(){const e=this.getAttribute("shortcut");e&&document.addEventListener("keydown",t=>{if(t.target.nodeName!=="BODY")return;const r=`${t.metaKey?"meta+":""}${t.ctrlKey?"ctrl+":""}${t.shiftKey?"shift+":""}${t.key.toUpperCase()}`;e===r&&(this.id&&document.getElementById(this.id).click(),t.preventDefault())})}}customElements.define("se-menu-item",HN);const ex=document.createElement("template");ex.innerHTML=`
 <style>
+label {
+  color: var(--text-color, #333333);
+}
+
 #select-container {
   margin-top: 10px;
   display: inline-block;
@@ -948,7 +950,7 @@ See https://elix.org/documentation/SlotContentMixin.`),r}get[Ke](){return Object
 
 #select-container::part(value) {
   background-color: var(--main-bg-color);
-  color: #333333;
+  color: var(--text-color, #333333);
 }
 
 #select-container::part(popup-toggle) {
@@ -1891,14 +1893,14 @@ div.jGraduate_Slider img {
 select {
   margin-top: 8px;
   background-color: var(--input-color);
-  color: #333333;
+  color: var(--text-color, #333333);
   appearance: none;
   outline: none;
   padding: 3px;
 }
 label {
   margin-left: 2px;
-  color: #333333;
+  color: var(--text-color, #333333);
 }
 ::slotted(*) {
   padding:0;

@@ -2143,6 +2143,7 @@ ZB.innerHTML = `
   input{
     border:unset;
     background-color:var(--input-color);
+    color: var(--text-color, #333333);
     min-width:unset;
     width:40px;
     height:23px;
@@ -2217,13 +2218,13 @@ ZB.innerHTML = `
     display:flex;
     flex-direction:column;
     background-color:var(--icon-bg-color);
-    border:solid 1px white;
+    border:solid 1px var(--border-color, #cccccc);
     box-shadow:0 0px 10px rgb(0 0 0 / 50%);
   }
   ::slotted(*) {
     margin:2px;
     padding:3px;
-    color:white;
+    color: var(--text-color, #333333);
   }
   ::slotted(*:hover) {
     background-color: rgb(43, 60, 69);
@@ -3699,10 +3700,11 @@ p5.innerHTML = `
     right: -4px;
     position: relative;
     margin-right: 4px;
-    color: #fff;
+    color: var(--text-color, #333333);
   }
   elix-input {
     background-color: var(--input-color);
+    color: var(--text-color, #333333);
     border-radius: 3px;
     height: 24px;
   }
@@ -4697,7 +4699,7 @@ w5.innerHTML = `
     position: relative;
     margin-left: -4px;
     margin-right: 1px;
-    color: #fff;
+    color: var(--text-color, #333333);
   }
   elix-number-spin-box {
     background-color: var(--input-color);
@@ -4711,6 +4713,7 @@ w5.innerHTML = `
   }
   elix-number-spin-box::part(input) {
     width: 3em;
+    color: var(--text-color, #333333);
   }
   elix-number-spin-box{
     width: 54px;
@@ -7833,6 +7836,10 @@ customElements.define("se-menu-item", L4);
 const G5 = document.createElement("template");
 G5.innerHTML = `
 <style>
+label {
+  color: var(--text-color, #333333);
+}
+
 #select-container {
   margin-top: 10px;
   display: inline-block;
@@ -7844,6 +7851,7 @@ G5.innerHTML = `
 
 #select-container::part(value) {
   background-color: var(--main-bg-color);
+  color: var(--text-color, #333333);
 }
 
 #select-container::part(popup-toggle) {
@@ -44497,12 +44505,14 @@ EP.innerHTML = `
 select {
   margin-top: 8px;
   background-color: var(--input-color);
+  color: var(--text-color, #333333);
   appearance: none;
   outline: none;
   padding: 3px;
 }
 label {
   margin-left: 2px;
+  color: var(--text-color, #333333);
 }
 ::slotted(*) {
   padding:0;
