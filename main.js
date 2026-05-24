@@ -22,7 +22,7 @@ __export(main_exports, {
   default: () => SvgPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian9 = require("obsidian");
+var import_obsidian10 = require("obsidian");
 
 // src/view/SvgView.ts
 var import_obsidian2 = require("obsidian");
@@ -139,24 +139,36 @@ async function svgToPngBlob(svgString, scale, transparent) {
 }
 
 // src/export/exporter.ts
-function getCompanionPath(sourceFile, ext) {
-  const base = sourceFile.path.replace(/\.md$/, "");
-  return (0, import_obsidian.normalizePath)(`${base}.${ext}`);
+function getCompanionPath(sourcePath, ext, settings) {
+  const basename = sourcePath.split("/").pop().replace(/\.md$/, "") + "." + ext;
+  let bestLen = 0;
+  let exportFolder = "";
+  for (const mapping of settings.exportFolderMappings) {
+    const srcFolder = mapping.sourceFolder.replace(/\/?$/, "/");
+    if (sourcePath.startsWith(srcFolder) && srcFolder.length > bestLen) {
+      bestLen = srcFolder.length;
+      exportFolder = mapping.exportFolder;
+    }
+  }
+  if (exportFolder) {
+    return (0, import_obsidian.normalizePath)(exportFolder.replace(/\/?$/, "/") + basename);
+  }
+  return (0, import_obsidian.normalizePath)(sourcePath.replace(/\.md$/, "") + "." + ext);
 }
-async function exportSvg(app, sourceFile, svgString) {
-  const path = getCompanionPath(sourceFile, "svg");
+async function exportSvg(app, sourceFile, svgString, settings) {
+  const path = getCompanionPath(sourceFile.path, "svg", settings);
   await app.vault.adapter.write(path, svgString);
 }
-async function exportPng(app, sourceFile, svgString, scale, transparent = false) {
-  const path = getCompanionPath(sourceFile, "png");
+async function exportPng(app, sourceFile, svgString, scale, transparent = false, settings) {
+  const path = getCompanionPath(sourceFile.path, "png", settings);
   const buf = await svgToPngArrayBuffer(svgString, scale, transparent);
   await app.vault.adapter.writeBinary(path, buf);
 }
 async function autoExport(app, file, svgString, settings, effective) {
   const tasks = [];
-  if (settings.autoExportSvg) tasks.push(exportSvg(app, file, svgString));
+  if (settings.autoExportSvg) tasks.push(exportSvg(app, file, svgString, settings));
   if (effective.autoExportPng)
-    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground));
+    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings));
   await Promise.all(tasks);
 }
 
@@ -483,6 +495,15 @@ var SvgSettingsTab = class extends import_obsidian3.PluginSettingTab {
         await this.plugin.saveSettings();
       })
     );
+    new import_obsidian3.Setting(containerEl).setHeading().setName("File sync");
+    new import_obsidian3.Setting(containerEl).setName("Keep companion files in sync").setDesc(
+      "When a drawing is renamed or deleted, automatically rename/delete its companion .svg and .png files."
+    ).addToggle(
+      (t) => t.setValue(this.plugin.settings.keepInSync).onChange(async (v) => {
+        this.plugin.settings.keepInSync = v;
+        await this.plugin.saveSettings();
+      })
+    );
     new import_obsidian3.Setting(containerEl).setHeading().setName("New drawing defaults");
     new import_obsidian3.Setting(containerEl).setName("Canvas width").addText(
       (t) => t.setValue(String(this.plugin.settings.defaultCanvasWidth)).onChange(async (v) => {
@@ -525,6 +546,44 @@ var SvgSettingsTab = class extends import_obsidian3.PluginSettingTab {
     for (let i = 0; i < this.plugin.settings.folderConfigs.length; i++) {
       this.renderFolderBlock(containerEl, i);
     }
+    new import_obsidian3.Setting(containerEl).setHeading().setName("Export folder mappings");
+    containerEl.createEl("p", {
+      text: "Map drawings in a source folder to a different export folder for their companion .svg and .png files. Longest-prefix match wins. If no mapping matches, companions are exported next to the drawing.",
+      cls: "setting-item-description"
+    });
+    new import_obsidian3.Setting(containerEl).addButton(
+      (btn) => btn.setButtonText("+ Add mapping").setCta().onClick(async () => {
+        this.plugin.settings.exportFolderMappings.push({ sourceFolder: "", exportFolder: "" });
+        await this.plugin.saveSettings();
+        this.display();
+      })
+    );
+    for (let i = 0; i < this.plugin.settings.exportFolderMappings.length; i++) {
+      this.renderMappingRow(containerEl, i);
+    }
+  }
+  renderMappingRow(containerEl, index) {
+    const mapping = this.plugin.settings.exportFolderMappings[index];
+    const wrapper = containerEl.createDiv("svg-plugin-mapping-row");
+    wrapper.style.cssText = "border: 1px solid var(--background-modifier-border); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px;";
+    new import_obsidian3.Setting(wrapper).setName("Source folder").setDesc("Drawings in this vault folder (and sub-folders) use the custom export path.").addText(
+      (t) => t.setPlaceholder("Content/Concepts").setValue(mapping.sourceFolder).onChange(async (v) => {
+        this.plugin.settings.exportFolderMappings[index].sourceFolder = v.trim();
+        await this.plugin.saveSettings();
+      })
+    ).addButton(
+      (btn) => btn.setIcon("trash").setTooltip("Remove this mapping").onClick(async () => {
+        this.plugin.settings.exportFolderMappings.splice(index, 1);
+        await this.plugin.saveSettings();
+        this.display();
+      })
+    );
+    new import_obsidian3.Setting(wrapper).setName("Export folder").setDesc("Companion files are written here instead of next to the drawing.").addText(
+      (t) => t.setPlaceholder("Assets/Concepts").setValue(mapping.exportFolder).onChange(async (v) => {
+        this.plugin.settings.exportFolderMappings[index].exportFolder = v.trim();
+        await this.plugin.saveSettings();
+      })
+    );
   }
   renderFolderBlock(containerEl, index) {
     const cfg = this.plugin.settings.folderConfigs[index];
@@ -585,7 +644,9 @@ var DEFAULT_SETTINGS = {
   drawingsFolder: "",
   openAsMarkdown: false,
   transparentBackground: false,
-  folderConfigs: []
+  folderConfigs: [],
+  keepInSync: false,
+  exportFolderMappings: []
 };
 
 // src/postprocessor/markdownPostProcessor.ts
@@ -865,7 +926,7 @@ function registerCommands(plugin) {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportSvg(plugin.app, view.file, svgString).then(() => new import_obsidian8.Notice("Exported SVG")).catch((e) => new import_obsidian8.Notice(`Export failed: ${e.message}`));
+        exportSvg(plugin.app, view.file, svgString, plugin.settings).then(() => new import_obsidian8.Notice("Exported SVG")).catch((e) => new import_obsidian8.Notice(`Export failed: ${e.message}`));
       }
       return true;
     }
@@ -879,7 +940,7 @@ function registerCommands(plugin) {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale).then(() => new import_obsidian8.Notice("Exported PNG")).catch((e) => new import_obsidian8.Notice(`Export failed: ${e.message}`));
+        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, void 0, plugin.settings).then(() => new import_obsidian8.Notice("Exported PNG")).catch((e) => new import_obsidian8.Notice(`Export failed: ${e.message}`));
       }
       return true;
     }
@@ -930,14 +991,73 @@ function getActiveLeaf(plugin) {
   return (_c = (_b = (_a = plugin.app.workspace.getActiveViewOfType(SvgView)) == null ? void 0 : _a.leaf) != null ? _b : plugin.app.workspace.getMostRecentLeaf()) != null ? _c : plugin.app.workspace.getLeaf(false);
 }
 
+// src/fileSync.ts
+var import_obsidian9 = require("obsidian");
+function registerFileSyncHandlers(plugin) {
+  plugin.registerEvent(
+    plugin.app.metadataCache.on("changed", (file) => {
+      var _a;
+      const fm = (_a = plugin.app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter;
+      if ((fm == null ? void 0 : fm[FRONTMATTER_KEY_PLUGIN]) === FRONTMATTER_PLUGIN_VALUE) {
+        plugin.svgDrawingPaths.add(file.path);
+      } else {
+        plugin.svgDrawingPaths.delete(file.path);
+      }
+    })
+  );
+  plugin.registerEvent(
+    plugin.app.vault.on("rename", (file, oldPath) => {
+      if (!(file instanceof import_obsidian9.TFile)) return;
+      void handleRename(plugin, file, oldPath);
+    })
+  );
+  plugin.registerEvent(
+    plugin.app.vault.on("delete", (file) => {
+      if (!(file instanceof import_obsidian9.TFile)) return;
+      void handleDelete(plugin, file);
+    })
+  );
+}
+async function handleRename(plugin, file, oldPath) {
+  if (!plugin.settings.keepInSync) return;
+  if (!plugin.svgDrawingPaths.has(oldPath)) return;
+  plugin.svgDrawingPaths.delete(oldPath);
+  plugin.svgDrawingPaths.add(file.path);
+  for (const ext of ["svg", "png"]) {
+    const oldCompanion = getCompanionPath(oldPath, ext, plugin.settings);
+    const newCompanion = getCompanionPath(file.path, ext, plugin.settings);
+    if (oldCompanion === newCompanion) continue;
+    const companionFile = plugin.app.vault.getAbstractFileByPath((0, import_obsidian9.normalizePath)(oldCompanion));
+    if (companionFile instanceof import_obsidian9.TFile) {
+      await plugin.app.fileManager.renameFile(companionFile, (0, import_obsidian9.normalizePath)(newCompanion));
+    }
+  }
+}
+async function handleDelete(plugin, file) {
+  if (!plugin.settings.keepInSync) return;
+  if (!plugin.svgDrawingPaths.has(file.path)) return;
+  plugin.svgDrawingPaths.delete(file.path);
+  const companions = ["svg", "png"].map(
+    (ext) => getCompanionPath(file.path, ext, plugin.settings)
+  );
+  window.setTimeout(() => {
+    for (const companionPath of companions) {
+      const f = plugin.app.vault.getAbstractFileByPath((0, import_obsidian9.normalizePath)(companionPath));
+      if (f instanceof import_obsidian9.TFile) plugin.app.vault.delete(f);
+    }
+  }, 500);
+}
+
 // src/main.ts
 var RIBBON_ICON = "pencil";
-var SvgPlugin = class extends import_obsidian9.Plugin {
+var SvgPlugin = class extends import_obsidian10.Plugin {
   constructor() {
     super(...arguments);
     this._loaded = false;
     /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
     this.bypassLeaves = /* @__PURE__ */ new Set();
+    /** Paths of all currently known SVG drawing files (used by fileSync handlers). */
+    this.svgDrawingPaths = /* @__PURE__ */ new Set();
     this.uninstallPatch = null;
   }
   async onload() {
@@ -969,6 +1089,10 @@ var SvgPlugin = class extends import_obsidian9.Plugin {
     registerCommands(this);
     this.addSettingTab(new SvgSettingsTab(this.app, this));
     this._loaded = true;
+    this.app.vault.getMarkdownFiles().forEach((f) => {
+      if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
+    });
+    registerFileSyncHandlers(this);
   }
   async onunload() {
     var _a;

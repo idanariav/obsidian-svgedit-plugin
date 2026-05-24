@@ -7,6 +7,8 @@ import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { registerCommands } from "./commands";
+import { registerFileSyncHandlers } from "./fileSync";
+import { isSvgDrawingFile } from "./data/frontmatter";
 import { VIEW_TYPE_SVG } from "./constants";
 
 const RIBBON_ICON = "pencil";
@@ -16,6 +18,8 @@ export default class SvgPlugin extends Plugin {
   _loaded = false;
   /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
   bypassLeaves = new Set<WorkspaceLeaf>();
+  /** Paths of all currently known SVG drawing files (used by fileSync handlers). */
+  svgDrawingPaths = new Set<string>();
 
   private uninstallPatch: (() => void) | null = null;
 
@@ -61,6 +65,14 @@ export default class SvgPlugin extends Plugin {
     this.addSettingTab(new SvgSettingsTab(this.app, this));
 
     this._loaded = true;
+
+    // Seed the SVG drawing paths set from all existing vault files, then
+    // register rename/delete sync handlers (must run after _loaded = true so
+    // the metadataCache is ready).
+    this.app.vault.getMarkdownFiles().forEach((f) => {
+      if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
+    });
+    registerFileSyncHandlers(this);
   }
 
   async onunload(): Promise<void> {

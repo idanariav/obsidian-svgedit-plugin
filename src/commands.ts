@@ -87,7 +87,7 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportSvg(plugin.app, view.file, svgString)
+        exportSvg(plugin.app, view.file, svgString, plugin.settings)
           .then(() => new Notice("Exported SVG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }
@@ -104,7 +104,7 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale)
+        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, undefined, plugin.settings)
           .then(() => new Notice("Exported PNG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }

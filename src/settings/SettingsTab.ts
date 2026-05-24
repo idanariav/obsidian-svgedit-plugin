@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
-import type { FolderConfig } from "./defaults";
+import type { FolderConfig, ExportFolderMapping } from "./defaults";
 
 /** "inherit" maps to undefined; "true"/"false" map to the matching boolean. */
 type TriState = "inherit" | "true" | "false";
@@ -100,6 +100,23 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    // ── File sync ────────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("File sync");
+
+    new Setting(containerEl)
+      .setName("Keep companion files in sync")
+      .setDesc(
+        "When a drawing is renamed or deleted, automatically rename/delete its companion .svg and .png files.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.keepInSync)
+          .onChange(async (v) => {
+            this.plugin.settings.keepInSync = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Canvas defaults ───────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("New drawing defaults");
 
@@ -173,6 +190,76 @@ export class SvgSettingsTab extends PluginSettingTab {
     for (let i = 0; i < this.plugin.settings.folderConfigs.length; i++) {
       this.renderFolderBlock(containerEl, i);
     }
+
+    // ── Export folder mappings ────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Export folder mappings");
+
+    containerEl.createEl("p", {
+      text: "Map drawings in a source folder to a different export folder for their companion .svg and .png files. "
+        + "Longest-prefix match wins. If no mapping matches, companions are exported next to the drawing.",
+      cls: "setting-item-description",
+    });
+
+    new Setting(containerEl)
+      .addButton((btn) =>
+        btn
+          .setButtonText("+ Add mapping")
+          .setCta()
+          .onClick(async () => {
+            this.plugin.settings.exportFolderMappings.push({ sourceFolder: "", exportFolder: "" });
+            await this.plugin.saveSettings();
+            this.display();
+          }),
+      );
+
+    for (let i = 0; i < this.plugin.settings.exportFolderMappings.length; i++) {
+      this.renderMappingRow(containerEl, i);
+    }
+  }
+
+  private renderMappingRow(containerEl: HTMLElement, index: number): void {
+    const mapping: ExportFolderMapping = this.plugin.settings.exportFolderMappings[index];
+
+    const wrapper = containerEl.createDiv("svg-plugin-mapping-row");
+    wrapper.style.cssText =
+      "border: 1px solid var(--background-modifier-border); " +
+      "border-radius: 6px; padding: 8px 12px; margin-bottom: 12px;";
+
+    new Setting(wrapper)
+      .setName("Source folder")
+      .setDesc("Drawings in this vault folder (and sub-folders) use the custom export path.")
+      .addText((t) =>
+        t
+          .setPlaceholder("Content/Concepts")
+          .setValue(mapping.sourceFolder)
+          .onChange(async (v) => {
+            this.plugin.settings.exportFolderMappings[index].sourceFolder = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      )
+      .addButton((btn) =>
+        btn
+          .setIcon("trash")
+          .setTooltip("Remove this mapping")
+          .onClick(async () => {
+            this.plugin.settings.exportFolderMappings.splice(index, 1);
+            await this.plugin.saveSettings();
+            this.display();
+          }),
+      );
+
+    new Setting(wrapper)
+      .setName("Export folder")
+      .setDesc("Companion files are written here instead of next to the drawing.")
+      .addText((t) =>
+        t
+          .setPlaceholder("Assets/Concepts")
+          .setValue(mapping.exportFolder)
+          .onChange(async (v) => {
+            this.plugin.settings.exportFolderMappings[index].exportFolder = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
   }
 
   private renderFolderBlock(containerEl: HTMLElement, index: number): void {
