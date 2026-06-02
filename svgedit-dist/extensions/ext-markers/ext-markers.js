@@ -12,11 +12,20 @@ const extMarkers = {
       leftarrow: { element: "path", attr: { d: "M0,50 L100,90 L70,50 L100,10 Z" } },
       rightarrow: { element: "path", attr: { d: "M100,50 L0,90 L30,50 L0,10 Z" } },
       box: { element: "path", attr: { d: "M20,20 L20,80 L80,80 L80,20 Z" } },
-      mcircle: { element: "circle", attr: { r: 30, cx: 50, cy: 50 } }
+      mcircle: { element: "circle", attr: { r: 30, cx: 50, cy: 50 } },
+      triangle: { element: "path", attr: { d: "M0,10 L100,50 L0,90 Z" } },
+      diamond: { element: "path", attr: { d: "M0,50 L50,10 L100,50 L50,90 Z" } },
+      openarrow: { element: "path", attr: { d: "M0,10 L100,50 L0,90" } },
+      star: { element: "path", attr: { d: "M50,5 L61,39 L97,39 L68,61 L79,95 L50,75 L21,95 L32,61 L3,39 L39,39 Z" } },
+      xmark: { element: "path", attr: { d: "M20,20 L80,80 M80,20 L20,80" } },
+      forwardslash: { element: "path", attr: { d: "M20,80 L80,20" } },
+      reverseslash: { element: "path", attr: { d: "M20,20 L80,80" } },
+      verticalslash: { element: "path", attr: { d: "M50,10 L50,90" } }
     };
-    ["leftarrow", "rightarrow", "box", "mcircle"].forEach((v) => {
+    ["leftarrow", "rightarrow", "box", "mcircle", "triangle", "star", "diamond"].forEach((v) => {
       markerTypes[v + "_o"] = markerTypes[v];
     });
+    const strokeOnly = ["openarrow", "forwardslash", "reverseslash", "verticalslash", "xmark"];
     const getLinked = (elem, attr) => {
       const str = elem.getAttribute(attr);
       if (!str) {
@@ -73,7 +82,7 @@ const extMarkers = {
         }
       });
       const mel = addElem(markerTypes[seType]);
-      const fillcolor = seType.substr(-2) === "_o" ? "none" : color;
+      const fillcolor = seType.substr(-2) === "_o" || strokeOnly.includes(seType) ? "none" : color;
       mel.setAttribute("fill", fillcolor);
       mel.setAttribute("stroke", color);
       mel.setAttribute("stroke-width", strokeWidth);
@@ -200,17 +209,31 @@ const extMarkers = {
       // The callback should be used to load the DOM with the appropriate UI items
       callback() {
         const panelTemplate = document.createElement("template");
-        let innerHTML = '<div id="marker_panel">';
+        const posLabels = { start: "Start", mid: "Mid", end: "End" };
+        let innerHTML = '<div id="marker_panel" class="sidepanel_section" style="display:none">';
+        innerHTML += '<div class="sidepanel_section_label">Markers</div>';
+        innerHTML += '<div class="sidepanel_btn_row">';
         mtypes.forEach((pos) => {
+          innerHTML += `<div><div class="sub_label">${posLabels[pos]}</div>`;
           innerHTML += `<se-list id="${pos}_marker_list_opts" title="tools.${pos}_marker_list_opts" label="" width="22px" height="22px">`;
           Object.entries(markerTypes).forEach(([marker, _mkr]) => {
             innerHTML += `<se-list-item id="mkr_${pos}_${marker}" value="${marker}" title="tools.mkr_${marker}" src="${marker}.svg" img-height="22px"></se-list-item>`;
           });
-          innerHTML += "</se-list>";
+          innerHTML += "</se-list></div>";
         });
-        innerHTML += "</div>";
+        innerHTML += "</div></div>";
         panelTemplate.innerHTML = innerHTML;
-        $id("tools_top").appendChild(panelTemplate.content.cloneNode(true));
+        const designTab = $id("tab_design");
+        const objectPanel = designTab?.querySelector(".selected_panel");
+        if (designTab) {
+          if (objectPanel) {
+            designTab.insertBefore(panelTemplate.content, objectPanel);
+          } else {
+            designTab.appendChild(panelTemplate.content);
+          }
+        } else {
+          $id("tools_top").appendChild(panelTemplate.content.cloneNode(true));
+        }
         showPanel(false);
         mtypes.forEach((pos) => {
           $id(`${pos}_marker_list_opts`).addEventListener("change", (evt) => {

@@ -8,7 +8,7 @@
   --app-bg:        #F4F5F7;
   --chrome-bg:     #FFFFFF;
   --chrome-border: #E6E8EC;
-  --canvas-bg:     #E8ECF2;
+  --canvas-bg:     #F8F9FB;
   --ruler-bg:      #FFFFFF;
   --paper-bg:      #FFFFFF;
   --paper-border:  #DCDFE5;
@@ -17,6 +17,10 @@
     0 1px 2px rgba(20,25,35,0.05),
     0 12px 28px -10px rgba(20,25,35,0.18),
     0 30px 60px -30px rgba(20,25,35,0.25);
+  /* drop-shadow() equivalent for the document page (no spread support) */
+  --paper-shadow-filter:
+    drop-shadow(0 1px 2px rgba(20,25,35,0.10))
+    drop-shadow(0 12px 24px rgba(20,25,35,0.16));
 
   /* Text */
   --fg:    #1B1F24;
@@ -51,6 +55,9 @@
   /* Number fields */
   --field-bg:     #FFFFFF;
   --field-border: #DDE1E7;
+  --field-border-h: #C8CDD6;              /* field border on hover */
+  --accent-ring:  rgba(41,98,255,0.16);   /* field focus ring */
+  --section-rule: #EEF0F3;                /* light divider between sections */
 
   /* Swatches */
   --swatch-bg:           #FFFFFF;
@@ -59,6 +66,39 @@
   --swatch-inset:        rgba(0,0,0,0.18);
   --swatch-shadow:       0 1px 2px rgba(20,25,35,0.08);
   --checker:             rgba(0,0,0,0.07);
+
+  /* Color picker tokens */
+  --cp-modal-bg:           #FFFFFF;
+  --cp-head-bg:            #FAFBFC;
+  --cp-stage-bg:           #ECEEF2;
+  --cp-backdrop:           rgba(20, 24, 35, 0.06);
+  --cp-field-hover:        #B6BFCE;
+  --cp-focus-ring:         rgba(41, 98, 255, 0.18);
+  --cp-tab-shadow:         0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);
+  --cp-stop-ring:          rgba(20, 24, 35, .30);
+  --cp-danger:             #E11D48;
+  --cp-danger-bg:          #FEE9EE;
+  --cp-btn-primary-fg:     #FFFFFF;
+  --cp-btn-primary-shadow: rgba(41, 98, 255, .28);
+  --cp-dial-bg:            #F4F5F7;
+  --cp-dial-border:        #DDE1E7;
+  --cp-dial-tick:          #B6BFCE;
+  --cp-swatch-bg:          #FFFFFF;
+  --cp-swatch-border:      #C3C8D1;
+  --cp-swatch-inset:       rgba(0, 0, 0, .18);
+  --cp-checker:            rgba(0, 0, 0, .07);
+
+  /* Shape library tokens */
+  --sl-modal-bg:           #FFFFFF;
+  --sl-head-bg:            #FAFBFC;
+  --sl-side-bg:            #F6F7F9;
+  --sl-field-hover:        #B6BFCE;
+  --sl-tab-shadow:         0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(20,24,35,0.04);
+  --sl-tile-shadow:        0 2px 6px rgba(41,98,255,0.12);
+  --sl-btn-primary-fg:     #FFFFFF;
+  --sl-btn-primary-shadow: rgba(41,98,255,0.28);
+  --sl-shape:              #4B5563;
+  --sl-shape-hover:        #0F172A;
 
   /* Rulers */
   --ruler-tick: #B5BAC3;
@@ -106,6 +146,10 @@
     0 1px 2px rgba(0,0,0,0.4),
     0 14px 36px -10px rgba(0,0,0,0.5),
     0 40px 80px -30px rgba(0,0,0,0.65);
+  /* drop-shadow() equivalent for the document page (no spread support) */
+  --paper-shadow-filter:
+    drop-shadow(0 1px 2px rgba(0,0,0,0.45))
+    drop-shadow(0 14px 30px rgba(0,0,0,0.5));
 
   /* Text */
   --fg:    #ECEEF2;
@@ -140,6 +184,9 @@
   /* Number fields */
   --field-bg:     #14161A;
   --field-border: #2C2F37;
+  --field-border-h: #3C4150;              /* field border on hover */
+  --accent-ring:  rgba(246,178,58,0.20);  /* field focus ring */
+  --section-rule: #23262E;                /* dark divider between sections */
 
   /* Swatches */
   --swatch-bg:           #2F333C;
@@ -151,6 +198,39 @@
     0 1px 2px rgba(0,0,0,0.5),
     0 0 0 1px rgba(0,0,0,0.35);
   --checker: rgba(255,255,255,0.06);
+
+  /* Color picker tokens */
+  --cp-modal-bg:           #22252C;
+  --cp-head-bg:            #1E2026;
+  --cp-stage-bg:           #0F1115;
+  --cp-backdrop:           rgba(0, 0, 0, .5);
+  --cp-field-hover:        #4B5160;
+  --cp-focus-ring:         rgba(246, 178, 58, .22);
+  --cp-tab-shadow:         0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);
+  --cp-stop-ring:          rgba(0, 0, 0, .6);
+  --cp-danger:             #FB7185;
+  --cp-danger-bg:          #3A1A22;
+  --cp-btn-primary-fg:     #1A1208;
+  --cp-btn-primary-shadow: rgba(246, 178, 58, .30);
+  --cp-dial-bg:            #1A1C22;
+  --cp-dial-border:        #353944;
+  --cp-dial-tick:          #4B5160;
+  --cp-swatch-bg:          #2F333C;
+  --cp-swatch-border:      #6A7180;
+  --cp-swatch-inset:       rgba(255, 255, 255, .22);
+  --cp-checker:            rgba(255, 255, 255, .06);
+
+  /* Shape library tokens */
+  --sl-modal-bg:           #22252C;
+  --sl-head-bg:            #1E2026;
+  --sl-side-bg:            #1A1C22;
+  --sl-field-hover:        #4B5160;
+  --sl-tab-shadow:         0 1px 2px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04);
+  --sl-tile-shadow:        0 2px 8px rgba(246,178,58,0.18);
+  --sl-btn-primary-fg:     #1A1208;
+  --sl-btn-primary-shadow: rgba(246,178,58,0.30);
+  --sl-shape:              #B7BDC8;
+  --sl-shape-hover:        #FFFFFF;
 
   /* Rulers */
   --ruler-tick: #4A4F5A;
@@ -220,7 +300,7 @@
 
 /* class to open the right panel */
 .svg_editor.open {
-  grid-template-columns: 34px 15px 50px 1fr 220px;
+  grid-template-columns: 34px 15px 50px 1fr 280px;
 }
 
 #svgroot {
@@ -236,28 +316,58 @@
   border: none;
   overflow: auto;
   text-align: center;
+  padding: 56px 80px 80px 56px;
 }
 
+/* #svgcanvas is the (over-sized) scroll/pan area, not the document page, so it
+   must stay transparent. The "paper" appearance lives on #canvasBackground
+   below, which is sized to the document and scales with zoom. */
 #svgcanvas {
   line-height: normal;
   display: inline-block;
-  background: var(--canvas-bg-color);
+  background: transparent;
   text-align: center;
   vertical-align: middle;
   position: relative;
-  box-shadow: var(--paper-shadow);
-  border: 1px solid var(--paper-border);
-  border-radius: var(--paper-radius);
+}
+
+/* The document page itself — tracks the canvas size and zoom level. */
+#canvasBackground {
+  filter: var(--paper-shadow-filter);
+}
+#canvasBackground > rect {
+  stroke: var(--paper-border);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
 }
 
 #sidepanels {
   grid-area: side;
+  position: relative;
+  /* let the grid cell constrain instead of stretch */
+  min-height: 0;
+}
+
+/* Scroll the content area, not #sidepanels — otherwise the panel handle
+   (which sits at `right: 100%` when open) gets clipped. */
+#sidepanel_content {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
 }
 
 /* ── Panel handle ─────────────────────────────────────────────────── */
 #sidepanel_handle {
   writing-mode: vertical-rl;
   text-orientation: mixed;
+  /* override the global `.svg_editor * { transform-origin: 0 0 }` so the
+     rotate happens around the handle's centre — keeps the layout box and
+     the visual box in the same place, so `right: 0` / `right: 100%`
+     position the handle predictably against the panel edges. */
+  transform-origin: center;
   transform: translateY(-50%) rotate(180deg);
   color: var(--muted);
   position: absolute;
@@ -287,6 +397,12 @@
   color: var(--icon-hover);
 }
 
+/* When the panel is open, anchor the handle to the panel's left edge
+   so it stops covering the content inside. */
+.svg_editor.open #sidepanel_handle {
+  right: 100%;
+}
+
 .svg_editor:not(.open) #sidepanel_content {
   display: none;
 }
@@ -305,87 +421,235 @@ hr {
   padding-top: 4px;
 }
 
-#layersLabel {
-  color: var(--text-color);
-}
-
-#layerpanel {
-  user-select: none;
-  padding-left: 15px;
-}
-
-#layerbuttons {
-  margin: 0;
-  padding: 0;
-  padding-left: 2px;
-  padding-right: 2px;
-  width: 125px;
-  height: 20px;
-  border: 0px;
-  overflow: hidden;
+/* ── Right-panel tab bar ──────────────────────────────────────────── */
+#sidepanel_tabs {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 2px;
+  padding: 6px 8px 0;
+  position: sticky;
+  top: 0;
+  background: var(--chrome-bg);
+  border-bottom: 1px solid var(--section-rule, #EEF0F3);
+  z-index: 1;
 }
-
-#layerlist {
-  margin: 1px;
-  padding: 0;
-  width: 132px;
-  border-collapse: collapse;
-  border: 1px solid var(--border-color);
-  background-color: var(--layer-bg);
+.sidepanel_tab {
+  flex: 1;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font: 600 12.5px var(--ui-font);
+  padding: 9px 4px 11px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 7px 7px 0 0;
+  transition: color 0.12s, background 0.12s;
 }
+.sidepanel_tab:hover { color: var(--fg); background: var(--icon-hover-bg); }
+.sidepanel_tab.active { color: var(--accent); }
+.sidepanel_tab.active::after {
+  content: "";
+  position: absolute;
+  left: 8px; right: 8px; bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+.sidepanel_tabpanel { display: none; padding: 2px 0 10px; }
+.sidepanel_tabpanel.active { display: block; }
 
-#layerlist tr.layer {
-  background-color: var(--layer-bg);
+/* ── Sections ─────────────────────────────────────────────────────── */
+.sidepanel_section,
+#color_shift_panel,
+#shadow_panel {
+  padding: 14px 16px;
   margin: 0;
-  padding: 0;
+  border-top: 1px solid var(--section-rule, #EEF0F3);
+  color: var(--fg);
+  user-select: none;
 }
+/* first visible section in a tab shouldn't carry a top rule */
+.sidepanel_tabpanel > .sidepanel_section:first-child { border-top: none; }
 
-#layerlist tr.layersel {
-  border: 1px solid var(--border-color);
-  background-color: var(--layer-selected-bg);
-}
-
-#layerlist td.layervis {
-  width: 22px;
-  cursor: pointer;
-}
-
-#layerlist td.layerinvis {
-  background-image: none;
-  cursor: pointer;
-}
-
-#layerlist td.layervis * {
-  display: block;
-}
-
-#layerlist td.layerinvis * {
-  display: none;
-}
-
-#layerlist td.layername {
-  cursor: pointer;
-}
-
-#layerlist td.layername:hover {
-  color: blue;
-}
-
-#layerlist tr.layersel td.layername {
-  font-weight: bold;
-}
-
-#selLayerLabel {
+.sidepanel_section_label,
+#color_shift_label {
+  font: 700 11px var(--ui-font);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 12px;
   white-space: nowrap;
 }
 
+/* Two-column field grid. align-items:start keeps stacked labels tidy when one
+   field wraps; row-gap is generous for the "comfortable" density. */
+.sidepanel_section_grid,
+.color_shift_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 10px;
+  align-items: start;
+}
+/* a control that should fill the row */
+.sidepanel_section_grid .span2,
+.sidepanel_section_grid se-input[size="15"],
+.sidepanel_section_grid .image_url_field { grid-column: 1 / -1; }
+
+/* a labelled sub-block (header above a button row / segmented control) */
+.sub_label {
+  font: 600 10px var(--ui-font);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 5px 2px;
+}
+.sidepanel_subsection { margin-top: 12px; }
+
+/* ── Button rows (object actions, text style, joins/caps) ─────────── */
+.sidepanel_btn_row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+/* group se-list/se-button into a single bordered "segmented" strip */
+.sidepanel_seg {
+  display: inline-flex;
+  align-items: center;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 34px;
+}
+.sidepanel_seg se-list,
+.sidepanel_seg se-button { --seg: 1; }
+
+.sidepanel_text_font {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.sidepanel_text_font se-font-select { flex: 1; min-width: 0; }
+
+/* ── Shadow / Clip-Mask footers ───────────────────────────────────── */
+.shadow_panel_footer,
+.clipmask_panel_footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.shadow_panel_footer input[type="color"] {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  background: var(--field-bg);
+  cursor: pointer;
+}
+
+/* ── Color-shift toggles / reset ──────────────────────────────────── */
+.color_shift_toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.color_shift_toggles label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.color_shift_toggles input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 15px; height: 15px;
+  cursor: pointer;
+  margin: 0;
+}
+#color_shift_reset {
+  margin-left: auto;
+  height: 32px;
+  padding: 0 14px;
+  font: 600 12.5px var(--ui-font);
+  color: var(--fg);
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+#color_shift_reset:hover { background: var(--icon-hover-bg); border-color: var(--field-border-h, #C8CDD6); }
+#color_shift_hint { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+/* ── Layers tab ───────────────────────────────────────────────────── */
+#layerpanel {
+  user-select: none;
+  padding: 14px 16px;
+}
+#layersLabel {
+  font: 700 11px var(--ui-font);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 12px;
+}
+#layerbuttons {
+  margin: 0 0 12px;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  border: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-start;
+}
+#layerlist {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--field-border);
+  border-radius: 9px;
+  overflow: hidden;
+  background: var(--field-bg);
+}
+#layerlist tr.layer { background: transparent; }
+#layerlist tr.layer + tr.layer td { border-top: 1px solid var(--section-rule, #EEF0F3); }
+#layerlist tr.layersel { background: var(--accent-soft); }
+#layerlist td {
+  padding: 9px 6px;
+  cursor: pointer;
+}
+#layerlist td.layervis {
+  width: 30px;
+  padding-left: 11px;
+  text-align: center;
+}
+#layerlist td.layervis * { display: block; }
+#layerlist td.layerinvis * { display: none; }
+#layerlist td.layername {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+}
+#layerlist td.layername:hover { color: var(--accent); }
+#layerlist tr.layersel td.layername { font-weight: 600; }
+
+#selLayerLabel { white-space: nowrap; }
 #selLayerNames {
   display: block;
-  top: -8px;
-  position: relative;
+  position: static;
+  top: 0;
+  margin-top: 12px;
 }
 
 /* ── Brand pill / main button ─────────────────────────────────────── */
@@ -519,9 +783,8 @@ hr {
   grid-area: top;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  align-content: flex-start;
   background: var(--chrome-bg);
   border-bottom: 1px solid var(--chrome-border);
   min-height: var(--top-toolbar-min-height);
@@ -529,19 +792,33 @@ hr {
   gap: 6px;
   position: relative;
   z-index: 5;
+  /* Stay a single row: overflow horizontally (thin scrollbar) instead of
+     wrapping contextual panels (e.g. the star panel) onto a second row. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+#tools_top::-webkit-scrollbar {
+  height: 3px;
 }
 
 #tools_top > * {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 2px;
+  /* Keep each group at its natural width so they scroll rather than squish. */
+  flex-shrink: 0;
 }
 
-/* History group: push to the right */
-#history_panel {
-  margin-left: auto;
+/* Rounded "tray" groups in the top toolbar (view / history / object / arrange /
+   zoom / path-node). Shared visual language for all quick-action clusters. */
+#editor_panel,
+#history_panel,
+#zoom_panel,
+.quick_tray {
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -549,23 +826,37 @@ hr {
   background: var(--group-bg);
   border: 1px solid var(--group-border);
   border-radius: 10px;
+}
+
+/* Path-node fields (transient pathedit toolbar): lay the X/Y labels inline
+   beside the field instead of stacked above it. Stacked labels make the tray
+   taller than 56px, which grows the top grid row and shifts the canvas down
+   when entering node-edit mode. Inline keeps it the height of a plain field. */
+.path_node_panel se-spin-input,
+.path_node_panel se-select,
+#curvature_panel se-select {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Polystar context fields hold only small numbers, but elix' default spin-box
+   is ~184px wide — three of them wrap the top toolbar to a second row. Cap the
+   width (labels are kept short to match) so the star panel fits one row. */
+#star_panel se-spin-input,
+#polygon_panel se-spin-input {
+  width: 58px;
+}
+
+/* History group: push it (and everything after) to the right edge */
+#history_panel {
+  margin-left: auto;
 }
 
 /* Title panel */
 #title_panel {
   display: inline-flex;
   align-items: center;
-}
-
-/* Editor panel (source/wireframe) */
-#editor_panel {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 4px;
-  background: var(--group-bg);
-  border: 1px solid var(--group-border);
-  border-radius: 10px;
 }
 
 /* ── Bottom bar ───────────────────────────────────────────────────── */
@@ -592,7 +883,7 @@ hr {
 
 #tools_bottom se-list,
 #tools_bottom se-select {
-  margin-bottom: 8px;
+  /* no bottom margin — flexbox align-items:center handles vertical centering */
 }
 
 /* ── Left toolbar ─────────────────────────────────────────────────── */
@@ -752,13 +1043,8 @@ input[type=text] {
   overflow: hidden;
 }
 
-#tool_image {
-  overflow: hidden;
-}
-
 #tool_open input,
-#tool_import input,
-#tool_image input {
+#tool_import input {
   position: absolute;
   opacity: 0;
   font-size: 10em;
@@ -900,4 +1186,9 @@ ul li.current {
   color: var(--fg);
   background-color: var(--chrome-bg);
   border: none;
+}
+
+#stroke_width,
+#opacity {
+  color: var(--fg);
 }

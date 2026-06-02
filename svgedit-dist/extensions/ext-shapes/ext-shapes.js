@@ -47,19 +47,22 @@ const extShapes = {
     let curShape;
     let startX;
     let startY;
+    let _userShapeData = null;
     return {
       callback() {
         if ($id("tool_shapelib") === null) {
           const extPath = svgEditor.configObj.curConfig.extPath;
           const buttonTemplate = `
-          <se-explorerbutton id="tool_shapelib" title="${svgEditor.i18next.t(`${name}:buttons.0.title`)}" lib="${extPath}/ext-shapes/shapelib/"
-          src="shapelib.svg"></se-explorerbutton>
+          <se-shape-library id="tool_shapelib"
+            title="${svgEditor.i18next.t(`${name}:buttons.0.title`)}"
+            lib="${extPath}/ext-shapes/shapelib/"
+            src="shapelib.svg"></se-shape-library>
           `;
           canv.insertChildAtIndex($id("tools_left"), buttonTemplate, 9);
-          $click($id("tool_shapelib"), () => {
-            if (this.leftPanel.updateLeftPanel("tool_shapelib")) {
-              canv.setMode(modeId);
-            }
+          $id("tool_shapelib").addEventListener("shape-insert", (e) => {
+            canv.setMode(modeId);
+            $id("tool_shapelib").setAttribute("pressed", "true");
+            _userShapeData = e.detail.isUserShape ? e.detail : null;
           });
         }
       },
@@ -68,26 +71,46 @@ const extShapes = {
         if (mode !== modeId) {
           return void 0;
         }
-        const currentD = document.getElementById("tool_shapelib").dataset.draw;
         startX = opts.start_x;
         const x = startX;
         startY = opts.start_y;
         const y = startY;
-        const curStyle = canv.getStyle();
         startClientPos.x = opts.event.clientX;
         startClientPos.y = opts.event.clientY;
-        curShape = canv.addSVGElementsFromJson({
-          element: "path",
-          curStyles: true,
-          attr: {
-            d: currentD,
-            id: canv.getNextId(),
-            opacity: curStyle.opacity / 2,
-            style: "pointer-events:none"
-          }
-        });
-        curShape.setAttribute("transform", "translate(" + x + "," + y + ") scale(0.005) translate(" + -x + "," + -y + ")");
-        canv.recalculateDimensions(curShape);
+        if (_userShapeData) {
+          const { svgContent, bbox } = _userShapeData;
+          const parser = new DOMParser();
+          const parsed = parser.parseFromString(
+            `<svg xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`,
+            "image/svg+xml"
+          );
+          const groupEl = parsed.documentElement.firstElementChild;
+          const imported = canv.getDOMDocument().importNode(groupEl, true);
+          imported.id = canv.getNextId();
+          const layer = canv.getCurrentGroup() || canv.getCurrentDrawing().getCurrentLayer();
+          layer.appendChild(imported);
+          imported.setAttribute(
+            "transform",
+            `translate(${x},${y}) scale(0.005) translate(${-bbox.x},${-bbox.y})`
+          );
+          canv.recalculateDimensions(imported);
+          curShape = imported;
+        } else {
+          const currentD = document.getElementById("tool_shapelib").dataset.draw;
+          const curStyle = canv.getStyle();
+          curShape = canv.addSVGElementsFromJson({
+            element: "path",
+            curStyles: true,
+            attr: {
+              d: currentD,
+              id: canv.getNextId(),
+              opacity: curStyle.opacity / 2,
+              style: "pointer-events:none"
+            }
+          });
+          curShape.setAttribute("transform", "translate(" + x + "," + y + ") scale(0.005) translate(" + -x + "," + -y + ")");
+          canv.recalculateDimensions(curShape);
+        }
         lastBBox = curShape.getBBox();
         return {
           started: true

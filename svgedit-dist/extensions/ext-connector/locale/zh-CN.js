@@ -8,7 +8,12 @@ const zhCN = {
     {
       title: "连接两个对象"
     }
-  ]
+  ],
+  routing: {
+    straight: "直线连接",
+    elbow: "正交（折线）连接",
+    leader: "引导线样式"
+  }
 };
 export {
   zhCN as default

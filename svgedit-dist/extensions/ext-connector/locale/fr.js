@@ -8,7 +8,12 @@ const fr = {
     {
       title: "Connecter deux objets"
     }
-  ]
+  ],
+  routing: {
+    straight: "Routage droit",
+    elbow: "Routage orthogonal (coude)",
+    leader: "Style ligne de repère"
+  }
 };
 export {
   fr as default

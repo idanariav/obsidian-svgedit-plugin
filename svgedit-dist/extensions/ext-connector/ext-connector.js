@@ -83,7 +83,49 @@ const extConnector = {
       const size = line.getAttribute("stroke-width") * 5;
       return hasMarker ? size : 0;
     };
-    const showPanel = (on) => {
+    const getConnMode = (line) => {
+      return line.getAttributeNS(seNs, "conn_mode") === "elbow" ? "elbow" : "straight";
+    };
+    const computeConnectorPoints = (startBB, endBB, line) => {
+      const sc = { x: startBB.x + startBB.width / 2, y: startBB.y + startBB.height / 2 };
+      const ec = { x: endBB.x + endBB.width / 2, y: endBB.y + endBB.height / 2 };
+      if (getConnMode(line) === "elbow") {
+        const offS = getOffset("start", line) / 2;
+        const offE = getOffset("end", line) / 2;
+        const dx = ec.x - sc.x;
+        const dy = ec.y - sc.y;
+        let sPt2, ePt2;
+        if (Math.abs(dx) >= Math.abs(dy)) {
+          if (dx >= 0) {
+            sPt2 = { x: startBB.x + startBB.width + offS, y: sc.y };
+            ePt2 = { x: endBB.x - offE, y: ec.y };
+          } else {
+            sPt2 = { x: startBB.x - offS, y: sc.y };
+            ePt2 = { x: endBB.x + endBB.width + offE, y: ec.y };
+          }
+          const midX = (sPt2.x + ePt2.x) / 2;
+          return [sPt2, { x: midX, y: sPt2.y }, { x: midX, y: ePt2.y }, ePt2];
+        }
+        if (dy >= 0) {
+          sPt2 = { x: sc.x, y: startBB.y + startBB.height + offS };
+          ePt2 = { x: ec.x, y: endBB.y - offE };
+        } else {
+          sPt2 = { x: sc.x, y: startBB.y - offS };
+          ePt2 = { x: ec.x, y: endBB.y + endBB.height + offE };
+        }
+        const midY = (sPt2.y + ePt2.y) / 2;
+        return [sPt2, { x: sPt2.x, y: midY }, { x: ePt2.x, y: midY }, ePt2];
+      }
+      const sPt = getBBintersect(ec.x, ec.y, startBB, getOffset("start", line));
+      const ePt = getBBintersect(sPt.x, sPt.y, endBB, getOffset("end", line));
+      return [sPt, { x: (sPt.x + ePt.x) / 2, y: (sPt.y + ePt.y) / 2 }, ePt];
+    };
+    const routeConnector = (line, startBB, endBB) => {
+      if (!startBB || !endBB) return;
+      const pts = computeConnectorPoints(startBB, endBB, line);
+      line.setAttribute("points", pts.map((p) => `${p.x},${p.y}`).join(" "));
+    };
+    const showPanel = (on, elem) => {
       let connRules = $id("connector_rules");
       if (!connRules) {
         connRules = document.createElement("style");
@@ -94,6 +136,36 @@ const extConnector = {
       if ($id("connector_rules")) {
         $id("connector_rules").style.display = on ? "block" : "none";
       }
+      const panel = $id("connector_panel");
+      if (panel) {
+        panel.style.display = on ? "block" : "none";
+        if (on && elem) {
+          const elbow = getConnMode(elem) === "elbow";
+          $id("connroute_straight").pressed = !elbow;
+          $id("connroute_elbow").pressed = elbow;
+        }
+      }
+    };
+    const setRouting = (mode) => {
+      const sel = svgCanvas.getSelectedElements()[0];
+      if (!sel?.id?.startsWith("conn_")) return;
+      const dataStorage = svgCanvas.getDataStorage();
+      sel.setAttributeNS(seNs, "se:conn_mode", mode);
+      routeConnector(sel, dataStorage.get(sel, "start_bb"), dataStorage.get(sel, "end_bb"));
+      $id("connroute_straight").pressed = mode !== "elbow";
+      $id("connroute_elbow").pressed = mode === "elbow";
+      svgCanvas.call("changed", [sel]);
+    };
+    const applyLeaderPreset = () => {
+      const sel = svgCanvas.getSelectedElements()[0];
+      if (!sel?.id?.startsWith("conn_")) return;
+      svgCanvas.changeSelectedAttribute("stroke-width", 1);
+      const endList = $id("end_marker_list_opts");
+      if (endList) {
+        endList.setAttribute("value", "mcircle");
+        endList.dispatchEvent(new CustomEvent("change", { detail: { value: "mcircle" } }));
+      }
+      svgCanvas.call("changed", [sel]);
     };
     const setPoint = (elem, pos, x, y, setMid) => {
       const pts = elem.points;
@@ -110,13 +182,10 @@ const extConnector = {
         setPoint(elem, 1, (ptEnd.x + ptStart.x) / 2, (ptEnd.y + ptStart.y) / 2);
       }
     };
-    const updatePoints = (line, conn, bb, altBB, pre, altPre) => {
-      const srcX = altBB.x + altBB.width / 2;
-      const srcY = altBB.y + altBB.height / 2;
-      const pt = getBBintersect(srcX, srcY, bb, getOffset(pre, line));
-      setPoint(line, conn.is_start ? 0 : "end", pt.x, pt.y, true);
-      const pt2 = getBBintersect(pt.x, pt.y, altBB, getOffset(altPre, line));
-      setPoint(line, conn.is_start ? "end" : 0, pt2.x, pt2.y, true);
+    const updatePoints = (line, conn, bb, altBB) => {
+      const startBB = conn.is_start ? bb : altBB;
+      const endBB = conn.is_start ? altBB : bb;
+      routeConnector(line, startBB, endBB);
     };
     const updateLine = (diffX, diffY) => {
       const dataStorage = svgCanvas.getDataStorage();
@@ -206,17 +275,9 @@ const extConnector = {
           dataStorage.put(line, `${pre}_bb`, bb);
           const altPre = isStart ? "end" : "start";
           const bb2 = dataStorage.get(line, `${altPre}_bb`);
-          const srcX = bb2?.x + bb2?.width / 2;
-          const srcY = bb2?.y + bb2?.height / 2;
-          const pt = getBBintersect(srcX, srcY, bb, getOffset(pre, line));
-          setPoint(line, isStart ? 0 : "end", pt.x, pt.y, true);
-          const pt2 = getBBintersect(
-            pt.x,
-            pt.y,
-            dataStorage.get(line, `${altPre}_bb`),
-            getOffset(altPre, line)
-          );
-          setPoint(line, isStart ? "end" : 0, pt2.x, pt2.y, true);
+          const startBB = isStart ? bb : bb2;
+          const endBB = isStart ? bb2 : bb;
+          routeConnector(line, startBB, endBB);
         }
       }
     };
@@ -253,6 +314,26 @@ const extConnector = {
             svgCanvas.setMode("connector");
           }
         });
+        const panelTemplate = document.createElement("template");
+        panelTemplate.innerHTML = `
+          <div id="connector_panel" class="sidepanel_section" style="display:none">
+            <div class="sidepanel_section_label">Connector</div>
+            <div class="sidepanel_btn_row">
+              <se-button id="connroute_straight" title="${name}:routing.straight" src="conn_straight.svg"></se-button>
+              <se-button id="connroute_elbow" title="${name}:routing.elbow" src="conn_elbow.svg"></se-button>
+              <se-button id="connleader" title="${name}:routing.leader" src="conn_leader.svg"></se-button>
+            </div>
+          </div>
+        `;
+        const designTab = $id("tab_design");
+        if (designTab) {
+          designTab.appendChild(panelTemplate.content);
+        } else {
+          $id("tools_top").appendChild(panelTemplate.content.cloneNode(true));
+        }
+        $click($id("connroute_straight"), () => setRouting("straight"));
+        $click($id("connroute_elbow"), () => setRouting("elbow"));
+        $click($id("connleader"), () => applyLeaderPreset());
       },
       mouseDown(opts) {
         const dataStorage = svgCanvas.getDataStorage();
@@ -378,17 +459,11 @@ const extConnector = {
           };
         }
         const bb = svgCanvas.getStrokedBBox([endElem]);
-        const pt = getBBintersect(
-          startX,
-          startY,
-          bb,
-          getOffset("start", curLine)
-        );
-        setPoint(curLine, "end", pt.x, pt.y, true);
         dataStorage.put(curLine, "c_start", startId);
         dataStorage.put(curLine, "c_end", endId);
         dataStorage.put(curLine, "end_bb", bb);
         curLine.setAttributeNS(seNs, "se:connector", connStr);
+        routeConnector(curLine, dataStorage.get(curLine, "start_bb"), bb);
         curLine.setAttribute("opacity", 1);
         svgCanvas.addToSelection([curLine]);
         svgCanvas.moveToBottomSelectedElement();
@@ -411,7 +486,7 @@ const extConnector = {
         for (const elem of selElems) {
           if (elem && dataStorage.has(elem, "c_start")) {
             selectorManager.requestSelector(elem).showGrips(false);
-            showPanel(opts.selectedElement && !opts.multiselected);
+            showPanel(opts.selectedElement && !opts.multiselected, elem);
           } else {
             showPanel(false);
           }

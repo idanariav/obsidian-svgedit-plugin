@@ -1,5 +1,6 @@
 import { __vitePreload } from "../_virtual/preload-helper.js";
 import { fileOpen as n, fileSave as o } from "../node_modules/browser-fs-access/dist/index.modern.js";
+import { insertImageFromHref } from "../src/editor/dialogs/insertImage.js";
 function __variableDynamicImportRuntime0__(path) {
   switch (path) {
     case "./locale/en.js":
@@ -79,36 +80,9 @@ const extOpensave = {
       } else {
         reader = new FileReader();
         reader.onloadend = ({ target: { result } }) => {
-          const insertNewImage = (imageWidth, imageHeight) => {
-            const newImage = this.svgCanvas.addSVGElementsFromJson({
-              element: "image",
-              attr: {
-                x: 0,
-                y: 0,
-                width: imageWidth,
-                height: imageHeight,
-                id: this.svgCanvas.getNextId(),
-                style: "pointer-events:inherit"
-              }
-            });
-            this.svgCanvas.setHref(newImage, result);
-            this.svgCanvas.selectOnly([newImage]);
-            this.svgCanvas.alignSelectedElements("m", "page");
-            this.svgCanvas.alignSelectedElements("c", "page");
-            this.topPanel.updateContextPanel();
-            $id("se-prompt-dialog").setAttribute("close", true);
-            resetFileInput();
-          };
-          let imgWidth = 100;
-          let imgHeight = 100;
-          const img = new Image();
-          img.style.opacity = 0;
-          img.addEventListener("load", () => {
-            imgWidth = img.offsetWidth || img.naturalWidth || img.width;
-            imgHeight = img.offsetHeight || img.naturalHeight || img.height;
-            insertNewImage(imgWidth, imgHeight);
-          });
-          img.src = result;
+          insertImageFromHref(result);
+          $id("se-prompt-dialog").setAttribute("close", true);
+          resetFileInput();
         };
         reader.readAsDataURL(file);
       }
@@ -128,7 +102,7 @@ const extOpensave = {
       svgEditor.svgCanvas.setResolution(x, y);
       svgEditor.updateCanvas(true);
       svgEditor.zoomImage();
-      svgEditor.layersPanel.populateLayers();
+      svgEditor.rightPanel.populateLayers();
       svgEditor.topPanel.updateContextPanel();
       svgEditor.topPanel.updateTitle("untitled.svg");
     };
@@ -153,7 +127,7 @@ const extOpensave = {
           size: blob.size,
           type: blob.type
         });
-        svgEditor.layersPanel.populateLayers();
+        svgEditor.rightPanel.populateLayers();
       } catch (err) {
         if (err.name !== "AbortError") {
           return console.error(err);

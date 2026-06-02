@@ -60,6 +60,67 @@ const extPolystar = {
     };
     const cot = (n) => 1 / Math.tan(n);
     const sec = (n) => 1 / Math.cos(n);
+    const buildStarPoints = (elem) => {
+      if (!elem.points || !elem.points.numberOfItems) return null;
+      const point = Number(elem.getAttribute("point"));
+      const orient = elem.getAttribute("orient");
+      const radialshift = Number(elem.getAttribute("radialshift"));
+      const circumradius = Number(elem.getAttribute("r"));
+      const inradius = circumradius / elem.getAttribute("starRadiusMultiplier");
+      const list = elem.points;
+      const len = list.numberOfItems;
+      const dup = isNaN(inradius) ? 1 : 2;
+      const used = Math.max(len - dup, 1);
+      let xpos = 0;
+      let ypos = 0;
+      for (let i = 0; i < used; ++i) {
+        const pt = list.getItem(i);
+        xpos += parseFloat(pt.x);
+        ypos += parseFloat(pt.y);
+      }
+      const cx = xpos / used;
+      const cy = ypos / used;
+      let polyPoints = "";
+      for (let s = 0; point >= s; s++) {
+        let angle = 2 * Math.PI * (s / point);
+        if (orient === "point") {
+          angle -= Math.PI / 2;
+        } else if (orient === "edge") {
+          angle = angle + Math.PI / point - Math.PI / 2;
+        }
+        let x = circumradius * Math.cos(angle) + cx;
+        let y = circumradius * Math.sin(angle) + cy;
+        polyPoints += x + "," + y + " ";
+        if (!isNaN(inradius)) {
+          angle = 2 * Math.PI * (s / point) + Math.PI / point;
+          if (orient === "point") {
+            angle -= Math.PI / 2;
+          } else if (orient === "edge") {
+            angle = angle + Math.PI / point - Math.PI / 2;
+          }
+          angle += radialshift;
+          x = inradius * Math.cos(angle) + cx;
+          y = inradius * Math.sin(angle) + cy;
+          polyPoints += x + "," + y + " ";
+        }
+      }
+      return polyPoints;
+    };
+    const applyStarAttr = (attr, val) => {
+      setAttr(attr, val);
+      let i = selElems.length;
+      while (i--) {
+        const elem = selElems[i];
+        if (elem?.getAttribute("shape") === "star") {
+          const oldPoints = elem.getAttribute("points");
+          const newPoints = buildStarPoints(elem);
+          if (newPoints !== null) {
+            elem.setAttribute("points", newPoints);
+            addToHistory(new ChangeElementCommand(elem, { points: oldPoints }));
+          }
+        }
+      }
+    };
     return {
       name: svgEditor.i18next.t(`${name}:name`),
       // The callback should be used to load the DOM with the appropriate UI items
@@ -90,6 +151,12 @@ const extPolystar = {
             showPanel(false, "star");
           }
         });
+        document.addEventListener("modeChange", (evt) => {
+          const mode = evt.detail.getMode();
+          const shapes = (selElems || []).filter(Boolean).map((el) => el.getAttribute?.("shape"));
+          if (mode !== "star" && !shapes.includes("star")) showPanel(false, "star");
+          if (mode !== "polygon" && !shapes.includes("regularPoly")) showPanel(false, "polygon");
+        });
         const label0 = `${name}:contextTools.0.label`;
         const title0 = `${name}:contextTools.0.title`;
         const label1 = `${name}:contextTools.1.label`;
@@ -117,65 +184,13 @@ const extPolystar = {
         showPanel(false, "star");
         showPanel(false, "polygon");
         $id("starNumPoints").addEventListener("change", (event) => {
-          setAttr("point", event.target.value);
-          const orient = "point";
-          const point = event.target.value;
-          let i = selElems.length;
-          while (i--) {
-            const elem = selElems[i];
-            if (elem.hasAttribute("r")) {
-              const oldPoint = elem.getAttribute("point");
-              const oldPoints = elem.getAttribute("points");
-              const radialshift = elem.getAttribute("radialshift");
-              let xpos = 0;
-              let ypos = 0;
-              if (elem.points) {
-                const list = elem.points;
-                const len = list.numberOfItems;
-                for (let i2 = 0; i2 < len; ++i2) {
-                  const pt = list.getItem(i2);
-                  xpos += parseFloat(pt.x);
-                  ypos += parseFloat(pt.y);
-                }
-                const cx = xpos / len;
-                const cy = ypos / len;
-                const circumradius = Number(elem.getAttribute("r"));
-                const inradius = circumradius / elem.getAttribute("starRadiusMultiplier");
-                let polyPoints = "";
-                for (let s = 0; point >= s; s++) {
-                  let angle = 2 * Math.PI * (s / point);
-                  if (orient === "point") {
-                    angle -= Math.PI / 2;
-                  } else if (orient === "edge") {
-                    angle = angle + Math.PI / point - Math.PI / 2;
-                  }
-                  let x = circumradius * Math.cos(angle) + cx;
-                  let y = circumradius * Math.sin(angle) + cy;
-                  polyPoints += x + "," + y + " ";
-                  if (!isNaN(inradius)) {
-                    angle = 2 * Math.PI * (s / point) + Math.PI / point;
-                    if (orient === "point") {
-                      angle -= Math.PI / 2;
-                    } else if (orient === "edge") {
-                      angle = angle + Math.PI / point - Math.PI / 2;
-                    }
-                    angle += radialshift;
-                    x = inradius * Math.cos(angle) + cx;
-                    y = inradius * Math.sin(angle) + cy;
-                    polyPoints += x + "," + y + " ";
-                  }
-                }
-                elem.setAttribute("points", polyPoints);
-                addToHistory(new ChangeElementCommand(elem, { point: oldPoint, points: oldPoints }));
-              }
-            }
-          }
+          applyStarAttr("point", event.target.value);
         });
         $id("RadiusMultiplier").addEventListener("change", (event) => {
-          setAttr("starRadiusMultiplier", event.target.value);
+          applyStarAttr("starRadiusMultiplier", event.target.value);
         });
         $id("radialShift").addEventListener("change", (event) => {
-          setAttr("radialshift", event.target.value);
+          applyStarAttr("radialshift", event.target.value);
         });
         $id("polySides").addEventListener("change", (event) => {
           setAttr("sides", event.target.value);
@@ -383,6 +398,7 @@ const extPolystar = {
           if (elem?.getAttribute("shape") === "star") {
             if (opts.selectedElement && !opts.multiselected) {
               $id("starNumPoints").value = elem.getAttribute("point");
+              $id("RadiusMultiplier").value = elem.getAttribute("starRadiusMultiplier");
               $id("radialShift").value = elem.getAttribute("radialshift");
               showPanel(true, "star");
             } else {
