@@ -1080,16 +1080,33 @@ function registerFileSyncHandlers(plugin) {
 }
 async function handleRename(plugin, file, oldPath) {
   if (!plugin.settings.keepInSync) return;
-  if (!plugin.svgDrawingPaths.has(oldPath)) return;
+  if (!isSvgDrawingFile(plugin.app, file) && !plugin.svgDrawingPaths.has(oldPath)) {
+    return;
+  }
   plugin.svgDrawingPaths.delete(oldPath);
   plugin.svgDrawingPaths.add(file.path);
+  console.debug(
+    `[SVG Draw] rename sync: ${oldPath} \u2192 ${file.path} (keepInSync on)`
+  );
   for (const ext of ["svg", "png"]) {
-    const oldCompanion = getCompanionPath(oldPath, ext, plugin.settings);
-    const newCompanion = getCompanionPath(file.path, ext, plugin.settings);
+    const oldCompanion = (0, import_obsidian9.normalizePath)(getCompanionPath(oldPath, ext, plugin.settings));
+    const newCompanion = (0, import_obsidian9.normalizePath)(getCompanionPath(file.path, ext, plugin.settings));
     if (oldCompanion === newCompanion) continue;
-    const companionFile = plugin.app.vault.getAbstractFileByPath((0, import_obsidian9.normalizePath)(oldCompanion));
-    if (companionFile instanceof import_obsidian9.TFile) {
-      await plugin.app.fileManager.renameFile(companionFile, (0, import_obsidian9.normalizePath)(newCompanion));
+    const companionFile = plugin.app.vault.getAbstractFileByPath(oldCompanion);
+    console.debug(
+      `[SVG Draw] rename sync ${ext}: looking for ${oldCompanion} \u2192 found=${companionFile instanceof import_obsidian9.TFile}`
+    );
+    if (!(companionFile instanceof import_obsidian9.TFile)) continue;
+    if (plugin.app.vault.getAbstractFileByPath(newCompanion) instanceof import_obsidian9.TFile) {
+      await plugin.app.vault.delete(companionFile);
+      continue;
+    }
+    try {
+      await plugin.app.fileManager.renameFile(companionFile, newCompanion);
+    } catch (e) {
+      if (plugin.app.vault.getAbstractFileByPath(oldCompanion) instanceof import_obsidian9.TFile) {
+        await plugin.app.vault.delete(companionFile);
+      }
     }
   }
 }
@@ -1149,10 +1166,12 @@ var SvgPlugin = class extends import_obsidian10.Plugin {
     registerCommands(this);
     this.addSettingTab(new SvgSettingsTab(this.app, this));
     this._loaded = true;
-    this.app.vault.getMarkdownFiles().forEach((f) => {
-      if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
-    });
     registerFileSyncHandlers(this);
+    this.app.workspace.onLayoutReady(() => {
+      this.app.vault.getMarkdownFiles().forEach((f) => {
+        if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
+      });
+    });
   }
   async onunload() {
     var _a;

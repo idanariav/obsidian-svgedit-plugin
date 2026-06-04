@@ -66,13 +66,19 @@ export default class SvgPlugin extends Plugin {
 
     this._loaded = true;
 
-    // Seed the SVG drawing paths set from all existing vault files, then
-    // register rename/delete sync handlers (must run after _loaded = true so
-    // the metadataCache is ready).
-    this.app.vault.getMarkdownFiles().forEach((f) => {
-      if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
-    });
+    // Register rename/delete sync handlers immediately so the metadataCache
+    // "changed" listener starts tracking drawings as soon as they are indexed.
     registerFileSyncHandlers(this);
+
+    // Seed the SVG drawing paths set from all existing vault files. This must
+    // wait for onLayoutReady: during onload the metadataCache is not yet
+    // populated, so isSvgDrawingFile() (which reads getFileCache) would return
+    // false for every file and leave the set empty — breaking rename/delete sync.
+    this.app.workspace.onLayoutReady(() => {
+      this.app.vault.getMarkdownFiles().forEach((f) => {
+        if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
+      });
+    });
   }
 
   async onunload(): Promise<void> {

@@ -1,6 +1,7 @@
 import { TAbstractFile, TFile, normalizePath } from "obsidian";
 import type SvgPlugin from "./main";
 import { getCompanionPath } from "./export/exporter";
+import { isSvgDrawingFile } from "./data/frontmatter";
 import {
   FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
@@ -46,19 +47,44 @@ async function handleRename(
   oldPath: string,
 ): Promise<void> {
   if (!plugin.settings.keepInSync) return;
-  if (!plugin.svgDrawingPaths.has(oldPath)) return;
+
+  // Identify the drawing by reading the renamed file's frontmatter directly,
+  // rather than trusting the pre-seeded svgDrawingPaths set (which can be empty
+  // if the metadataCache wasn't ready when the set was seeded). After a rename
+  // the file content is unchanged, so the cache still carries the frontmatter
+  // under the new path. Fall back to the tracked set for robustness.
+  if (!isSvgDrawingFile(plugin.app, file) && !plugin.svgDrawingPaths.has(oldPath)) {
+    return;
+  }
 
   // Update tracked path immediately
   plugin.svgDrawingPaths.delete(oldPath);
   plugin.svgDrawingPaths.add(file.path);
 
   for (const ext of ["svg", "png"] as const) {
-    const oldCompanion = getCompanionPath(oldPath, ext, plugin.settings);
-    const newCompanion = getCompanionPath(file.path, ext, plugin.settings);
+    const oldCompanion = normalizePath(getCompanionPath(oldPath, ext, plugin.settings));
+    const newCompanion = normalizePath(getCompanionPath(file.path, ext, plugin.settings));
     if (oldCompanion === newCompanion) continue;
-    const companionFile = plugin.app.vault.getAbstractFileByPath(normalizePath(oldCompanion));
-    if (companionFile instanceof TFile) {
-      await plugin.app.fileManager.renameFile(companionFile, normalizePath(newCompanion));
+
+    const companionFile = plugin.app.vault.getAbstractFileByPath(oldCompanion);
+    if (!(companionFile instanceof TFile)) continue;
+
+    // A companion may already exist at the new path: the open view's autoExport
+    // re-writes companions under the renamed file's path on save, and that can
+    // win the race against this handler. renameFile() throws if the destination
+    // exists, which would orphan the old-named file. In that case the newly
+    // exported companion is the source of truth — drop the stale old one.
+    if (plugin.app.vault.getAbstractFileByPath(newCompanion) instanceof TFile) {
+      await plugin.app.vault.delete(companionFile);
+      continue;
+    }
+    try {
+      await plugin.app.fileManager.renameFile(companionFile, newCompanion);
+    } catch {
+      // Lost the race after the existence check above — remove the orphan.
+      if (plugin.app.vault.getAbstractFileByPath(oldCompanion) instanceof TFile) {
+        await plugin.app.vault.delete(companionFile);
+      }
     }
   }
 }
