@@ -21,6 +21,8 @@ ready-to-embed `.svg` and `.png` image in sync automatically.
   the source drawing, not the flat image.
 - **Light / dark theme** that can follow Obsidian or be fixed.
 - **Frames** — mark a region of the canvas and export just that part.
+- **Vault-linked content** — import an image from your vault or attach a link to a
+  saved shape, and the drawing keeps a real backlink to the source note.
 - **Flexible configuration** — set behavior globally, per-folder, or per-file.
 - **Desktop and mobile.**
 
@@ -64,6 +66,33 @@ embed any image:
 
 The image renders in reading view, and **clicking it opens the drawing editor** so
 you can make changes — your edits flow back to the embedded image on the next save.
+
+---
+
+## Linking vault files into a drawing
+
+Two editor actions create a tracked link from the drawing back to a file in your vault:
+
+- **Image tool → Import from vault** — pick an image from your vault and it's embedded
+  on the canvas. If that image is the companion of another drawing (a note with the same
+  name), the link points to the **source note**; otherwise it points to the image file.
+- **Shape library → attach a link** — when you save an object to the shape library you
+  can attach a link to any vault file. Every time you insert that shape, the link is
+  recorded too.
+
+Each tracked link is written as a wikilink in an auto-managed **`## Linked Files`**
+section near the top of the note, so it shows up in Obsidian's graph and backlinks:
+
+```markdown
+## Linked Files
+- [[source-note]]
+- [[diagram.png]]
+```
+
+You don't edit this section by hand — the plugin rebuilds it on every save from the
+objects currently on the canvas. A link stays as long as **any** object from that import
+survives; recoloring, resizing, ungrouping, or deleting *some* of the pieces keeps it.
+The link is removed only when **all** objects from that import are gone.
 
 ---
 

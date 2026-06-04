@@ -6,7 +6,7 @@ import {
   normalizePath,
 } from "obsidian";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles } from "../data/SvgData";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
@@ -272,7 +272,8 @@ export class SvgView extends TextFileView {
 
   getViewData(): string {
     if (!this.svgEditor) return this.currentData;
-    return replaceSvg(this.currentData, this.svgEditor.svgCanvas.getSvgString());
+    const svg = this.svgEditor.svgCanvas.getSvgString();
+    return reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
   }
 
   clear(): void {
@@ -307,10 +308,8 @@ export class SvgView extends TextFileView {
     // calls save() after onunload, and also flushes any debounced requestSave()
     // that hasn't fired yet (e.g. when the user closes the tab quickly).
     if (this.svgEditor && this.file) {
-      this.currentData = replaceSvg(
-        this.currentData,
-        this.svgEditor.svgCanvas.getSvgString(),
-      );
+      const svg = this.svgEditor.svgCanvas.getSvgString();
+      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
       try { await this.save(); } catch { /* best-effort */ }
     }
     this.svgEditor = null;

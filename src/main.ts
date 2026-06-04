@@ -5,6 +5,8 @@ import { DEFAULT_SETTINGS, SvgPluginSettings } from "./settings/defaults";
 import { markdownPostProcessor } from "./postprocessor/markdownPostProcessor";
 import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
+import { fileToDataUri, pickVaultFile, resolveVaultLink } from "./modals/vaultImage";
+import { IMAGE_EXTENSIONS } from "./constants";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { registerCommands } from "./commands";
 import { registerFileSyncHandlers } from "./fileSync";
@@ -66,6 +68,9 @@ export default class SvgPlugin extends Plugin {
 
     this._loaded = true;
 
+    // Host bridge svgedit feature-detects to offer "import/link from vault".
+    this.installHostBridge();
+
     // Register rename/delete sync handlers immediately so the metadataCache
     // "changed" listener starts tracking drawings as soon as they are indexed.
     registerFileSyncHandlers(this);
@@ -84,6 +89,39 @@ export default class SvgPlugin extends Plugin {
   async onunload(): Promise<void> {
     this._loaded = false;
     this.uninstallPatch?.();
+    delete window.svgEditHost;
+  }
+
+  /** The vault path the active drawing's links should resolve against. */
+  private activeDrawingPath(): string {
+    return this.app.workspace.getActiveViewOfType(SvgView)?.file?.path ?? "";
+  }
+
+  /**
+   * Install the global svgedit reads to let the user pick a vault image/file.
+   * Picks resolve a wikilink (via resolveVaultLink) which svgedit stamps onto
+   * the inserted element(s) as data-vault-link; the link section is then
+   * reconciled from the SVG on save.
+   */
+  private installHostBridge(): void {
+    window.svgEditHost = {
+      pickVaultImage: async () => {
+        const file = await pickVaultFile(
+          this.app,
+          "Pick a vault image to import…",
+          (f) => IMAGE_EXTENSIONS.has(f.extension.toLowerCase()),
+        );
+        if (!file) return null;
+        const dataUrl = await fileToDataUri(this.app, file);
+        const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
+        return { dataUrl, link };
+      },
+      pickVaultFile: async () => {
+        const file = await pickVaultFile(this.app, "Pick a vault file to link…");
+        if (!file) return null;
+        return { link: resolveVaultLink(this.app, file, this.activeDrawingPath()) };
+      },
+    };
   }
 
   async loadSettings(): Promise<void> {

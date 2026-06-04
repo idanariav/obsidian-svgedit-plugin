@@ -1,4 +1,4 @@
-const insertImageFromHref = (href) => {
+const insertImageFromHref = (href, opts = {}) => {
   const svgCanvas = svgEditor.svgCanvas;
   const insertNewImage = (imageWidth, imageHeight) => {
     const newImage = svgCanvas.addSVGElementsFromJson({
@@ -13,6 +13,7 @@ const insertImageFromHref = (href) => {
       }
     });
     svgCanvas.setHref(newImage, href);
+    if (opts.vaultLink) newImage.setAttribute("data-vault-link", opts.vaultLink);
     svgCanvas.selectOnly([newImage]);
     svgCanvas.alignSelectedElements("m", "page");
     svgCanvas.alignSelectedElements("c", "page");

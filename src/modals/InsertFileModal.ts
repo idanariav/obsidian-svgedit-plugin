@@ -6,6 +6,7 @@ import {
 } from "obsidian";
 import { SvgView } from "../view/SvgView";
 import { IMAGE_EXTENSIONS } from "../constants";
+import { fileToDataUri } from "./vaultImage";
 
 export class InsertFileModal extends FuzzySuggestModal<TFile> {
   private view: SvgView;
@@ -38,11 +39,7 @@ export class InsertFileModal extends FuzzySuggestModal<TFile> {
   }
 
   private async insertImage(file: TFile): Promise<void> {
-    const binary = await this.app.vault.readBinary(file);
-    const b64 = arrayBufferToBase64(binary);
-    const mime = getMimeType(file.extension);
-    const dataUri = `data:${mime};base64,${b64}`;
-
+    const dataUri = await fileToDataUri(this.app, file);
     const fragment = `<image href="${dataUri}" x="50" y="50" width="200" height="200"/>`;
     await this.view.insertSvgFragment(fragment);
   }
@@ -52,27 +49,5 @@ export class InsertFileModal extends FuzzySuggestModal<TFile> {
     const escaped = linkText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const fragment = `<text x="50" y="80" font-family="sans-serif" font-size="16" fill="currentColor">[[${escaped}]]</text>`;
     await this.view.insertSvgFragment(fragment);
-  }
-}
-
-function arrayBufferToBase64(buffer: ArrayBuffer): string {
-  const bytes = new Uint8Array(buffer);
-  let binary = "";
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
-
-function getMimeType(ext: string): string {
-  switch (ext.toLowerCase()) {
-    case "png": return "image/png";
-    case "jpg":
-    case "jpeg": return "image/jpeg";
-    case "gif": return "image/gif";
-    case "webp": return "image/webp";
-    case "bmp": return "image/bmp";
-    case "svg": return "image/svg+xml";
-    default: return "application/octet-stream";
   }
 }

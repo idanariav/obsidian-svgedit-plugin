@@ -38,7 +38,7 @@ const extShapes = {
   async init() {
     const svgEditor = this;
     const canv = svgEditor.svgCanvas;
-    const { $id, $click } = canv;
+    const { $id } = canv;
     const svgroot = canv.getSvgRoot();
     let lastBBox = {};
     await loadExtensionTranslation(svgEditor);
@@ -94,6 +94,13 @@ const extShapes = {
             `translate(${x},${y}) scale(0.005) translate(${-bbox.x},${-bbox.y})`
           );
           canv.recalculateDimensions(imported);
+          if (_userShapeData.linkedFile) {
+            const stamp = (el) => {
+              el.setAttribute("data-vault-link", _userShapeData.linkedFile);
+              for (const child of el.children) stamp(child);
+            };
+            stamp(imported);
+          }
           curShape = imported;
         } else {
           const currentD = document.getElementById("tool_shapelib").dataset.draw;

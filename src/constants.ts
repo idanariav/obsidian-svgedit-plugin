@@ -12,6 +12,15 @@ export const DRAWING_SECTION_HEADING = "## Drawing";
 export const DRAWING_FENCE_OPEN = "```svg";
 export const DRAWING_FENCE_CLOSE = "```";
 export const DRAWING_SECTION_END = "%%";
+
+// Auto-managed section of wikilinks to vault files referenced by the drawing
+// (imported images / linked shapes). Kept visible above ## Drawing so Obsidian
+// generates real backlinks. Reconciled from the SVG on every save.
+export const LINKED_FILES_HEADING = "## Linked Files";
+// SVG attribute that svgedit stamps onto every element originating from a vault
+// import. Its value is the wikilink text to record. This is the cross-repo
+// contract with the svgedit fork.
+export const VAULT_LINK_ATTR = "data-vault-link";
 export const SWITCH_NOTICE =
   "==⚠  Switch to SVG VIEW in the ribbon or right-click menu  ⚠==";
 

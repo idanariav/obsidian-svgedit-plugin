@@ -7,6 +7,8 @@ import {
   FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
   SWITCH_NOTICE,
+  LINKED_FILES_HEADING,
+  VAULT_LINK_ATTR,
 } from "../constants";
 
 // Matches the fenced SVG block between the ## Drawing heading and the %% terminator.
@@ -34,6 +36,58 @@ export function replaceSvg(content: string, newSvg: string): string {
 
 function buildBlock(svg: string): string {
   return `${DRAWING_SECTION_HEADING}\n${DRAWING_FENCE_OPEN}\n${svg}\n${DRAWING_FENCE_CLOSE}\n${DRAWING_SECTION_END}`;
+}
+
+// Matches the auto-managed "## Linked Files" section: the heading through every
+// following line up to (but not including) the next "## " heading — in practice
+// always "## Drawing". Multiline so ^ anchors each line.
+const LINKED_FILES_BLOCK_REGEX = new RegExp(
+  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^## )`,
+  "m",
+);
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Collect the distinct vault-link wikilink texts present in the SVG, in first-seen order. */
+function collectVaultLinks(svg: string): string[] {
+  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  const seen = new Set<string>();
+  const links: string[] = [];
+  for (const el of Array.from(doc.querySelectorAll(`[${VAULT_LINK_ATTR}]`))) {
+    const link = el.getAttribute(VAULT_LINK_ATTR)?.trim();
+    if (link && !seen.has(link)) {
+      seen.add(link);
+      links.push(link);
+    }
+  }
+  return links;
+}
+
+/**
+ * Rebuild the auto-managed "## Linked Files" section to match the vault links
+ * still present in the SVG. Links survive as long as ≥1 stamped element remains;
+ * the section is removed entirely when none do. The section sits above
+ * "## Drawing" so its wikilinks produce real Obsidian backlinks.
+ */
+export function reconcileLinkedFiles(content: string, svg: string): string {
+  // Strip any existing section first so we always rebuild from scratch.
+  const stripped = content.replace(LINKED_FILES_BLOCK_REGEX, "");
+
+  const links = collectVaultLinks(svg);
+  if (links.length === 0) return stripped;
+
+  const section =
+    `${LINKED_FILES_HEADING}\n` +
+    links.map((l) => `- [[${l}]]`).join("\n") +
+    "\n\n";
+
+  if (stripped.includes(DRAWING_SECTION_HEADING)) {
+    // Function replacer so "$" sequences in link text aren't treated as patterns.
+    return stripped.replace(DRAWING_SECTION_HEADING, () => section + DRAWING_SECTION_HEADING);
+  }
+  return stripped + "\n\n" + section.trimEnd() + "\n";
 }
 
 /** Generate the initial markdown content for a brand-new drawing file. */
