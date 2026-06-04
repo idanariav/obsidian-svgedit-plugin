@@ -5,6 +5,7 @@ import {
   FRONTMATTER_PLUGIN_VALUE,
   FRONTMATTER_KEY_AUTO_EXPORT_PNG,
   FRONTMATTER_KEY_TRANSPARENT_BG,
+  FRONTMATTER_KEY_EXPORT_FRAME,
 } from "../constants";
 import type {
   SvgPluginSettings,
@@ -45,6 +46,7 @@ export function resolveEffectiveSettings(
   let openAsMarkdown        = globalSettings.openAsMarkdown;
   let autoExportPng         = globalSettings.autoExportPng;
   let transparentBackground = globalSettings.transparentBackground;
+  let exportFrame           = globalSettings.exportFrame;
 
   // 2. Apply the best-matching folder override (longest matching path wins)
   const folder = resolveFolderConfig(file.path, globalSettings.folderConfigs);
@@ -52,6 +54,7 @@ export function resolveEffectiveSettings(
     if (folder.openAsMarkdown        !== undefined) openAsMarkdown        = folder.openAsMarkdown;
     if (folder.autoExportPng         !== undefined) autoExportPng         = folder.autoExportPng;
     if (folder.transparentBackground !== undefined) transparentBackground = folder.transparentBackground;
+    if (folder.exportFrame           !== undefined) exportFrame           = folder.exportFrame;
   }
 
   // 3. Apply per-file frontmatter overrides
@@ -61,8 +64,10 @@ export function resolveEffectiveSettings(
     autoExportPng         = !!fm[FRONTMATTER_KEY_AUTO_EXPORT_PNG];
   if (fm?.[FRONTMATTER_KEY_TRANSPARENT_BG]  !== undefined && fm[FRONTMATTER_KEY_TRANSPARENT_BG]  !== null)
     transparentBackground = !!fm[FRONTMATTER_KEY_TRANSPARENT_BG];
+  if (fm?.[FRONTMATTER_KEY_EXPORT_FRAME]    !== undefined && fm[FRONTMATTER_KEY_EXPORT_FRAME]    !== null)
+    exportFrame           = String(fm[FRONTMATTER_KEY_EXPORT_FRAME]);
 
-  return { openAsMarkdown, autoExportPng, transparentBackground };
+  return { openAsMarkdown, autoExportPng, transparentBackground, exportFrame };
 }
 
 /**

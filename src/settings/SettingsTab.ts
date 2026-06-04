@@ -112,6 +112,22 @@ export class SvgSettingsTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName("Export region (frame name)")
+      .setDesc(
+        "Leave blank to export the whole canvas. Enter a frame name to crop exports to the matching frame. "
+        + "If no frame matches, the whole canvas is exported. Frame rects are always stripped from exports.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder("Whole canvas")
+          .setValue(this.plugin.settings.exportFrame)
+          .onChange(async (v) => {
+            this.plugin.settings.exportFrame = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
       .setName("PNG scale")
       .setDesc("Pixel density multiplier for exported PNGs (1 = 1:1, 2 = 2×).")
       .addDropdown((d) =>
@@ -193,7 +209,7 @@ export class SvgSettingsTab extends PluginSettingTab {
     containerEl.createEl("p", {
       text: "Per-folder settings override the global defaults above. "
         + "Use \"Inherit\" to fall back to the global value. "
-        + "Individual file frontmatter (svg-open-md, svg-auto-export-png, svg-transparent-bg) takes highest priority.",
+        + "Individual file frontmatter (svg-open-md, svg-auto-export-png, svg-transparent-bg, svg-export-frame) takes highest priority.",
       cls: "setting-item-description",
     });
 
@@ -368,6 +384,21 @@ export class SvgSettingsTab extends PluginSettingTab {
           .setValue(toTriState(cfg.transparentBackground))
           .onChange(async (v) => {
             this.plugin.settings.folderConfigs[index].transparentBackground = fromTriState(v as TriState);
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    // Export region (frame name)
+    new Setting(wrapper)
+      .setName("Export region (frame name)")
+      .setDesc("Blank inherits the global value. Enter a frame name to crop exports to it for drawings in this folder.")
+      .addText((t) =>
+        t
+          .setPlaceholder("Inherit")
+          .setValue(cfg.exportFrame ?? "")
+          .onChange(async (v) => {
+            const trimmed = v.trim();
+            this.plugin.settings.folderConfigs[index].exportFrame = trimmed === "" ? undefined : trimmed;
             await this.plugin.saveSettings();
           }),
       );

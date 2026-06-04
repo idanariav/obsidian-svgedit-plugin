@@ -1,5 +1,6 @@
 import { App, TFile, normalizePath } from "obsidian";
 import { svgToPngArrayBuffer } from "./raster";
+import { prepareSvgForExport } from "./frames";
 import type { SvgPluginSettings, EffectiveDrawingSettings } from "../settings/defaults";
 
 /**
@@ -13,8 +14,10 @@ export function getCompanionPath(
   sourcePath: string,
   ext: "svg" | "png",
   settings: SvgPluginSettings,
+  suffix = "",
 ): string {
-  const basename = sourcePath.split("/").pop()!.replace(/\.md$/, "") + "." + ext;
+  const stem = sourcePath.split("/").pop()!.replace(/\.md$/, "");
+  const basename = stem + suffix + "." + ext;
 
   let bestLen = 0;
   let exportFolder = "";
@@ -29,7 +32,20 @@ export function getCompanionPath(
   if (exportFolder) {
     return normalizePath(exportFolder.replace(/\/?$/, "/") + basename);
   }
-  return normalizePath(sourcePath.replace(/\.md$/, "") + "." + ext);
+  return normalizePath(sourcePath.replace(/[^/]+$/, basename));
+}
+
+/**
+ * Turn a frame name into a filename-safe path suffix (e.g. "Hero shot" →
+ * "-hero-shot"). Used by one-off frame exports so they land in a distinct file
+ * that auto-export-on-save never overwrites.
+ */
+export function frameFileSuffix(frameName: string): string {
+  const slug = frameName
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, "")
+    .replace(/\s+/g, "-");
+  return slug ? `-${slug}` : "";
 }
 
 export async function exportSvg(
@@ -37,9 +53,11 @@ export async function exportSvg(
   sourceFile: TFile,
   svgString: string,
   settings: SvgPluginSettings,
+  frameName = "",
+  pathSuffix = "",
 ): Promise<void> {
-  const path = getCompanionPath(sourceFile.path, "svg", settings);
-  await app.vault.adapter.write(path, svgString);
+  const path = getCompanionPath(sourceFile.path, "svg", settings, pathSuffix);
+  await app.vault.adapter.write(path, prepareSvgForExport(svgString, frameName));
 }
 
 export async function exportPng(
@@ -49,9 +67,11 @@ export async function exportPng(
   scale: number,
   transparent = false,
   settings: SvgPluginSettings,
+  frameName = "",
+  pathSuffix = "",
 ): Promise<void> {
-  const path = getCompanionPath(sourceFile.path, "png", settings);
-  const buf = await svgToPngArrayBuffer(svgString, scale, transparent);
+  const path = getCompanionPath(sourceFile.path, "png", settings, pathSuffix);
+  const buf = await svgToPngArrayBuffer(prepareSvgForExport(svgString, frameName), scale, transparent);
   await app.vault.adapter.writeBinary(path, buf);
 }
 
@@ -63,8 +83,9 @@ export async function autoExport(
   effective: EffectiveDrawingSettings,
 ): Promise<void> {
   const tasks: Promise<void>[] = [];
-  if (settings.autoExportSvg) tasks.push(exportSvg(app, file, svgString, settings));
+  if (settings.autoExportSvg)
+    tasks.push(exportSvg(app, file, svgString, settings, effective.exportFrame));
   if (effective.autoExportPng)
-    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings));
+    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings, effective.exportFrame));
   await Promise.all(tasks);
 }

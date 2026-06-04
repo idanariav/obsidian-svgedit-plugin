@@ -10,6 +10,8 @@ export interface FolderConfig {
   openAsMarkdown?: boolean;
   autoExportPng?: boolean;
   transparentBackground?: boolean;
+  /** Name of the frame to crop exports to. Empty/undefined inherits the global value. */
+  exportFrame?: string;
 }
 
 /** Resolved, concrete settings for a specific file (no undefined values). */
@@ -17,6 +19,8 @@ export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
   autoExportPng: boolean;
   transparentBackground: boolean;
+  /** Name of the frame to crop exports to. Empty string = export the whole canvas. */
+  exportFrame: string;
 }
 
 export interface SvgPluginSettings {
@@ -30,6 +34,8 @@ export interface SvgPluginSettings {
   openAsMarkdown: boolean;
   /** Global default: export PNGs with transparent background (false = white fill). */
   transparentBackground: boolean;
+  /** Global default frame name to crop exports to. Empty = export the whole canvas. */
+  exportFrame: string;
   /** Per-folder overrides, applied before per-file frontmatter. */
   folderConfigs: FolderConfig[];
   /** When true, rename/delete of a drawing also renames/deletes its companion files. */
@@ -51,6 +57,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   drawingsFolder: "",
   openAsMarkdown: false,
   transparentBackground: false,
+  exportFrame: "",
   folderConfigs: [],
   keepInSync: false,
   exportFolderMappings: [],

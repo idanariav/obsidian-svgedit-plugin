@@ -2,8 +2,9 @@ import { Notice, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
-import { isSvgDrawingFile } from "./data/frontmatter";
+import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { exportSvg, exportPng } from "./export/exporter";
+import { ExportModal } from "./modals/ExportModal";
 import { extractSvg, replaceSvg } from "./data/SvgData";
 import {
   VIEW_TYPE_SVG,
@@ -77,7 +78,19 @@ export function registerCommands(plugin: SvgPlugin): void {
     },
   });
 
-  // Export commands
+  // Export drawing (menu) — pick format, transparency and region
+  plugin.addCommand({
+    id: "export-drawing",
+    name: "Export drawing…",
+    checkCallback: (checking) => {
+      const view = getActiveSvgView(plugin);
+      if (!view || !view.file) return false;
+      if (!checking) new ExportModal(plugin, view).open();
+      return true;
+    },
+  });
+
+  // Quick export commands — use the file's resolved export region (frame/canvas)
   plugin.addCommand({
     id: "export-svg",
     name: "Export drawing as SVG",
@@ -87,7 +100,8 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportSvg(plugin.app, view.file, svgString, plugin.settings)
+        const { exportFrame } = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
+        exportSvg(plugin.app, view.file, svgString, plugin.settings, exportFrame)
           .then(() => new Notice("Exported SVG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }
@@ -104,7 +118,9 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getSvgString();
         if (!svgString) return true;
-        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, undefined, plugin.settings)
+        const { transparentBackground, exportFrame } =
+          resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
+        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, transparentBackground, plugin.settings, exportFrame)
           .then(() => new Notice("Exported PNG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }
