@@ -1,6 +1,7 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
 import type { ExportFolderMapping } from "./defaults";
+import { FolderSuggest } from "./FolderSuggest";
 
 /** "inherit" maps to undefined; "true"/"false" map to the matching boolean. */
 type TriState = "inherit" | "true" | "false";
@@ -193,15 +194,19 @@ export class SvgSettingsTab extends PluginSettingTab {
       .setDesc(
         "Default vault folder for new drawings (e.g. Drawings). Leave blank for vault root.",
       )
-      .addText((t) =>
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.drawingsFolder = v.trim();
+          await this.plugin.saveSettings();
+        });
         t
           .setPlaceholder("Drawings")
           .setValue(this.plugin.settings.drawingsFolder)
           .onChange(async (v) => {
             this.plugin.settings.drawingsFolder = v.trim();
             await this.plugin.saveSettings();
-          }),
-      );
+          });
+      });
 
     // ── Folder overrides ─────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Folder overrides");
@@ -268,15 +273,19 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(wrapper)
       .setName("Source folder")
       .setDesc("Drawings in this vault folder (and sub-folders) use the custom export path.")
-      .addText((t) =>
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.exportFolderMappings[index].sourceFolder = v.trim();
+          await this.plugin.saveSettings();
+        });
         t
           .setPlaceholder("Content/Concepts")
           .setValue(mapping.sourceFolder)
           .onChange(async (v) => {
             this.plugin.settings.exportFolderMappings[index].sourceFolder = v.trim();
             await this.plugin.saveSettings();
-          }),
-      )
+          });
+      })
       .addButton((btn) =>
         btn
           .setIcon("trash")
@@ -291,15 +300,19 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(wrapper)
       .setName("Export folder")
       .setDesc("Companion files are written here instead of next to the drawing.")
-      .addText((t) =>
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.exportFolderMappings[index].exportFolder = v.trim();
+          await this.plugin.saveSettings();
+        });
         t
           .setPlaceholder("Assets/Concepts")
           .setValue(mapping.exportFolder)
           .onChange(async (v) => {
             this.plugin.settings.exportFolderMappings[index].exportFolder = v.trim();
             await this.plugin.saveSettings();
-          }),
-      );
+          });
+      });
   }
 
   private renderFolderBlock(containerEl: HTMLElement, index: number): void {
@@ -314,15 +327,19 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(wrapper)
       .setName("Folder path")
       .setDesc("Vault-relative path, e.g. Drawings/work")
-      .addText((t) =>
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.folderConfigs[index].folder = v.trim();
+          await this.plugin.saveSettings();
+        });
         t
           .setPlaceholder("Folder/Path")
           .setValue(cfg.folder)
           .onChange(async (v) => {
             this.plugin.settings.folderConfigs[index].folder = v.trim();
             await this.plugin.saveSettings();
-          }),
-      )
+          });
+      })
       .addButton((btn) =>
         btn
           .setIcon("trash")
