@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
-import type { FolderConfig, ExportFolderMapping } from "./defaults";
+import type { ExportFolderMapping } from "./defaults";
 
 /** "inherit" maps to undefined; "true"/"false" map to the matching boolean. */
 type TriState = "inherit" | "true" | "false";
