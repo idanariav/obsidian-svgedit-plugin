@@ -36,6 +36,10 @@ export interface SvgPluginSettings {
   keepInSync: boolean;
   /** Custom export destinations: drawings in sourceFolder export to exportFolder. */
   exportFolderMappings: ExportFolderMapping[];
+  /** Persisted svgedit editor theme. "auto" follows Obsidian's light/dark mode;
+   *  "light"/"dark" is the user's explicit in-editor choice, remembered across
+   *  files and sessions. */
+  editorTheme: "auto" | "light" | "dark";
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -50,4 +54,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   folderConfigs: [],
   keepInSync: false,
   exportFolderMappings: [],
+  editorTheme: "auto",
 };

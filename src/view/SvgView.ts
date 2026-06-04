@@ -3,7 +3,6 @@ import {
   WorkspaceLeaf,
   FileSystemAdapter,
   setIcon,
-  TFile,
   normalizePath,
 } from "obsidian";
 import type SvgPlugin from "../main";
@@ -16,6 +15,9 @@ interface SvgEditorInstance {
   setConfig(cfg: Record<string, unknown>): void;
   init(): Promise<void>;
   loadFromString(svg: string): Promise<void>;
+  /** svgedit's root element; carries the theme-light / theme-dark class. */
+  $svgEditor?: HTMLElement;
+  configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
     bind(event: string, cb: () => void): void;
@@ -36,6 +38,10 @@ export class SvgView extends TextFileView {
   private isLoading = false;
   /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
   private loadGen = 0;
+  /** Last theme applied to svgedit's root. Lets the theme-class MutationObserver
+   *  distinguish real theme changes from other class changes (e.g. `.open`) and
+   *  ignore our own programmatic "auto"-follow updates. */
+  private lastTheme: "light" | "dark" = "light";
 
   constructor(leaf: WorkspaceLeaf, plugin: SvgPlugin) {
     super(leaf);
@@ -73,15 +79,21 @@ export class SvgView extends TextFileView {
     const adapter = this.app.vault.adapter as FileSystemAdapter;
     const dist = normalizePath(`${this.plugin.manifest.dir}/svgedit-dist`);
 
-    // ── CSS (one <link> per document) ──────────────────────────────────────
+    // ── CSS (one <style> per document) ─────────────────────────────────────
+    // Inject svgedit.css as inline <style> content, NOT a <link>. Obsidian loads
+    // <script> from app:// resource URLs (the editor runs) but does not reliably
+    // apply external <link rel="stylesheet"> from those URLs, which left all of
+    // svgedit's light-DOM (side panel, handle, rulers, workarea padding, paper)
+    // unstyled while the shadow-DOM components looked fine. Inlining the file
+    // content guarantees it applies — the same approach the Excalidraw plugin
+    // uses. svgedit.css contains no url() references, so inlining is safe.
     if (!document.getElementById(CSS_ELEM_ID)) {
-      document.head.createEl("link", {
-        attr: {
-          id: CSS_ELEM_ID,
-          rel: "stylesheet",
-          href: adapter.getResourcePath(`${dist}/svgedit.css`),
-        },
-      });
+      // Drop the leading `:root,` selector from svgedit's variable block so its
+      // legacy aliases (e.g. --link-color) don't leak onto Obsidian's document
+      // root and restyle Obsidian's own UI. The same variables are also declared
+      // on `.svg_editor`, so the editor itself stays fully themed.
+      const cssText = (await adapter.read(`${dist}/svgedit.css`)).replace(/^:root,$/m, "");
+      document.head.createEl("style", { attr: { id: CSS_ELEM_ID } }).textContent = cssText;
     }
 
     // ── IIFE script (one <script> per document) ────────────────────────────
@@ -108,14 +120,36 @@ export class SvgView extends TextFileView {
     this.svgEditor.setConfig({
       no_save_warning: true,
       initTool: "select",
+      // Apply the persisted editor theme (the user's last in-editor choice, or
+      // Obsidian's current mode when set to "auto"). Passing it as a pref — rather
+      // than toggling the class after init — keeps svgedit's stored `theme` pref
+      // in sync with the applied class, so the ext-theme-toggle works first-click.
+      theme: this.resolveInitialTheme(),
+      // Leave the side panel closed by default (a "PANEL" handle on the right
+      // edge), matching the native svgedit UI; the handle toggles it open.
+      showlayers: false,
       noDefaultExtensions: true,
-      // Load only the tool extensions; skip file I/O ones (ext-opensave, ext-storage)
-      // which require browser file-system APIs unavailable in Obsidian's context.
+      // Mirror svgedit's full default extension set so the Obsidian editor has
+      // the same tools and right-hand panels as the native UI. The only ones we
+      // omit are the file-I/O extensions (ext-opensave, ext-storage), which need
+      // browser file-system / localStorage APIs unavailable in Obsidian's
+      // context, and ext-overview_window (disabled upstream for performance).
+      // ext-eyedropper is kept even though it is not an upstream default.
       extensions: [
         "ext-connector",
-        "ext-eyedropper",
+        "ext-grid",
+        "ext-markers",
+        "ext-panning",
         "ext-shapes",
         "ext-polystar",
+        "ext-cutter",
+        "ext-curvature",
+        "ext-layer_view",
+        "ext-theme-toggle",
+        "ext-shadow",
+        "ext-color-shift",
+        "ext-fonts",
+        "ext-eyedropper",
       ],
       extPath,
       imgPath,
@@ -123,7 +157,7 @@ export class SvgView extends TextFileView {
 
     await this.svgEditor.init();
 
-    this.injectThemeGuard();
+    this.setupThemeSync();
 
     this.svgEditor.svgCanvas.bind("changed", () => {
       if (!this.isLoading) this.requestSave();
@@ -138,41 +172,71 @@ export class SvgView extends TextFileView {
     }
   }
 
-  /** Inject a document-level CSS firewall (inspired by Excalidraw's StylesManager)
-   *  that re-declares every svgedit CSS variable with correct light-theme values
-   *  using !important, scoped to .svg-plugin-editor-container.
-   *
-   *  Why: Obsidian's dark theme globally redefines variables like --text-color to
-   *  a light/white value — sometimes with !important.  Shadow DOM elements inherit
-   *  these variables from their host elements, so even our container-level override
-   *  can be beaten if Obsidian uses !important on an ancestor selector.  Injecting
-   *  from JavaScript (vs. styles.css) lets us use a high-specificity rule at
-   *  document load time, matching Excalidraw's proven approach. */
-  private injectThemeGuard(): void {
-    const GUARD_ID = 'svg-plugin-theme-guard';
-    if (document.getElementById(GUARD_ID)) return;
+  /** Re-apply the configured theme to a live editor (called when the default
+   *  theme is changed from the settings tab). */
+  refreshThemeFromSettings(): void {
+    this.applyTheme(this.resolveInitialTheme());
+  }
 
-    const style = document.createElement('style');
-    style.id = GUARD_ID;
-    // All values are hardcoded light-theme constants — no CSS variable references
-    // that Obsidian could redefine.  These mirror what styles.css sets but with
-    // !important so they win even against Obsidian's !important declarations.
-    style.textContent = `
-      .svg-plugin-editor-container {
-        --text-color:          #333333 !important;
-        --text-normal:         #333333 !important;
-        --text-muted:          #666666 !important;
-        --text-faint:          #888888 !important;
-        --main-bg-color:       #f0f0f0 !important;
-        --input-color:         #f0f0f0 !important;
-        --icon-bg-color:       #f0f0f0 !important;
-        --icon-bg-color-hover: #d8d8d8 !important;
-        --border-color:        #cccccc !important;
-        --canvas-bg-color:     #ffffff !important;
-        --ruler-color:         #e8e8e8 !important;
+  /** The theme to apply when the editor opens: the user's explicit persisted
+   *  choice, or Obsidian's current mode when set to "auto". */
+  private resolveInitialTheme(): "light" | "dark" {
+    const pref = this.plugin.settings.editorTheme;
+    if (pref === "light" || pref === "dark") return pref;
+    return document.body.classList.contains("theme-dark") ? "dark" : "light";
+  }
+
+  /** svgedit's root element, which carries the theme-light / theme-dark class. */
+  private getEditorRoot(): HTMLElement | null {
+    const root = this.svgEditor?.$svgEditor
+      ?? this.editorContainer.querySelector(".svg_editor");
+    return root instanceof HTMLElement ? root : null;
+  }
+
+  /** Wire up two-way theme syncing:
+   *  - A MutationObserver persists the user's in-editor theme toggle so it
+   *    survives switching files / restarting Obsidian.
+   *  - While the theme is "auto", follow Obsidian's light/dark mode live. */
+  private setupThemeSync(): void {
+    const root = this.getEditorRoot();
+    if (!root) return;
+    this.lastTheme = root.classList.contains("theme-dark") ? "dark" : "light";
+
+    const observer = new MutationObserver(() => {
+      const theme = root.classList.contains("theme-dark") ? "dark" : "light";
+      // Ignore non-theme class changes (e.g. the `.open` side-panel toggle) and
+      // our own programmatic "auto"-follow updates (which set lastTheme first).
+      if (theme === this.lastTheme) return;
+      this.lastTheme = theme;
+      // A real theme change here means the user clicked the in-editor toggle —
+      // persist it as their explicit choice so it survives reopening / restarts.
+      if (this.plugin.settings.editorTheme !== theme) {
+        this.plugin.settings.editorTheme = theme;
+        void this.plugin.saveSettings();
       }
-    `;
-    document.head.appendChild(style);
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    this.register(() => observer.disconnect());
+
+    this.registerEvent(
+      this.app.workspace.on("css-change", () => {
+        if (this.plugin.settings.editorTheme !== "auto") return;
+        this.applyTheme(document.body.classList.contains("theme-dark") ? "dark" : "light");
+      }),
+    );
+  }
+
+  /** Programmatically set svgedit's theme for the "auto" Obsidian-follow path.
+   *  Updating lastTheme before mutating the class makes the observer treat the
+   *  resulting change as our own and skip persisting it. */
+  private applyTheme(theme: "light" | "dark"): void {
+    if (!this.svgEditor) return;
+    const root = this.getEditorRoot();
+    if (!root || this.lastTheme === theme) return;
+    this.lastTheme = theme;
+    this.svgEditor.configObj.pref("theme", theme);
+    root.classList.toggle("theme-dark", theme === "dark");
+    root.classList.toggle("theme-light", theme === "light");
   }
 
   private async switchToMarkdown(): Promise<void> {

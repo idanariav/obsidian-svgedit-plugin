@@ -92,6 +92,15 @@ export default class SvgPlugin extends Plugin {
     await this.saveData(this.settings);
   }
 
+  /** Re-apply the configured editor theme to every open SVG view (used when the
+   *  default theme is changed from the settings tab). */
+  refreshOpenEditorThemes(): void {
+    for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
+      const view = leaf.view;
+      if (view instanceof SvgView) view.refreshThemeFromSettings();
+    }
+  }
+
   /** Open the "insert file from vault" picker for the given SvgView. */
   openInsertFileModal(view: SvgView): void {
     new InsertFileModal(this.app, view).open();

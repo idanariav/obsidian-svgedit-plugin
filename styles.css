@@ -53,26 +53,39 @@
 }
 
 /* svgedit mounts a .svg_editor div directly into this container.
-   Absolute positioning gives it definite pixel dimensions regardless of
-   Obsidian's flex/height resolution, and !important overrides ensure
-   Obsidian's global stylesheet cannot break the svgedit grid layout. */
+ *
+ * Obsidian's global stylesheet overrides `display`, `grid-template-*` and
+ * `grid-area` on generic divs, beating svgedit.css's single-class selectors.
+ * So the CSS grid must be re-declared here with `!important` to survive — this
+ * is genuine Obsidian glue, not a style choice.
+ *
+ * IMPORTANT: these values mirror `.svg_editor` in svgedit.css and must be kept
+ * in sync with the fork whenever the editor layout changes. Do NOT "improve"
+ * them independently. Theme/colors are intentionally NOT overridden here so the
+ * editor renders with svgedit's own Light/Dark Studio palette. */
 .svg-plugin-editor-container .svg_editor {
   position: absolute !important;
   inset: 0 !important;
-  display: grid !important;
   direction: ltr !important;
-  grid-template-rows: minmax(80px, auto) 15px 1fr 40px !important;
-  grid-template-columns: 40px 15px 50px 1fr 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  /* mirrors svgedit.css `.svg_editor` (--top-toolbar-min-height: 56px) */
+  grid-template-rows: minmax(56px, auto) 15px 1fr 40px !important;
+  grid-template-columns: 56px 15px 50px 1fr 15px !important;
   grid-template-areas:
-    "main main main top top"
+    "main main   main   top    top"
     "left corner rulerX rulerX side"
     "left rulerY workarea workarea side"
     "left bottom bottom bottom bottom" !important;
-  width: 100% !important;
-  height: 100% !important;
 }
 
-/* Force grid-area assignments so Obsidian rules can't override them */
+/* Right-hand side panel open state — mirrors svgedit.css `.svg_editor.open`. */
+.svg-plugin-editor-container .svg_editor.open {
+  grid-template-columns: 34px 15px 50px 1fr 280px !important;
+}
+
+/* Pin each region to its grid cell so Obsidian's rules can't displace them. */
 .svg-plugin-editor-container #tools_left   { grid-area: left !important; }
 .svg-plugin-editor-container #workarea     { grid-area: workarea !important; }
 .svg-plugin-editor-container #tools_top    { grid-area: top !important; }
@@ -80,113 +93,41 @@
 .svg-plugin-editor-container #sidepanels   { grid-area: side !important; }
 .svg-plugin-editor-container #main_button  { grid-area: main !important; }
 
-/* Side panel hidden by default; overflow clips any content */
-.svg-plugin-editor-container #sidepanels {
-  overflow: hidden;
-}
-
-/* Allow side panel column to expand when open */
-.svg-plugin-editor-container .svg_editor.open {
-  grid-template-columns: 34px 15px 50px 1fr 220px !important;
-}
-
-/* Restore flex layout on the top toolbar.
-   - #tools_top itself: !important needed because Obsidian overrides display.
-   - Children: NO !important so JS can still hide contextual panels with
-     element.style.display='none' (inline styles beat non-!important CSS, but
-     lose to !important). The ID-based selector gives us enough specificity to
-     beat Obsidian's class-based rules without !important. */
-.svg-plugin-editor-container #tools_top {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-}
-
-.svg-plugin-editor-container #tools_top > * {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-/* Light theme — SVG icons have been recolored to #333 so no filter tricks
-   are needed. We use a doubled class selector (.c.c) to win the cascade over
-   svgedit.css's :root rules, which have the same specificity as a single class
-   but are loaded later (source-order would otherwise make :root win). */
-.svg-plugin-editor-container.svg-plugin-editor-container {
-  --main-bg-color: #f0f0f0;
-  --icon-bg-color: #f0f0f0;
-  --icon-bg-color-hover: #d8d8d8;
-  --input-color: #f0f0f0;
-  --border-color: #cccccc;
-  --canvas-bg-color: #ffffff;
-  --ruler-color: #e8e8e8;
-  --text-color: #333333;
-}
-
-/* Explicit backgrounds for the main panel areas */
-.svg-plugin-editor-container .svg_editor,
-.svg-plugin-editor-container #tools_left,
+/* Obsidian overrides `display` on these containers; restore the flex layout
+   svgedit.css expects. No flex-wrap override — svgedit keeps the top toolbar a
+   single scrolling row (nowrap), which the previous wrap override broke. */
 .svg-plugin-editor-container #tools_top,
-.svg-plugin-editor-container #tools_bottom,
-.svg-plugin-editor-container #sidepanels {
-  background-color: #f0f0f0 !important;
-  color: #333333 !important;
-}
-
-/* Restore flex layout on the bottom toolbar.
-   Same rationale as #tools_top: Obsidian can override display, so !important
-   is needed on the container. Children use no !important so svgedit JS can
-   still use inline display:'none' to hide contextual controls (inline styles
-   beat non-!important CSS, but lose to !important). */
 .svg-plugin-editor-container #tools_bottom {
   display: flex !important;
-  align-items: center !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
 }
 
-/* Ensure every direct child custom element is visible and participates in
-   the flex row. No !important — JS contextual show/hide still works. */
-.svg-plugin-editor-container #tools_bottom > se-zoom,
-.svg-plugin-editor-container #tools_bottom > se-colorpicker,
-.svg-plugin-editor-container #tools_bottom > se-spin-input,
-.svg-plugin-editor-container #tools_bottom > se-select,
-.svg-plugin-editor-container #tools_bottom > se-list,
-.svg-plugin-editor-container #tools_bottom > se-palette {
-  display: inline-flex;
-  flex-shrink: 0;
+/* Side panel show/hide. svgedit toggles the `.open` class on `.svg_editor` and
+   hides the closed panel's body via `:not(.open) #sidepanel_content { display:
+   none }`. Obsidian's `display` overrides defeat that rule, so the panel body
+   spills out of the narrow 15px closed column. Re-assert it with !important so
+   the body is hidden when closed and shown when open. */
+.svg-plugin-editor-container .svg_editor:not(.open) #sidepanel_content {
+  display: none !important;
+}
+.svg-plugin-editor-container .svg_editor.open #sidepanel_content {
+  display: block !important;
 }
 
-/* svgedit.css adds margin-bottom: 8px to se-list and se-select, which can
-   push them below the 40px container boundary (clipped by overflow-y:hidden).
-   Reset to zero to keep them vertically centered. */
-.svg-plugin-editor-container #tools_bottom > se-list,
-.svg-plugin-editor-container #tools_bottom > se-select {
-  margin-bottom: 0 !important;
+/* Right-panel tabs (Design / Text / Effects / Layers) are plain <button>s.
+   Obsidian's button styling is scoped under a container class (e.g.
+   `.workspace-leaf-content button`), so it out-specifies svgedit's
+   `.sidepanel_tab` rule and paints a solid button background + text colour over
+   the flat tabs. Re-assert svgedit's intent using its own theme variables so the
+   tabs stay correct in both light and dark. */
+.svg-plugin-editor-container .sidepanel_tab {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--muted) !important;
 }
-
-/* ── Input text-color fix ────────────────────────────────────────────────── */
-/* Force dark text on every custom-element host so that color is inherited
-   correctly into their shadow DOMs.  Shadow DOM inherits `color` from the
-   host's *computed* value; if Obsidian's theme sets a light color directly
-   on these elements (beating our parent-level rule via specificity), shadow
-   DOM children would inherit that light color instead.  Adding !important
-   here ensures the host's computed color is always #333333. */
-.svg-plugin-editor-container se-input,
-.svg-plugin-editor-container se-spin-input,
-.svg-plugin-editor-container se-zoom,
-.svg-plugin-editor-container se-select,
-.svg-plugin-editor-container se-list,
-.svg-plugin-editor-container se-text,
-.svg-plugin-editor-container se-colorpicker,
-.svg-plugin-editor-container se-menu {
-  color: #333333 !important;
+.svg-plugin-editor-container .sidepanel_tab:hover {
+  background: var(--icon-hover-bg) !important;
+  color: var(--fg) !important;
 }
-
-/* Plain <input> elements in the light DOM (dialogs, legacy toolbar inputs)
-   need an explicit dark text color in case Obsidian overrides them.
-   Do NOT set background-color here — shadow-DOM inputs already get the
-   correct gray via var(--input-color), and forcing white would break those. */
-.svg-plugin-editor-container input {
-  color: #333333 !important;
+.svg-plugin-editor-container .sidepanel_tab.active {
+  color: var(--accent) !important;
 }

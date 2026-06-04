@@ -46,6 +46,30 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    // ── Appearance ───────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Appearance");
+
+    new Setting(containerEl)
+      .setName("Editor theme")
+      .setDesc(
+        "Default theme for the SVG editor. \"Match Obsidian\" follows Obsidian's light/dark mode; "
+        + "toggling the theme inside the editor updates this setting.",
+      )
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            auto: "Match Obsidian",
+            light: "Light",
+            dark: "Dark",
+          })
+          .setValue(this.plugin.settings.editorTheme)
+          .onChange(async (v) => {
+            this.plugin.settings.editorTheme = v as "auto" | "light" | "dark";
+            await this.plugin.saveSettings();
+            this.plugin.refreshOpenEditorThemes();
+          }),
+      );
+
     // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");
 
