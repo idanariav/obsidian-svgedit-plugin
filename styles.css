@@ -131,3 +131,10 @@
 .svg-plugin-editor-container .sidepanel_tab.active {
   color: var(--accent) !important;
 }
+
+/* ── Inline frame embed (![[drawing#frame]]) ───────────────────────────── */
+
+.svg-frame-embed svg {
+  max-width: 100%;
+  height: auto;
+}

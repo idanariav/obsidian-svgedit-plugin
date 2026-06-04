@@ -1,6 +1,7 @@
 import { App, FuzzySuggestModal, TFile } from "obsidian";
 import { IMAGE_EXTENSIONS } from "../constants";
 import { isSvgDrawingFile } from "../data/frontmatter";
+import { extractSvg } from "../data/SvgData";
 
 /** Host bridge svgedit feature-detects on `window` to offer "import/link from vault". */
 export interface SvgEditHost {
@@ -55,6 +56,52 @@ export async function fileToDataUri(app: App, file: TFile): Promise<string> {
   return `data:${mime};base64,${b64}`;
 }
 
+/**
+ * Encode an SVG string as an `image/svg+xml` data URL. Uses UTF-8-safe base64
+ * (`btoa` alone throws on non-Latin1 characters, which frame text may contain).
+ */
+export function svgToDataUri(svg: string): string {
+  const b64 = arrayBufferToBase64(new TextEncoder().encode(svg).buffer);
+  return `data:image/svg+xml;base64,${b64}`;
+}
+
+/** Read a drawing file and return its embedded SVG string, or null if absent. */
+export async function readDrawingSvg(app: App, file: TFile): Promise<string | null> {
+  const content = await app.vault.cachedRead(file);
+  return extractSvg(content);
+}
+
+/**
+ * Open a fuzzy picker over frame names plus a leading "Whole drawing" entry.
+ * Resolves with the chosen frame name, "" for the whole drawing, or null if
+ * dismissed.
+ */
+export function pickFrame(app: App, frames: string[]): Promise<string | null> {
+  const WHOLE = "Whole drawing";
+  const items = [WHOLE, ...frames];
+  return new Promise((resolve) => {
+    let chosen: string | null = null;
+    const modal = new (class extends FuzzySuggestModal<string> {
+      getItems(): string[] {
+        return items;
+      }
+      getItemText(item: string): string {
+        return item;
+      }
+      onChooseItem(item: string): void {
+        chosen = item === WHOLE ? "" : item;
+        resolve(chosen);
+      }
+      onClose(): void {
+        // Defer so onChooseItem (which also closes) wins the resolve race.
+        window.setTimeout(() => resolve(chosen), 0);
+      }
+    })(app);
+    modal.setPlaceholder("Pick a frame to import (or the whole drawing)…");
+    modal.open();
+  });
+}
+
 export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binary = "";
@@ -87,14 +134,26 @@ export function getMimeType(ext: string): string {
  * the link points to `file` itself.
  */
 export function resolveVaultLink(app: App, file: TFile, drawingPath: string): string {
-  let target = file;
+  const target = drawingSourceFor(app, file) ?? file;
+  return app.metadataCache.fileToLinktext(target, drawingPath);
+}
+
+/**
+ * Resolve the svg-plugin drawing a picked file represents, if any:
+ * the file itself when it's a drawing note, or its sibling `<stem>.md` companion
+ * when an image's source note is a drawing (e.g. "art/logo.png" → "art/logo.md").
+ * Returns null for plain files with no drawing source.
+ */
+export function drawingSourceFor(app: App, file: TFile): TFile | null {
+  if (file.extension.toLowerCase() === "md") {
+    return isSvgDrawingFile(app, file) ? file : null;
+  }
   if (IMAGE_EXTENSIONS.has(file.extension.toLowerCase())) {
-    // Sibling note with the same stem (e.g. "art/logo.png" → "art/logo.md").
     const companionPath = file.path.slice(0, -file.extension.length) + "md";
     const companion = app.vault.getAbstractFileByPath(companionPath);
     if (companion instanceof TFile && isSvgDrawingFile(app, companion)) {
-      target = companion;
+      return companion;
     }
   }
-  return app.metadataCache.fileToLinktext(target, drawingPath);
+  return null;
 }

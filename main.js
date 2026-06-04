@@ -860,19 +860,46 @@ async function markdownPostProcessor(el, ctx, app) {
   for (const embed of Array.from(embeds)) {
     const src = embed.getAttribute("src");
     if (!src) continue;
+    const hashIdx = src.indexOf("#");
+    if (hashIdx > 0) {
+      await renderFrameEmbed(embed, src, hashIdx, ctx, app);
+      continue;
+    }
     if (!/\.(png|svg)$/i.test(src)) continue;
-    const sourceMd = findSourceMd(app, src);
+    const sourceMd = findSourceMd(app, src, ctx.sourcePath);
     if (!sourceMd) continue;
-    embed.style.cursor = "pointer";
-    embed.addEventListener("click", (evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
-      const leaf = app.workspace.getLeaf(false);
-      leaf.openFile(sourceMd, { active: true });
-    });
+    bindOpenSource(embed, app, sourceMd);
   }
 }
-function findSourceMd(app, imageSrc) {
+async function renderFrameEmbed(embed, src, hashIdx, ctx, app) {
+  if (embed.dataset.svgFrame) return;
+  const base = src.slice(0, hashIdx);
+  const subpath = src.slice(hashIdx + 1).trim();
+  if (!subpath) return;
+  const file = app.metadataCache.getFirstLinkpathDest(base, ctx.sourcePath);
+  if (!(file instanceof import_obsidian5.TFile) || !isSvgDrawingFile(app, file)) return;
+  const svg = extractSvg(await app.vault.cachedRead(file));
+  if (!svg) return;
+  const frame = listFrames(svg).find((f) => f.name === subpath);
+  if (!frame) return;
+  const cropped = prepareSvgForExport(svg, frame.name);
+  const svgEl = new DOMParser().parseFromString(cropped, "image/svg+xml").documentElement;
+  embed.empty();
+  embed.dataset.svgFrame = "1";
+  embed.addClass("svg-frame-embed");
+  embed.appendChild(document.importNode(svgEl, true));
+  bindOpenSource(embed, app, file);
+}
+function bindOpenSource(embed, app, sourceMd) {
+  embed.style.cursor = "pointer";
+  embed.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const leaf = app.workspace.getLeaf(false);
+    leaf.openFile(sourceMd, { active: true });
+  });
+}
+function findSourceMd(app, imageSrc, sourcePath) {
   const mdPath = (0, import_obsidian5.normalizePath)(
     imageSrc.replace(/\.(png|svg)$/i, ".md")
   );
@@ -882,7 +909,7 @@ function findSourceMd(app, imageSrc) {
   }
   const resolved = app.metadataCache.getFirstLinkpathDest(
     imageSrc.replace(/\.(png|svg)$/i, ""),
-    ""
+    sourcePath
   );
   if (resolved) {
     const mdPath2 = (0, import_obsidian5.normalizePath)(resolved.path.replace(/\.(png|svg)$/i, ".md"));
@@ -994,6 +1021,38 @@ async function fileToDataUri(app, file) {
   const mime = getMimeType(file.extension);
   return `data:${mime};base64,${b64}`;
 }
+function svgToDataUri(svg) {
+  const b64 = arrayBufferToBase64(new TextEncoder().encode(svg).buffer);
+  return `data:image/svg+xml;base64,${b64}`;
+}
+async function readDrawingSvg(app, file) {
+  const content = await app.vault.cachedRead(file);
+  return extractSvg(content);
+}
+function pickFrame(app, frames) {
+  const WHOLE = "Whole drawing";
+  const items = [WHOLE, ...frames];
+  return new Promise((resolve) => {
+    let chosen = null;
+    const modal = new class extends import_obsidian7.FuzzySuggestModal {
+      getItems() {
+        return items;
+      }
+      getItemText(item) {
+        return item;
+      }
+      onChooseItem(item) {
+        chosen = item === WHOLE ? "" : item;
+        resolve(chosen);
+      }
+      onClose() {
+        window.setTimeout(() => resolve(chosen), 0);
+      }
+    }(app);
+    modal.setPlaceholder("Pick a frame to import (or the whole drawing)\u2026");
+    modal.open();
+  });
+}
 function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
   let binary = "";
@@ -1022,15 +1081,22 @@ function getMimeType(ext) {
   }
 }
 function resolveVaultLink(app, file, drawingPath) {
-  let target = file;
+  var _a;
+  const target = (_a = drawingSourceFor(app, file)) != null ? _a : file;
+  return app.metadataCache.fileToLinktext(target, drawingPath);
+}
+function drawingSourceFor(app, file) {
+  if (file.extension.toLowerCase() === "md") {
+    return isSvgDrawingFile(app, file) ? file : null;
+  }
   if (IMAGE_EXTENSIONS.has(file.extension.toLowerCase())) {
     const companionPath = file.path.slice(0, -file.extension.length) + "md";
     const companion = app.vault.getAbstractFileByPath(companionPath);
     if (companion instanceof import_obsidian7.TFile && isSvgDrawingFile(app, companion)) {
-      target = companion;
+      return companion;
     }
   }
-  return app.metadataCache.fileToLinktext(target, drawingPath);
+  return null;
 }
 
 // src/modals/InsertFileModal.ts
@@ -1463,10 +1529,23 @@ var SvgPlugin = class extends import_obsidian13.Plugin {
       pickVaultImage: async () => {
         const file = await pickVaultFile(
           this.app,
-          "Pick a vault image to import\u2026",
-          (f) => IMAGE_EXTENSIONS.has(f.extension.toLowerCase())
+          "Pick a vault image or drawing to import\u2026",
+          (f) => IMAGE_EXTENSIONS.has(f.extension.toLowerCase()) || f.extension.toLowerCase() === "md" && isSvgDrawingFile(this.app, f)
         );
         if (!file) return null;
+        const drawing = drawingSourceFor(this.app, file);
+        if (drawing) {
+          const svg = await readDrawingSvg(this.app, drawing);
+          if (svg) {
+            const frames = listFrames(svg);
+            const frameName2 = frames.length ? await pickFrame(this.app, frames.map((f) => f.name)) : "";
+            if (frameName2 === null) return null;
+            const dataUrl2 = svgToDataUri(prepareSvgForExport(svg, frameName2));
+            let link2 = resolveVaultLink(this.app, drawing, this.activeDrawingPath());
+            if (frameName2) link2 += `#${frameName2}`;
+            return { dataUrl: dataUrl2, link: link2 };
+          }
+        }
         const dataUrl = await fileToDataUri(this.app, file);
         const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
         return { dataUrl, link };

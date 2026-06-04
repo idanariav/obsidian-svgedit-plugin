@@ -5,7 +5,16 @@ import { DEFAULT_SETTINGS, SvgPluginSettings } from "./settings/defaults";
 import { markdownPostProcessor } from "./postprocessor/markdownPostProcessor";
 import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
-import { fileToDataUri, pickVaultFile, resolveVaultLink } from "./modals/vaultImage";
+import {
+  fileToDataUri,
+  pickVaultFile,
+  resolveVaultLink,
+  drawingSourceFor,
+  readDrawingSvg,
+  pickFrame,
+  svgToDataUri,
+} from "./modals/vaultImage";
+import { listFrames, prepareSvgForExport } from "./export/frames";
 import { IMAGE_EXTENSIONS } from "./constants";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { registerCommands } from "./commands";
@@ -108,10 +117,29 @@ export default class SvgPlugin extends Plugin {
       pickVaultImage: async () => {
         const file = await pickVaultFile(
           this.app,
-          "Pick a vault image to import…",
-          (f) => IMAGE_EXTENSIONS.has(f.extension.toLowerCase()),
+          "Pick a vault image or drawing to import…",
+          (f) =>
+            IMAGE_EXTENSIONS.has(f.extension.toLowerCase()) ||
+            (f.extension.toLowerCase() === "md" && isSvgDrawingFile(this.app, f)),
         );
         if (!file) return null;
+
+        // A drawing source (the picked drawing note, or an image's companion
+        // note) can be imported whole or cropped to one of its frames.
+        const drawing = drawingSourceFor(this.app, file);
+        if (drawing) {
+          const svg = await readDrawingSvg(this.app, drawing);
+          if (svg) {
+            const frames = listFrames(svg);
+            const frameName = frames.length ? await pickFrame(this.app, frames.map((f) => f.name)) : "";
+            if (frameName === null) return null; // dismissed the frame picker
+            const dataUrl = svgToDataUri(prepareSvgForExport(svg, frameName));
+            let link = resolveVaultLink(this.app, drawing, this.activeDrawingPath());
+            if (frameName) link += `#${frameName}`;
+            return { dataUrl, link };
+          }
+        }
+
         const dataUrl = await fileToDataUri(this.app, file);
         const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
         return { dataUrl, link };

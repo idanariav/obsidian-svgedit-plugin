@@ -20,9 +20,10 @@ ready-to-embed `.svg` and `.png` image in sync automatically.
 - **Click-through embeds** — clicking an embedded drawing image opens the editor for
   the source drawing, not the flat image.
 - **Light / dark theme** that can follow Obsidian or be fixed.
-- **Frames** — mark a region of the canvas and export just that part.
-- **Vault-linked content** — import an image from your vault or attach a link to a
-  saved shape, and the drawing keeps a real backlink to the source note.
+- **Frames** — mark a region of the canvas to export just that part, embed it on its
+  own (`![[drawing#frame]]`), or import it into another drawing.
+- **Vault-linked content** — import an image (or a single frame) from your vault, or
+  attach a link to a saved shape, and the drawing keeps a real backlink to the source note.
 - **Flexible configuration** — set behavior globally, per-folder, or per-file.
 - **Desktop and mobile.**
 
@@ -67,6 +68,19 @@ embed any image:
 The image renders in reading view, and **clicking it opens the drawing editor** so
 you can make changes — your edits flow back to the embedded image on the next save.
 
+### Embedding a single frame
+
+If a drawing has a [frame](docs/settings.md), you can embed just that frame's region by
+adding its name as a subpath — no separate image file needed:
+
+```markdown
+![[my-diagram#frame_1]]
+```
+
+The frame is rendered live from the drawing's current content, so it always reflects
+the latest edits. Clicking it opens the source drawing. (`frame_1` is the frame's name;
+use whatever you named the frame.)
+
 ---
 
 ## Linking vault files into a drawing
@@ -76,6 +90,9 @@ Two editor actions create a tracked link from the drawing back to a file in your
 - **Image tool → Import from vault** — pick an image from your vault and it's embedded
   on the canvas. If that image is the companion of another drawing (a note with the same
   name), the link points to the **source note**; otherwise it points to the image file.
+  You can also pick a drawing directly: if it has frames, you're asked which frame to
+  import (or the whole drawing), and only that region is inserted with a `[[note#frame]]`
+  link.
 - **Shape library → attach a link** — when you save an object to the shape library you
   can attach a link to any vault file. Every time you insert that shape, the link is
   recorded too.
