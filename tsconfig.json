@@ -12,7 +12,13 @@
     "importHelpers": true,
     "isolatedModules": true,
     "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
     "lib": ["ES6", "DOM"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "build"]
 }
