@@ -292,6 +292,10 @@ function resolveVaultLink(app, file, drawingPath) {
   const target = (_a = drawingSourceFor(app, file)) != null ? _a : file;
   return app.metadataCache.fileToLinktext(target, drawingPath);
 }
+function hasCompanionMd(app, file) {
+  const companionPath = file.path.slice(0, -file.extension.length) + "md";
+  return app.vault.getAbstractFileByPath(companionPath) instanceof import_obsidian.TFile;
+}
 function drawingSourceFor(app, file) {
   if (file.extension.toLowerCase() === "md") {
     return isSvgDrawingFile(app, file) ? file : null;
@@ -1606,7 +1610,11 @@ var SvgPlugin = class extends import_obsidian14.Plugin {
         const file = await pickVaultFile(
           this.app,
           "Pick a vault image or drawing to import\u2026",
-          (f) => IMAGE_EXTENSIONS.has(f.extension.toLowerCase()) || f.extension.toLowerCase() === "md" && isSvgDrawingFile(this.app, f)
+          (f) => {
+            const ext = f.extension.toLowerCase();
+            if (IMAGE_EXTENSIONS.has(ext)) return !hasCompanionMd(this.app, f);
+            return ext === "md" && isSvgDrawingFile(this.app, f);
+          }
         );
         if (!file) return null;
         const drawing = drawingSourceFor(this.app, file);

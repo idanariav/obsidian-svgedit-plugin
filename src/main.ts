@@ -10,6 +10,7 @@ import {
   pickVaultFile,
   resolveVaultLink,
   drawingSourceFor,
+  hasCompanionMd,
   readDrawingSvg,
   pickFrame,
   pickImportMode,
@@ -119,9 +120,13 @@ export default class SvgPlugin extends Plugin {
         const file = await pickVaultFile(
           this.app,
           "Pick a vault image or drawing to import…",
-          (f) =>
-            IMAGE_EXTENSIONS.has(f.extension.toLowerCase()) ||
-            (f.extension.toLowerCase() === "md" && isSvgDrawingFile(this.app, f)),
+          (f) => {
+            const ext = f.extension.toLowerCase();
+            // Skip image exports that have a companion `.md` — the drawing note
+            // is offered instead, so the rendered image isn't a duplicate pick.
+            if (IMAGE_EXTENSIONS.has(ext)) return !hasCompanionMd(this.app, f);
+            return ext === "md" && isSvgDrawingFile(this.app, f);
+          },
         );
         if (!file) return null;
 

@@ -181,6 +181,16 @@ export function resolveVaultLink(app: App, file: TFile, drawingPath: string): st
 }
 
 /**
+ * True if an image file has a sibling `<stem>.md` note (e.g. "art/logo.png" →
+ * "art/logo.md"). Such images are typically the rendered export of a drawing,
+ * so the import picker offers the `.md` note instead of the duplicate image.
+ */
+export function hasCompanionMd(app: App, file: TFile): boolean {
+  const companionPath = file.path.slice(0, -file.extension.length) + "md";
+  return app.vault.getAbstractFileByPath(companionPath) instanceof TFile;
+}
+
+/**
  * Resolve the svg-plugin drawing a picked file represents, if any:
  * the file itself when it's a drawing note, or its sibling `<stem>.md` companion
  * when an image's source note is a drawing (e.g. "art/logo.png" → "art/logo.md").
