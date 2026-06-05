@@ -42,6 +42,15 @@ While editing a drawing, this lets you pick an image (or other supported file) f
 your vault and drop it into the canvas. Only available when an SVG editor is the
 active view.
 
+When you pick an image you also choose an import **mode**:
+
+- **Unlocked** — a frozen snapshot that never changes.
+- **Locked** — re-rendered from the source each time you reopen or save the drawing,
+  so editing the source updates every locked copy.
+
+Either way the drawing keeps a backlink to the source (see *Linking vault files into a
+drawing* in the README). Non-image files are inserted as a `[[wikilink]]` instead.
+
 Use it to trace over a screenshot, build a diagram on top of a reference image, or
 combine existing assets into one drawing.
 

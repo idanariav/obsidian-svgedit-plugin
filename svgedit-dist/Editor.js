@@ -1341,121 +1341,121 @@ Di.loadLanguages;
 function $I(n) {
   switch (n) {
     case "./locale/lang.af.js":
-      return Promise.resolve().then(() => eY);
+      return Promise.resolve().then(() => tY);
     case "./locale/lang.ar.js":
-      return Promise.resolve().then(() => rY);
+      return Promise.resolve().then(() => nY);
     case "./locale/lang.az.js":
-      return Promise.resolve().then(() => iY);
+      return Promise.resolve().then(() => oY);
     case "./locale/lang.be.js":
-      return Promise.resolve().then(() => aY);
+      return Promise.resolve().then(() => sY);
     case "./locale/lang.bg.js":
-      return Promise.resolve().then(() => lY);
+      return Promise.resolve().then(() => cY);
     case "./locale/lang.ca.js":
-      return Promise.resolve().then(() => uY);
+      return Promise.resolve().then(() => dY);
     case "./locale/lang.cs.js":
-      return Promise.resolve().then(() => AY);
+      return Promise.resolve().then(() => hY);
     case "./locale/lang.cy.js":
-      return Promise.resolve().then(() => pY);
+      return Promise.resolve().then(() => gY);
     case "./locale/lang.da.js":
-      return Promise.resolve().then(() => fY);
+      return Promise.resolve().then(() => _Y);
     case "./locale/lang.de.js":
-      return Promise.resolve().then(() => mY);
+      return Promise.resolve().then(() => yY);
     case "./locale/lang.el.js":
-      return Promise.resolve().then(() => vY);
+      return Promise.resolve().then(() => bY);
     case "./locale/lang.en.js":
-      return Promise.resolve().then(() => wY);
+      return Promise.resolve().then(() => xY);
     case "./locale/lang.es.js":
-      return Promise.resolve().then(() => CY);
+      return Promise.resolve().then(() => kY);
     case "./locale/lang.et.js":
-      return Promise.resolve().then(() => SY);
+      return Promise.resolve().then(() => BY);
     case "./locale/lang.fa.js":
-      return Promise.resolve().then(() => EY);
+      return Promise.resolve().then(() => LY);
     case "./locale/lang.fi.js":
-      return Promise.resolve().then(() => PY);
+      return Promise.resolve().then(() => TY);
     case "./locale/lang.fr.js":
-      return Promise.resolve().then(() => jY);
+      return Promise.resolve().then(() => FY);
     case "./locale/lang.fy.js":
-      return Promise.resolve().then(() => IY);
+      return Promise.resolve().then(() => NY);
     case "./locale/lang.ga.js":
-      return Promise.resolve().then(() => MY);
+      return Promise.resolve().then(() => OY);
     case "./locale/lang.gl.js":
-      return Promise.resolve().then(() => UY);
+      return Promise.resolve().then(() => RY);
     case "./locale/lang.he.js":
-      return Promise.resolve().then(() => QY);
+      return Promise.resolve().then(() => DY);
     case "./locale/lang.hi.js":
-      return Promise.resolve().then(() => qY);
+      return Promise.resolve().then(() => VY);
     case "./locale/lang.hr.js":
-      return Promise.resolve().then(() => HY);
+      return Promise.resolve().then(() => GY);
     case "./locale/lang.hu.js":
-      return Promise.resolve().then(() => zY);
+      return Promise.resolve().then(() => $Y);
     case "./locale/lang.hy.js":
-      return Promise.resolve().then(() => KY);
+      return Promise.resolve().then(() => XY);
     case "./locale/lang.id.js":
-      return Promise.resolve().then(() => YY);
+      return Promise.resolve().then(() => WY);
     case "./locale/lang.is.js":
-      return Promise.resolve().then(() => ZY);
+      return Promise.resolve().then(() => JY);
     case "./locale/lang.it.js":
-      return Promise.resolve().then(() => eW);
+      return Promise.resolve().then(() => tW);
     case "./locale/lang.ja.js":
-      return Promise.resolve().then(() => rW);
+      return Promise.resolve().then(() => nW);
     case "./locale/lang.ko.js":
-      return Promise.resolve().then(() => iW);
+      return Promise.resolve().then(() => oW);
     case "./locale/lang.lt.js":
-      return Promise.resolve().then(() => aW);
+      return Promise.resolve().then(() => sW);
     case "./locale/lang.lv.js":
-      return Promise.resolve().then(() => lW);
+      return Promise.resolve().then(() => cW);
     case "./locale/lang.mk.js":
-      return Promise.resolve().then(() => uW);
+      return Promise.resolve().then(() => dW);
     case "./locale/lang.ms.js":
-      return Promise.resolve().then(() => AW);
+      return Promise.resolve().then(() => hW);
     case "./locale/lang.mt.js":
-      return Promise.resolve().then(() => pW);
+      return Promise.resolve().then(() => gW);
     case "./locale/lang.nl.js":
-      return Promise.resolve().then(() => fW);
+      return Promise.resolve().then(() => _W);
     case "./locale/lang.no.js":
-      return Promise.resolve().then(() => mW);
+      return Promise.resolve().then(() => yW);
     case "./locale/lang.pl.js":
-      return Promise.resolve().then(() => vW);
+      return Promise.resolve().then(() => bW);
     case "./locale/lang.pt-BR.js":
-      return Promise.resolve().then(() => wW);
+      return Promise.resolve().then(() => xW);
     case "./locale/lang.pt-PT.js":
-      return Promise.resolve().then(() => CW);
+      return Promise.resolve().then(() => kW);
     case "./locale/lang.ro.js":
-      return Promise.resolve().then(() => SW);
+      return Promise.resolve().then(() => BW);
     case "./locale/lang.ru.js":
-      return Promise.resolve().then(() => EW);
+      return Promise.resolve().then(() => LW);
     case "./locale/lang.sk.js":
-      return Promise.resolve().then(() => PW);
+      return Promise.resolve().then(() => TW);
     case "./locale/lang.sl.js":
-      return Promise.resolve().then(() => jW);
+      return Promise.resolve().then(() => FW);
     case "./locale/lang.sq.js":
-      return Promise.resolve().then(() => IW);
+      return Promise.resolve().then(() => NW);
     case "./locale/lang.sr.js":
-      return Promise.resolve().then(() => MW);
+      return Promise.resolve().then(() => OW);
     case "./locale/lang.sv.js":
-      return Promise.resolve().then(() => UW);
+      return Promise.resolve().then(() => RW);
     case "./locale/lang.sw.js":
-      return Promise.resolve().then(() => QW);
+      return Promise.resolve().then(() => DW);
     case "./locale/lang.test.js":
-      return Promise.resolve().then(() => qW);
+      return Promise.resolve().then(() => VW);
     case "./locale/lang.th.js":
-      return Promise.resolve().then(() => HW);
+      return Promise.resolve().then(() => GW);
     case "./locale/lang.tl.js":
-      return Promise.resolve().then(() => zW);
+      return Promise.resolve().then(() => $W);
     case "./locale/lang.tr.js":
-      return Promise.resolve().then(() => KW);
+      return Promise.resolve().then(() => XW);
     case "./locale/lang.uk.js":
-      return Promise.resolve().then(() => YW);
+      return Promise.resolve().then(() => WW);
     case "./locale/lang.vi.js":
-      return Promise.resolve().then(() => ZW);
+      return Promise.resolve().then(() => JW);
     case "./locale/lang.yi.js":
-      return Promise.resolve().then(() => eZ);
+      return Promise.resolve().then(() => tZ);
     case "./locale/lang.zh-CN.js":
-      return Promise.resolve().then(() => rZ);
+      return Promise.resolve().then(() => nZ);
     case "./locale/lang.zh-HK.js":
-      return Promise.resolve().then(() => iZ);
+      return Promise.resolve().then(() => oZ);
     case "./locale/lang.zh-TW.js":
-      return Promise.resolve().then(() => aZ);
+      return Promise.resolve().then(() => sZ);
     default:
       return new Promise(function(e, t) {
         (typeof queueMicrotask == "function" ? queueMicrotask : setTimeout)(
@@ -61645,7 +61645,7 @@ class gX extends HTMLElement {
     * @function constructor
     */
   constructor() {
-    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(VF.content.cloneNode(!0)), this.$dialog = this._shadowRoot.querySelector("#image_import_box"), this.$title = this._shadowRoot.querySelector("#image_import_title"), this.$closeBtn = this._shadowRoot.querySelector("#image_import_close"), this.$dropzone = this._shadowRoot.querySelector("#image_dropzone"), this.$dropzoneText = this._shadowRoot.querySelector("#image_dropzone_text"), this.$browseBtn = this._shadowRoot.querySelector("#image_browse_btn"), this.$fileInput = this._shadowRoot.querySelector("#image_file_input"), this.$orText = this._shadowRoot.querySelector("#image_import_or_text"), this.$urlLabel = this._shadowRoot.querySelector("#image_url_label"), this.$urlInput = this._shadowRoot.querySelector("#image_url_input"), this.$previewRow = this._shadowRoot.querySelector("#image_preview_row"), this.$preview = this._shadowRoot.querySelector("#image_preview"), this.$previewName = this._shadowRoot.querySelector("#image_preview_name"), this.$error = this._shadowRoot.querySelector("#image_import_error"), this.$cancelBtn = this._shadowRoot.querySelector("#image_import_cancel"), this.$okBtn = this._shadowRoot.querySelector("#image_import_ok"), this.$vaultOr = this._shadowRoot.querySelector("#image_vault_or"), this.$vaultBtn = this._shadowRoot.querySelector("#image_vault_btn"), this.href = "", this.vaultLink = "";
+    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(VF.content.cloneNode(!0)), this.$dialog = this._shadowRoot.querySelector("#image_import_box"), this.$title = this._shadowRoot.querySelector("#image_import_title"), this.$closeBtn = this._shadowRoot.querySelector("#image_import_close"), this.$dropzone = this._shadowRoot.querySelector("#image_dropzone"), this.$dropzoneText = this._shadowRoot.querySelector("#image_dropzone_text"), this.$browseBtn = this._shadowRoot.querySelector("#image_browse_btn"), this.$fileInput = this._shadowRoot.querySelector("#image_file_input"), this.$orText = this._shadowRoot.querySelector("#image_import_or_text"), this.$urlLabel = this._shadowRoot.querySelector("#image_url_label"), this.$urlInput = this._shadowRoot.querySelector("#image_url_input"), this.$previewRow = this._shadowRoot.querySelector("#image_preview_row"), this.$preview = this._shadowRoot.querySelector("#image_preview"), this.$previewName = this._shadowRoot.querySelector("#image_preview_name"), this.$error = this._shadowRoot.querySelector("#image_import_error"), this.$cancelBtn = this._shadowRoot.querySelector("#image_import_cancel"), this.$okBtn = this._shadowRoot.querySelector("#image_import_ok"), this.$vaultOr = this._shadowRoot.querySelector("#image_vault_or"), this.$vaultBtn = this._shadowRoot.querySelector("#image_vault_btn"), this.href = "", this.vaultLink = "", this.locked = !1, this.editableSvg = "";
   }
   /**
    * @function init
@@ -61724,7 +61724,7 @@ class gX extends HTMLElement {
    * @returns {void}
    */
   reset() {
-    this.href = "", this.vaultLink = "", this.$fileInput.value = "", this.$urlInput.value = "", this.$previewRow.classList.remove("show"), this.$preview.removeAttribute("src"), this.$previewName.textContent = "", this.$error.classList.remove("show"), this.$dropzone.classList.remove("dragover"), this.$okBtn.disabled = !0;
+    this.href = "", this.vaultLink = "", this.locked = !1, this.editableSvg = "", this.$fileInput.value = "", this.$urlInput.value = "", this.$previewRow.classList.remove("show"), this.$preview.removeAttribute("src"), this.$previewName.textContent = "", this.$error.classList.remove("show"), this.$dropzone.classList.remove("dragover"), this.$okBtn.disabled = !0;
   }
   /**
    * Show a preview thumbnail and enable the Insert button.
@@ -61742,7 +61742,7 @@ class gX extends HTMLElement {
    */
   handleFile(e) {
     if (!e || !e.type.includes("image")) return;
-    this.vaultLink = "";
+    this.vaultLink = "", this.locked = !1, this.editableSvg = "";
     const t = new FileReader();
     t.onloadend = ({ target: { result: r } }) => {
       this.showPreview(r, e.name);
@@ -61777,7 +61777,7 @@ class gX extends HTMLElement {
         this.reset();
         return;
       }
-      this.vaultLink = "";
+      this.vaultLink = "", this.locked = !1, this.editableSvg = "";
       const o = new Image();
       o.onload = () => this.showPreview(i), o.onerror = () => {
         this.href = "", this.$previewRow.classList.remove("show"), this.$error.classList.add("show"), this.$okBtn.disabled = !0;
@@ -61787,10 +61787,10 @@ class gX extends HTMLElement {
       i.key === "Enter" && (i.preventDefault(), r());
     }), svgEditor.$click(this.$vaultBtn, async () => {
       const i = await window.svgEditHost?.pickVaultImage?.();
-      i && (this.vaultLink = i.link || "", this.showPreview(i.dataUrl));
+      i && (this.vaultLink = i.link || "", this.editableSvg = i.editableSvg || "", this.locked = this.editableSvg ? !1 : !!i.locked, this.showPreview(i.dataUrl));
     }), svgEditor.$click(this.$cancelBtn, e), svgEditor.$click(this.$closeBtn, e), this.$dialog.addEventListener("close", () => this.reset()), svgEditor.$click(this.$okBtn, () => {
       this.href && (this.dispatchEvent(new CustomEvent("change", {
-        detail: { trigger: "ok", href: this.href, vaultLink: this.vaultLink || void 0 }
+        detail: { trigger: "ok", href: this.href, vaultLink: this.vaultLink || void 0, locked: this.locked || void 0, editableSvg: this.editableSvg || void 0 }
       })), e());
     });
   }
@@ -62835,7 +62835,7 @@ const MX = '<div id="tools_left"><se-button id="tool_select" title="tools.mode_s
         style: "pointer-events:inherit"
       }
     });
-    t.setHref(s, n), e.vaultLink && s.setAttribute("data-vault-link", e.vaultLink), t.selectOnly([s]), t.alignSelectedElements("m", "page"), t.alignSelectedElements("c", "page"), svgEditor.topPanel.updateContextPanel();
+    t.setHref(s, n), e.vaultLink && s.setAttribute("data-vault-link", e.vaultLink), e.locked && s.setAttribute("data-vault-locked", "1"), t.selectOnly([s]), t.alignSelectedElements("m", "page"), t.alignSelectedElements("c", "page"), svgEditor.topPanel.updateContextPanel();
   }, i = new Image();
   i.style.opacity = 0, i.addEventListener("load", () => {
     const o = i.offsetWidth || i.naturalWidth || i.width || 100, a = i.offsetHeight || i.naturalHeight || i.height || 100;
@@ -62843,8 +62843,50 @@ const MX = '<div id="tools_left"><se-button id="tool_select" title="tools.mode_s
   }), i.addEventListener("error", () => {
     r(100, 100);
   }), i.src = n;
-}, { $id: Mi, $qa: UX, $click: bo } = un;
-class RX {
+}, UX = (n, e = {}) => {
+  const t = svgEditor.svgCanvas, r = t.getDOMDocument(), o = new DOMParser().parseFromString(n, "image/svg+xml").documentElement;
+  if (!o || o.getElementsByTagName("parsererror").length) return;
+  const a = [], s = [], c = (S) => {
+    Array.from(S.children).forEach((k) => {
+      k.localName === "defs" && Array.from(k.children).forEach((L) => a.push(L));
+    });
+  }, u = (S) => {
+    Array.from(S.children).forEach((k) => {
+      const L = k.localName;
+      L === "title" || L === "metadata" || L === "defs" || s.push(k);
+    });
+  }, d = Array.from(o.children).filter(
+    (S) => S.localName === "g" && S.classList.contains("layer")
+  );
+  if (c(o), d.length ? (d.forEach(c), d.forEach(u)) : u(o), !s.length) return;
+  const g = r.createElementNS(t.NS.SVG, "g");
+  [...a, ...s].forEach((S) => {
+    g.appendChild(r.adoptNode(S));
+  }), g.querySelectorAll("*").forEach((S) => {
+    S.id || (S.id = t.getNextId());
+  }), g.id = t.getNextId(), t.uniquifyElems(g);
+  const _ = t.findDefs();
+  a.forEach((S) => _.appendChild(S));
+  const h = t.getCurrentDrawing().getCurrentLayer();
+  s.forEach((S) => {
+    h.appendChild(S), e.vaultLink && S.setAttribute("data-vault-link", e.vaultLink);
+  }), t.selectOnly(s);
+  const b = new t.history.BatchCommand("Insert SVG elements");
+  [...a, ...s].forEach((S) => {
+    b.addSubCommand(new t.history.InsertElementCommand(S));
+  });
+  const y = t.getStrokedBBox(s);
+  if (y) {
+    const S = t.getContentW() / 2 - (y.x + y.width / 2), k = t.getContentH() / 2 - (y.y + y.height / 2), L = t.moveSelectedElements(
+      s.map(() => S),
+      s.map(() => k),
+      !1
+    );
+    L && !L.isEmpty() && b.addSubCommand(L);
+  }
+  t.addCommandToHistory(b), t.call("changed", s), svgEditor.topPanel.updateContextPanel();
+}, { $id: Mi, $qa: RX, $click: bo } = un;
+class QX {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -62861,7 +62903,7 @@ class RX {
    * @returns {boolean} Whether the button was disabled or not
    */
   updateLeftPanel(e) {
-    return e.disabled ? !1 : (UX("#tools_left *[pressed]").forEach((t) => {
+    return e.disabled ? !1 : (RX("#tools_left *[pressed]").forEach((t) => {
       t.pressed = !1;
     }), Mi(e).pressed = !0, !0);
   }
@@ -62943,7 +62985,13 @@ class RX {
    * @returns {void}
    */
   handleImageImport(e) {
-    e?.detail?.trigger !== "ok" || !e?.detail?.href || OX(e.detail.href, { vaultLink: e.detail.vaultLink });
+    if (!(e?.detail?.trigger !== "ok" || !e?.detail?.href)) {
+      if (e.detail.editableSvg) {
+        UX(e.detail.editableSvg, { vaultLink: e.detail.vaultLink });
+        return;
+      }
+      OX(e.detail.href, { vaultLink: e.detail.vaultLink, locked: e.detail.locked });
+    }
   }
   /**
    *
@@ -62989,8 +63037,8 @@ class RX {
     e.innerHTML = MX, this.editor.$svgEditor.append(e.content.cloneNode(!0)), bo(Mi("tool_select"), this.clickSelect.bind(this)), bo(Mi("tool_fhpath"), this.clickFHPath.bind(this)), bo(Mi("tool_text"), this.clickText.bind(this)), bo(Mi("tool_image"), this.clickImage.bind(this)), Mi("se-image-import-dialog").addEventListener("change", this.handleImageImport.bind(this)), bo(Mi("tool_zoom"), this.clickZoom.bind(this)), Mi("tool_zoom").addEventListener("dblclick", this.dblclickZoom.bind(this)), bo(Mi("tool_path"), this.clickPath.bind(this)), bo(Mi("tool_line"), this.clickLine.bind(this)), bo(Mi("tool_rect"), this.clickRect.bind(this)), bo(Mi("tool_square"), this.clickSquare.bind(this)), bo(Mi("tool_fhrect"), this.clickFHRect.bind(this)), bo(Mi("tool_ellipse"), this.clickEllipse.bind(this)), bo(Mi("tool_circle"), this.clickCircle.bind(this)), bo(Mi("tool_fhellipse"), this.clickFHEllipse.bind(this));
   }
 }
-const QX = '<div id="tools_top"><div id="title_panel"><p>untitled.svg</p></div><!--title panel--><div id="editor_panel"><se-button id="tool_frame" title="tools.tool_frame" shortcut="U" src="frame.svg"></se-button><se-button id="tool_wireframe" title="tools.wireframe_mode" shortcut="F" src="wireframe.svg"></se-button><se-canvas-settings id="tool_canvas_settings" title="Canvas settings" src="canvas.svg"></se-canvas-settings></div><!--editor_panel(view toggles)--><div id="theme_panel"></div><!--theme_panel--><!--Path node editing(transient,pathedit mode)--><div class="path_node_panel quick_tray"><se-button id="tool_node_link" title="tools.node_link" src="tool_node_link.svg" pressed></se-button><se-spin-input id="path_node_x" data-attr="x" size="4" title="properties.node_x" label="properties.x_label"></se-spin-input><se-spin-input id="path_node_y" data-attr="y" size="4" title="properties.node_y" label="properties.y_label"></se-spin-input><se-select id="seg_type" title="properties.seg_type" label=""options="properties.straight_segments,properties.curve_segments" values="4::6"></se-select><se-button id="tool_node_clone" title="tools.node_clone" src="tool_node_clone.svg"></se-button><se-button id="tool_node_delete" title="tools.node_delete" src="tool_node_delete.svg"></se-button><se-button id="tool_openclose_path" title="tools.openclose_path" src="tool_openclose_path.svg"></se-button><se-button id="tool_add_subpath" title="tools.add_subpath" src="tool_add_subpath.svg"></se-button></div><!--path_node_panel--><div id="history_panel"><se-button id="tool_undo" title="tools.undo" shortcut="ctrl+Z" src="undo.svg" disabled></se-button><se-button id="tool_redo" title="tools.redo" shortcut="ctrl+Y" src="redo.svg" disabled></se-button></div><!--history_panel(pushed to the right)--><!--Object actions when a single element is selected: clone/delete/arrange/flip/align--><div class="selected_panel quick_tray" style="display:none"><se-button id="tool_clone" title="tools.clone" shortcut="D" src="clone.svg"></se-button><se-button id="tool_delete" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-list id="tool_arrange" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward" value="backward" title="tools.move_backward" src="move_backwards.svg"img-height="22px"></se-list-item><se-list-item id="arrange_back" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item></se-list><se-button id="tool_flip_h" title="tools.flip_horizontal" src="flip_horizontal.svg"></se-button><se-button id="tool_flip_v" title="tools.flip_vertical" src="flip_vertical.svg"></se-button><se-list id="tool_position" src="align.svg" title="tools.align_to_page" label="" width="28px" height="28px"><se-list-item id="tool_posleft" value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item id="tool_poscenter" value="c" title="tools.align_center" src="align_center.svg"img-height="22px"></se-list-item><se-list-item id="tool_posright" value="r" title="tools.align_right" src="align_right.svg"img-height="22px"></se-list-item><se-list-item id="tool_postop" value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item id="tool_posmiddle" value="m" title="tools.align_middle" src="align_middle.svg"img-height="22px"></se-list-item><se-list-item id="tool_posbottom" value="b" src="align_bottom.svg" title="tools.align_bottom"img-height="22px"></se-list-item><se-list-item id="tool_poshoriz" value="dh" src="align_distrib_horiz.svg" title="tools.align_distrib_horiz"img-height="22px"></se-list-item><se-list-item id="tool_posverti" value="dv" src="align_distrib_verti.svg" title="tools.align_distrib_verti"img-height="22px"></se-list-item></se-list></div><!--Object actions when multiple elements are selected: clone/delete/group/arrange/align--><div class="multiselected_panel quick_tray" style="display:none"><se-button id="tool_clone_multi" title="tools.clone" shortcut="C" src="clone.svg"></se-button><se-button id="tool_delete_multi" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-button id="tool_group_elements" title="tools.group_elements" shortcut="G" src="group_elements.svg"></se-button><se-list id="tool_arrange_multi" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front_multi" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward_multi" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward_multi" value="backward" title="tools.move_backward"src="move_backwards.svg" img-height="22px"></se-list-item><se-list-item id="arrange_back_multi" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item><se-list-item id="arrange_switch" value="switch" title="tools.switch_layers" src="switch_layer.svg"img-height="22px"></se-list-item></se-list><se-list id="tool_align_multi" src="align.svg" title="tools.align_to_page" width="28px" height="28px"><se-list-item value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item value="c" title="tools.align_center" src="align_center.svg" img-height="22px"></se-list-item><se-list-item value="r" title="tools.align_right" src="align_right.svg" img-height="22px"></se-list-item><se-list-item value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item value="m" title="tools.align_middle" src="align_middle.svg" img-height="22px"></se-list-item><se-list-item value="b" title="tools.align_bottom" src="align_bottom.svg" img-height="22px"></se-list-item><se-list-item value="dh" title="tools.align_distrib_horiz" src="align_distrib_horiz.svg"img-height="22px"></se-list-item><se-list-item value="dv" title="tools.align_distrib_verti" src="align_distrib_verti.svg"img-height="22px"></se-list-item></se-list><se-select id="tool_align_relative" label="tools.relativeTo"options="tools.selected_objects,tools.largest_object,tools.smallest_object,tools.page"values="selected::largest::smallest::page"></se-select></div><!--Ungroup(shown for a selected group/link)--><div class="g_panel quick_tray" style="display:none"><se-button id="tool_ungroup" title="tools.ungroup" src="ungroup.svg"></se-button></div><!--Zoom(far right)--><div id="zoom_panel"><se-zoom id="zoom" src="zoom.svg" title="Change zoom level" inputsize="40px"><se-text value="1000" text="1000%"></se-text><se-text value="400" text="400%"></se-text><se-text value="200" text="200%"></se-text><se-text value="100" text="100%"></se-text><se-text value="50" text="50%"></se-text><se-text value="25" text="25%"></se-text><se-text value="canvas" text="tools.fit_to_canvas"></se-text><se-text value="selection" text="tools.fit_to_sel"></se-text><se-text value="layer" text="tools.fit_to_layer_content"></se-text><se-text value="content" text="tools.fit_to_all"></se-text></se-zoom></div><!--Not visible,but still used(text edit buffer)--><input id="text" type="text" size="35"/><div id="cur_context_panel"></div></div>', { $qa: wd, $id: ut, $click: qr, isValidUnit: DX, getTypeMap: qX, convertUnit: xd } = un;
-class VX {
+const DX = '<div id="tools_top"><div id="title_panel"><p>untitled.svg</p></div><!--title panel--><div id="editor_panel"><se-button id="tool_frame" title="tools.tool_frame" shortcut="U" src="frame.svg"></se-button><se-button id="tool_wireframe" title="tools.wireframe_mode" shortcut="F" src="wireframe.svg"></se-button><se-canvas-settings id="tool_canvas_settings" title="Canvas settings" src="canvas.svg"></se-canvas-settings></div><!--editor_panel(view toggles)--><div id="theme_panel"></div><!--theme_panel--><!--Path node editing(transient,pathedit mode)--><div class="path_node_panel quick_tray"><se-button id="tool_node_link" title="tools.node_link" src="tool_node_link.svg" pressed></se-button><se-spin-input id="path_node_x" data-attr="x" size="4" title="properties.node_x" label="properties.x_label"></se-spin-input><se-spin-input id="path_node_y" data-attr="y" size="4" title="properties.node_y" label="properties.y_label"></se-spin-input><se-select id="seg_type" title="properties.seg_type" label=""options="properties.straight_segments,properties.curve_segments" values="4::6"></se-select><se-button id="tool_node_clone" title="tools.node_clone" src="tool_node_clone.svg"></se-button><se-button id="tool_node_delete" title="tools.node_delete" src="tool_node_delete.svg"></se-button><se-button id="tool_openclose_path" title="tools.openclose_path" src="tool_openclose_path.svg"></se-button><se-button id="tool_add_subpath" title="tools.add_subpath" src="tool_add_subpath.svg"></se-button></div><!--path_node_panel--><div id="history_panel"><se-button id="tool_undo" title="tools.undo" shortcut="ctrl+Z" src="undo.svg" disabled></se-button><se-button id="tool_redo" title="tools.redo" shortcut="ctrl+Y" src="redo.svg" disabled></se-button></div><!--history_panel(pushed to the right)--><!--Object actions when a single element is selected: clone/delete/arrange/flip/align--><div class="selected_panel quick_tray" style="display:none"><se-button id="tool_clone" title="tools.clone" shortcut="D" src="clone.svg"></se-button><se-button id="tool_delete" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-list id="tool_arrange" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward" value="backward" title="tools.move_backward" src="move_backwards.svg"img-height="22px"></se-list-item><se-list-item id="arrange_back" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item></se-list><se-button id="tool_flip_h" title="tools.flip_horizontal" src="flip_horizontal.svg"></se-button><se-button id="tool_flip_v" title="tools.flip_vertical" src="flip_vertical.svg"></se-button><se-list id="tool_position" src="align.svg" title="tools.align_to_page" label="" width="28px" height="28px"><se-list-item id="tool_posleft" value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item id="tool_poscenter" value="c" title="tools.align_center" src="align_center.svg"img-height="22px"></se-list-item><se-list-item id="tool_posright" value="r" title="tools.align_right" src="align_right.svg"img-height="22px"></se-list-item><se-list-item id="tool_postop" value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item id="tool_posmiddle" value="m" title="tools.align_middle" src="align_middle.svg"img-height="22px"></se-list-item><se-list-item id="tool_posbottom" value="b" src="align_bottom.svg" title="tools.align_bottom"img-height="22px"></se-list-item><se-list-item id="tool_poshoriz" value="dh" src="align_distrib_horiz.svg" title="tools.align_distrib_horiz"img-height="22px"></se-list-item><se-list-item id="tool_posverti" value="dv" src="align_distrib_verti.svg" title="tools.align_distrib_verti"img-height="22px"></se-list-item></se-list></div><!--Object actions when multiple elements are selected: clone/delete/group/arrange/align--><div class="multiselected_panel quick_tray" style="display:none"><se-button id="tool_clone_multi" title="tools.clone" shortcut="C" src="clone.svg"></se-button><se-button id="tool_delete_multi" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-button id="tool_group_elements" title="tools.group_elements" shortcut="G" src="group_elements.svg"></se-button><se-list id="tool_arrange_multi" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front_multi" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward_multi" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward_multi" value="backward" title="tools.move_backward"src="move_backwards.svg" img-height="22px"></se-list-item><se-list-item id="arrange_back_multi" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item><se-list-item id="arrange_switch" value="switch" title="tools.switch_layers" src="switch_layer.svg"img-height="22px"></se-list-item></se-list><se-list id="tool_align_multi" src="align.svg" title="tools.align_to_page" width="28px" height="28px"><se-list-item value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item value="c" title="tools.align_center" src="align_center.svg" img-height="22px"></se-list-item><se-list-item value="r" title="tools.align_right" src="align_right.svg" img-height="22px"></se-list-item><se-list-item value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item value="m" title="tools.align_middle" src="align_middle.svg" img-height="22px"></se-list-item><se-list-item value="b" title="tools.align_bottom" src="align_bottom.svg" img-height="22px"></se-list-item><se-list-item value="dh" title="tools.align_distrib_horiz" src="align_distrib_horiz.svg"img-height="22px"></se-list-item><se-list-item value="dv" title="tools.align_distrib_verti" src="align_distrib_verti.svg"img-height="22px"></se-list-item></se-list><se-select id="tool_align_relative" label="tools.relativeTo"options="tools.selected_objects,tools.largest_object,tools.smallest_object,tools.page"values="selected::largest::smallest::page"></se-select></div><!--Ungroup(shown for a selected group/link)--><div class="g_panel quick_tray" style="display:none"><se-button id="tool_ungroup" title="tools.ungroup" src="ungroup.svg"></se-button></div><!--Zoom(far right)--><div id="zoom_panel"><se-zoom id="zoom" src="zoom.svg" title="Change zoom level" inputsize="40px"><se-text value="1000" text="1000%"></se-text><se-text value="400" text="400%"></se-text><se-text value="200" text="200%"></se-text><se-text value="100" text="100%"></se-text><se-text value="50" text="50%"></se-text><se-text value="25" text="25%"></se-text><se-text value="canvas" text="tools.fit_to_canvas"></se-text><se-text value="selection" text="tools.fit_to_sel"></se-text><se-text value="layer" text="tools.fit_to_layer_content"></se-text><se-text value="content" text="tools.fit_to_all"></se-text></se-zoom></div><!--Not visible,but still used(text edit buffer)--><input id="text" type="text" size="35"/><div id="cur_context_panel"></div></div>', { $qa: wd, $id: ut, $click: qr, isValidUnit: qX, getTypeMap: VX, convertUnit: xd } = un;
+class HX {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -63383,13 +63431,13 @@ class VX {
     let r = e.target.value;
     if (this.selectedElement?.tagName === "path" && this.selectedElement.hasAttribute("data-arc") && ["cx", "cy", "r"].includes(t))
       return this.editor.svgCanvas.setCircleArcAttr(t, Number(r)), !0;
-    if (!DX(t, r, this.selectedElement))
+    if (!qX(t, r, this.selectedElement))
       return e.target.value = this.selectedElement.getAttribute(t), alert(this.editor.i18next.t("notification.invalidAttrValGiven")), !1;
     if (t !== "id" && t !== "class") {
       if (isNaN(r))
         r = this.editor.svgCanvas.convertToNum(t, r);
       else if (this.editor.configObj.curConfig.baseUnit !== "px") {
-        const a = qX();
+        const a = VX();
         (this.editor.selectedElement[t] || this.editor.svgCanvas.getMode() === "pathedit" || t === "x" || t === "y") && (r *= a[this.editor.configObj.curConfig.baseUnit]);
       }
     }
@@ -63632,7 +63680,7 @@ class VX {
    */
   init() {
     const e = document.createElement("template"), { i18next: t } = this.editor;
-    e.innerHTML = QX, this.editor.$svgEditor.append(e.content.cloneNode(!0));
+    e.innerHTML = DX, this.editor.$svgEditor.append(e.content.cloneNode(!0));
     const r = document.createElement(
       "se-svg-source-editor-dialog"
     );
@@ -63708,8 +63756,8 @@ class VX {
     );
   }
 }
-const HX = '<div id="tools_bottom"><se-colorpicker id="fill_color" src="fill.svg" label="properties.fill_color" type="fill"></se-colorpicker><se-colorpicker id="stroke_color" src="stroke.svg" label="properties.stroke_color" type="stroke"></se-colorpicker><se-colorpicker id="bg_color" src="canvas_bg.svg" label="Background Color" type="background"></se-colorpicker><se-palette id="palette"></se-palette></div>', { $id: ei } = un;
-class GX {
+const GX = '<div id="tools_bottom"><se-colorpicker id="fill_color" src="fill.svg" label="properties.fill_color" type="fill"></se-colorpicker><se-colorpicker id="stroke_color" src="stroke.svg" label="properties.stroke_color" type="stroke"></se-colorpicker><se-colorpicker id="bg_color" src="canvas_bg.svg" label="Background Color" type="background"></se-colorpicker><se-palette id="palette"></se-palette></div>', { $id: ei } = un;
+class zX {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -63751,7 +63799,7 @@ class GX {
         if (this.editor.svgCanvas.getMode() === "pathedit")
           this.editor.zoomImage(t / r);
         else {
-          const { workarea: i } = this.editor, o = zX(i, r);
+          const { workarea: i } = this.editor, o = $X(i, r);
           this.editor.zoomChanged(
             window,
             {
@@ -63838,7 +63886,7 @@ class GX {
    */
   init() {
     const e = document.createElement("template"), { i18next: t } = this.editor;
-    e.innerHTML = HX, this.editor.$svgEditor.append(e.content.cloneNode(!0)), ei("palette").addEventListener("change", this.handlePalette.bind(this)), ei("palette").init(t);
+    e.innerHTML = GX, this.editor.$svgEditor.append(e.content.cloneNode(!0)), ei("palette").addEventListener("change", this.handlePalette.bind(this)), ei("palette").init(t);
     const { curConfig: r } = this.editor.configObj;
     ei("fill_color").setPaint(
       new pi({ alpha: 100, solidColor: r.initFill.color })
@@ -63876,14 +63924,14 @@ class GX {
     );
   }
 }
-const zX = (n, e) => {
+const $X = (n, e) => {
   const t = parseFloat(getComputedStyle(n).width.replace("px", "")), r = parseFloat(getComputedStyle(n).height.replace("px", ""));
   return {
     x: (n.scrollLeft + t / 2) / e,
     y: (n.scrollTop + r / 2) / e
   };
-}, $X = '<div id="sidepanels"><se-text id="sidepanel_handle" title="ui.panel_action" text="ui.panel"></se-text><div id="sidepanel_content"><div id="sidepanel_tabs"><button type="button" class="sidepanel_tab active" data-tab="design">Design</button><button type="button" class="sidepanel_tab" data-tab="text">Text</button><button type="button" class="sidepanel_tab" data-tab="effects">Effects</button><button type="button" class="sidepanel_tab" data-tab="layers">Layers</button></div><!--───────────────── DESIGN TAB ─────────────────--><div id="tab_design" class="sidepanel_tabpanel active"><!--General: position first,then identity--><div id="sidepanel_general" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">General</div><div class="sidepanel_section_grid"><se-spin-input id="selected_x" data-attr="x" size="4" type="text" label="properties.x_label"title="properties.pos_x"></se-spin-input><se-spin-input id="selected_y" data-attr="y" size="4" type="text" label="properties.y_label"title="properties.pos_y"></se-spin-input><se-spin-input id="angle" size="3" min="-180" max="180" step="5" label="Rotate"title="properties.angle"></se-spin-input><se-input id="elem_id" class="span2" data-attr="id" size="10" label="properties.id_label"title="properties.id"></se-input><se-class-select id="elem_class" class="span2" label="properties.class_label"title="properties.class"></se-class-select></div></div><!--Frame name(export region;shown only for data-frame rects)--><div class="frame_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Frame</div><div class="sidepanel_section_grid"><se-input id="frame_name" class="span2" data-attr="title" size="10"label="properties.frame_name" title="properties.frame_name"></se-input></div></div><!--Shape dimensions(contextual)--><div class="rect_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="rect_width" data-attr="width" size="4" label="properties.w_label"title="properties.rect_width"></se-spin-input><se-spin-input id="rect_height" data-attr="height" size="4" label="properties.h_label"title="properties.rect_height"></se-spin-input><se-spin-input id="rect_rx" min=0 max=1000 step=1 size="3" label="Radius"title="properties.corner_radius" data-attr="Corner Radius"></se-spin-input></div></div><div class="image_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="image_width" data-attr="width" size="4" type="text" label="properties.w_label"title="properties.image_width"></se-spin-input><se-spin-input id="image_height" data-attr="height" size="4" type="text" label="properties.h_label"title="properties.image_height"></se-spin-input><se-input id="image_url" class="span2" data-attr="image_url" size="15"label="properties.image_url"></se-input></div></div><div class="circle_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="circle_cx" data-attr="cx" size="4" label="properties.cx_label"></se-spin-input><se-spin-input id="circle_cy" data-attr="cy" size="4" label="properties.cy_label"></se-spin-input><se-spin-input id="circle_r" data-attr="r" size="4" label="properties.r_label"></se-spin-input><se-spin-input id="circle_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="ellipse_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="ellipse_cx" data-attr="cx" size="4" title="properties.ellipse_cx"label="properties.cx_label"></se-spin-input><se-spin-input id="ellipse_cy" data-attr="cy" size="4" title="properties.ellipse_cy"label="properties.cy_label"></se-spin-input><se-spin-input id="ellipse_rx" data-attr="rx" size="4" title="properties.ellipse_rx"label="properties.rx_label"></se-spin-input><se-spin-input id="ellipse_ry" data-attr="ry" size="4" title="properties.ellipse_ry"label="properties.ry_label"></se-spin-input></div></div><div class="line_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="line_x1" data-attr="x1" size="4" title="properties.line_x1"label="properties.x1_label"></se-spin-input><se-spin-input id="line_y1" data-attr="y1" size="4" title="properties.line_y1"label="properties.y1_label"></se-spin-input><se-spin-input id="line_x2" data-attr="x2" size="4" title="properties.line_x2"label="properties.x2_label"></se-spin-input><se-spin-input id="line_y2" data-attr="y2" size="4" title="properties.line_y2"label="properties.y2_label"></se-spin-input></div></div><!--Stroke&opacity(always available;sets defaults when nothing selected)--><div class="sidepanel_section"><div class="sidepanel_section_label">Stroke&amp;Opacity</div><div class="sidepanel_section_grid"><se-spin-input id="stroke_width" min=0 max=99 step=1 label="Stroke"title="properties.stroke_width" src="stroke-width.svg"></se-spin-input><se-spin-input id="opacity" min=0 max=100 step=5 label="Opacity"title="properties.opacity" src="opacity.svg"></se-spin-input></div><div class="sidepanel_subsection"><div class="sub_label">Dash</div><se-select id="stroke_style" title="properties.stroke_style"options="&#8212;,...,--,-.,-.." values="none::2,2::5,5::5,2,2,2::5,2,2,2,2,2"></se-select></div><div class="sidepanel_subsection"><div class="sub_label">Joins&amp;caps</div><div class="sidepanel_btn_row"><se-list id="stroke_linejoin" title="properties.linejoin_miter" label="" width="22px" height="22px"><se-list-item id="linejoin_miter" value="miter" src="linejoin_miter.svg"title="properties.linejoin_miter" img-height="22px"></se-list-item><se-list-item id="linejoin_round" value="round" src="linejoin_round.svg"title="properties.linejoin_round" img-height="22px"></se-list-item><se-list-item id="linejoin_bevel" value="bevel" src="linejoin_bevel.svg"title="properties.linejoin_bevel" img-height="22px"></se-list-item></se-list><se-list id="stroke_linecap" title="properties.linecap_butt" label="" width="22px" height="22px"><se-list-item id="linecap_butt" value="butt" src="linecap_butt.svg"title="properties.linecap_butt" img-height="22px"></se-list-item><se-list-item id="linecap_square" value="square" src="linecap_square.svg"title="properties.linecap_square" img-height="22px"></se-list-item><se-list-item id="linecap_round" value="round" src="linecap_round.svg"title="properties.linecap_round" img-height="22px"></se-list-item></se-list></div></div></div><!--Convert/object actions(single element)--><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Object</div><div class="sidepanel_btn_row"><se-button id="tool_topath" size="small" title="tools.to_path" src="to_path.svg"></se-button><se-offset-settings id="tool_path_offset" title="tools.path_offset" src="path_offset.svg"></se-offset-settings><se-button id="tool_stroke_to_path" size="small" title="tools.stroke_to_path" src="stroke_to_path.svg"></se-button><se-button id="tool_reorient" size="small" title="tools.reorient_path" src="reorient.svg"></se-button><se-button id="tool_make_link" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div><div class="container_panel sidepanel_subsection" style="display:none"><se-input id="g_title" data-attr="title" size="8" label="properties.label"></se-input></div><div class="use_panel sidepanel_subsection" style="display:none"><se-button id="tool_unlink_use" size="small" title="tools.tool_unlink_use" src="unlink_use.svg"></se-button></div><div class="a_panel sidepanel_subsection" style="display:none"><label id="tool_link_url"><span id="linkLabel" class="icon_label"></span><input id="link_url" type="text" size="35"/></label></div></div><!--Combine(multiple elements)--><div class="multiselected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Combine</div><div class="sidepanel_btn_row"><se-button id="tool_bool_union" size="small" title="tools.bool_union" src="bool_union.svg"></se-button><se-button id="tool_bool_intersect" size="small" title="tools.bool_intersect"src="bool_intersect.svg"></se-button><se-button id="tool_bool_subtract" size="small" title="tools.bool_subtract" src="bool_subtract.svg"></se-button><se-button id="tool_bool_exclude" size="small" title="tools.bool_exclude" src="bool_exclude.svg"></se-button><se-button id="tool_bool_divide" size="small" title="tools.bool_divide" src="bool_divide.svg"></se-button><se-button id="tool_clip_set" size="small" title="tools.clip_set" src="clip_set.svg"></se-button><se-button id="tool_mask_set" size="small" title="tools.mask_set" src="mask_set.svg"></se-button><se-button id="tool_make_link_multi" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div></div></div><!--───────────────── TEXT TAB ─────────────────--><div id="tab_text" class="sidepanel_tabpanel"><div class="text_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Font</div><div class="sidepanel_text_font"><se-font-select id="tool_font_family" src="font.svg" title="properties.font_family"options="properties.serif,properties.sans_serif,properties.cursive,properties.fantasy,properties.monospace,properties.courier,properties.helvetica,properties.times"values="Serif::Sans-serif::Cursive::Fantasy::Monospace::Courier::Helvetica::Times"></se-font-select><se-font-library id="tool_font_library" title="Browse&embed custom fonts"></se-font-library></div><div class="sidepanel_section_grid sidepanel_subsection"><se-spin-input size="2" id="font_size" min=1 max=1000 step=1 label="Size"title="properties.font_size" src="fontsize.svg"></se-spin-input><div><div class="sub_label">Align</div><se-list id="tool_text_anchor" label="" width="22px" height="22px"><se-list-item id="tool_text_anchor_start" value="start" title="properties.text_anchor_start"src="anchor_start.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_middle" value="middle" title="properties.text_anchor_middle"src="anchor_middle.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_end" value="end" title="properties.text_anchor_end"src="anchor_end.svg" img-height="25px"></se-list-item></se-list></div></div><div class="sidepanel_subsection"><div class="sub_label">Style</div><div class="sidepanel_btn_row"><se-button id="tool_bold" size="small" title="properties.bold" src="bold.svg" shortcut="B"></se-button><se-button id="tool_italic" size="small" title="properties.italic" src="italic.svg" shortcut="I"></se-button><se-button id="tool_text_decoration_underline" size="small" title="properties.text_decoration_underline"src="text_decoration_underline.svg"></se-button><se-button id="tool_text_decoration_linethrough" size="small" title="properties.text_decoration_linethrough"src="text_decoration_linethrough.svg"></se-button><se-button id="tool_text_decoration_overline" size="small" title="properties.text_decoration_overline"src="text_decoration_overline.svg"></se-button></div></div></div><div id="sidepanel_text" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Spacing&amp;Shape</div><div class="sidepanel_section_grid"><se-spin-input size="2" id="tool_letter_spacing" min=0 max=100 step=1 label="Letter"title="properties.text_letter_spacing" src="letter_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_word_spacing" min=0 max=1000 step=1 label="Word"title="properties.text_word_spacing" src="word_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_text_length" min=0 max=1000 step=1 label="Length"title="properties.text_length" src="text_length.svg"></se-spin-input><se-select id="tool_length_adjust" label="Adjust" title="properties.text_length_adjust"options="properties.text_length_adjust_spacing,properties.text_length_adjust_spacing_and_glyphs"values="spacing::spacingAndGlyphs"></se-select><se-spin-input size="3" id="tool_perspective_x" min=-80 max=80 step=1 label="Skew X"title="properties.text_perspective_x" src="perspective_x.svg"></se-spin-input><se-spin-input size="3" id="tool_perspective_y" min=-80 max=80 step=1 label="Skew Y"title="properties.text_perspective_y" src="perspective_y.svg"></se-spin-input></div></div></div><!--───────────────── EFFECTS TAB ─────────────────--><div id="tab_effects" class="sidepanel_tabpanel"><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Blur</div><div class="sidepanel_section_grid"><se-spin-input id="blur" class="span2" size="2" min="0" max="100" step="5" label="Amount"title="properties.blur" src="blur.svg"></se-spin-input></div></div><div id="clipmask_panel" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Clip&amp;Mask</div><div class="sidepanel_section_grid"><se-spin-input id="clipmask_feather" class="span2" size="3" min="-50" max="50" step="1" label="Feather"title="properties.feather" src="feather.svg"></se-spin-input></div><div class="clipmask_panel_footer"><se-button id="clipmask_release" size="small" title="tools.clip_release" src="clip_release.svg"></se-button></div></div><!--ext-shadow(#shadow_panel)and ext-color-shift(#color_shift_panel)inject here--></div><!--───────────────── LAYERS TAB ─────────────────--><div id="tab_layers" class="sidepanel_tabpanel"><div id="layerpanel"><se-text id="layersLabel" text="layers.layers"></se-text><fieldset id="layerbuttons"><se-button id="layer_new" title="layers.new" size="small" src="new.svg"></se-button><se-button id="layer_delete" title="layers.del" size="small" src="delete.svg"></se-button><se-button id="layer_rename" title="layers.rename" size="small" src="text.svg"></se-button><se-button id="layer_up" title="layers.move_up" size="small" src="go_up.svg"></se-button><se-button id="layer_down" title="layers.move_down" size="small" src="go_down.svg"></se-button><se-button id="layer_moreopts" title="common.more_opts" size="small" src="context_menu.svg"></se-button></fieldset><table id="layerlist"><tr class="layer"><td class="layervis"></td><td class="layername">Layer 1</td></tr></table><se-select id="selLayerNames" title="layers.move_selected" label="layers.move_elems_to"options="Layer 1" values="layer1" value="layer1" disabled="disabled"></se-select></div></div></div></div>', { $id: Yi, $click: tl } = un;
-class KX {
+}, KX = '<div id="sidepanels"><se-text id="sidepanel_handle" title="ui.panel_action" text="ui.panel"></se-text><div id="sidepanel_content"><div id="sidepanel_tabs"><button type="button" class="sidepanel_tab active" data-tab="design">Design</button><button type="button" class="sidepanel_tab" data-tab="text">Text</button><button type="button" class="sidepanel_tab" data-tab="effects">Effects</button><button type="button" class="sidepanel_tab" data-tab="layers">Layers</button></div><!--───────────────── DESIGN TAB ─────────────────--><div id="tab_design" class="sidepanel_tabpanel active"><!--General: position first,then identity--><div id="sidepanel_general" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">General</div><div class="sidepanel_section_grid"><se-spin-input id="selected_x" data-attr="x" size="4" type="text" label="properties.x_label"title="properties.pos_x"></se-spin-input><se-spin-input id="selected_y" data-attr="y" size="4" type="text" label="properties.y_label"title="properties.pos_y"></se-spin-input><se-spin-input id="angle" size="3" min="-180" max="180" step="5" label="Rotate"title="properties.angle"></se-spin-input><se-input id="elem_id" class="span2" data-attr="id" size="10" label="properties.id_label"title="properties.id"></se-input><se-class-select id="elem_class" class="span2" label="properties.class_label"title="properties.class"></se-class-select></div></div><!--Frame name(export region;shown only for data-frame rects)--><div class="frame_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Frame</div><div class="sidepanel_section_grid"><se-input id="frame_name" class="span2" data-attr="title" size="10"label="properties.frame_name" title="properties.frame_name"></se-input></div></div><!--Shape dimensions(contextual)--><div class="rect_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="rect_width" data-attr="width" size="4" label="properties.w_label"title="properties.rect_width"></se-spin-input><se-spin-input id="rect_height" data-attr="height" size="4" label="properties.h_label"title="properties.rect_height"></se-spin-input><se-spin-input id="rect_rx" min=0 max=1000 step=1 size="3" label="Radius"title="properties.corner_radius" data-attr="Corner Radius"></se-spin-input></div></div><div class="image_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="image_width" data-attr="width" size="4" type="text" label="properties.w_label"title="properties.image_width"></se-spin-input><se-spin-input id="image_height" data-attr="height" size="4" type="text" label="properties.h_label"title="properties.image_height"></se-spin-input><se-input id="image_url" class="span2" data-attr="image_url" size="15"label="properties.image_url"></se-input></div></div><div class="circle_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="circle_cx" data-attr="cx" size="4" label="properties.cx_label"></se-spin-input><se-spin-input id="circle_cy" data-attr="cy" size="4" label="properties.cy_label"></se-spin-input><se-spin-input id="circle_r" data-attr="r" size="4" label="properties.r_label"></se-spin-input><se-spin-input id="circle_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="ellipse_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="ellipse_cx" data-attr="cx" size="4" title="properties.ellipse_cx"label="properties.cx_label"></se-spin-input><se-spin-input id="ellipse_cy" data-attr="cy" size="4" title="properties.ellipse_cy"label="properties.cy_label"></se-spin-input><se-spin-input id="ellipse_rx" data-attr="rx" size="4" title="properties.ellipse_rx"label="properties.rx_label"></se-spin-input><se-spin-input id="ellipse_ry" data-attr="ry" size="4" title="properties.ellipse_ry"label="properties.ry_label"></se-spin-input></div></div><div class="line_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="line_x1" data-attr="x1" size="4" title="properties.line_x1"label="properties.x1_label"></se-spin-input><se-spin-input id="line_y1" data-attr="y1" size="4" title="properties.line_y1"label="properties.y1_label"></se-spin-input><se-spin-input id="line_x2" data-attr="x2" size="4" title="properties.line_x2"label="properties.x2_label"></se-spin-input><se-spin-input id="line_y2" data-attr="y2" size="4" title="properties.line_y2"label="properties.y2_label"></se-spin-input></div></div><!--Stroke&opacity(always available;sets defaults when nothing selected)--><div class="sidepanel_section"><div class="sidepanel_section_label">Stroke&amp;Opacity</div><div class="sidepanel_section_grid"><se-spin-input id="stroke_width" min=0 max=99 step=1 label="Stroke"title="properties.stroke_width" src="stroke-width.svg"></se-spin-input><se-spin-input id="opacity" min=0 max=100 step=5 label="Opacity"title="properties.opacity" src="opacity.svg"></se-spin-input></div><div class="sidepanel_subsection"><div class="sub_label">Dash</div><se-select id="stroke_style" title="properties.stroke_style"options="&#8212;,...,--,-.,-.." values="none::2,2::5,5::5,2,2,2::5,2,2,2,2,2"></se-select></div><div class="sidepanel_subsection"><div class="sub_label">Joins&amp;caps</div><div class="sidepanel_btn_row"><se-list id="stroke_linejoin" title="properties.linejoin_miter" label="" width="22px" height="22px"><se-list-item id="linejoin_miter" value="miter" src="linejoin_miter.svg"title="properties.linejoin_miter" img-height="22px"></se-list-item><se-list-item id="linejoin_round" value="round" src="linejoin_round.svg"title="properties.linejoin_round" img-height="22px"></se-list-item><se-list-item id="linejoin_bevel" value="bevel" src="linejoin_bevel.svg"title="properties.linejoin_bevel" img-height="22px"></se-list-item></se-list><se-list id="stroke_linecap" title="properties.linecap_butt" label="" width="22px" height="22px"><se-list-item id="linecap_butt" value="butt" src="linecap_butt.svg"title="properties.linecap_butt" img-height="22px"></se-list-item><se-list-item id="linecap_square" value="square" src="linecap_square.svg"title="properties.linecap_square" img-height="22px"></se-list-item><se-list-item id="linecap_round" value="round" src="linecap_round.svg"title="properties.linecap_round" img-height="22px"></se-list-item></se-list></div></div></div><!--Convert/object actions(single element)--><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Object</div><div class="sidepanel_btn_row"><se-button id="tool_topath" size="small" title="tools.to_path" src="to_path.svg"></se-button><se-offset-settings id="tool_path_offset" title="tools.path_offset" src="path_offset.svg"></se-offset-settings><se-button id="tool_stroke_to_path" size="small" title="tools.stroke_to_path" src="stroke_to_path.svg"></se-button><se-button id="tool_reorient" size="small" title="tools.reorient_path" src="reorient.svg"></se-button><se-button id="tool_make_link" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div><div class="container_panel sidepanel_subsection" style="display:none"><se-input id="g_title" data-attr="title" size="8" label="properties.label"></se-input></div><div class="use_panel sidepanel_subsection" style="display:none"><se-button id="tool_unlink_use" size="small" title="tools.tool_unlink_use" src="unlink_use.svg"></se-button></div><div class="a_panel sidepanel_subsection" style="display:none"><label id="tool_link_url"><span id="linkLabel" class="icon_label"></span><input id="link_url" type="text" size="35"/></label></div></div><!--Combine(multiple elements)--><div class="multiselected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Combine</div><div class="sidepanel_btn_row"><se-button id="tool_bool_union" size="small" title="tools.bool_union" src="bool_union.svg"></se-button><se-button id="tool_bool_intersect" size="small" title="tools.bool_intersect"src="bool_intersect.svg"></se-button><se-button id="tool_bool_subtract" size="small" title="tools.bool_subtract" src="bool_subtract.svg"></se-button><se-button id="tool_bool_exclude" size="small" title="tools.bool_exclude" src="bool_exclude.svg"></se-button><se-button id="tool_bool_divide" size="small" title="tools.bool_divide" src="bool_divide.svg"></se-button><se-button id="tool_clip_set" size="small" title="tools.clip_set" src="clip_set.svg"></se-button><se-button id="tool_mask_set" size="small" title="tools.mask_set" src="mask_set.svg"></se-button><se-button id="tool_make_link_multi" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div></div></div><!--───────────────── TEXT TAB ─────────────────--><div id="tab_text" class="sidepanel_tabpanel"><div class="text_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Font</div><div class="sidepanel_text_font"><se-font-select id="tool_font_family" src="font.svg" title="properties.font_family"options="properties.serif,properties.sans_serif,properties.cursive,properties.fantasy,properties.monospace,properties.courier,properties.helvetica,properties.times"values="Serif::Sans-serif::Cursive::Fantasy::Monospace::Courier::Helvetica::Times"></se-font-select><se-font-library id="tool_font_library" title="Browse&embed custom fonts"></se-font-library></div><div class="sidepanel_section_grid sidepanel_subsection"><se-spin-input size="2" id="font_size" min=1 max=1000 step=1 label="Size"title="properties.font_size" src="fontsize.svg"></se-spin-input><div><div class="sub_label">Align</div><se-list id="tool_text_anchor" label="" width="22px" height="22px"><se-list-item id="tool_text_anchor_start" value="start" title="properties.text_anchor_start"src="anchor_start.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_middle" value="middle" title="properties.text_anchor_middle"src="anchor_middle.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_end" value="end" title="properties.text_anchor_end"src="anchor_end.svg" img-height="25px"></se-list-item></se-list></div></div><div class="sidepanel_subsection"><div class="sub_label">Style</div><div class="sidepanel_btn_row"><se-button id="tool_bold" size="small" title="properties.bold" src="bold.svg" shortcut="B"></se-button><se-button id="tool_italic" size="small" title="properties.italic" src="italic.svg" shortcut="I"></se-button><se-button id="tool_text_decoration_underline" size="small" title="properties.text_decoration_underline"src="text_decoration_underline.svg"></se-button><se-button id="tool_text_decoration_linethrough" size="small" title="properties.text_decoration_linethrough"src="text_decoration_linethrough.svg"></se-button><se-button id="tool_text_decoration_overline" size="small" title="properties.text_decoration_overline"src="text_decoration_overline.svg"></se-button></div></div></div><div id="sidepanel_text" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Spacing&amp;Shape</div><div class="sidepanel_section_grid"><se-spin-input size="2" id="tool_letter_spacing" min=0 max=100 step=1 label="Letter"title="properties.text_letter_spacing" src="letter_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_word_spacing" min=0 max=1000 step=1 label="Word"title="properties.text_word_spacing" src="word_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_text_length" min=0 max=1000 step=1 label="Length"title="properties.text_length" src="text_length.svg"></se-spin-input><se-select id="tool_length_adjust" label="Adjust" title="properties.text_length_adjust"options="properties.text_length_adjust_spacing,properties.text_length_adjust_spacing_and_glyphs"values="spacing::spacingAndGlyphs"></se-select><se-spin-input size="3" id="tool_perspective_x" min=-80 max=80 step=1 label="Skew X"title="properties.text_perspective_x" src="perspective_x.svg"></se-spin-input><se-spin-input size="3" id="tool_perspective_y" min=-80 max=80 step=1 label="Skew Y"title="properties.text_perspective_y" src="perspective_y.svg"></se-spin-input></div></div></div><!--───────────────── EFFECTS TAB ─────────────────--><div id="tab_effects" class="sidepanel_tabpanel"><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Blur</div><div class="sidepanel_section_grid"><se-spin-input id="blur" class="span2" size="2" min="0" max="100" step="5" label="Amount"title="properties.blur" src="blur.svg"></se-spin-input></div></div><div id="clipmask_panel" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Clip&amp;Mask</div><div class="sidepanel_section_grid"><se-spin-input id="clipmask_feather" class="span2" size="3" min="-50" max="50" step="1" label="Feather"title="properties.feather" src="feather.svg"></se-spin-input></div><div class="clipmask_panel_footer"><se-button id="clipmask_release" size="small" title="tools.clip_release" src="clip_release.svg"></se-button></div></div><!--ext-shadow(#shadow_panel)and ext-color-shift(#color_shift_panel)inject here--></div><!--───────────────── LAYERS TAB ─────────────────--><div id="tab_layers" class="sidepanel_tabpanel"><div id="layerpanel"><se-text id="layersLabel" text="layers.layers"></se-text><fieldset id="layerbuttons"><se-button id="layer_new" title="layers.new" size="small" src="new.svg"></se-button><se-button id="layer_delete" title="layers.del" size="small" src="delete.svg"></se-button><se-button id="layer_rename" title="layers.rename" size="small" src="text.svg"></se-button><se-button id="layer_up" title="layers.move_up" size="small" src="go_up.svg"></se-button><se-button id="layer_down" title="layers.move_down" size="small" src="go_down.svg"></se-button><se-button id="layer_moreopts" title="common.more_opts" size="small" src="context_menu.svg"></se-button></fieldset><table id="layerlist"><tr class="layer"><td class="layervis"></td><td class="layername">Layer 1</td></tr></table><se-select id="selLayerNames" title="layers.move_selected" label="layers.move_elems_to"options="Layer 1" values="layer1" value="layer1" disabled="disabled"></se-select></div></div></div></div>', { $id: Yi, $click: tl } = un;
+class XX {
   /**
    * @param {PlainObject} editor
    */
@@ -63939,7 +63987,7 @@ class KX {
    */
   init() {
     const e = document.createElement("template"), { i18next: t } = this.editor;
-    e.innerHTML = $X, this.editor.$svgEditor.append(e.content.cloneNode(!0));
+    e.innerHTML = KX, this.editor.$svgEditor.append(e.content.cloneNode(!0));
     const r = document.createElement("se-cmenu-layers");
     r.setAttribute("id", "se-cmenu-layers-more"), r.value = "layer_moreopts", r.setAttribute("leftclick", !0), this.editor.$container.append(r), r.init(t);
     const i = document.createElement("se-cmenu-layers");
@@ -64106,8 +64154,8 @@ class KX {
     );
   }
 }
-const { $id: Xc, $click: XX } = un;
-class YX {
+const { $id: Xc, $click: YX } = un;
+class WX {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -64199,7 +64247,7 @@ class YX {
     <se-menu id="main_button" label="SVG-Edit" src="logo.svg" alt="logo">
         <se-menu-item id="tool_export" label="tools.export_img" src="export.svg"></se-menu-item>
         <se-menu-item id="tool_editor_prefs" label="config.editor_prefs" src="editPref.svg"></se-menu-item>
-    </se-menu>`, this.editor.$svgEditor.append(e.content.cloneNode(!0)), XX(Xc("tool_export"), function() {
+    </se-menu>`, this.editor.$svgEditor.append(e.content.cloneNode(!0)), YX(Xc("tool_export"), function() {
       document.getElementById("se-export-dialog").setAttribute("dialog", "open");
     }), Xc("se-export-dialog").addEventListener(
       "change",
@@ -64215,13 +64263,13 @@ class YX {
     );
   }
 }
-const { $id: Fn, $click: WX, decode64: ZX } = un;
-class yZ extends NX {
+const { $id: Fn, $click: ZX, decode64: JX } = un;
+class vZ extends NX {
   /**
    *
    */
   constructor(e = null) {
-    super(e), this.langChanged = !1, this.showSaveWarning = !1, this.storagePromptState = "ignore", this.title = "untitled.svg", this.svgCanvas = null, this.$click = WX, this.isReady = !1, this.customExportImage = !1, this.customExportPDF = !1, this.configObj = new wX(this), this.configObj.pref = this.configObj.pref.bind(this.configObj), this.setConfig = this.configObj.setConfig.bind(this.configObj), this.callbacks = [], this.curContext = null, this.exportWindowName = null, this.docprops = !1, this.configObj.preferences = !1, this.canvMenu = null, this.goodLangs = [
+    super(e), this.langChanged = !1, this.showSaveWarning = !1, this.storagePromptState = "ignore", this.title = "untitled.svg", this.svgCanvas = null, this.$click = ZX, this.isReady = !1, this.customExportImage = !1, this.customExportPDF = !1, this.configObj = new wX(this), this.configObj.pref = this.configObj.pref.bind(this.configObj), this.setConfig = this.configObj.setConfig.bind(this.configObj), this.callbacks = [], this.curContext = null, this.exportWindowName = null, this.docprops = !1, this.configObj.preferences = !1, this.canvMenu = null, this.goodLangs = [
       "ar",
       "cs",
       "de",
@@ -64459,7 +64507,7 @@ class yZ extends NX {
           this.enableToolCancel && this.cancelTool();
         }
       }
-    ], this.leftPanel = new RX(this), this.bottomPanel = new GX(this), this.topPanel = new VX(this), this.rightPanel = new KX(this), this.mainMenu = new YX(this), window.svgEditor = this;
+    ], this.leftPanel = new QX(this), this.bottomPanel = new zX(this), this.topPanel = new HX(this), this.rightPanel = new XX(this), this.mainMenu = new WX(this), window.svgEditor = this;
   }
   // end Constructor
   /**
@@ -65162,7 +65210,7 @@ class yZ extends NX {
       i ? r = !0 : i = e.match(/^data:image\/svg\+xml(?:;|;utf8)?,/), i && (i = i[0]);
       const o = e.slice(i.length);
       return this.loadSvgString(
-        r ? ZX(o) : decodeURIComponent(o),
+        r ? JX(o) : decodeURIComponent(o),
         { noAlert: t }
       );
     });
@@ -65181,7 +65229,7 @@ class yZ extends NX {
     return this.svgCanvas.addExtension(e, t, r);
   }
 }
-const JX = {
+const eY = {
   lang: "af",
   dir: "ltr",
   common: {
@@ -65503,10 +65551,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, eY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, tY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: JX
-}, Symbol.toStringTag, { value: "Module" })), tY = {
+  default: eY
+}, Symbol.toStringTag, { value: "Module" })), rY = {
   lang: "ar",
   dir: "rtl",
   common: {
@@ -65828,10 +65876,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "افتراضيًا وحيثما يدعم الأمر، يمكن لـ SVG-Edit تخزين تفضيلات المحرر ومحتوى SVG محليًا على جهازك بحيث لا يلزمك إضافة هذه المحتويات كل مرة تحمل فيها SVG-Edit. إذا لم ترغب لأسباب الخصوصية في تخزين هذه المعلومات على جهازك، فيمكنك التغيير بعيدًا عن الخيار الافتراضي أدناه.",
     source_dialog_note: "انسخ محتويات هذا الصندوق إلى محرر نصوص، ثم احفظ الملف بامتداد .svg"
   }
-}, rY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, nY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tY
-}, Symbol.toStringTag, { value: "Module" })), nY = {
+  default: rY
+}, Symbol.toStringTag, { value: "Module" })), iY = {
   lang: "az",
   dir: "ltr",
   common: {
@@ -66153,10 +66201,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, iY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, oY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: nY
-}, Symbol.toStringTag, { value: "Module" })), oY = {
+  default: iY
+}, Symbol.toStringTag, { value: "Module" })), aY = {
   lang: "be",
   dir: "ltr",
   common: {
@@ -66478,10 +66526,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, aY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, sY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: oY
-}, Symbol.toStringTag, { value: "Module" })), sY = {
+  default: aY
+}, Symbol.toStringTag, { value: "Module" })), lY = {
   lang: "bg",
   dir: "ltr",
   common: {
@@ -66803,10 +66851,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, lY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, cY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: sY
-}, Symbol.toStringTag, { value: "Module" })), cY = {
+  default: lY
+}, Symbol.toStringTag, { value: "Module" })), uY = {
   lang: "ca",
   dir: "ltr",
   common: {
@@ -67131,10 +67179,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, uY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, dY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: cY
-}, Symbol.toStringTag, { value: "Module" })), dY = {
+  default: uY
+}, Symbol.toStringTag, { value: "Module" })), AY = {
   lang: "cs",
   dir: "ltr",
   common: {
@@ -67459,10 +67507,10 @@ Chcete se vrátit k původnímu?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, AY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, hY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: dY
-}, Symbol.toStringTag, { value: "Module" })), hY = {
+  default: AY
+}, Symbol.toStringTag, { value: "Module" })), pY = {
   lang: "cy",
   dir: "ltr",
   common: {
@@ -67787,10 +67835,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, pY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, gY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: hY
-}, Symbol.toStringTag, { value: "Module" })), gY = {
+  default: pY
+}, Symbol.toStringTag, { value: "Module" })), fY = {
   lang: "da",
   dir: "ltr",
   common: {
@@ -68115,10 +68163,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, fY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, _Y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: gY
-}, Symbol.toStringTag, { value: "Module" })), _Y = {
+  default: fY
+}, Symbol.toStringTag, { value: "Module" })), mY = {
   lang: "de",
   dir: "ltr",
   common: {
@@ -68443,10 +68491,10 @@ Die Original-SVG wiederherstellen?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, mY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, yY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: _Y
-}, Symbol.toStringTag, { value: "Module" })), yY = {
+  default: mY
+}, Symbol.toStringTag, { value: "Module" })), vY = {
   lang: "el",
   dir: "ltr",
   common: {
@@ -68771,10 +68819,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, vY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, bY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: yY
-}, Symbol.toStringTag, { value: "Module" })), bY = {
+  default: vY
+}, Symbol.toStringTag, { value: "Module" })), wY = {
   lang: "en",
   dir: "ltr",
   common: {
@@ -69129,10 +69177,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, wY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, xY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: bY
-}, Symbol.toStringTag, { value: "Module" })), xY = {
+  default: wY
+}, Symbol.toStringTag, { value: "Module" })), CY = {
   lang: "es",
   dir: "ltr",
   common: {
@@ -69457,10 +69505,10 @@ This will also erase your undo history!`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, CY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, kY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: xY
-}, Symbol.toStringTag, { value: "Module" })), kY = {
+  default: CY
+}, Symbol.toStringTag, { value: "Module" })), SY = {
   lang: "et",
   dir: "ltr",
   common: {
@@ -69785,10 +69833,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, SY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, BY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: kY
-}, Symbol.toStringTag, { value: "Module" })), BY = {
+  default: SY
+}, Symbol.toStringTag, { value: "Module" })), EY = {
   lang: "fa",
   dir: "rtl",
   common: {
@@ -70113,10 +70161,10 @@ This will also erase your undo history!`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, EY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, LY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: BY
-}, Symbol.toStringTag, { value: "Module" })), LY = {
+  default: EY
+}, Symbol.toStringTag, { value: "Module" })), PY = {
   lang: "fi",
   dir: "ltr",
   common: {
@@ -70438,10 +70486,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, PY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, TY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: LY
-}, Symbol.toStringTag, { value: "Module" })), TY = {
+  default: PY
+}, Symbol.toStringTag, { value: "Module" })), jY = {
   lang: "fr",
   dir: "ltr",
   common: {
@@ -70766,10 +70814,10 @@ Restaurer le code source SVG antérieur aux modifications ?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, jY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, FY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: TY
-}, Symbol.toStringTag, { value: "Module" })), FY = {
+  default: jY
+}, Symbol.toStringTag, { value: "Module" })), IY = {
   lang: "fy",
   dir: "ltr",
   common: {
@@ -71093,10 +71141,10 @@ Weromgean nei foarige SVG-boarne?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, IY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, NY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: FY
-}, Symbol.toStringTag, { value: "Module" })), NY = {
+  default: IY
+}, Symbol.toStringTag, { value: "Module" })), MY = {
   lang: "ga",
   dir: "ltr",
   common: {
@@ -71421,10 +71469,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, MY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, OY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: NY
-}, Symbol.toStringTag, { value: "Module" })), OY = {
+  default: MY
+}, Symbol.toStringTag, { value: "Module" })), UY = {
   lang: "gl",
   dir: "ltr",
   common: {
@@ -71749,10 +71797,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, UY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, RY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: OY
-}, Symbol.toStringTag, { value: "Module" })), RY = {
+  default: UY
+}, Symbol.toStringTag, { value: "Module" })), QY = {
   lang: "he",
   dir: "rtl",
   common: {
@@ -72077,10 +72125,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, QY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, DY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: RY
-}, Symbol.toStringTag, { value: "Module" })), DY = {
+  default: QY
+}, Symbol.toStringTag, { value: "Module" })), qY = {
   lang: "hi",
   dir: "ltr",
   common: {
@@ -72405,10 +72453,10 @@ This will also erase your undo history!`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, qY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, VY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: DY
-}, Symbol.toStringTag, { value: "Module" })), VY = {
+  default: qY
+}, Symbol.toStringTag, { value: "Module" })), HY = {
   lang: "hr",
   dir: "ltr",
   common: {
@@ -72733,10 +72781,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, HY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, GY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: VY
-}, Symbol.toStringTag, { value: "Module" })), GY = {
+  default: HY
+}, Symbol.toStringTag, { value: "Module" })), zY = {
   lang: "hu",
   dir: "ltr",
   common: {
@@ -73061,10 +73109,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, zY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, $Y = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: GY
-}, Symbol.toStringTag, { value: "Module" })), $Y = {
+  default: zY
+}, Symbol.toStringTag, { value: "Module" })), KY = {
   lang: "hy",
   dir: "ltr",
   common: {
@@ -73386,10 +73434,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, KY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, XY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: $Y
-}, Symbol.toStringTag, { value: "Module" })), XY = {
+  default: KY
+}, Symbol.toStringTag, { value: "Module" })), YY = {
   lang: "id",
   dir: "ltr",
   common: {
@@ -73711,10 +73759,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, YY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, WY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: XY
-}, Symbol.toStringTag, { value: "Module" })), WY = {
+  default: YY
+}, Symbol.toStringTag, { value: "Module" })), ZY = {
   lang: "is",
   dir: "ltr",
   common: {
@@ -74036,10 +74084,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, ZY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, JY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: WY
-}, Symbol.toStringTag, { value: "Module" })), JY = {
+  default: ZY
+}, Symbol.toStringTag, { value: "Module" })), eW = {
   lang: "it",
   dir: "ltr",
   common: {
@@ -74364,10 +74412,10 @@ Ritorno al codice originale?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, eW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, tW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: JY
-}, Symbol.toStringTag, { value: "Module" })), tW = {
+  default: eW
+}, Symbol.toStringTag, { value: "Module" })), rW = {
   lang: "ja",
   dir: "ltr",
   common: {
@@ -74692,10 +74740,10 @@ Ritorno al codice originale?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, rW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, nW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tW
-}, Symbol.toStringTag, { value: "Module" })), nW = {
+  default: rW
+}, Symbol.toStringTag, { value: "Module" })), iW = {
   lang: "ko",
   dir: "ltr",
   common: {
@@ -75020,10 +75068,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, iW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, oW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: nW
-}, Symbol.toStringTag, { value: "Module" })), oW = {
+  default: iW
+}, Symbol.toStringTag, { value: "Module" })), aW = {
   lang: "lt",
   dir: "ltr",
   common: {
@@ -75345,10 +75393,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, aW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, sW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: oW
-}, Symbol.toStringTag, { value: "Module" })), sW = {
+  default: aW
+}, Symbol.toStringTag, { value: "Module" })), lW = {
   lang: "lv",
   dir: "ltr",
   common: {
@@ -75670,10 +75718,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, lW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, cW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: sW
-}, Symbol.toStringTag, { value: "Module" })), cW = {
+  default: lW
+}, Symbol.toStringTag, { value: "Module" })), uW = {
   lang: "mk",
   dir: "ltr",
   common: {
@@ -75998,10 +76046,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, uW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, dW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: cW
-}, Symbol.toStringTag, { value: "Module" })), dW = {
+  default: uW
+}, Symbol.toStringTag, { value: "Module" })), AW = {
   lang: "ms",
   dir: "ltr",
   common: {
@@ -76323,10 +76371,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, AW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, hW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: dW
-}, Symbol.toStringTag, { value: "Module" })), hW = {
+  default: AW
+}, Symbol.toStringTag, { value: "Module" })), pW = {
   lang: "mt",
   dir: "ltr",
   common: {
@@ -76648,10 +76696,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, pW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, gW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: hW
-}, Symbol.toStringTag, { value: "Module" })), gW = {
+  default: pW
+}, Symbol.toStringTag, { value: "Module" })), fW = {
   lang: "nl",
   dir: "ltr",
   common: {
@@ -76976,10 +77024,10 @@ Teruggaan naar de originele SVG bron?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, fW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, _W = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: gW
-}, Symbol.toStringTag, { value: "Module" })), _W = {
+  default: fW
+}, Symbol.toStringTag, { value: "Module" })), mW = {
   lang: "no",
   dir: "ltr",
   common: {
@@ -77301,10 +77349,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, mW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, yW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: _W
-}, Symbol.toStringTag, { value: "Module" })), yW = {
+  default: mW
+}, Symbol.toStringTag, { value: "Module" })), vW = {
   lang: "pl",
   dir: "ltr",
   author: "Aleksander Lurie",
@@ -77630,10 +77678,10 @@ Przywrócić orginalne źródło pliku SVG?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, vW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, bW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: yW
-}, Symbol.toStringTag, { value: "Module" })), bW = {
+  default: vW
+}, Symbol.toStringTag, { value: "Module" })), wW = {
   lang: "pt-BR",
   dir: "ltr",
   common: {
@@ -77958,10 +78006,10 @@ Reverter para o código SVG original?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, wW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, xW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: bW
-}, Symbol.toStringTag, { value: "Module" })), xW = {
+  default: wW
+}, Symbol.toStringTag, { value: "Module" })), CW = {
   lang: "pt-PT",
   dir: "ltr",
   common: {
@@ -78286,10 +78334,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, CW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, kW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: xW
-}, Symbol.toStringTag, { value: "Module" })), kW = {
+  default: CW
+}, Symbol.toStringTag, { value: "Module" })), SW = {
   lang: "ro",
   dir: "ltr",
   common: {
@@ -78614,10 +78662,10 @@ Revenire la sursa SVG orginală?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, SW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, BW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: kW
-}, Symbol.toStringTag, { value: "Module" })), BW = {
+  default: SW
+}, Symbol.toStringTag, { value: "Module" })), EW = {
   lang: "ru",
   dir: "ltr",
   common: {
@@ -78943,10 +78991,10 @@ Revenire la sursa SVG orginală?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Скопируйте содержмиое этого блока в текстовый редактор, затем сохраните файл с расширением .svg."
   }
-}, EW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, LW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: BW
-}, Symbol.toStringTag, { value: "Module" })), LW = {
+  default: EW
+}, Symbol.toStringTag, { value: "Module" })), PW = {
   lang: "sk",
   dir: "ltr",
   common: {
@@ -79271,10 +79319,10 @@ Vrátiť povodný SVG dokument?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, PW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, TW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: LW
-}, Symbol.toStringTag, { value: "Module" })), TW = {
+  default: PW
+}, Symbol.toStringTag, { value: "Module" })), jW = {
   lang: "sl",
   dir: "ltr",
   common: {
@@ -79599,10 +79647,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, jW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, FW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: TW
-}, Symbol.toStringTag, { value: "Module" })), FW = {
+  default: jW
+}, Symbol.toStringTag, { value: "Module" })), IW = {
   lang: "sq",
   dir: "ltr",
   common: {
@@ -79924,10 +79972,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, IW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, NW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: FW
-}, Symbol.toStringTag, { value: "Module" })), NW = {
+  default: IW
+}, Symbol.toStringTag, { value: "Module" })), MW = {
   lang: "sr",
   dir: "ltr",
   common: {
@@ -80252,10 +80300,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, MW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, OW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: NW
-}, Symbol.toStringTag, { value: "Module" })), OW = {
+  default: MW
+}, Symbol.toStringTag, { value: "Module" })), UW = {
   lang: "sv",
   dir: "ltr",
   common: {
@@ -80577,10 +80625,10 @@ Detta kommer också att radera din ångringshistorik!`,
     editorPreferencesMsg: "Som standard och där det stöds kan SVG-Edit lagra dina redigeringsinställningar och SVG-innehåll lokalt på din maskin så att du inte behöver lägga till dessa igen varje gång du laddar SVG-Edit. Om du av integritetsskäl inte vill lagra denna information på din maskin kan du byta bort från standardalternativet nedan.",
     source_dialog_note: "Kopiera innehållet i den här rutan till en textredigerare och spara sedan filen med filtillägget .svg."
   }
-}, UW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, RW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: OW
-}, Symbol.toStringTag, { value: "Module" })), RW = {
+  default: UW
+}, Symbol.toStringTag, { value: "Module" })), QW = {
   lang: "sw",
   dir: "ltr",
   common: {
@@ -80902,10 +80950,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, QW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, DW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: RW
-}, Symbol.toStringTag, { value: "Module" })), DW = {
+  default: QW
+}, Symbol.toStringTag, { value: "Module" })), qW = {
   lang: "test",
   dir: "ltr",
   common: {
@@ -81227,10 +81275,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, qW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, VW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: DW
-}, Symbol.toStringTag, { value: "Module" })), VW = {
+  default: qW
+}, Symbol.toStringTag, { value: "Module" })), HW = {
   lang: "th",
   dir: "ltr",
   common: {
@@ -81555,10 +81603,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, HW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, GW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: VW
-}, Symbol.toStringTag, { value: "Module" })), GW = {
+  default: HW
+}, Symbol.toStringTag, { value: "Module" })), zW = {
   lang: "tl",
   dir: "ltr",
   common: {
@@ -81883,10 +81931,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, zW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, $W = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: GW
-}, Symbol.toStringTag, { value: "Module" })), $W = {
+  default: zW
+}, Symbol.toStringTag, { value: "Module" })), KW = {
   lang: "tr",
   dir: "ltr",
   common: {
@@ -82208,10 +82256,10 @@ Orjinal SVG dosyasına dönüş yapılsın mı?`,
     editorPreferencesMsg: "Varsayılan olarak ve destekleniyorsa, SVG-Edit seçimlerinizi ve SVG dosyayı bilgisayarınızda yerel olarak kaydedebilir dolayısıyla SVG-Edit'i her açtığınızda tekrar yüklemek zorunda değilsiniz. Eğer gizlilik gereği bu özelliği kapatmak isterseniz aşağıdaki seçeneklerden yapabilrisiniz.",
     source_dialog_note: "Bu kutu içeriğini metin düzenleyiciye kopyalayın, sonra dosyayı .svg eklentisi ile kaydedin."
   }
-}, KW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, XW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: $W
-}, Symbol.toStringTag, { value: "Module" })), XW = {
+  default: KW
+}, Symbol.toStringTag, { value: "Module" })), YW = {
   lang: "uk",
   dir: "ltr",
   common: {
@@ -82533,10 +82581,10 @@ Orjinal SVG dosyasına dönüş yapılsın mı?`,
     editorPreferencesMsg: "За замовчуванням і там, де це підтримується, SVG-Edit може зберігати ваші параметри редактора та вміст SVG локально на вашому комп’ютері, тож вам не потрібно додавати їх щоразу, коли ви завантажуєте SVG-Edit. Якщо з міркувань конфіденційності ви не бажаєте зберігати цю інформацію на своєму комп’ютері, ви можете змінити параметр за замовчуванням нижче.",
     source_dialog_note: "Скопіюйте вміст цього поля в текстовий редактор, а потім збережіть файл із розширенням .svg."
   }
-}, YW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, WW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: XW
-}, Symbol.toStringTag, { value: "Module" })), WW = {
+  default: YW
+}, Symbol.toStringTag, { value: "Module" })), ZW = {
   lang: "vi",
   dir: "ltr",
   common: {
@@ -82858,10 +82906,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, ZW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, JW = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: WW
-}, Symbol.toStringTag, { value: "Module" })), JW = {
+  default: ZW
+}, Symbol.toStringTag, { value: "Module" })), eZ = {
   lang: "yi",
   dir: "ltr",
   common: {
@@ -83186,10 +83234,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, eZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, tZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: JW
-}, Symbol.toStringTag, { value: "Module" })), tZ = {
+  default: eZ
+}, Symbol.toStringTag, { value: "Module" })), rZ = {
   lang: "zh-CN",
   dir: "ltr",
   common: {
@@ -83514,10 +83562,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "默认情况下，只要您的设备支持，SVG-Edit 会将您的编辑偏好设置和 SVG 内容本地保存在您的电脑上，这样您每次重新打开 SVG-Edit 时，就无需再费力重新设置或导入内容了。但如果您出于隐私考虑，不希望这些信息留在您的设备上，只需在下方切换选项，轻松关闭这一默认功能即可！",
     source_dialog_note: "将此框中的内容复制到文本编辑器中，然后以 .svg 为扩展名保存该文件。"
   }
-}, rZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, nZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tZ
-}, Symbol.toStringTag, { value: "Module" })), nZ = {
+  default: rZ
+}, Symbol.toStringTag, { value: "Module" })), iZ = {
   lang: "zh-HK",
   dir: "ltr",
   common: {
@@ -83842,10 +83890,10 @@ Revert back to original SVG source?`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, iZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, oZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: nZ
-}, Symbol.toStringTag, { value: "Module" })), oZ = {
+  default: iZ
+}, Symbol.toStringTag, { value: "Module" })), aZ = {
   lang: "zh-TW",
   dir: "ltr",
   common: {
@@ -84170,11 +84218,11 @@ This will also erase your undo history!`,
     editorPreferencesMsg: "By default and where supported, SVG-Edit can store your editor preferences and SVG content locally on your machine so you do not need to add these back each time you load SVG-Edit. If, for privacy reasons, you do not wish to store this information on your machine, you can change away from the default option below.",
     source_dialog_note: "Copy the contents of this box into a text editor, then save the file with a .svg extension."
   }
-}, aZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, sZ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: oZ
+  default: aZ
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  yZ as default
+  vZ as default
 };
 //# sourceMappingURL=Editor.js.map

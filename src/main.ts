@@ -12,6 +12,7 @@ import {
   drawingSourceFor,
   readDrawingSvg,
   pickFrame,
+  pickImportMode,
   svgToDataUri,
 } from "./modals/vaultImage";
 import { listFrames, prepareSvgForExport } from "./export/frames";
@@ -133,16 +134,28 @@ export default class SvgPlugin extends Plugin {
             const frames = listFrames(svg);
             const frameName = frames.length ? await pickFrame(this.app, frames.map((f) => f.name)) : "";
             if (frameName === null) return null; // dismissed the frame picker
-            const dataUrl = svgToDataUri(prepareSvgForExport(svg, frameName));
+            const mode = await pickImportMode(this.app);
+            if (mode === null) return null; // dismissed the mode picker
+            const prepared = prepareSvgForExport(svg, frameName);
+            const dataUrl = svgToDataUri(prepared);
             let link = resolveVaultLink(this.app, drawing, this.activeDrawingPath());
             if (frameName) link += `#${frameName}`;
-            return { dataUrl, link };
+            // An unlocked *whole-drawing* import is inserted as editable SVG
+            // elements (svgedit decomposes `editableSvg`). Frame crops can't be
+            // decomposed without bringing the whole drawing, so they — and all
+            // locked imports — stay frozen/synced <image> embeds.
+            if (mode === "unlocked" && !frameName) {
+              return { dataUrl, link, editableSvg: prepared };
+            }
+            return { dataUrl, link, locked: mode === "locked" };
           }
         }
 
+        const mode = await pickImportMode(this.app);
+        if (mode === null) return null; // dismissed the mode picker
         const dataUrl = await fileToDataUri(this.app, file);
         const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
-        return { dataUrl, link };
+        return { dataUrl, link, locked: mode === "locked" };
       },
       pickVaultFile: async () => {
         const file = await pickVaultFile(this.app, "Pick a vault file to link…");

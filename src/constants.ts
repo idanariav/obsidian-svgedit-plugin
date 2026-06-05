@@ -21,6 +21,10 @@ export const LINKED_FILES_HEADING = "## Linked Files";
 // import. Its value is the wikilink text to record. This is the cross-repo
 // contract with the svgedit fork.
 export const VAULT_LINK_ATTR = "data-vault-link";
+// Marks an imported element as "locked": its content is re-baked from the
+// source on every load (see refreshLockedEmbeds) rather than kept as a frozen
+// snapshot. Also stamped by the svgedit fork at import time.
+export const VAULT_LOCKED_ATTR = "data-vault-locked";
 export const SWITCH_NOTICE =
   "==⚠  Switch to SVG VIEW in the ribbon or right-click menu  ⚠==";
 

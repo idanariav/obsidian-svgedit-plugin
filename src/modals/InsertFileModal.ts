@@ -6,7 +6,7 @@ import {
 } from "obsidian";
 import { SvgView } from "../view/SvgView";
 import { IMAGE_EXTENSIONS } from "../constants";
-import { fileToDataUri } from "./vaultImage";
+import { fileToDataUri, pickImportMode, resolveVaultLink } from "./vaultImage";
 
 export class InsertFileModal extends FuzzySuggestModal<TFile> {
   private view: SvgView;
@@ -39,8 +39,16 @@ export class InsertFileModal extends FuzzySuggestModal<TFile> {
   }
 
   private async insertImage(file: TFile): Promise<void> {
+    // Locked imports re-bake from their source on every open; unlocked ones stay
+    // a frozen snapshot. Both record a vault link so the drawing keeps a backlink.
+    const mode = await pickImportMode(this.app);
+    if (mode === null) return; // dismissed the mode picker
     const dataUri = await fileToDataUri(this.app, file);
-    const fragment = `<image href="${dataUri}" x="50" y="50" width="200" height="200"/>`;
+    const link = resolveVaultLink(this.app, file, this.view.file?.path ?? "");
+    const lockedAttr = mode === "locked" ? ` data-vault-locked="1"` : "";
+    const fragment =
+      `<image href="${dataUri}" data-vault-link="${escapeAttr(link)}"${lockedAttr}` +
+      ` x="50" y="50" width="200" height="200"/>`;
     await this.view.insertSvgFragment(fragment);
   }
 
@@ -50,4 +58,12 @@ export class InsertFileModal extends FuzzySuggestModal<TFile> {
     const fragment = `<text x="50" y="80" font-family="sans-serif" font-size="16" fill="currentColor">[[${escaped}]]</text>`;
     await this.view.insertSvgFragment(fragment);
   }
+}
+
+/** Escape a value for safe inclusion in a double-quoted XML attribute. */
+function escapeAttr(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;");
 }

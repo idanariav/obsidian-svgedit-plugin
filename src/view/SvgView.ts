@@ -7,6 +7,7 @@ import {
 } from "obsidian";
 import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg, reconcileLinkedFiles } from "../data/SvgData";
+import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
@@ -254,8 +255,12 @@ export class SvgView extends TextFileView {
 
   async setViewData(data: string, _clear: boolean): Promise<void> {
     this.currentData = data;
-    const svg = extractSvg(data) ?? EMPTY_SVG;
     const gen = ++this.loadGen; // uniquely identifies this load
+    const raw = extractSvg(data) ?? EMPTY_SVG;
+    // Locked imports are re-baked from their source on every open so a drawing
+    // always reflects the latest version of what it embeds.
+    const svg = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
+    if (this.loadGen !== gen) return; // a newer load superseded us during the re-bake
 
     if (this.svgEditor) {
       this.isLoading = true;

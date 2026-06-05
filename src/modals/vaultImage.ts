@@ -5,7 +5,14 @@ import { extractSvg } from "../data/SvgData";
 
 /** Host bridge svgedit feature-detects on `window` to offer "import/link from vault". */
 export interface SvgEditHost {
-  pickVaultImage(): Promise<{ dataUrl: string; link: string } | null>;
+  pickVaultImage(): Promise<
+    | { dataUrl: string; link: string; locked?: boolean }
+    // An unlocked whole-drawing import carries the source's full SVG so svgedit
+    // inserts it as editable elements rather than a flattened <image>. `dataUrl`
+    // is still provided for the import dialog's preview thumbnail.
+    | { dataUrl: string; link: string; editableSvg: string }
+    | null
+  >;
   pickVaultFile(): Promise<{ link: string } | null>;
 }
 
@@ -98,6 +105,41 @@ export function pickFrame(app: App, frames: string[]): Promise<string | null> {
       }
     })(app);
     modal.setPlaceholder("Pick a frame to import (or the whole drawing)…");
+    modal.open();
+  });
+}
+
+/**
+ * Open a fuzzy picker to choose how an imported object should behave:
+ * "unlocked" (an independent copy that never syncs) or "locked" (its content is
+ * re-baked from the source whenever the embedding drawing is opened). For an
+ * unlocked whole-drawing import the copy is editable SVG elements; otherwise
+ * (frame crops, raster images) it is a frozen <image> snapshot. Resolves with
+ * the chosen mode, or null if dismissed.
+ */
+export function pickImportMode(app: App): Promise<"locked" | "unlocked" | null> {
+  const UNLOCKED = "Unlocked — an independent copy (won't sync)";
+  const LOCKED = "Locked — auto-syncs from the source on open";
+  const items = [UNLOCKED, LOCKED];
+  return new Promise((resolve) => {
+    let chosen: "locked" | "unlocked" | null = null;
+    const modal = new (class extends FuzzySuggestModal<string> {
+      getItems(): string[] {
+        return items;
+      }
+      getItemText(item: string): string {
+        return item;
+      }
+      onChooseItem(item: string): void {
+        chosen = item === LOCKED ? "locked" : "unlocked";
+        resolve(chosen);
+      }
+      onClose(): void {
+        // Defer so onChooseItem (which also closes) wins the resolve race.
+        window.setTimeout(() => resolve(chosen), 0);
+      }
+    })(app);
+    modal.setPlaceholder("Import as locked or unlocked?");
     modal.open();
   });
 }

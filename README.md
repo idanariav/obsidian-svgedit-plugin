@@ -92,7 +92,16 @@ Two editor actions create a tracked link from the drawing back to a file in your
   name), the link points to the **source note**; otherwise it points to the image file.
   You can also pick a drawing directly: if it has frames, you're asked which frame to
   import (or the whole drawing), and only that region is inserted with a `[[note#frame]]`
-  link.
+  link. Finally, you choose an import **mode**:
+  - **Unlocked** — an independent copy that never syncs. Importing a **whole drawing**
+    unlocked inserts its **actual editable elements** (a group of paths/shapes/text you
+    can move, resize, enter, ungroup and edit freely). A frame crop or a raster image
+    imported unlocked is a frozen `<image>` snapshot instead, since those can't be
+    decomposed into shapes.
+  - **Locked** — a live copy. Each time you reopen (or save) this drawing, the locked
+    object is re-rendered from the source's **current** content, so editing the source
+    once updates every locked copy. The object is still freely movable; only its picture
+    auto-syncs.
 - **Shape library → attach a link** — when you save an object to the shape library you
   can attach a link to any vault file. Every time you insert that shape, the link is
   recorded too.
