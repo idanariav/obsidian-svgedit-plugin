@@ -54,6 +54,11 @@ export interface SvgPluginSettings {
    *  "light"/"dark" is the user's explicit in-editor choice, remembered across
    *  files and sessions. */
   editorTheme: "auto" | "light" | "dark";
+  /** svgedit UI mode used when Obsidian runs on a desktop/PC. "tablet" enables
+   *  svgedit's touch-first shell; "desktop" uses the standard layout. */
+  uiModeDesktop: "desktop" | "tablet";
+  /** svgedit UI mode used when Obsidian runs on a mobile device. */
+  uiModeMobile: "desktop" | "tablet";
   /** When true, the drawing SVG is stored LZString-compressed in the note to
    *  keep files slim. When false it is stored as readable SVG (better git diffs
    *  and plain-text search). Existing files migrate to the chosen format on the
@@ -78,5 +83,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   drawingTag: "svg",
   exportFolderMappings: [],
   editorTheme: "auto",
+  uiModeDesktop: "desktop",
+  uiModeMobile: "tablet",
   compressDrawingData: true,
 };

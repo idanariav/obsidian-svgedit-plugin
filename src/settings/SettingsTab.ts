@@ -71,6 +71,43 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName("Editor UI mode (desktop)")
+      .setDesc(
+        "Layout used when Obsidian runs on a computer. \"Tablet\" enables svgedit's "
+        + "touch-first shell; \"Desktop\" uses the standard layout. Takes effect on the next drawing opened.",
+      )
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            desktop: "Desktop",
+            tablet: "Tablet",
+          })
+          .setValue(this.plugin.settings.uiModeDesktop)
+          .onChange(async (v) => {
+            this.plugin.settings.uiModeDesktop = v as "desktop" | "tablet";
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Editor UI mode (mobile)")
+      .setDesc(
+        "Layout used when Obsidian runs on a phone or tablet. Takes effect on the next drawing opened.",
+      )
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            desktop: "Desktop",
+            tablet: "Tablet",
+          })
+          .setValue(this.plugin.settings.uiModeMobile)
+          .onChange(async (v) => {
+            this.plugin.settings.uiModeMobile = v as "desktop" | "tablet";
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Storage ──────────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Storage");
 

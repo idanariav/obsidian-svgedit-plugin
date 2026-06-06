@@ -1,6 +1,7 @@
 import {
   TextFileView,
   WorkspaceLeaf,
+  Platform,
   setIcon,
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
@@ -89,6 +90,9 @@ export class SvgView extends TextFileView {
       // than toggling the class after init — keeps svgedit's stored `theme` pref
       // in sync with the applied class, so the ext-theme-toggle works first-click.
       theme: this.resolveInitialTheme(),
+      // Touch-first tablet shell vs. standard desktop layout, chosen per platform
+      // (PC vs. mobile) in the plugin settings.
+      tabletMode: this.resolveTabletMode(),
       // Leave the side panel closed by default (a "PANEL" handle on the right
       // edge), matching the native svgedit UI; the handle toggles it open.
       showlayers: false,
@@ -160,6 +164,15 @@ export class SvgView extends TextFileView {
     const pref = this.plugin.settings.editorTheme;
     if (pref === "light" || pref === "dark") return pref;
     return document.body.classList.contains("theme-dark") ? "dark" : "light";
+  }
+
+  /** Whether svgedit's touch-first tablet shell should be on, per the platform's
+   *  configured UI mode (PC vs. mobile). */
+  private resolveTabletMode(): boolean {
+    const mode = Platform.isMobile
+      ? this.plugin.settings.uiModeMobile
+      : this.plugin.settings.uiModeDesktop;
+    return mode === "tablet";
   }
 
   /** svgedit's root element, which carries the theme-light / theme-dark class. */
