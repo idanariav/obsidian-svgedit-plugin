@@ -43,6 +43,11 @@ export interface SvgPluginSettings {
   /** When converting an Excalidraw drawing, remove the original Excalidraw data
    *  (the "# Excalidraw Data" section) from the note. False keeps it as inert text. */
   removeExcalidrawData: boolean;
+  /** When converting a markdown note into an svgedit drawing, add a frontmatter
+   *  tag to mark it. When false, no tag is stamped. */
+  addDrawingTag: boolean;
+  /** The tag text added on conversion when addDrawingTag is true (no leading #). */
+  drawingTag: string;
   /** Custom export destinations: drawings in sourceFolder export to exportFolder. */
   exportFolderMappings: ExportFolderMapping[];
   /** Persisted svgedit editor theme. "auto" follows Obsidian's light/dark mode;
@@ -69,6 +74,8 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   folderConfigs: [],
   keepInSync: false,
   removeExcalidrawData: false,
+  addDrawingTag: true,
+  drawingTag: "svg",
   exportFolderMappings: [],
   editorTheme: "auto",
   compressDrawingData: true,

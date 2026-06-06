@@ -27,6 +27,21 @@ function isExcalidrawFile(app: App, file: TFile): boolean {
   return fm?.[EXCALIDRAW_FM_KEY] != null;
 }
 
+/**
+ * Stamp the configured drawing tag onto a note's frontmatter when converting it
+ * to an svgedit drawing. No-op when the setting is disabled or the tag is blank.
+ */
+function applyDrawingTag(fm: Record<string, unknown>, plugin: SvgPlugin): void {
+  if (!plugin.settings.addDrawingTag) return;
+  const tag = plugin.settings.drawingTag.trim();
+  if (!tag) return;
+  if (!Array.isArray(fm.tags)) {
+    fm.tags = [tag];
+  } else if (!(fm.tags as string[]).includes(tag)) {
+    (fm.tags as string[]).push(tag);
+  }
+}
+
 export function registerCommands(plugin: SvgPlugin): void {
   // New drawing
   plugin.addCommand({
@@ -185,11 +200,7 @@ async function convertExcalidrawToDrawing(plugin: SvgPlugin, file: TFile): Promi
       }
       fm[FRONTMATTER_KEY_PLUGIN] = FRONTMATTER_PLUGIN_VALUE;
       fm[FRONTMATTER_KEY_OPEN_MD] = false;
-      if (!Array.isArray(fm.tags)) {
-        fm.tags = ["svg"];
-      } else if (!(fm.tags as string[]).includes("svg")) {
-        (fm.tags as string[]).push("svg");
-      }
+      applyDrawingTag(fm, plugin);
     });
 
     // 2. Body edits on the (frontmatter-updated) content.
@@ -218,11 +229,7 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     await plugin.app.fileManager.processFrontMatter(file, (fm) => {
       fm[FRONTMATTER_KEY_PLUGIN] = FRONTMATTER_PLUGIN_VALUE;
       fm[FRONTMATTER_KEY_OPEN_MD] = false;
-      if (!Array.isArray(fm.tags)) {
-        fm.tags = ["svg"];
-      } else if (!(fm.tags as string[]).includes("svg")) {
-        (fm.tags as string[]).push("svg");
-      }
+      applyDrawingTag(fm, plugin);
     });
 
     // 2. Append the drawing block if it isn't there yet

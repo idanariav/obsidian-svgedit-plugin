@@ -178,6 +178,40 @@ export class SvgSettingsTab extends PluginSettingTab {
       );
 
     // ── Excalidraw import ─────────────────────────────────────────────────────
+    // ── Conversion ────────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Conversion");
+
+    new Setting(containerEl)
+      .setName("Add tag on conversion")
+      .setDesc(
+        "When converting a note into an SVG drawing, add a frontmatter tag to "
+        + "mark it.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.addDrawingTag)
+          .onChange(async (v) => {
+            this.plugin.settings.addDrawingTag = v;
+            await this.plugin.saveSettings();
+            this.display();
+          }),
+      );
+
+    if (this.plugin.settings.addDrawingTag) {
+      new Setting(containerEl)
+        .setName("Tag text")
+        .setDesc("The tag added to converted drawings (without a leading #).")
+        .addText((t) =>
+          t
+            .setPlaceholder("svg")
+            .setValue(this.plugin.settings.drawingTag)
+            .onChange(async (v) => {
+              this.plugin.settings.drawingTag = v;
+              await this.plugin.saveSettings();
+            }),
+        );
+    }
+
     new Setting(containerEl).setHeading().setName("Excalidraw import");
 
     new Setting(containerEl)
