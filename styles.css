@@ -138,3 +138,21 @@
   max-width: 100%;
   height: auto;
 }
+
+/* ── Link hover preview of a drawing note ──────────────────────────────── */
+
+.svg-hover-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  max-width: 400px;
+  max-height: 400px;
+  overflow: auto;
+  cursor: pointer;
+}
+
+.svg-hover-preview svg {
+  max-width: 100%;
+  height: auto;
+}

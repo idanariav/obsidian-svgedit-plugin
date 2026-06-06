@@ -16,12 +16,28 @@ import { listFrames, prepareSvgForExport } from "../export/frames";
  * 2. `![[drawing.png]]` / `![[drawing.svg]]` — an image whose companion .md is a
  *    drawing gets a click handler that opens the source drawing in SvgView
  *    instead of navigating to the image file.
+ *
+ * Plus: when this runs inside a hover-preview popover for a drawing note, the
+ * raw markdown (the switch notice + hidden data block) is replaced with the
+ * rendered drawing — see renderDrawingHoverPreview.
  */
 export async function markdownPostProcessor(
   el: HTMLElement,
   ctx: MarkdownPostProcessorContext,
   app: App,
 ): Promise<void> {
+  // `containerEl` is the (undocumented) element the post-processor renders into.
+  // When it sits inside a `.hover-popover`, we're rendering a link's hover
+  // preview rather than the document itself.
+  const containerEl = (ctx as unknown as { containerEl?: HTMLElement }).containerEl;
+  if (containerEl?.closest(".hover-popover")) {
+    const file = app.vault.getAbstractFileByPath(ctx.sourcePath);
+    if (file instanceof TFile && isSvgDrawingFile(app, file)) {
+      await renderDrawingHoverPreview(app, file, containerEl);
+      return;
+    }
+  }
+
   const embeds = el.querySelectorAll<HTMLElement>(".internal-embed");
   if (embeds.length === 0) return;
 
@@ -78,6 +94,44 @@ async function renderFrameEmbed(
   embed.addClass("svg-frame-embed");
   embed.appendChild(document.importNode(svgEl, true));
   bindOpenSource(embed, app, file);
+}
+
+/**
+ * Replace a drawing note's hover preview with the rendered drawing.
+ *
+ * A drawing note's markdown is just a switch notice and a `%%`-hidden data
+ * block, so its native page preview shows nothing useful. The whole drawing is
+ * rendered into the popover instead (frame rects stripped, as in export), and
+ * clicking it opens the drawing. The native markdown content is hidden, and a
+ * dataset flag on the popover keeps this to a single render even though the
+ * post-processor fires once per rendered block.
+ */
+async function renderDrawingHoverPreview(
+  app: App,
+  file: TFile,
+  containerEl: HTMLElement,
+): Promise<void> {
+  const popover = containerEl.closest<HTMLElement>(".hover-popover");
+  if (!popover || popover.dataset.svgHoverPreview) return;
+  popover.dataset.svgHoverPreview = "1"; // claim synchronously before awaiting
+
+  const svg = extractSvg(await app.vault.cachedRead(file));
+  if (!svg) {
+    delete popover.dataset.svgHoverPreview; // nothing to show; let native render
+    return;
+  }
+
+  const svgEl = new DOMParser()
+    .parseFromString(prepareSvgForExport(svg), "image/svg+xml")
+    .documentElement;
+
+  // Hide the native markdown content and inject the drawing alongside it.
+  const nativeContent = containerEl.closest<HTMLElement>(".markdown-embed");
+  if (nativeContent) nativeContent.style.display = "none";
+
+  const wrap = popover.createDiv({ cls: "svg-hover-preview" });
+  wrap.appendChild(document.importNode(svgEl, true));
+  bindOpenSource(wrap, app, file);
 }
 
 /** Make clicking the embed open the source drawing in SvgView. */
