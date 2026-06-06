@@ -1,10 +1,9 @@
 import {
   TextFileView,
   WorkspaceLeaf,
-  FileSystemAdapter,
   setIcon,
-  normalizePath,
 } from "obsidian";
+import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg, reconcileLinkedFiles } from "../data/SvgData";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
@@ -25,9 +24,6 @@ interface SvgEditorInstance {
   };
 }
 
-// Sentinel on window so we only inject the script tag once across all views.
-const SCRIPT_LOADED_KEY = "__svgPluginEditorLoaded";
-const CSS_ELEM_ID = "svg-plugin-svgedit-css";
 
 export class SvgView extends TextFileView {
   readonly plugin: SvgPlugin;
@@ -77,45 +73,12 @@ export class SvgView extends TextFileView {
   }
 
   private async initEditor(): Promise<void> {
-    const adapter = this.app.vault.adapter as FileSystemAdapter;
-    const dist = normalizePath(`${this.plugin.manifest.dir}/svgedit-dist`);
-
-    // ── CSS (one <style> per document) ─────────────────────────────────────
-    // Inject svgedit.css as inline <style> content, NOT a <link>. Obsidian loads
-    // <script> from app:// resource URLs (the editor runs) but does not reliably
-    // apply external <link rel="stylesheet"> from those URLs, which left all of
-    // svgedit's light-DOM (side panel, handle, rulers, workarea padding, paper)
-    // unstyled while the shadow-DOM components looked fine. Inlining the file
-    // content guarantees it applies — the same approach the Excalidraw plugin
-    // uses. svgedit.css contains no url() references, so inlining is safe.
-    if (!document.getElementById(CSS_ELEM_ID)) {
-      // Drop the leading `:root,` selector from svgedit's variable block so its
-      // legacy aliases (e.g. --link-color) don't leak onto Obsidian's document
-      // root and restyle Obsidian's own UI. The same variables are also declared
-      // on `.svg_editor`, so the editor itself stays fully themed.
-      const cssText = (await adapter.read(`${dist}/svgedit.css`)).replace(/^:root,$/m, "");
-      document.head.createEl("style", { attr: { id: CSS_ELEM_ID } }).textContent = cssText;
-    }
-
-    // ── IIFE script (one <script> per document) ────────────────────────────
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const win = window as any;
-    if (!win[SCRIPT_LOADED_KEY]) {
-      const jsUrl = adapter.getResourcePath(`${dist}/iife-Editor.js`);
-      await new Promise<void>((resolve, reject) => {
-        const s = document.head.createEl("script", { attr: { src: jsUrl } });
-        s.addEventListener("load", () => { win[SCRIPT_LOADED_KEY] = true; resolve(); });
-        s.addEventListener("error", () => reject(new Error(`Failed to load ${jsUrl}`)));
-      });
-    }
-
-    const EditorCtor = (win.Editor?.default ?? win.Editor) as new (el: HTMLElement) => SvgEditorInstance;
-
-    if (!EditorCtor) throw new Error("window.Editor not found after script load");
-
-    // imgPath and extPath must be absolute URLs (no cache-busting query string).
-    const imgPath = adapter.getResourcePath(`${dist}/images/`).split("?")[0];
-    const extPath = adapter.getResourcePath(`${dist}/extensions`).split("?")[0];
+    // svgedit ships as a single self-contained ESM bundle that esbuild inlines
+    // into this plugin's main.js (see esbuild.config.mjs `alias`). It carries its
+    // own CSS, icons and extensions, so there's nothing to fetch from disk — we
+    // just instantiate the imported constructor. CSS is injected into
+    // document.head by the bundle itself on init (see scopeInjectedCss below).
+    const EditorCtor = SvgEditor as new (el: HTMLElement) => SvgEditorInstance;
 
     this.svgEditor = new EditorCtor(this.editorContainer);
     this.svgEditor.setConfig({
@@ -152,11 +115,10 @@ export class SvgView extends TextFileView {
         "ext-fonts",
         "ext-eyedropper",
       ],
-      extPath,
-      imgPath,
     });
 
     await this.svgEditor.init();
+    this.scopeInjectedCss();
 
     this.setupThemeSync();
 
@@ -171,6 +133,19 @@ export class SvgView extends TextFileView {
       this.isLoading = true;
       try { await this.svgEditor.loadFromString(svg); } finally { this.isLoading = false; }
     }
+  }
+
+  /** The svgedit bundle injects its stylesheet into document.head on init. That
+   *  stylesheet declares its CSS variables on `:root, .svg_editor`, so the
+   *  `:root` half leaks svgedit's legacy aliases (e.g. --link-color) onto
+   *  Obsidian's document root and restyles Obsidian's own UI. Drop the `:root`
+   *  selector from the variable block — the same vars on `.svg_editor` keep the
+   *  editor fully themed. Idempotent: safe to run after every view's init. */
+  private scopeInjectedCss(): void {
+    const style = document.querySelector<HTMLStyleElement>("style[data-svgedit-css]");
+    if (!style) return;
+    const scoped = style.textContent?.replace(/:root,\s*(\.svg_editor)/g, "$1");
+    if (scoped && scoped !== style.textContent) style.textContent = scoped;
   }
 
   /** Re-apply the configured theme to a live editor (called when the default

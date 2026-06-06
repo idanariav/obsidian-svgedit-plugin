@@ -22,23 +22,29 @@ Ask: *"Would this change make sense for any svgedit consumer, not just Obsidian?
 
 ## 🚫 Never edit `svgedit-dist/` directly
 
-`svgedit-dist/` is a **build artifact**. It is populated by:
+`svgedit-dist/Editor.js` is svgedit's **self-contained ESM bundle** (CSS, icons,
+extensions and locales all inlined). It is a **build artifact**, populated by:
 
 ```bash
 # 1. Make source changes in the svgedit fork
 cd ../svgedit && npm run build
 
-# 2. Copy the fresh build into this repo
+# 2. Copy the fresh bundle into this repo
 cd ../obsidian-svgedit-plugin && npm run sync-svgedit
 ```
 
-Any direct edit to `svgedit-dist/` will be silently overwritten the next time
-`sync-svgedit` runs. If you find yourself editing a file in `svgedit-dist/`,
-stop — find the source file in `../svgedit/src/` and make the change there.
+This plugin imports that bundle at **build time** (esbuild `alias` →
+`svgedit-editor`, see `esbuild.config.mjs`), so the whole editor is inlined into
+`main.js`. **Nothing from `svgedit-dist/` is shipped to the vault** — the plugin
+dir only needs `main.js`, `manifest.json` and `styles.css`.
+
+Any direct edit to `svgedit-dist/Editor.js` will be silently overwritten the next
+time `sync-svgedit` runs. If you find yourself editing it, stop — find the source
+in `../svgedit/src/` and make the change there.
 
 **The only exception:** if `../svgedit` is unavailable (e.g. CI without the
 sibling repo), `sync-svgedit` falls back to installing from npm. In that case
-the dist is read-only and no patching should occur.
+the bundle is read-only and no patching should occur.
 
 ---
 
@@ -49,7 +55,7 @@ the dist is read-only and no patching should occur.
 | `src/` | Obsidian plugin TypeScript — views, commands, settings |
 | `styles.css` | Obsidian-scoped CSS overrides for the editor container |
 | `scripts/fetch-svgedit-dist.mjs` | Sync script (do not change without updating the fork's build) |
-| `svgedit-dist/` | **Build artifact — never edit manually** |
+| `svgedit-dist/Editor.js` | **Build artifact — svgedit's ESM bundle, inlined into `main.js`; never edit manually** |
 
 ---
 
@@ -57,8 +63,9 @@ the dist is read-only and no patching should occur.
 
 1. Make and commit the source change in `../svgedit`
 2. `cd ../svgedit && npm run build`
-3. `cd ../obsidian-svgedit-plugin && npm run sync-svgedit`
-4. Commit the updated `svgedit-dist/` here with a message referencing the fork commit
+3. `cd ../obsidian-svgedit-plugin && npm run sync-svgedit` (refreshes `svgedit-dist/Editor.js`)
+4. `npm run build` to re-inline the bundle into `main.js`
+5. Commit the updated `svgedit-dist/Editor.js` here with a message referencing the fork commit
 
 ---
 

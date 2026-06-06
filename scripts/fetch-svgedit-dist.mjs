@@ -1,5 +1,10 @@
 /**
- * Populates svgedit-dist/ with the svgedit editor build.
+ * Populates svgedit-dist/ with the svgedit editor bundle.
+ *
+ * svgedit now ships a single self-contained ESM bundle (`Editor.js`) with CSS,
+ * images, extensions and locales all inlined. This plugin imports that file at
+ * BUILD time so esbuild bundles it straight into `main.js` — nothing from
+ * svgedit-dist/ is shipped to the vault at runtime. So we copy only Editor.js.
  *
  * Resolution order:
  *   1. $SVGEDIT_LOCAL_PATH env var (explicit override)
@@ -9,7 +14,7 @@
  * To bump the npm fallback version, update SVGEDIT_VERSION below.
  */
 
-import { existsSync, mkdirSync, cpSync, rmSync } from "fs";
+import { existsSync, mkdirSync, copyFileSync, rmSync } from "fs";
 import { execSync } from "child_process";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -20,9 +25,15 @@ const ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
 const TARGET = join(ROOT, "svgedit-dist");
 
 function copyDist(editorDir) {
+  const src = join(editorDir, "Editor.js");
+  if (!existsSync(src)) {
+    console.error(`[fetch-svgedit-dist] Bundle not found at ${src}`);
+    console.error("  Run 'npm run build' in your local svgedit repo first.");
+    process.exit(1);
+  }
   mkdirSync(TARGET, { recursive: true });
-  cpSync(editorDir, TARGET, { recursive: true });
-  console.log(`[fetch-svgedit-dist] Copied editor dist from ${editorDir}`);
+  copyFileSync(src, join(TARGET, "Editor.js"));
+  console.log(`[fetch-svgedit-dist] Copied Editor.js bundle from ${editorDir}`);
 }
 
 // 1. Explicit env var override

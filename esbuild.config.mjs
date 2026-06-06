@@ -7,6 +7,10 @@ const prod = process.argv[2] === "production";
 const context = await esbuild.context({
   entryPoints: ["src/main.ts"],
   bundle: true,
+  // Pull svgedit's self-contained ESM bundle straight into main.js so the
+  // editor ships inside the plugin's single output file — no svgedit-dist/
+  // folder needs to be distributed to the vault at runtime.
+  alias: { "svgedit-editor": "./svgedit-dist/Editor.js" },
   external: ["obsidian", "electron", ...builtins],
   format: "cjs",
   target: "es2018",
