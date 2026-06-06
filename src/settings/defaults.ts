@@ -49,6 +49,11 @@ export interface SvgPluginSettings {
    *  "light"/"dark" is the user's explicit in-editor choice, remembered across
    *  files and sessions. */
   editorTheme: "auto" | "light" | "dark";
+  /** When true, the drawing SVG is stored LZString-compressed in the note to
+   *  keep files slim. When false it is stored as readable SVG (better git diffs
+   *  and plain-text search). Existing files migrate to the chosen format on the
+   *  next save; reads handle both formats either way. */
+  compressDrawingData: boolean;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -66,4 +71,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   removeExcalidrawData: false,
   exportFolderMappings: [],
   editorTheme: "auto",
+  compressDrawingData: true,
 };

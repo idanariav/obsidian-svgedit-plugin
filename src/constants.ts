@@ -17,6 +17,9 @@ export const SVGEDIT_SECTION_HEADING = "# SVGEdit Data";
 export const SVGEDIT_SECTION_OPEN = "%%\n# SVGEdit Data";
 export const DRAWING_SECTION_HEADING = "## Drawing";
 export const DRAWING_FENCE_OPEN = "```svg";
+// Fence used when the drawing is stored LZString-compressed (see SvgData.ts).
+// Mirrors the Obsidian Excalidraw plugin's `compressed-json` token.
+export const DRAWING_FENCE_COMPRESSED_OPEN = "```compressed-svg";
 export const DRAWING_FENCE_CLOSE = "```";
 export const DRAWING_SECTION_END = "%%";
 

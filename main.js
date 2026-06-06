@@ -32,7 +32,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // node_modules/lz-string/libs/lz-string.js
 var require_lz_string = __commonJS({
   "node_modules/lz-string/libs/lz-string.js"(exports, module2) {
-    var LZString2 = function() {
+    var LZString3 = function() {
       var f = String.fromCharCode;
       var keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
       var keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
@@ -46,10 +46,10 @@ var require_lz_string = __commonJS({
         }
         return baseReverseDic[alphabet][character];
       }
-      var LZString3 = {
+      var LZString4 = {
         compressToBase64: function(input) {
           if (input == null) return "";
-          var res = LZString3._compress(input, 6, function(a) {
+          var res = LZString4._compress(input, 6, function(a) {
             return keyStrBase64.charAt(a);
           });
           switch (res.length % 4) {
@@ -67,26 +67,26 @@ var require_lz_string = __commonJS({
         decompressFromBase64: function(input) {
           if (input == null) return "";
           if (input == "") return null;
-          return LZString3._decompress(input.length, 32, function(index) {
+          return LZString4._decompress(input.length, 32, function(index) {
             return getBaseValue(keyStrBase64, input.charAt(index));
           });
         },
         compressToUTF16: function(input) {
           if (input == null) return "";
-          return LZString3._compress(input, 15, function(a) {
+          return LZString4._compress(input, 15, function(a) {
             return f(a + 32);
           }) + " ";
         },
         decompressFromUTF16: function(compressed) {
           if (compressed == null) return "";
           if (compressed == "") return null;
-          return LZString3._decompress(compressed.length, 16384, function(index) {
+          return LZString4._decompress(compressed.length, 16384, function(index) {
             return compressed.charCodeAt(index) - 32;
           });
         },
         //compress into uint8array (UCS-2 big endian format)
         compressToUint8Array: function(uncompressed) {
-          var compressed = LZString3.compress(uncompressed);
+          var compressed = LZString4.compress(uncompressed);
           var buf = new Uint8Array(compressed.length * 2);
           for (var i = 0, TotalLen = compressed.length; i < TotalLen; i++) {
             var current_value = compressed.charCodeAt(i);
@@ -98,7 +98,7 @@ var require_lz_string = __commonJS({
         //decompress from uint8array (UCS-2 big endian format)
         decompressFromUint8Array: function(compressed) {
           if (compressed === null || compressed === void 0) {
-            return LZString3.decompress(compressed);
+            return LZString4.decompress(compressed);
           } else {
             var buf = new Array(compressed.length / 2);
             for (var i = 0, TotalLen = buf.length; i < TotalLen; i++) {
@@ -108,13 +108,13 @@ var require_lz_string = __commonJS({
             buf.forEach(function(c) {
               result.push(f(c));
             });
-            return LZString3.decompress(result.join(""));
+            return LZString4.decompress(result.join(""));
           }
         },
         //compress into a string that is already URI encoded
         compressToEncodedURIComponent: function(input) {
           if (input == null) return "";
-          return LZString3._compress(input, 6, function(a) {
+          return LZString4._compress(input, 6, function(a) {
             return keyStrUriSafe.charAt(a);
           });
         },
@@ -123,12 +123,12 @@ var require_lz_string = __commonJS({
           if (input == null) return "";
           if (input == "") return null;
           input = input.replace(/ /g, "+");
-          return LZString3._decompress(input.length, 32, function(index) {
+          return LZString4._decompress(input.length, 32, function(index) {
             return getBaseValue(keyStrUriSafe, input.charAt(index));
           });
         },
         compress: function(uncompressed) {
-          return LZString3._compress(uncompressed, 16, function(a) {
+          return LZString4._compress(uncompressed, 16, function(a) {
             return f(a);
           });
         },
@@ -325,7 +325,7 @@ var require_lz_string = __commonJS({
         decompress: function(compressed) {
           if (compressed == null) return "";
           if (compressed == "") return null;
-          return LZString3._decompress(compressed.length, 32768, function(index) {
+          return LZString4._decompress(compressed.length, 32768, function(index) {
             return compressed.charCodeAt(index);
           });
         },
@@ -467,17 +467,17 @@ var require_lz_string = __commonJS({
           }
         }
       };
-      return LZString3;
+      return LZString4;
     }();
     if (typeof define === "function" && define.amd) {
       define(function() {
-        return LZString2;
+        return LZString3;
       });
     } else if (typeof module2 !== "undefined" && module2 != null) {
-      module2.exports = LZString2;
+      module2.exports = LZString3;
     } else if (typeof angular !== "undefined" && angular != null) {
       angular.module("LZString", []).factory("LZString", function() {
-        return LZString2;
+        return LZString3;
       });
     }
   }
@@ -494,6 +494,9 @@ var import_obsidian14 = require("obsidian");
 // src/view/SvgView.ts
 var import_obsidian4 = require("obsidian");
 
+// src/data/SvgData.ts
+var import_lz_string = __toESM(require_lz_string());
+
 // src/constants.ts
 var VIEW_TYPE_SVG = "svg-draw-view";
 var FRONTMATTER_KEY_PLUGIN = "svg-plugin";
@@ -505,6 +508,7 @@ var FRONTMATTER_PLUGIN_VALUE = "parsed";
 var SVGEDIT_SECTION_OPEN = "%%\n# SVGEdit Data";
 var DRAWING_SECTION_HEADING = "## Drawing";
 var DRAWING_FENCE_OPEN = "```svg";
+var DRAWING_FENCE_COMPRESSED_OPEN = "```compressed-svg";
 var DRAWING_FENCE_CLOSE = "```";
 var DRAWING_SECTION_END = "%%";
 var LINKED_FILES_HEADING = "## Linked Files";
@@ -523,27 +527,38 @@ var IMAGE_EXTENSIONS = /* @__PURE__ */ new Set([
 ]);
 
 // src/data/SvgData.ts
-var BLOCK_REGEX = /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
-var BLOCK_REPLACE_REGEX = /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
+var RAW_BLOCK_REGEX = /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
+var COMPRESSED_BLOCK_REGEX = /## Drawing\n```compressed-svg\n([\s\S]*?)\n```\s*\n%%/;
+var BLOCK_REPLACE_REGEX = /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```(?:svg|compressed-svg)\n[\s\S]*?\n```\s*\n%%/;
+var BASE64_LINE_WIDTH = 76;
 function extractSvg(content) {
-  const m = BLOCK_REGEX.exec(content);
+  const c = COMPRESSED_BLOCK_REGEX.exec(content);
+  if (c) return import_lz_string.default.decompressFromBase64(c[1].replace(/\s+/g, "")) || null;
+  const m = RAW_BLOCK_REGEX.exec(content);
   return m ? m[1] : null;
 }
-function replaceSvg(content, newSvg) {
-  const block = buildBlock(newSvg);
+function replaceSvg(content, newSvg, compress) {
+  const block = buildBlock(newSvg, compress);
   if (BLOCK_REPLACE_REGEX.test(content)) {
-    return content.replace(BLOCK_REPLACE_REGEX, block);
+    return content.replace(BLOCK_REPLACE_REGEX, () => block);
   }
   return content + "\n\n" + block;
 }
-function buildBlock(svg) {
+function buildBlock(svg, compress) {
+  const fenceOpen = compress ? DRAWING_FENCE_COMPRESSED_OPEN : DRAWING_FENCE_OPEN;
+  const payload = compress ? chunk(import_lz_string.default.compressToBase64(svg), BASE64_LINE_WIDTH) : svg;
   return `${SVGEDIT_SECTION_OPEN}
 
 ${DRAWING_SECTION_HEADING}
-${DRAWING_FENCE_OPEN}
-${svg}
+${fenceOpen}
+${payload}
 ${DRAWING_FENCE_CLOSE}
 ${DRAWING_SECTION_END}`;
+}
+function chunk(s, width) {
+  const lines = [];
+  for (let i = 0; i < s.length; i += width) lines.push(s.slice(i, i + width));
+  return lines.join("\n");
 }
 var LINKED_FILES_BLOCK_REGEX = new RegExp(
   `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
@@ -577,7 +592,7 @@ function reconcileLinkedFiles(content, svg) {
   }
   return stripped + "\n\n" + section.trimEnd() + "\n";
 }
-function createDrawingTemplate(svg) {
+function createDrawingTemplate(compress, svg) {
   const content = svg != null ? svg : EMPTY_SVG;
   return `---
 ${FRONTMATTER_KEY_PLUGIN}: ${FRONTMATTER_PLUGIN_VALUE}
@@ -587,7 +602,7 @@ tags:
 
 ${SWITCH_NOTICE}
 
-${buildBlock(content)}
+${buildBlock(content, compress)}
 `;
 }
 
@@ -1157,7 +1172,8 @@ var SvgView = class extends import_obsidian4.TextFileView {
   getViewData() {
     if (!this.svgEditor) return this.currentData;
     const svg = this.svgEditor.svgCanvas.getSvgString();
-    return reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
+    const compress = this.plugin.settings.compressDrawingData;
+    return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
   }
   clear() {
     this.currentData = "";
@@ -1183,7 +1199,8 @@ var SvgView = class extends import_obsidian4.TextFileView {
     var _a;
     if (this.svgEditor && this.file) {
       const svg = this.svgEditor.svgCanvas.getSvgString();
-      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
+      const compress = this.plugin.settings.compressDrawingData;
+      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
       try {
         await this.save();
       } catch (e) {
@@ -1286,6 +1303,15 @@ var SvgSettingsTab = class extends import_obsidian6.PluginSettingTab {
         this.plugin.settings.editorTheme = v;
         await this.plugin.saveSettings();
         this.plugin.refreshOpenEditorThemes();
+      })
+    );
+    new import_obsidian6.Setting(containerEl).setHeading().setName("Storage");
+    new import_obsidian6.Setting(containerEl).setName("Compress drawing data").setDesc(
+      "Store the drawing compressed inside the note to keep files slim. Turn off for readable, plain-text SVG (better git diffs and search). Existing drawings migrate to the chosen format the next time they're saved."
+    ).addToggle(
+      (t) => t.setValue(this.plugin.settings.compressDrawingData).onChange(async (v) => {
+        this.plugin.settings.compressDrawingData = v;
+        await this.plugin.saveSettings();
       })
     );
     new import_obsidian6.Setting(containerEl).setHeading().setName("Auto-export");
@@ -1512,7 +1538,8 @@ var DEFAULT_SETTINGS = {
   keepInSync: false,
   removeExcalidrawData: false,
   exportFolderMappings: [],
-  editorTheme: "auto"
+  editorTheme: "auto",
+  compressDrawingData: true
 };
 
 // src/postprocessor/markdownPostProcessor.ts
@@ -1700,10 +1727,11 @@ function escapeAttr(s) {
 // src/modals/NewDrawingModal.ts
 var import_obsidian10 = require("obsidian");
 var NewDrawingModal = class extends import_obsidian10.Modal {
-  constructor(app, defaultFolder, onSubmit) {
+  constructor(app, defaultFolder, compress, onSubmit) {
     super(app);
     this.name = "Untitled";
     this.folder = defaultFolder;
+    this.compress = compress;
     this.onSubmit = onSubmit;
   }
   onOpen() {
@@ -1720,7 +1748,7 @@ var NewDrawingModal = class extends import_obsidian10.Modal {
         if (!this.name) return;
         const dir = this.folder ? this.folder.replace(/\/$/, "") + "/" : "";
         const path = (0, import_obsidian10.normalizePath)(`${dir}${this.name}.md`);
-        this.onSubmit({ path, content: createDrawingTemplate() });
+        this.onSubmit({ path, content: createDrawingTemplate(this.compress) });
         this.close();
       })
     );
@@ -1808,14 +1836,14 @@ var ExportModal = class extends import_obsidian11.Modal {
 };
 
 // src/import/excalidrawImport.ts
-var import_lz_string = __toESM(require_lz_string());
+var import_lz_string2 = __toESM(require_lz_string());
 var COMPRESSED_RE = /```compressed-json\n([\s\S]*?)\n```/;
 var JSON_RE = /## Drawing\n```json\n([\s\S]*?)\n```/;
 function parseExcalidrawScene(content) {
   const compressed = COMPRESSED_RE.exec(content);
   if (compressed) {
     const cleaned = compressed[1].replace(/\s+/g, "");
-    const json = import_lz_string.default.decompressFromBase64(cleaned);
+    const json = import_lz_string2.default.decompressFromBase64(cleaned);
     if (!json) return null;
     return JSON.parse(json);
   }
@@ -2021,6 +2049,7 @@ function registerCommands(plugin) {
       new NewDrawingModal(
         plugin.app,
         plugin.settings.drawingsFolder,
+        plugin.settings.compressDrawingData,
         async ({ path, content }) => {
           try {
             const existing = plugin.app.vault.getAbstractFileByPath(path);
@@ -2150,7 +2179,7 @@ async function convertExcalidrawToDrawing(plugin, file) {
     if (plugin.settings.removeExcalidrawData) {
       content = stripExcalidrawData(content);
     }
-    await plugin.app.vault.modify(file, replaceSvg(content, svg));
+    await plugin.app.vault.modify(file, replaceSvg(content, svg, plugin.settings.compressDrawingData));
     const leaf = getActiveLeaf(plugin);
     await leaf.openFile(file, { active: true });
     new import_obsidian12.Notice("Converted Excalidraw drawing to SVG");
@@ -2171,7 +2200,7 @@ async function convertNoteToDrawing(plugin, file) {
     });
     const content = await plugin.app.vault.read(file);
     if (!extractSvg(content)) {
-      await plugin.app.vault.modify(file, replaceSvg(content, EMPTY_SVG));
+      await plugin.app.vault.modify(file, replaceSvg(content, EMPTY_SVG, plugin.settings.compressDrawingData));
     }
     const leaf = getActiveLeaf(plugin);
     await leaf.openFile(file, { active: true });
@@ -2289,6 +2318,7 @@ var SvgPlugin = class extends import_obsidian14.Plugin {
       new NewDrawingModal(
         this.app,
         this.settings.drawingsFolder,
+        this.settings.compressDrawingData,
         async ({ path, content }) => {
           const file = await this.app.vault.create(path, content);
           const leaf = this.app.workspace.getLeaf(false);

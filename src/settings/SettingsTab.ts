@@ -71,6 +71,25 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    // ── Storage ──────────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Storage");
+
+    new Setting(containerEl)
+      .setName("Compress drawing data")
+      .setDesc(
+        "Store the drawing compressed inside the note to keep files slim. "
+        + "Turn off for readable, plain-text SVG (better git diffs and search). "
+        + "Existing drawings migrate to the chosen format the next time they're saved.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.compressDrawingData)
+          .onChange(async (v) => {
+            this.plugin.settings.compressDrawingData = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");
 

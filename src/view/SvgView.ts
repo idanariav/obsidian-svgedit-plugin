@@ -278,7 +278,8 @@ export class SvgView extends TextFileView {
   getViewData(): string {
     if (!this.svgEditor) return this.currentData;
     const svg = this.svgEditor.svgCanvas.getSvgString();
-    return reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
+    const compress = this.plugin.settings.compressDrawingData;
+    return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
   }
 
   clear(): void {
@@ -314,7 +315,8 @@ export class SvgView extends TextFileView {
     // that hasn't fired yet (e.g. when the user closes the tab quickly).
     if (this.svgEditor && this.file) {
       const svg = this.svgEditor.svgCanvas.getSvgString();
-      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg), svg);
+      const compress = this.plugin.settings.compressDrawingData;
+      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
       try { await this.save(); } catch { /* best-effort */ }
     }
     this.svgEditor = null;

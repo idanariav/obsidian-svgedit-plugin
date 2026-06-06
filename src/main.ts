@@ -50,6 +50,7 @@ export default class SvgPlugin extends Plugin {
       new NewDrawingModal(
         this.app,
         this.settings.drawingsFolder,
+        this.settings.compressDrawingData,
         async ({ path, content }) => {
           const file = await this.app.vault.create(path, content);
           const leaf = this.app.workspace.getLeaf(false);

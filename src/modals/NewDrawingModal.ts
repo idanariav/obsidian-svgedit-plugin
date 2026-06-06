@@ -4,15 +4,18 @@ import { createDrawingTemplate } from "../data/SvgData";
 export class NewDrawingModal extends Modal {
   private name = "Untitled";
   private folder: string;
+  private compress: boolean;
   private onSubmit: (file: { path: string; content: string }) => void;
 
   constructor(
     app: App,
     defaultFolder: string,
+    compress: boolean,
     onSubmit: (file: { path: string; content: string }) => void,
   ) {
     super(app);
     this.folder = defaultFolder;
+    this.compress = compress;
     this.onSubmit = onSubmit;
   }
 
@@ -45,7 +48,7 @@ export class NewDrawingModal extends Modal {
           if (!this.name) return;
           const dir = this.folder ? this.folder.replace(/\/$/, "") + "/" : "";
           const path = normalizePath(`${dir}${this.name}.md`);
-          this.onSubmit({ path, content: createDrawingTemplate() });
+          this.onSubmit({ path, content: createDrawingTemplate(this.compress) });
           this.close();
         }),
     );

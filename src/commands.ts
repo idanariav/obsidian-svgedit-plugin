@@ -36,6 +36,7 @@ export function registerCommands(plugin: SvgPlugin): void {
       new NewDrawingModal(
         plugin.app,
         plugin.settings.drawingsFolder,
+        plugin.settings.compressDrawingData,
         async ({ path, content }) => {
           try {
             const existing = plugin.app.vault.getAbstractFileByPath(path);
@@ -196,7 +197,7 @@ async function convertExcalidrawToDrawing(plugin: SvgPlugin, file: TFile): Promi
     if (plugin.settings.removeExcalidrawData) {
       content = stripExcalidrawData(content);
     }
-    await plugin.app.vault.modify(file, replaceSvg(content, svg));
+    await plugin.app.vault.modify(file, replaceSvg(content, svg, plugin.settings.compressDrawingData));
 
     // 3. Reopen — the setViewState patch now routes it to SvgView.
     const leaf = getActiveLeaf(plugin);
@@ -227,7 +228,7 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     // 2. Append the drawing block if it isn't there yet
     const content = await plugin.app.vault.read(file);
     if (!extractSvg(content)) {
-      await plugin.app.vault.modify(file, replaceSvg(content, EMPTY_SVG));
+      await plugin.app.vault.modify(file, replaceSvg(content, EMPTY_SVG, plugin.settings.compressDrawingData));
     }
 
     // 3. Reopen — setViewState patch will now route it to SvgView

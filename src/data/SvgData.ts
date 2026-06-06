@@ -1,7 +1,9 @@
+import LZString from "lz-string";
 import {
   SVGEDIT_SECTION_OPEN,
   DRAWING_SECTION_HEADING,
   DRAWING_FENCE_OPEN,
+  DRAWING_FENCE_COMPRESSED_OPEN,
   DRAWING_FENCE_CLOSE,
   DRAWING_SECTION_END,
   EMPTY_SVG,
@@ -12,38 +14,60 @@ import {
   VAULT_LINK_ATTR,
 } from "../constants";
 
-// Matches the fenced SVG block between the ## Drawing heading and the %% terminator.
-// Captures only the SVG content inside the fence. The optional `%%\n# SVGEdit Data`
-// prefix may sit just above (new format); BLOCK_REGEX only needs the inner block.
-const BLOCK_REGEX =
+// Matches the fenced raw-SVG block between the ## Drawing heading and the %%
+// terminator, capturing the SVG content inside the fence. The optional
+// `%%\n# SVGEdit Data` prefix may sit just above; this regex only needs the
+// inner block.
+const RAW_BLOCK_REGEX =
   /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
 
-// Same block, including the optional `%%\n# SVGEdit Data` wrapper opening that
-// precedes it in the current format. Matching the opening too means rebuilding
-// the block also migrates legacy (un-wrapped) files to the wrapped layout.
+// Matches the fenced compressed-SVG block, capturing the chunked base64 payload.
+const COMPRESSED_BLOCK_REGEX =
+  /## Drawing\n```compressed-svg\n([\s\S]*?)\n```\s*\n%%/;
+
+// Either block (raw or compressed), including the optional `%%\n# SVGEdit Data`
+// wrapper opening that precedes it. Matching the opening too means rebuilding
+// the block also migrates legacy (un-wrapped) files to the wrapped layout, and
+// the `(?:svg|compressed-svg)` alternation lets a save in either direction
+// rewrite whichever format currently exists.
 const BLOCK_REPLACE_REGEX =
-  /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
+  /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```(?:svg|compressed-svg)\n[\s\S]*?\n```\s*\n%%/;
+
+// Width to wrap the base64 payload at, so a compressed drawing is many modest
+// lines rather than one enormous line. Whitespace is stripped before decompress.
+const BASE64_LINE_WIDTH = 76;
 
 /** Extract the SVG string from a markdown drawing file. Returns null if not found. */
 export function extractSvg(content: string): string | null {
-  const m = BLOCK_REGEX.exec(content);
+  const c = COMPRESSED_BLOCK_REGEX.exec(content);
+  if (c) return LZString.decompressFromBase64(c[1].replace(/\s+/g, "")) || null;
+  const m = RAW_BLOCK_REGEX.exec(content);
   return m ? m[1] : null;
 }
 
 /** Replace the SVG block in an existing markdown drawing file with new SVG content. */
-export function replaceSvg(content: string, newSvg: string): string {
-  const block = buildBlock(newSvg);
+export function replaceSvg(content: string, newSvg: string, compress: boolean): string {
+  const block = buildBlock(newSvg, compress);
   if (BLOCK_REPLACE_REGEX.test(content)) {
-    return content.replace(BLOCK_REPLACE_REGEX, block);
+    return content.replace(BLOCK_REPLACE_REGEX, () => block);
   }
   return content + "\n\n" + block;
 }
 
-function buildBlock(svg: string): string {
+function buildBlock(svg: string, compress: boolean): string {
+  const fenceOpen = compress ? DRAWING_FENCE_COMPRESSED_OPEN : DRAWING_FENCE_OPEN;
+  const payload = compress ? chunk(LZString.compressToBase64(svg), BASE64_LINE_WIDTH) : svg;
   return (
     `${SVGEDIT_SECTION_OPEN}\n\n` +
-    `${DRAWING_SECTION_HEADING}\n${DRAWING_FENCE_OPEN}\n${svg}\n${DRAWING_FENCE_CLOSE}\n${DRAWING_SECTION_END}`
+    `${DRAWING_SECTION_HEADING}\n${fenceOpen}\n${payload}\n${DRAWING_FENCE_CLOSE}\n${DRAWING_SECTION_END}`
   );
+}
+
+/** Break a string into newline-separated lines of at most `width` characters. */
+function chunk(s: string, width: number): string {
+  const lines: string[] = [];
+  for (let i = 0; i < s.length; i += width) lines.push(s.slice(i, i + width));
+  return lines.join("\n");
 }
 
 // Matches the auto-managed "## Linked Files" section: the heading through every
@@ -100,7 +124,7 @@ export function reconcileLinkedFiles(content: string, svg: string): string {
 }
 
 /** Generate the initial markdown content for a brand-new drawing file. */
-export function createDrawingTemplate(svg?: string): string {
+export function createDrawingTemplate(compress: boolean, svg?: string): string {
   const content = svg ?? EMPTY_SVG;
   return `---
 ${FRONTMATTER_KEY_PLUGIN}: ${FRONTMATTER_PLUGIN_VALUE}
@@ -110,6 +134,6 @@ tags:
 
 ${SWITCH_NOTICE}
 
-${buildBlock(content)}
+${buildBlock(content, compress)}
 `;
 }
