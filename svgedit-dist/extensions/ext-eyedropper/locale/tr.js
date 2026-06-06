@@ -1,13 +1,9 @@
-const tr = {
-  name: "renkseçici",
+export default {
+  name: 'renkseçici',
   buttons: [
     {
-      title: "Renk Seçim Aracı",
-      key: "I"
+      title: 'Renk Seçim Aracı',
+      key: 'I'
     }
   ]
-};
-export {
-  tr as default
-};
-//# sourceMappingURL=tr.js.map
+}

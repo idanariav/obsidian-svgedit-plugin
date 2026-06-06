@@ -1,15 +1,11 @@
-const en = {
-  name: "Curvature",
+export default {
+  name: 'Curvature',
   buttons: [
     {
-      title: "Curvature Tool — click to place points, draw smooth curves automatically"
+      title: 'Curvature Tool — click to place points, draw smooth curves automatically'
     }
   ],
   modes: {
-    label: "Curve"
+    label: 'Curve'
   }
-};
-export {
-  en as default
-};
-//# sourceMappingURL=en.js.map
+}

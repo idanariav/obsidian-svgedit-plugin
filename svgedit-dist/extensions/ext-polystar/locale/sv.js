@@ -1,34 +1,30 @@
-const sv = {
-  name: "stjärna",
-  title: "Polygon/stjärnverktyg",
+export default {
+  name: 'stjärna',
+  title: 'Polygon/stjärnverktyg',
   buttons: [
     {
-      title: "Stjärnverktyg"
+      title: 'Stjärnverktyg'
     },
     {
-      title: "Polygonverktyg"
+      title: 'Polygonverktyg'
     }
   ],
   contextTools: [
     {
-      title: "Antal sidor",
-      label: "poäng"
+      title: 'Antal sidor',
+      label: 'poäng'
     },
     {
-      title: "Pointiness",
-      label: "Pointiness"
+      title: 'Pointiness',
+      label: 'Pointiness'
     },
     {
-      title: "Vrider stjärnan",
-      label: "Radiell förskjutning"
+      title: 'Vrider stjärnan',
+      label: 'Radiell förskjutning'
     },
     {
-      title: "Antal sidor",
-      label: "sidor"
+      title: 'Antal sidor',
+      label: 'sidor'
     }
   ]
-};
-export {
-  sv as default
-};
-//# sourceMappingURL=sv.js.map
+}

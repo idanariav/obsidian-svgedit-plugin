@@ -1,13 +1,9 @@
-const sv = {
-  name: "Panorering av tillägg",
+export default {
+  name: 'Panorering av tillägg',
   buttons: [
     {
-      title: "Panorering",
-      key: "[Blanksteg / mushjul + dra]"
+      title: 'Panorering',
+      key: '[Blanksteg / mushjul + dra]'
     }
   ]
-};
-export {
-  sv as default
-};
-//# sourceMappingURL=sv.js.map
+}

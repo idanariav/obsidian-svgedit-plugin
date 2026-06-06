@@ -1,13 +1,9 @@
-const uk = {
-  name: "Розширення: Малювання",
+export default {
+  name: 'Розширення: Малювання',
   buttons: [
     {
-      title: "Малювання",
-      key: "[Пробіл / колесо миші + перетягування]"
+      title: 'Малювання',
+      key: '[Пробіл / колесо миші + перетягування]'
     }
   ]
-};
-export {
-  uk as default
-};
-//# sourceMappingURL=uk.js.map
+}

@@ -1,13 +1,9 @@
-const en = {
-  name: "Extension Panning",
+export default {
+  name: 'Extension Panning',
   buttons: [
     {
-      title: "Panning",
-      key: "[Space / mouse wheel + drag]"
+      title: 'Panning',
+      key: '[Space / mouse wheel + drag]'
     }
   ]
-};
-export {
-  en as default
-};
-//# sourceMappingURL=en.js.map
+}

@@ -1,12 +1,8 @@
-const sv = {
-  name: "Visa rutnät",
+export default {
+  name: 'Visa rutnät',
   buttons: [
     {
-      title: "Visa/dölj rutnät"
+      title: 'Visa/dölj rutnät'
     }
   ]
-};
-export {
-  sv as default
-};
-//# sourceMappingURL=sv.js.map
+}

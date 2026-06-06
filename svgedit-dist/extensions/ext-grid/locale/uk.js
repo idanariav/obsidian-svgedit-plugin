@@ -1,12 +1,8 @@
-const uk = {
-  name: "Сітка",
+export default {
+  name: 'Сітка',
   buttons: [
     {
-      title: "Показати/Заковати Сітку"
+      title: 'Показати/Заковати Сітку'
     }
   ]
-};
-export {
-  uk as default
-};
-//# sourceMappingURL=uk.js.map
+}

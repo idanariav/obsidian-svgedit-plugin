@@ -1,12 +1,8 @@
-const en = {
-  name: "View Grid",
+export default {
+  name: 'View Grid',
   buttons: [
     {
-      title: "Grid settings"
+      title: 'Grid settings'
     }
   ]
-};
-export {
-  en as default
-};
-//# sourceMappingURL=en.js.map
+}

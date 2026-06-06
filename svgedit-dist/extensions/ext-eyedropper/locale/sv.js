@@ -1,13 +1,9 @@
-const sv = {
-  name: "pipett",
+export default {
+  name: 'pipett',
   buttons: [
     {
-      title: "pipettverktyg",
-      key: "I"
+      title: 'pipettverktyg',
+      key: 'I'
     }
   ]
-};
-export {
-  sv as default
-};
-//# sourceMappingURL=sv.js.map
+}

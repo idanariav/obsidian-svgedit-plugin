@@ -1,12 +1,8 @@
-const tr = {
-  name: "Izgarayı Görüntüle",
+export default {
+  name: 'Izgarayı Görüntüle',
   buttons: [
     {
-      title: "Izgara Göster/Gizle"
+      title: 'Izgara Göster/Gizle'
     }
   ]
-};
-export {
-  tr as default
-};
-//# sourceMappingURL=tr.js.map
+}

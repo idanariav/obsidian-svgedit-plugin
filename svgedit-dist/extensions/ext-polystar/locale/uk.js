@@ -1,34 +1,30 @@
-const uk = {
-  name: "зірка",
-  title: "Полігон/Зірка",
+export default {
+  name: 'зірка',
+  title: 'Полігон/Зірка',
   buttons: [
     {
-      title: "Зірка"
+      title: 'Зірка'
     },
     {
-      title: "Полігон"
+      title: 'Полігон'
     }
   ],
   contextTools: [
     {
-      title: "Кількість Сторін",
-      label: "точки"
+      title: 'Кількість Сторін',
+      label: 'точки'
     },
     {
-      title: "Без точок",
-      label: "Без точок"
+      title: 'Без точок',
+      label: 'Без точок'
     },
     {
-      title: "Закручення зірки",
-      label: "Радіальне Зміщення"
+      title: 'Закручення зірки',
+      label: 'Радіальне Зміщення'
     },
     {
-      title: "Кількість Сторін",
-      label: "сторони"
+      title: 'Кількість Сторін',
+      label: 'сторони'
     }
   ]
-};
-export {
-  uk as default
-};
-//# sourceMappingURL=uk.js.map
+}

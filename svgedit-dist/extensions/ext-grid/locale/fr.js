@@ -1,12 +1,8 @@
-const fr = {
-  name: "Grille",
+export default {
+  name: 'Grille',
   buttons: [
     {
-      title: "Afficher/Cacher Grille"
+      title: 'Afficher/Cacher Grille'
     }
   ]
-};
-export {
-  fr as default
-};
-//# sourceMappingURL=fr.js.map
+}

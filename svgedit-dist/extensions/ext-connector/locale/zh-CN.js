@@ -1,21 +1,17 @@
-const zhCN = {
-  name: "连接器",
-  langListTitle: "连接两个对象",
+export default {
+  name: '连接器',
+  langListTitle: '连接两个对象',
   langList: [
-    { id: "mode_connect", title: "连接两个对象" }
+    { id: 'mode_connect', title: '连接两个对象' }
   ],
   buttons: [
     {
-      title: "连接两个对象"
+      title: '连接两个对象'
     }
   ],
   routing: {
-    straight: "直线连接",
-    elbow: "正交（折线）连接",
-    leader: "引导线样式"
+    straight: '直线连接',
+    elbow: '正交（折线）连接',
+    leader: '引导线样式'
   }
-};
-export {
-  zhCN as default
-};
-//# sourceMappingURL=zh-CN.js.map
+}

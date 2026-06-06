@@ -1,13 +1,9 @@
-const uk = {
-  name: "eyedropper",
+export default {
+  name: 'eyedropper',
   buttons: [
     {
-      title: "Піпетка",
-      key: "I"
+      title: 'Піпетка',
+      key: 'I'
     }
   ]
-};
-export {
-  uk as default
-};
-//# sourceMappingURL=uk.js.map
+}
