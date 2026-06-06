@@ -502,6 +502,7 @@ var FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
 var FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
 var FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
 var FRONTMATTER_PLUGIN_VALUE = "parsed";
+var SVGEDIT_SECTION_OPEN = "%%\n# SVGEdit Data";
 var DRAWING_SECTION_HEADING = "## Drawing";
 var DRAWING_FENCE_OPEN = "```svg";
 var DRAWING_FENCE_CLOSE = "```";
@@ -523,7 +524,7 @@ var IMAGE_EXTENSIONS = /* @__PURE__ */ new Set([
 
 // src/data/SvgData.ts
 var BLOCK_REGEX = /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
-var BLOCK_REPLACE_REGEX = /## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
+var BLOCK_REPLACE_REGEX = /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
 function extractSvg(content) {
   const m = BLOCK_REGEX.exec(content);
   return m ? m[1] : null;
@@ -536,14 +537,16 @@ function replaceSvg(content, newSvg) {
   return content + "\n\n" + block;
 }
 function buildBlock(svg) {
-  return `${DRAWING_SECTION_HEADING}
+  return `${SVGEDIT_SECTION_OPEN}
+
+${DRAWING_SECTION_HEADING}
 ${DRAWING_FENCE_OPEN}
 ${svg}
 ${DRAWING_FENCE_CLOSE}
 ${DRAWING_SECTION_END}`;
 }
 var LINKED_FILES_BLOCK_REGEX = new RegExp(
-  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^## )`,
+  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
   "m"
 );
 function escapeRegExp(s) {
@@ -569,8 +572,8 @@ function reconcileLinkedFiles(content, svg) {
   if (links.length === 0) return stripped;
   const section = `${LINKED_FILES_HEADING}
 ` + links.map((l) => `- [[${l}]]`).join("\n") + "\n\n";
-  if (stripped.includes(DRAWING_SECTION_HEADING)) {
-    return stripped.replace(DRAWING_SECTION_HEADING, () => section + DRAWING_SECTION_HEADING);
+  if (stripped.includes(SVGEDIT_SECTION_OPEN)) {
+    return stripped.replace(SVGEDIT_SECTION_OPEN, () => section + SVGEDIT_SECTION_OPEN);
   }
   return stripped + "\n\n" + section.trimEnd() + "\n";
 }

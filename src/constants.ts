@@ -8,14 +8,22 @@ export const FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
 export const FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
 export const FRONTMATTER_PLUGIN_VALUE = "parsed";
 
+// The drawing data lives inside a "# SVGEdit Data" section wrapped in `%%`
+// comment fences so Obsidian hides it from rendered/preview output. `## Drawing`
+// is a level-2 heading nested under that level-1 section heading.
+export const SVGEDIT_SECTION_HEADING = "# SVGEdit Data";
+// Opening `%%` comment fence plus the section heading, written as one unit and
+// also used as the anchor that the Linked Files section is inserted above.
+export const SVGEDIT_SECTION_OPEN = "%%\n# SVGEdit Data";
 export const DRAWING_SECTION_HEADING = "## Drawing";
 export const DRAWING_FENCE_OPEN = "```svg";
 export const DRAWING_FENCE_CLOSE = "```";
 export const DRAWING_SECTION_END = "%%";
 
 // Auto-managed section of wikilinks to vault files referenced by the drawing
-// (imported images / linked shapes). Kept visible above ## Drawing so Obsidian
-// generates real backlinks. Reconciled from the SVG on every save.
+// (imported images / linked shapes). Kept visible above the %%-hidden SVGEdit
+// Data section so Obsidian still generates real backlinks. Reconciled from the
+// SVG on every save.
 export const LINKED_FILES_HEADING = "## Linked Files";
 // SVG attribute that svgedit stamps onto every element originating from a vault
 // import. Its value is the wikilink text to record. This is the cross-repo

@@ -1,4 +1,5 @@
 import {
+  SVGEDIT_SECTION_OPEN,
   DRAWING_SECTION_HEADING,
   DRAWING_FENCE_OPEN,
   DRAWING_FENCE_CLOSE,
@@ -12,12 +13,16 @@ import {
 } from "../constants";
 
 // Matches the fenced SVG block between the ## Drawing heading and the %% terminator.
-// Captures only the SVG content inside the fence.
+// Captures only the SVG content inside the fence. The optional `%%\n# SVGEdit Data`
+// prefix may sit just above (new format); BLOCK_REGEX only needs the inner block.
 const BLOCK_REGEX =
   /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
 
+// Same block, including the optional `%%\n# SVGEdit Data` wrapper opening that
+// precedes it in the current format. Matching the opening too means rebuilding
+// the block also migrates legacy (un-wrapped) files to the wrapped layout.
 const BLOCK_REPLACE_REGEX =
-  /## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
+  /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```svg\n[\s\S]*?\n```\s*\n%%/;
 
 /** Extract the SVG string from a markdown drawing file. Returns null if not found. */
 export function extractSvg(content: string): string | null {
@@ -35,14 +40,17 @@ export function replaceSvg(content: string, newSvg: string): string {
 }
 
 function buildBlock(svg: string): string {
-  return `${DRAWING_SECTION_HEADING}\n${DRAWING_FENCE_OPEN}\n${svg}\n${DRAWING_FENCE_CLOSE}\n${DRAWING_SECTION_END}`;
+  return (
+    `${SVGEDIT_SECTION_OPEN}\n\n` +
+    `${DRAWING_SECTION_HEADING}\n${DRAWING_FENCE_OPEN}\n${svg}\n${DRAWING_FENCE_CLOSE}\n${DRAWING_SECTION_END}`
+  );
 }
 
 // Matches the auto-managed "## Linked Files" section: the heading through every
-// following line up to (but not including) the next "## " heading — in practice
-// always "## Drawing". Multiline so ^ anchors each line.
+// following line up to (but not including) the "%%\n# SVGEdit Data" opening that
+// always follows it. Multiline so ^ anchors each line.
 const LINKED_FILES_BLOCK_REGEX = new RegExp(
-  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^## )`,
+  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
   "m",
 );
 
@@ -68,8 +76,9 @@ function collectVaultLinks(svg: string): string[] {
 /**
  * Rebuild the auto-managed "## Linked Files" section to match the vault links
  * still present in the SVG. Links survive as long as ≥1 stamped element remains;
- * the section is removed entirely when none do. The section sits above
- * "## Drawing" so its wikilinks produce real Obsidian backlinks.
+ * the section is removed entirely when none do. The section sits above the
+ * %%-hidden "# SVGEdit Data" section so its wikilinks stay outside the comment
+ * and produce real Obsidian backlinks.
  */
 export function reconcileLinkedFiles(content: string, svg: string): string {
   // Strip any existing section first so we always rebuild from scratch.
@@ -83,9 +92,9 @@ export function reconcileLinkedFiles(content: string, svg: string): string {
     links.map((l) => `- [[${l}]]`).join("\n") +
     "\n\n";
 
-  if (stripped.includes(DRAWING_SECTION_HEADING)) {
+  if (stripped.includes(SVGEDIT_SECTION_OPEN)) {
     // Function replacer so "$" sequences in link text aren't treated as patterns.
-    return stripped.replace(DRAWING_SECTION_HEADING, () => section + DRAWING_SECTION_HEADING);
+    return stripped.replace(SVGEDIT_SECTION_OPEN, () => section + SVGEDIT_SECTION_OPEN);
   }
   return stripped + "\n\n" + section.trimEnd() + "\n";
 }
