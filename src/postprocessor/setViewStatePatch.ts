@@ -40,15 +40,22 @@ export function installViewStatePatch(
           state.type === "markdown" &&
           typeof (state as ViewState & { state?: { file?: string } }).state?.file === "string"
         ) {
-          // If this leaf is already showing a markdown view, the call is a
-          // mode change (e.g. toggling source / live-preview / reading view)
-          // rather than a new file open.  Let Obsidian handle it natively so
-          // that "Source view" works correctly on drawing files.
-          if (this.view?.getViewType() === "markdown") {
+          const filepath = (state as ViewState & { state: { file: string } }).state.file;
+
+          // If this leaf is already showing a markdown view of the SAME file,
+          // the call is a mode change (e.g. toggling source / live-preview /
+          // reading view) rather than a new file open.  Let Obsidian handle it
+          // natively so that "Source view" works correctly on drawing files.
+          // A DIFFERENT file is a new open and must still go through the SVG
+          // redirect below, otherwise clicking a drawing while a markdown view
+          // is active would wrongly open it as markdown.
+          if (
+            this.view?.getViewType() === "markdown" &&
+            (this.view as { file?: TFile }).file?.path === filepath
+          ) {
             return next.call(this, state, eState);
           }
 
-          const filepath = (state as ViewState & { state: { file: string } }).state.file;
           const file = app.vault.getAbstractFileByPath(filepath);
           if (file instanceof TFile && isSvgDrawingFile(app, file)) {
             const effective = resolveEffectiveSettings(app, file, getSettings());
