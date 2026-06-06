@@ -158,6 +158,24 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    // ── Excalidraw import ─────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Excalidraw import");
+
+    new Setting(containerEl)
+      .setName("Remove Excalidraw data after converting")
+      .setDesc(
+        "When converting an Excalidraw drawing to SVG, delete the original "
+        + "\"# Excalidraw Data\" section from the note. Off keeps it as inert text.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.removeExcalidrawData)
+          .onChange(async (v) => {
+            this.plugin.settings.removeExcalidrawData = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Canvas defaults ───────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("New drawing defaults");
 

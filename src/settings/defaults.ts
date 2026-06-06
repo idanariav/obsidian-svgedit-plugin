@@ -40,6 +40,9 @@ export interface SvgPluginSettings {
   folderConfigs: FolderConfig[];
   /** When true, rename/delete of a drawing also renames/deletes its companion files. */
   keepInSync: boolean;
+  /** When converting an Excalidraw drawing, remove the original Excalidraw data
+   *  (the "# Excalidraw Data" section) from the note. False keeps it as inert text. */
+  removeExcalidrawData: boolean;
   /** Custom export destinations: drawings in sourceFolder export to exportFolder. */
   exportFolderMappings: ExportFolderMapping[];
   /** Persisted svgedit editor theme. "auto" follows Obsidian's light/dark mode;
@@ -60,6 +63,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   exportFrame: "",
   folderConfigs: [],
   keepInSync: false,
+  removeExcalidrawData: false,
   exportFolderMappings: [],
   editorTheme: "auto",
 };

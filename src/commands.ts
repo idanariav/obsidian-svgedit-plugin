@@ -1,4 +1,4 @@
-import { Notice, TFile } from "obsidian";
+import { App, Notice, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
@@ -7,12 +7,25 @@ import { exportSvg, exportPng } from "./export/exporter";
 import { ExportModal } from "./modals/ExportModal";
 import { extractSvg, replaceSvg } from "./data/SvgData";
 import {
+  parseExcalidrawScene,
+  excalidrawToSvg,
+  stripExcalidrawData,
+} from "./import/excalidrawImport";
+import {
   VIEW_TYPE_SVG,
   FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_KEY_OPEN_MD,
   FRONTMATTER_PLUGIN_VALUE,
   EMPTY_SVG,
 } from "./constants";
+
+const EXCALIDRAW_FM_KEY = "excalidraw-plugin";
+
+/** True when the file is an Obsidian Excalidraw drawing. */
+function isExcalidrawFile(app: App, file: TFile): boolean {
+  const fm = app.metadataCache.getFileCache(file)?.frontmatter;
+  return fm?.[EXCALIDRAW_FM_KEY] != null;
+}
 
 export function registerCommands(plugin: SvgPlugin): void {
   // New drawing
@@ -38,6 +51,19 @@ export function registerCommands(plugin: SvgPlugin): void {
           }
         },
       ).open();
+    },
+  });
+
+  // Convert the active Excalidraw drawing into an svgedit drawing (in place)
+  plugin.addCommand({
+    id: "convert-excalidraw-to-svg",
+    name: "Convert Excalidraw drawing to SVG",
+    checkCallback: (checking) => {
+      const file = plugin.app.workspace.getActiveFile();
+      if (!file || file.extension !== "md") return false;
+      if (!isExcalidrawFile(plugin.app, file)) return false;
+      if (!checking) convertExcalidrawToDrawing(plugin, file);
+      return true;
     },
   });
 
@@ -132,6 +158,53 @@ export function registerCommands(plugin: SvgPlugin): void {
 function getActiveSvgView(plugin: SvgPlugin): SvgView | null {
   const view = plugin.app.workspace.getActiveViewOfType(SvgView);
   return view ?? null;
+}
+
+/**
+ * Convert an Excalidraw drawing note into an svgedit drawing in place: parse the
+ * scene to clean SVG primitives, swap the frontmatter from Excalidraw to svgedit,
+ * optionally strip the original Excalidraw data, embed the SVG block, then reopen
+ * so the setViewState patch routes the file to SvgView.
+ */
+async function convertExcalidrawToDrawing(plugin: SvgPlugin, file: TFile): Promise<void> {
+  try {
+    const original = await plugin.app.vault.read(file);
+    const scene = parseExcalidrawScene(original);
+    if (!scene) {
+      new Notice("No Excalidraw drawing data found in this note");
+      return;
+    }
+    const svg = excalidrawToSvg(scene);
+
+    // 1. Swap frontmatter: drop every excalidraw-* key (so the Excalidraw plugin
+    //    no longer claims the file), stamp the svgedit keys + svg tag.
+    await plugin.app.fileManager.processFrontMatter(file, (fm) => {
+      for (const key of Object.keys(fm)) {
+        if (key.startsWith("excalidraw-")) delete fm[key];
+      }
+      fm[FRONTMATTER_KEY_PLUGIN] = FRONTMATTER_PLUGIN_VALUE;
+      fm[FRONTMATTER_KEY_OPEN_MD] = false;
+      if (!Array.isArray(fm.tags)) {
+        fm.tags = ["svg"];
+      } else if (!(fm.tags as string[]).includes("svg")) {
+        (fm.tags as string[]).push("svg");
+      }
+    });
+
+    // 2. Body edits on the (frontmatter-updated) content.
+    let content = await plugin.app.vault.read(file);
+    if (plugin.settings.removeExcalidrawData) {
+      content = stripExcalidrawData(content);
+    }
+    await plugin.app.vault.modify(file, replaceSvg(content, svg));
+
+    // 3. Reopen — the setViewState patch now routes it to SvgView.
+    const leaf = getActiveLeaf(plugin);
+    await leaf.openFile(file, { active: true });
+    new Notice("Converted Excalidraw drawing to SVG");
+  } catch (e: unknown) {
+    new Notice(`Convert failed: ${(e as Error).message}`);
+  }
 }
 
 /**
