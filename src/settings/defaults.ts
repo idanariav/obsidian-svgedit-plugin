@@ -14,6 +14,22 @@ export interface FolderConfig {
   exportFrame?: string;
 }
 
+/** One saved entry in the shape library. Mirrors the svgedit fork's user-shape
+ *  schema (see userShapes.js); persisted here so it survives plugin updates. */
+export interface UserShapeEntry {
+  svgContent: string;
+  bbox: { x: number; y: number; width: number; height: number };
+  /** Provenance wikilink stamped onto inserted elements, when set. */
+  linkedFile?: string;
+}
+
+/** The saved shape library: ordered categories + their shapes. Matches the
+ *  store shape the svgedit userDataAdapter reads/writes. */
+export interface UserShapeStore {
+  categories: string[];
+  shapes: Record<string, Record<string, UserShapeEntry>>;
+}
+
 /** Resolved, concrete settings for a specific file (no undefined values). */
 export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
@@ -64,6 +80,12 @@ export interface SvgPluginSettings {
    *  and plain-text search). Existing files migrate to the chosen format on the
    *  next save; reads handle both formats either way. */
   compressDrawingData: boolean;
+  /** Custom palette color overrides (swatch index → color). Backs the svgedit
+   *  userDataAdapter so palette customizations live in data.json and survive
+   *  plugin updates instead of in the editor's unreachable localStorage. */
+  paletteOverrides: Record<string, string>;
+  /** Saved shape library. Backs the svgedit userDataAdapter (see paletteOverrides). */
+  userShapes: UserShapeStore;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -86,4 +108,6 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   uiModeDesktop: "desktop",
   uiModeMobile: "tablet",
   compressDrawingData: true,
+  paletteOverrides: {},
+  userShapes: { categories: [], shapes: {} },
 };

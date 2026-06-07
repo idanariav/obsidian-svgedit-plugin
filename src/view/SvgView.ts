@@ -11,10 +11,14 @@ import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
+import type { UserShapeStore } from "../settings/defaults";
 
 interface SvgEditorInstance {
   setConfig(cfg: Record<string, unknown>): void;
   init(): Promise<void>;
+  /** Re-read custom palette + saved shapes from the userDataAdapter and re-render
+   *  this instance's components. Called after another view edited them. */
+  reloadUserData(): void;
   loadFromString(svg: string): Promise<void>;
   /** svgedit's root element; carries the theme-light / theme-dark class. */
   $svgEditor?: HTMLElement;
@@ -93,6 +97,25 @@ export class SvgView extends TextFileView {
       // Touch-first tablet shell vs. standard desktop layout, chosen per platform
       // (PC vs. mobile) in the plugin settings.
       tabletMode: this.resolveTabletMode(),
+      // Route the editor's custom palette + saved shape library through the
+      // plugin's data store (data.json) instead of svgedit's own localStorage,
+      // so these customizations persist across plugin updates and sync with the
+      // vault. Reads are synchronous (settings are already loaded); writes are
+      // fire-and-forget saves of the full state on every edit.
+      userDataAdapter: {
+        getPalette: () => this.plugin.settings.paletteOverrides,
+        setPalette: (overrides: Record<string, string>) => {
+          this.plugin.settings.paletteOverrides = overrides;
+          void this.plugin.saveSettings();
+          this.plugin.reloadUserDataInOtherViews(this);
+        },
+        getUserShapes: () => this.plugin.settings.userShapes,
+        setUserShapes: (store: UserShapeStore) => {
+          this.plugin.settings.userShapes = store;
+          void this.plugin.saveSettings();
+          this.plugin.reloadUserDataInOtherViews(this);
+        },
+      },
       // Leave the side panel closed by default (a "PANEL" handle on the right
       // edge), matching the native svgedit UI; the handle toggles it open.
       showlayers: false,
@@ -150,6 +173,12 @@ export class SvgView extends TextFileView {
     if (!style) return;
     const scoped = style.textContent?.replace(/:root,\s*(\.svg_editor)/g, "$1");
     if (scoped && scoped !== style.textContent) style.textContent = scoped;
+  }
+
+  /** Re-read the custom palette + saved shapes from the plugin store and
+   *  re-render them. Called when another view edited them. No-op until init. */
+  reloadUserData(): void {
+    this.svgEditor?.reloadUserData();
   }
 
   /** Re-apply the configured theme to a live editor (called when the default

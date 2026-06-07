@@ -192,6 +192,15 @@ export default class SvgPlugin extends Plugin {
     }
   }
 
+  /** After one view writes the shared palette/shape library, tell every OTHER
+   *  open SVG view to re-read it so live editors stay in sync. */
+  reloadUserDataInOtherViews(except: SvgView): void {
+    for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
+      const view = leaf.view;
+      if (view instanceof SvgView && view !== except) view.reloadUserData();
+    }
+  }
+
   /** Open the "insert file from vault" picker for the given SvgView. */
   openInsertFileModal(view: SvgView): void {
     new InsertFileModal(this.app, view).open();
