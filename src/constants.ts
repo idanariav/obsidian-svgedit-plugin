@@ -3,6 +3,11 @@ export const PLUGIN_ID = "obsidian-svg-plugin";
 
 export const FRONTMATTER_KEY_PLUGIN = "svg-plugin";
 export const FRONTMATTER_KEY_OPEN_MD = "svg-open-md";
+// List of formats to auto-export on save, e.g. `[svg, png]`. Present-but-empty
+// means "export nothing"; absent means "inherit folder/global".
+export const FRONTMATTER_KEY_AUTO_EXPORT = "svg-auto-export";
+// Legacy boolean key, kept as a read-time fallback for files written before
+// FRONTMATTER_KEY_AUTO_EXPORT existed. Controls PNG export only.
 export const FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
 export const FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
 export const FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";

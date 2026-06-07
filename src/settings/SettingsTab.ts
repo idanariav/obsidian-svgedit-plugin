@@ -322,7 +322,7 @@ export class SvgSettingsTab extends PluginSettingTab {
     containerEl.createEl("p", {
       text: "Per-folder settings override the global defaults above. "
         + "Use \"Inherit\" to fall back to the global value. "
-        + "Individual file frontmatter (svg-open-md, svg-auto-export-png, svg-transparent-bg, svg-export-frame) takes highest priority.",
+        + "Individual file frontmatter (svg-open-md, svg-auto-export, svg-transparent-bg, svg-export-frame) takes highest priority.",
       cls: "setting-item-description",
     });
 

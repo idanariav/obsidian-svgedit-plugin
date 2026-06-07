@@ -83,7 +83,7 @@ export async function autoExport(
   effective: EffectiveDrawingSettings,
 ): Promise<void> {
   const tasks: Promise<void>[] = [];
-  if (settings.autoExportSvg)
+  if (effective.autoExportSvg)
     tasks.push(exportSvg(app, file, svgString, settings, effective.exportFrame));
   if (effective.autoExportPng)
     tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings, effective.exportFrame));

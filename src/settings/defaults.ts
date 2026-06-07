@@ -33,6 +33,7 @@ export interface UserShapeStore {
 /** Resolved, concrete settings for a specific file (no undefined values). */
 export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
+  autoExportSvg: boolean;
   autoExportPng: boolean;
   transparentBackground: boolean;
   /** Name of the frame to crop exports to. Empty string = export the whole canvas. */

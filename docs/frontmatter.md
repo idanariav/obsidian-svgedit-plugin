@@ -15,7 +15,7 @@ Example:
 ---
 svg-plugin: parsed
 svg-open-md: false
-svg-auto-export-png: true
+svg-auto-export: [svg, png]
 svg-transparent-bg: true
 svg-export-frame: Hero shot
 tags:
@@ -53,17 +53,25 @@ when you want a specific file to behave differently.
 
 ---
 
-## svg-auto-export-png
+## svg-auto-export
 
-- **Values:** `true` / `false`
-- Controls whether **this file** writes a companion `.png` on save.
-- Overrides the [Export PNG on save](settings.md#export-png-on-save) setting (and any
-  folder override) for this file only.
-- Use it to skip PNG export for a heavy drawing, or to force it on for one file in a
-  folder where it's otherwise off.
+- **Values:** a list of formats — `svg`, `png`, or both. Examples:
+  - `svg-auto-export: [svg, png]` — export both companions on save
+  - `svg-auto-export: png` — export only the `.png`
+  - `svg-auto-export: []` (or leave the value blank) — export **nothing** for this file
+  - omit the key entirely — inherit the folder/global [Export SVG on save](settings.md#export-svg-on-save)
+    and [Export PNG on save](settings.md#export-png-on-save) settings
+- Controls which companion files **this file** writes on save, overriding the global
+  and folder settings for both formats at once.
+- Use it to skip export for a heavy drawing, switch a single file to SVG-only, or
+  force a format on in a folder where it's otherwise off.
 
-> Note: there is no per-file key for SVG auto-export — that's controlled globally by
-> [Export SVG on save](settings.md#export-svg-on-save).
+> Note: present-but-empty (`[]` or a blank value) is different from omitting the key.
+> Empty means "export nothing"; omitting means "inherit the lower layers".
+>
+> The legacy boolean key `svg-auto-export-png: true` / `false` is still honored as a
+> fallback for older files (it controls PNG only), but new files should use
+> `svg-auto-export`.
 
 ---
 
