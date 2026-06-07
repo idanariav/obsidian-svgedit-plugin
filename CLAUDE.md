@@ -71,15 +71,16 @@ the bundle is read-only and no patching should occur.
 
 ## Testing features
 
-**Only ever use the test vault: `/Users/idanariav/Documents/test_vault`.**
-Never test against the user's other vaults — they hold real data.
+**Deploy/test vault: `/Users/idanariav/GitProjects/Obsidian_Vault`.**
+(Switched from `Documents/test_vault` on 2026-06-07.) Don't deploy into the
+user's other vaults unless they ask.
 
 ### In Obsidian (full integration)
 
 1. `npm run build` (runs `tsc` then esbuild → emits `main.js`)
 2. Copy the changed artifacts into the vault's plugin dir
-   (`<test_vault>/.obsidian/plugins/obsidian-svg-plugin/`): `main.js`, plus
-   `styles.css` / `manifest.json` only if those changed.
+   (`/Users/idanariav/GitProjects/Obsidian_Vault/.obsidian/plugins/obsidian-svg-plugin/`):
+   `main.js`, plus `styles.css` / `manifest.json` only if those changed.
 3. Reload the plugin in Obsidian (toggle it off/on in Settings → Community
    plugins, or run "Reload app without saving") to pick up the new build.
 4. `test_svg.md` is a ready-made drawing that already contains a `[data-frame]`
@@ -99,4 +100,4 @@ verified without Obsidian using the sibling fork's dev deps:
   on SVG serialization and rendering.
 - Run the throwaway script from **inside `../svgedit`** so Node resolves that
   repo's `node_modules` (this repo doesn't depend on jsdom/playwright). Read the
-  real SVG out of a `test_vault` `.md` drawing to test against authentic input.
+  real SVG out of an `Obsidian_Vault` `.md` drawing to test against authentic input.
