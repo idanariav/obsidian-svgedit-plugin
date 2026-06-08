@@ -165,12 +165,18 @@ export default class SvgPlugin extends Plugin {
       },
       listVaultFiles: () => {
         const drawingPath = this.activeDrawingPath();
-        return this.app.vault
+        // Surface the active drawing first so its own note is the top suggestion.
+        const files = this.app.vault
           .getMarkdownFiles()
-          .map((f) => ({
-            path: f.path,
-            link: resolveVaultLink(this.app, f, drawingPath),
-          }));
+          .sort((a, b) => {
+            if (a.path === drawingPath) return -1;
+            if (b.path === drawingPath) return 1;
+            return 0;
+          });
+        return files.map((f) => ({
+          path: f.path,
+          link: resolveVaultLink(this.app, f, drawingPath),
+        }));
       },
     };
   }
