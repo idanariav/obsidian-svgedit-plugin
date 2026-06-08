@@ -166,7 +166,7 @@ export default class SvgPlugin extends Plugin {
       listVaultFiles: () => {
         const drawingPath = this.activeDrawingPath();
         return this.app.vault
-          .getFiles()
+          .getMarkdownFiles()
           .map((f) => ({
             path: f.path,
             link: resolveVaultLink(this.app, f, drawingPath),
