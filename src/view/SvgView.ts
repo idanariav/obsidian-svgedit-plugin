@@ -28,6 +28,13 @@ interface SvgEditorInstance {
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
+    /** Serialize the drawing honoring the current save options. With the
+     *  `apply` option on it embeds @font-face and base64 images, yielding a
+     *  self-contained SVG suitable for export (see getExportSvgString). */
+    svgCanvasToString(): string;
+    /** The mutable save-options object (apply, images, round_digits…). */
+    getSvgOption(): { apply?: boolean; [k: string]: unknown };
+    setSvgOption(key: string, value: unknown): void;
     bind(event: string, cb: () => void): void;
   };
 }
@@ -349,9 +356,10 @@ export class SvgView extends TextFileView {
       const effective = resolveEffectiveSettings(this.app, this.file, this.plugin.settings);
       await autoExport(
         this.app, this.file,
-        this.svgEditor.svgCanvas.getSvgString(),
+        this.getExportSvgString() ?? this.svgEditor.svgCanvas.getSvgString(),
         this.plugin.settings,
         effective,
+        this.getCanvasBgColor(),
       );
     } catch (e) {
       console.error("[SVG Draw] auto-export failed:", e);
@@ -377,6 +385,33 @@ export class SvgView extends TextFileView {
 
   getSvgString(): string | null {
     return this.svgEditor?.svgCanvas.getSvgString() ?? null;
+  }
+
+  /** Serialize the drawing as a self-contained SVG for export. svgedit's plain
+   *  getSvgString() forces the `apply` save-option off (keeping the persisted
+   *  markdown lean), so it omits the @font-face / base64-image embedding that
+   *  svgCanvasToString does under `apply`. The raster export path renders the
+   *  SVG through an <img>, which has no access to the document's fonts, so
+   *  without embedding, custom fonts fall back to a default family. We flip
+   *  `apply` on just for this serialization and restore it. */
+  getExportSvgString(): string | null {
+    const canvas = this.svgEditor?.svgCanvas;
+    if (!canvas) return null;
+    const prev = canvas.getSvgOption().apply;
+    canvas.setSvgOption("apply", true);
+    try {
+      return canvas.svgCanvasToString();
+    } finally {
+      canvas.setSvgOption("apply", prev);
+    }
+  }
+
+  /** The editor's current canvas background color (svgedit's `bkgd_color`
+   *  pref), defaulting to white. Used to paint the PNG background so the export
+   *  matches what the canvas shows rather than always being white. */
+  getCanvasBgColor(): string {
+    const color = String(this.svgEditor?.configObj.pref("bkgd_color") ?? "");
+    return color || "#ffffff";
   }
 
   async insertSvgFragment(fragment: string): Promise<void> {

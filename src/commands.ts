@@ -140,7 +140,7 @@ export function registerCommands(plugin: SvgPlugin): void {
       const view = getActiveSvgView(plugin);
       if (!view || !view.file) return false;
       if (!checking) {
-        const svgString = view.getSvgString();
+        const svgString = view.getExportSvgString();
         if (!svgString) return true;
         const { exportFrame } = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
         exportSvg(plugin.app, view.file, svgString, plugin.settings, exportFrame)
@@ -158,11 +158,11 @@ export function registerCommands(plugin: SvgPlugin): void {
       const view = getActiveSvgView(plugin);
       if (!view || !view.file) return false;
       if (!checking) {
-        const svgString = view.getSvgString();
+        const svgString = view.getExportSvgString();
         if (!svgString) return true;
         const { transparentBackground, exportFrame } =
           resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
-        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, transparentBackground, plugin.settings, exportFrame)
+        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, transparentBackground, plugin.settings, exportFrame, "", view.getCanvasBgColor())
           .then(() => new Notice("Exported PNG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }

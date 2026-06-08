@@ -69,9 +69,10 @@ export async function exportPng(
   settings: SvgPluginSettings,
   frameName = "",
   pathSuffix = "",
+  bgColor = "#ffffff",
 ): Promise<void> {
   const path = getCompanionPath(sourceFile.path, "png", settings, pathSuffix);
-  const buf = await svgToPngArrayBuffer(prepareSvgForExport(svgString, frameName), scale, transparent);
+  const buf = await svgToPngArrayBuffer(prepareSvgForExport(svgString, frameName), scale, transparent, bgColor);
   await app.vault.adapter.writeBinary(path, buf);
 }
 
@@ -81,11 +82,12 @@ export async function autoExport(
   svgString: string,
   settings: SvgPluginSettings,
   effective: EffectiveDrawingSettings,
+  bgColor = "#ffffff",
 ): Promise<void> {
   const tasks: Promise<void>[] = [];
   if (effective.autoExportSvg)
     tasks.push(exportSvg(app, file, svgString, settings, effective.exportFrame));
   if (effective.autoExportPng)
-    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings, effective.exportFrame));
+    tasks.push(exportPng(app, file, svgString, settings.pngScale, effective.transparentBackground, settings, effective.exportFrame, "", bgColor));
   await Promise.all(tasks);
 }

@@ -32,7 +32,7 @@ export class ExportModal extends Modal {
     const { contentEl } = this;
     contentEl.createEl("h3", { text: "Export drawing" });
 
-    const svgString = this.view.getSvgString() ?? "";
+    const svgString = this.view.getExportSvgString() ?? "";
     const frames = listFrames(svgString);
 
     // Drop a stale default (e.g. a frame name that no longer exists) so the
@@ -103,6 +103,7 @@ export class ExportModal extends Modal {
           this.plugin.settings,
           this.frameName,
           suffix,
+          this.view.getCanvasBgColor(),
         );
       }
       new Notice(`Exported ${this.format.toUpperCase()}`);

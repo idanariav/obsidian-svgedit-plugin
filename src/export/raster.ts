@@ -3,17 +3,21 @@
  *
  * @param svgString  The SVG source to rasterise.
  * @param scale      Pixel-density multiplier (default 1).
- * @param transparent When false (default) a white rectangle is painted behind
- *                    the SVG so the PNG has a solid white background.  Pass
+ * @param transparent When false (default) a rectangle of `bgColor` is painted
+ *                    behind the SVG so the PNG has a solid background.  Pass
  *                    true to keep the PNG fully transparent where the SVG has
  *                    no content.
+ * @param bgColor    Fill painted behind the SVG when not transparent. Defaults
+ *                    to white; pass the canvas background color so the PNG
+ *                    matches what the editor shows.
  */
 export async function svgToPngArrayBuffer(
   svgString: string,
   scale = 1,
   transparent = false,
+  bgColor = "#ffffff",
 ): Promise<ArrayBuffer> {
-  const blob = await svgToPngBlob(svgString, scale, transparent);
+  const blob = await svgToPngBlob(svgString, scale, transparent, bgColor);
   return blob.arrayBuffer();
 }
 
@@ -21,6 +25,7 @@ async function svgToPngBlob(
   svgString: string,
   scale: number,
   transparent: boolean,
+  bgColor: string,
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const parser = new DOMParser();
@@ -53,7 +58,7 @@ async function svgToPngBlob(
     const img = new Image();
     img.onload = () => {
       if (!transparent) {
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, width, height);
       }
       ctx.drawImage(img, 0, 0);
