@@ -1,3 +1,7 @@
+// Must be first: installs an idempotent customElements.define guard before the
+// svgedit bundle (pulled in via SvgView) runs its top-level element definitions,
+// so re-enabling the plugin doesn't throw "already used with this registry".
+import "./compat/customElementsGuard";
 import { Plugin, WorkspaceLeaf } from "obsidian";
 import { SvgView } from "./view/SvgView";
 import { SvgSettingsTab } from "./settings/SettingsTab";
