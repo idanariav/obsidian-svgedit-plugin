@@ -477,6 +477,24 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    // Auto-export SVG
+    new Setting(wrapper)
+      .setName("Auto-export SVG")
+      .setDesc("Whether to write a companion .svg file on save.")
+      .addDropdown((d) =>
+        d
+          .addOptions({
+            inherit: "Inherit (global default)",
+            "true": "Yes",
+            "false": "No",
+          })
+          .setValue(toTriState(cfg.autoExportSvg))
+          .onChange(async (v) => {
+            this.plugin.settings.folderConfigs[index].autoExportSvg = fromTriState(v as TriState);
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // Auto-export PNG
     new Setting(wrapper)
       .setName("Auto-export PNG")

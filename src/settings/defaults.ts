@@ -8,6 +8,7 @@ export interface ExportFolderMapping {
 export interface FolderConfig {
   folder: string;
   openAsMarkdown?: boolean;
+  autoExportSvg?: boolean;
   autoExportPng?: boolean;
   transparentBackground?: boolean;
   /** Name of the frame to crop exports to. Empty/undefined inherits the global value. */

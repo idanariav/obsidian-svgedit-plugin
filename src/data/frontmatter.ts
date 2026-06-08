@@ -54,6 +54,7 @@ export function resolveEffectiveSettings(
   const folder = resolveFolderConfig(file.path, globalSettings.folderConfigs);
   if (folder) {
     if (folder.openAsMarkdown        !== undefined) openAsMarkdown        = folder.openAsMarkdown;
+    if (folder.autoExportSvg         !== undefined) autoExportSvg         = folder.autoExportSvg;
     if (folder.autoExportPng         !== undefined) autoExportPng         = folder.autoExportPng;
     if (folder.transparentBackground !== undefined) transparentBackground = folder.transparentBackground;
     if (folder.exportFrame           !== undefined) exportFrame           = folder.exportFrame;
