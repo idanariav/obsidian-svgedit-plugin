@@ -13,7 +13,10 @@ export interface SvgEditHost {
     | { dataUrl: string; link: string; editableSvg: string }
     | null
   >;
-  pickVaultFile(): Promise<{ link: string } | null>;
+  /** List the vault's linkable files so the editor can offer them inline (a
+   *  native <datalist>) instead of opening a separate host picker. Each entry
+   *  pairs the searchable display path with the wikilink to record. */
+  listVaultFiles(): { path: string; link: string }[];
 }
 
 declare global {

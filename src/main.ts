@@ -163,10 +163,14 @@ export default class SvgPlugin extends Plugin {
         const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
         return { dataUrl, link, locked: mode === "locked" };
       },
-      pickVaultFile: async () => {
-        const file = await pickVaultFile(this.app, "Pick a vault file to link…");
-        if (!file) return null;
-        return { link: resolveVaultLink(this.app, file, this.activeDrawingPath()) };
+      listVaultFiles: () => {
+        const drawingPath = this.activeDrawingPath();
+        return this.app.vault
+          .getFiles()
+          .map((f) => ({
+            path: f.path,
+            link: resolveVaultLink(this.app, f, drawingPath),
+          }));
       },
     };
   }
