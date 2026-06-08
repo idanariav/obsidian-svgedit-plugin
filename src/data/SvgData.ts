@@ -12,6 +12,7 @@ import {
   SWITCH_NOTICE,
   LINKED_FILES_HEADING,
   VAULT_LINK_ATTR,
+  CANVAS_BG_ATTR,
 } from "../constants";
 
 // Matches the fenced raw-SVG block between the ## Drawing heading and the %%
@@ -68,6 +69,32 @@ function chunk(s: string, width: number): string {
   const lines: string[] = [];
   for (let i = 0; i < s.length; i += width) lines.push(s.slice(i, i + width));
   return lines.join("\n");
+}
+
+// ── Per-drawing canvas background ──────────────────────────────────────────────
+// The canvas background color is svgedit editor chrome (a global `bkgd_color`
+// pref), not part of the SVG document, so it resets to white whenever a fresh
+// editor instance opens. To make it per-drawing, the plugin stamps the chosen
+// color onto the saved root <svg> via CANVAS_BG_ATTR and restores it after load.
+
+/** Read the persisted canvas background color from a saved SVG's root, or null. */
+export function getCanvasBg(svg: string): string | null {
+  const m = new RegExp(`<svg\\b[^>]*\\s${CANVAS_BG_ATTR}="([^"]*)"`).exec(svg);
+  return m ? m[1] : null;
+}
+
+/**
+ * Return `svg` with the canvas-background attribute set to `color` on the root
+ * <svg>, or removed when `color` is null. Any existing attribute is replaced
+ * first, so this is idempotent.
+ */
+export function setCanvasBg(svg: string, color: string | null): string {
+  const stripped = svg.replace(
+    new RegExp(`\\s${CANVAS_BG_ATTR}="[^"]*"`),
+    "",
+  );
+  if (!color) return stripped;
+  return stripped.replace(/<svg\b/, `<svg ${CANVAS_BG_ATTR}="${color}"`);
 }
 
 // Matches the auto-managed "## Linked Files" section: the heading through every

@@ -41,6 +41,14 @@ export const VAULT_LINK_ATTR = "data-vault-link";
 // source on every load (see refreshLockedEmbeds) rather than kept as a frozen
 // snapshot. Also stamped by the svgedit fork at import time.
 export const VAULT_LOCKED_ATTR = "data-vault-locked";
+// Stamped by this plugin onto the saved drawing's root <svg> to persist the
+// per-drawing canvas background color. svgedit keeps the background as editor
+// chrome (a global `bkgd_color` pref), not in the document, so it would reset to
+// white on every reopen; we stash it here and restore it after load. Lives only
+// in the persisted markdown — it's stripped before handing the SVG to the live
+// editor, so exports stay clean. White (the default) is omitted, so absence
+// means white. See SvgData.ts (getCanvasBg/setCanvasBg) and SvgView.ts.
+export const CANVAS_BG_ATTR = "data-svgedit-canvas-bg";
 export const SWITCH_NOTICE =
   "==⚠  Switch to SVG VIEW in the ribbon or right-click menu  ⚠==";
 

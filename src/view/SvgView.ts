@@ -6,7 +6,7 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg } from "../data/SvgData";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
@@ -20,6 +20,9 @@ interface SvgEditorInstance {
    *  this instance's components. Called after another view edited them. */
   reloadUserData(): void;
   loadFromString(svg: string): Promise<void>;
+  /** Set the canvas background. We use it to restore a saved per-drawing color
+   *  after load; svgedit also keeps the bottom-panel swatch in sync. */
+  setBackground(color: string, url?: string): void;
   /** svgedit's root element; carries the theme-light / theme-dark class. */
   $svgEditor?: HTMLElement;
   configObj: { pref(key: string, val?: unknown): unknown };
@@ -37,6 +40,9 @@ export class SvgView extends TextFileView {
   private svgEditor: SvgEditorInstance | null = null;
   private currentData = "";
   private pendingSvg: string | null = null;
+  /** Canvas background color awaiting an editor that isn't initialized yet;
+   *  paired with pendingSvg and applied once init delivers the drawing. */
+  private pendingBg: string | null = null;
   private isLoading = false;
   /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
   private loadGen = 0;
@@ -159,9 +165,14 @@ export class SvgView extends TextFileView {
     // Deliver SVG that arrived before the editor was ready
     if (this.pendingSvg !== null) {
       const svg = this.pendingSvg;
+      const bg = this.pendingBg;
       this.pendingSvg = null;
+      this.pendingBg = null;
       this.isLoading = true;
-      try { await this.svgEditor.loadFromString(svg); } finally { this.isLoading = false; }
+      try {
+        await this.svgEditor.loadFromString(svg);
+        if (bg) this.svgEditor.setBackground(bg, "");
+      } finally { this.isLoading = false; }
     }
   }
 
@@ -276,7 +287,12 @@ export class SvgView extends TextFileView {
   async setViewData(data: string, _clear: boolean): Promise<void> {
     this.currentData = data;
     const gen = ++this.loadGen; // uniquely identifies this load
-    const raw = extractSvg(data) ?? EMPTY_SVG;
+    const stored = extractSvg(data) ?? EMPTY_SVG;
+    // The per-drawing canvas background is stashed on the saved root <svg>.
+    // Pull it out and strip it before handing the SVG to the editor, so the
+    // live canvas (and its exports) never carry our bookkeeping attribute.
+    const bg = getCanvasBg(stored);
+    const raw = setCanvasBg(stored, null);
     // Locked imports are re-baked from their source on every open so a drawing
     // always reflects the latest version of what it embeds.
     const svg = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
@@ -286,20 +302,33 @@ export class SvgView extends TextFileView {
       this.isLoading = true;
       try {
         await this.svgEditor.loadFromString(svg);
+        // Restore after load; svgedit's loadFromString doesn't touch the
+        // background, but a fresh editor instance starts from the white default.
+        if (bg) this.svgEditor.setBackground(bg, "");
       } finally {
         // Only release the loading guard if a newer call hasn't already taken over.
         if (this.loadGen === gen) this.isLoading = false;
       }
     } else {
       this.pendingSvg = svg;
+      this.pendingBg = bg;
     }
   }
 
   getViewData(): string {
     if (!this.svgEditor) return this.currentData;
-    const svg = this.svgEditor.svgCanvas.getSvgString();
+    const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
     const compress = this.plugin.settings.compressDrawingData;
     return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
+  }
+
+  /** Stamp the editor's current canvas background onto the SVG root so it
+   *  persists per-drawing. White (the default) is omitted, so unedited drawings
+   *  don't gain the attribute and absence simply means white. */
+  private stampCanvasBg(svg: string): string {
+    const color = String(this.svgEditor?.configObj.pref("bkgd_color") ?? "");
+    const isDefaultWhite = /^(#fff(fff)?|white)$/i.test(color);
+    return setCanvasBg(svg, color && !isDefaultWhite ? color : null);
   }
 
   clear(): void {
@@ -310,6 +339,7 @@ export class SvgView extends TextFileView {
     // run un-awaited would race against setViewData's own loadFromString call
     // and could overwrite the correct drawing with a blank canvas.
     this.pendingSvg = EMPTY_SVG; // overridden by setViewData before init finishes
+    this.pendingBg = null;
   }
 
   async save(clear?: boolean): Promise<void> {
@@ -334,7 +364,7 @@ export class SvgView extends TextFileView {
     // calls save() after onunload, and also flushes any debounced requestSave()
     // that hasn't fired yet (e.g. when the user closes the tab quickly).
     if (this.svgEditor && this.file) {
-      const svg = this.svgEditor.svgCanvas.getSvgString();
+      const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
       try { await this.save(); } catch { /* best-effort */ }
