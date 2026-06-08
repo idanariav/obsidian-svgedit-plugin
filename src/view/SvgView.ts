@@ -89,6 +89,9 @@ export class SvgView extends TextFileView {
     this.svgEditor.setConfig({
       no_save_warning: true,
       initTool: "select",
+      // Hide svgedit's drawing-name field in the top bar — Obsidian already shows
+      // the file name in the view header / tab, so the in-editor title is redundant.
+      hideTitle: true,
       // Apply the persisted editor theme (the user's last in-editor choice, or
       // Obsidian's current mode when set to "auto"). Passing it as a pref — rather
       // than toggling the class after init — keeps svgedit's stored `theme` pref
