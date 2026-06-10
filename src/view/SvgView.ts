@@ -25,6 +25,9 @@ interface SvgEditorInstance {
   setBackground(color: string, url?: string): void;
   /** svgedit's root element; carries the theme-light / theme-dark class. */
   $svgEditor?: HTMLElement;
+  /** Tear down document-level listeners this editor registered (multi-instance
+   *  cleanup). Present on the reentrant svgedit build. */
+  destroy?(): void;
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
@@ -377,6 +380,9 @@ export class SvgView extends TextFileView {
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
       try { await this.save(); } catch { /* best-effort */ }
     }
+    // Remove the editor's document-level listeners so a closed drawing can't
+    // react to shortcuts/paste on a torn-down canvas or stay the "active" editor.
+    try { this.svgEditor?.destroy?.(); } catch { /* best-effort */ }
     this.svgEditor = null;
     this.editorContainer?.empty();
   }
