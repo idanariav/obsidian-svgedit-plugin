@@ -206,12 +206,15 @@ export default class SvgPlugin extends Plugin {
     }
   }
 
-  /** After one view writes the shared palette/shape library, tell every OTHER
-   *  open SVG view to re-read it so live editors stay in sync. */
-  reloadUserDataInOtherViews(except: SvgView): void {
+  /** After any view writes the shared palette/shape library, tell every open
+   *  SVG view to re-read it so live editors stay in sync. All views are
+   *  refreshed (not "all but the source"): with multiple editors the svgedit
+   *  user-data adapter is a single shared registry, so the source's identity
+   *  isn't reliable here, and re-reading the just-written value is idempotent. */
+  reloadUserDataInAllViews(): void {
     for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
       const view = leaf.view;
-      if (view instanceof SvgView && view !== except) view.reloadUserData();
+      if (view instanceof SvgView) view.reloadUserData();
     }
   }
 

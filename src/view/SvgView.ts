@@ -126,13 +126,13 @@ export class SvgView extends TextFileView {
         setPalette: (overrides: Record<string, string>) => {
           this.plugin.settings.paletteOverrides = overrides;
           void this.plugin.saveSettings();
-          this.plugin.reloadUserDataInOtherViews(this);
+          this.plugin.reloadUserDataInAllViews();
         },
         getUserShapes: () => this.plugin.settings.userShapes,
         setUserShapes: (store: UserShapeStore) => {
           this.plugin.settings.userShapes = store;
           void this.plugin.saveSettings();
-          this.plugin.reloadUserDataInOtherViews(this);
+          this.plugin.reloadUserDataInAllViews();
         },
       },
       // Leave the side panel closed by default (a "PANEL" handle on the right
