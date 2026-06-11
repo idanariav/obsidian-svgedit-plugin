@@ -6,7 +6,7 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement } from "../data/SvgData";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
@@ -21,8 +21,9 @@ interface SvgEditorInstance {
   reloadUserData(): void;
   loadFromString(svg: string): Promise<void>;
   /** Set the canvas background. We use it to restore a saved per-drawing color
-   *  after load; svgedit also keeps the bottom-panel swatch in sync. */
-  setBackground(color: string, url?: string): void;
+   *  after load; svgedit also keeps the bottom-panel swatch in sync. Pass
+   *  `'gradient'` with a gradient element to restore a gradient background. */
+  setBackground(color: string, url?: string, gradientElem?: Element): void;
   /** svgedit's root element; carries the theme-light / theme-dark class. */
   $svgEditor?: HTMLElement;
   /** Tear down document-level listeners this editor registered (multi-instance
@@ -181,7 +182,7 @@ export class SvgView extends TextFileView {
       this.isLoading = true;
       try {
         await this.svgEditor.loadFromString(svg);
-        if (bg) this.svgEditor.setBackground(bg, "");
+        if (bg) this.applyCanvasBg(bg);
       } finally { this.isLoading = false; }
     }
   }
@@ -314,7 +315,7 @@ export class SvgView extends TextFileView {
         await this.svgEditor.loadFromString(svg);
         // Restore after load; svgedit's loadFromString doesn't touch the
         // background, but a fresh editor instance starts from the white default.
-        if (bg) this.svgEditor.setBackground(bg, "");
+        if (bg) this.applyCanvasBg(bg);
       } finally {
         // Only release the loading guard if a newer call hasn't already taken over.
         if (this.loadGen === gen) this.isLoading = false;
@@ -336,9 +337,36 @@ export class SvgView extends TextFileView {
    *  persists per-drawing. White (the default) is omitted, so unedited drawings
    *  don't gain the attribute and absence simply means white. */
   private stampCanvasBg(svg: string): string {
+    return setCanvasBg(svg, this.canvasBgToken());
+  }
+
+  /** The current canvas background as a single persist/export token: a CSS
+   *  color, a `gradient:<base64>` token (svgedit keeps the gradient markup in
+   *  the `bkgd_gradient` pref), or null when it's the default white. */
+  private canvasBgToken(): string | null {
     const color = String(this.svgEditor?.configObj.pref("bkgd_color") ?? "");
-    const isDefaultWhite = /^(#fff(fff)?|white)$/i.test(color);
-    return setCanvasBg(svg, color && !isDefaultWhite ? color : null);
+    if (color === "gradient") {
+      const gradientXml = String(this.svgEditor?.configObj.pref("bkgd_gradient") ?? "");
+      return gradientXml ? encodeGradientBg(gradientXml) : null;
+    }
+    if (!color || /^(#fff(fff)?|white)$/i.test(color)) return null;
+    return color;
+  }
+
+  /** Restore a persisted canvas-background token onto the live editor. Decodes
+   *  a `gradient:<base64>` token back into a gradient element; otherwise treats
+   *  the token as a plain color. */
+  private applyCanvasBg(token: string): void {
+    if (!this.svgEditor) return;
+    const gradientXml = decodeGradientBg(token);
+    if (gradientXml) {
+      const el = parseGradientElement(gradientXml);
+      if (el) {
+        this.svgEditor.setBackground("gradient", "", el);
+        return;
+      }
+    }
+    this.svgEditor.setBackground(token, "");
   }
 
   clear(): void {
@@ -412,12 +440,12 @@ export class SvgView extends TextFileView {
     }
   }
 
-  /** The editor's current canvas background color (svgedit's `bkgd_color`
-   *  pref), defaulting to white. Used to paint the PNG background so the export
+  /** The editor's current canvas background as a token for the PNG exporter:
+   *  a CSS color, or a `gradient:<base64>` token the exporter bakes into the
+   *  SVG (a gradient can't be a ctx.fillStyle). Defaults to white so the export
    *  matches what the canvas shows rather than always being white. */
   getCanvasBgColor(): string {
-    const color = String(this.svgEditor?.configObj.pref("bkgd_color") ?? "");
-    return color || "#ffffff";
+    return this.canvasBgToken() ?? "#ffffff";
   }
 
   async insertSvgFragment(fragment: string): Promise<void> {

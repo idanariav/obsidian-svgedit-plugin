@@ -97,6 +97,73 @@ export function setCanvasBg(svg: string, color: string | null): string {
   return stripped.replace(/<svg\b/, `<svg ${CANVAS_BG_ATTR}="${color}"`);
 }
 
+// A gradient canvas background can't be expressed as a CSS color, so the
+// CANVAS_BG_ATTR token (and the bgColor threaded into the PNG exporter) carries
+// the gradient's SVG markup base64-encoded behind this prefix. Solid colors are
+// stored as-is; this keeps both forms in a single string channel.
+const GRADIENT_BG_PREFIX = "gradient:";
+
+/** Encode a gradient element's SVG markup into a CANVAS_BG_ATTR-safe token.
+ *  Gradient markup is ASCII (tags, numeric offsets, hex colors), so plain
+ *  base64 is sufficient and keeps the token free of quotes/whitespace. */
+export function encodeGradientBg(gradientXml: string): string {
+  return GRADIENT_BG_PREFIX + btoa(gradientXml);
+}
+
+/** Decode a CANVAS_BG_ATTR token to gradient markup, or null if it isn't one. */
+export function decodeGradientBg(token: string): string | null {
+  if (!token.startsWith(GRADIENT_BG_PREFIX)) return null;
+  try {
+    return atob(token.slice(GRADIENT_BG_PREFIX.length));
+  } catch {
+    return null;
+  }
+}
+
+/** Parse a stored gradient's markup into a live element, wrapping it in an
+ *  <svg> so the SVG namespace is guaranteed regardless of how it was
+ *  serialized. Returns null on malformed input. */
+export function parseGradientElement(gradientXml: string): Element | null {
+  const doc = new DOMParser().parseFromString(
+    `<svg xmlns="http://www.w3.org/2000/svg">${gradientXml}</svg>`,
+    "image/svg+xml",
+  );
+  if (doc.querySelector("parsererror")) return null;
+  return doc.documentElement.firstElementChild;
+}
+
+/** Bake a gradient background into an SVG export string: add the gradient to
+ *  <defs> and a full-canvas <rect> referencing it as the first (bottom-most)
+ *  drawable element. Used so the PNG exporter can render the gradient through
+ *  the SVG itself rather than via an (impossible) gradient ctx.fillStyle. */
+export function bakeGradientIntoSvg(svg: string, gradientXml: string): string {
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  if (doc.querySelector("parsererror")) return svg;
+  const root = doc.documentElement;
+  const grad = parseGradientElement(gradientXml);
+  if (!grad) return svg;
+
+  const id = "obsidian-canvas-bg-gradient";
+  grad.setAttribute("id", id);
+  let defs = root.querySelector("defs");
+  if (!defs) {
+    defs = doc.createElementNS(SVGNS, "defs");
+    root.insertBefore(defs, root.firstChild);
+  }
+  defs.appendChild(doc.importNode(grad, true));
+
+  const rect = doc.createElementNS(SVGNS, "rect");
+  rect.setAttribute("x", "0");
+  rect.setAttribute("y", "0");
+  rect.setAttribute("width", "100%");
+  rect.setAttribute("height", "100%");
+  rect.setAttribute("fill", `url(#${id})`);
+  root.insertBefore(rect, root.firstChild);
+
+  return new XMLSerializer().serializeToString(doc);
+}
+
 // Matches the auto-managed "## Linked Files" section: the heading through every
 // following line up to (but not including) the "%%\n# SVGEdit Data" opening that
 // always follows it. Multiline so ^ anchors each line.

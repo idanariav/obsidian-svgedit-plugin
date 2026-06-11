@@ -1,6 +1,7 @@
 import { App, TFile, normalizePath } from "obsidian";
 import { svgToPngArrayBuffer } from "./raster";
 import { prepareSvgForExport } from "./frames";
+import { decodeGradientBg, bakeGradientIntoSvg } from "../data/SvgData";
 import type { SvgPluginSettings, EffectiveDrawingSettings } from "../settings/defaults";
 
 /**
@@ -72,7 +73,19 @@ export async function exportPng(
   bgColor = "#ffffff",
 ): Promise<void> {
   const path = getCompanionPath(sourceFile.path, "png", settings, pathSuffix);
-  const buf = await svgToPngArrayBuffer(prepareSvgForExport(svgString, frameName), scale, transparent, bgColor);
+  let svg = prepareSvgForExport(svgString, frameName);
+  let solidBg = bgColor;
+  // A gradient background can't be a ctx.fillStyle, so bake it into the SVG as
+  // a full-canvas rect and rasterize transparently (the gradient is now drawn
+  // by the SVG itself). Solid colors keep the simpler fillStyle path. Skip when
+  // a transparent export was requested — then no background is wanted at all.
+  const gradientXml = transparent ? null : decodeGradientBg(bgColor);
+  if (gradientXml) {
+    svg = bakeGradientIntoSvg(svg, gradientXml);
+    transparent = true;
+    solidBg = "#ffffff";
+  }
+  const buf = await svgToPngArrayBuffer(svg, scale, transparent, solidBg);
   await app.vault.adapter.writeBinary(path, buf);
 }
 
