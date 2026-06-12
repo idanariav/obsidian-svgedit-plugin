@@ -88,6 +88,10 @@ export interface SvgPluginSettings {
   paletteOverrides: Record<string, string>;
   /** Saved shape library. Backs the svgedit userDataAdapter (see paletteOverrides). */
   userShapes: UserShapeStore;
+  /** Custom hotkey bindings (action id → list of canonical key combos). Backs the
+   *  svgedit userDataAdapter so keyboard customizations live in data.json and
+   *  survive plugin updates instead of in the editor's localStorage. */
+  hotkeyOverrides: Record<string, string[]>;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -112,4 +116,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   compressDrawingData: true,
   paletteOverrides: {},
   userShapes: { categories: [], shapes: {} },
+  hotkeyOverrides: {},
 };
