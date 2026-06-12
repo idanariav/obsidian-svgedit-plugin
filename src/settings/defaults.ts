@@ -92,6 +92,11 @@ export interface SvgPluginSettings {
    *  svgedit userDataAdapter so keyboard customizations live in data.json and
    *  survive plugin updates instead of in the editor's localStorage. */
   hotkeyOverrides: Record<string, string[]>;
+  /** Ordered list of favorited action ids backing the right-click quick-action
+   *  menu. Backs the svgedit userDataAdapter so favorites live in data.json and
+   *  survive plugin updates instead of in the editor's localStorage. Empty =
+   *  the editor's built-in default seed (cut/copy/paste/delete). */
+  favorites: string[];
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -117,4 +122,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   paletteOverrides: {},
   userShapes: { categories: [], shapes: {} },
   hotkeyOverrides: {},
+  favorites: [],
 };

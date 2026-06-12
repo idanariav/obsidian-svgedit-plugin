@@ -140,6 +140,11 @@ export class SvgView extends TextFileView {
           this.plugin.settings.hotkeyOverrides = overrides;
           void this.plugin.saveSettings();
         },
+        getFavorites: () => this.plugin.settings.favorites,
+        setFavorites: (ids: string[]) => {
+          this.plugin.settings.favorites = ids;
+          void this.plugin.saveSettings();
+        },
       },
       // Leave the side panel closed by default (a "PANEL" handle on the right
       // edge), matching the native svgedit UI; the handle toggles it open.
