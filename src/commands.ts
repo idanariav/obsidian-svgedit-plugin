@@ -14,7 +14,6 @@ import {
 import {
   VIEW_TYPE_SVG,
   FRONTMATTER_KEY_PLUGIN,
-  FRONTMATTER_KEY_OPEN_MD,
   FRONTMATTER_PLUGIN_VALUE,
   EMPTY_SVG,
 } from "./constants";
@@ -199,7 +198,6 @@ async function convertExcalidrawToDrawing(plugin: SvgPlugin, file: TFile): Promi
         if (key.startsWith("excalidraw-")) delete fm[key];
       }
       fm[FRONTMATTER_KEY_PLUGIN] = FRONTMATTER_PLUGIN_VALUE;
-      fm[FRONTMATTER_KEY_OPEN_MD] = false;
       applyDrawingTag(fm, plugin);
     });
 
@@ -228,7 +226,6 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     // 1. Stamp frontmatter — processFrontMatter handles YAML safely
     await plugin.app.fileManager.processFrontMatter(file, (fm) => {
       fm[FRONTMATTER_KEY_PLUGIN] = FRONTMATTER_PLUGIN_VALUE;
-      fm[FRONTMATTER_KEY_OPEN_MD] = false;
       applyDrawingTag(fm, plugin);
     });
 
