@@ -89,7 +89,7 @@ export class SvgView extends TextFileView {
     try {
       await this.initEditor();
     } catch (e) {
-      console.error("[SVG Draw] Failed to init editor:", e);
+      console.error("[Sketch Editor] Failed to init editor:", e);
       this.editorContainer.setText(`SVG editor failed to load: ${(e as Error).message}`);
     }
   }
@@ -403,7 +403,7 @@ export class SvgView extends TextFileView {
         this.getCanvasBgColor(),
       );
     } catch (e) {
-      console.error("[SVG Draw] auto-export failed:", e);
+      console.error("[Sketch Editor] auto-export failed:", e);
     }
   }
 

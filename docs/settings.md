@@ -1,6 +1,6 @@
 # Settings
 
-Open these from **Settings → Community plugins → SVG Draw**. They control how
+Open these from **Settings → Community plugins → Sketch Editor**. They control how
 drawings open, how they look, and how they're exported.
 
 Many settings come in three layers that build on each other:

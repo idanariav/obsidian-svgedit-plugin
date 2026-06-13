@@ -13,15 +13,19 @@ Example:
 
 ```yaml
 ---
-svg-plugin: parsed
-svg-open-md: false
-svg-auto-export: [svg, png]
-svg-transparent-bg: true
-svg-export-frame: Hero shot
+sketch-editor-plugin: parsed
+sketch-editor-open-md: false
+sketch-editor-auto-export: [svg, png]
+sketch-editor-transparent-bg: true
+sketch-editor-export-frame: Hero shot
 tags:
   - svg
 ---
 ```
+
+> The keys were previously named with an `svg-` prefix (`svg-plugin`,
+> `svg-open-md`, …). Older drawings using those names are still read for backward
+> compatibility; they switch to the `sketch-editor-` names on the next save.
 
 You normally won't write these by hand — the
 [New SVG drawing](commands.md#new-svg-drawing) and
@@ -31,7 +35,7 @@ when you want a specific file to behave differently.
 
 ---
 
-## svg-plugin
+## sketch-editor-plugin
 
 - **Values:** `parsed`
 - **This is the marker that tells the plugin a note is a drawing.** Without it, the
@@ -41,7 +45,7 @@ when you want a specific file to behave differently.
 
 ---
 
-## svg-open-md
+## sketch-editor-open-md
 
 - **Values:** `true` / `false`
 - Controls whether **this file** opens as Markdown (`true`) or in the SVG editor
@@ -53,12 +57,12 @@ when you want a specific file to behave differently.
 
 ---
 
-## svg-auto-export
+## sketch-editor-auto-export
 
 - **Values:** a list of formats — `svg`, `png`, or both. Examples:
-  - `svg-auto-export: [svg, png]` — export both companions on save
-  - `svg-auto-export: png` — export only the `.png`
-  - `svg-auto-export: []` (or leave the value blank) — export **nothing** for this file
+  - `sketch-editor-auto-export: [svg, png]` — export both companions on save
+  - `sketch-editor-auto-export: png` — export only the `.png`
+  - `sketch-editor-auto-export: []` (or leave the value blank) — export **nothing** for this file
   - omit the key entirely — inherit the folder/global [Export SVG on save](settings.md#export-svg-on-save)
     and [Export PNG on save](settings.md#export-png-on-save) settings
 - Controls which companion files **this file** writes on save, overriding the global
@@ -69,13 +73,13 @@ when you want a specific file to behave differently.
 > Note: present-but-empty (`[]` or a blank value) is different from omitting the key.
 > Empty means "export nothing"; omitting means "inherit the lower layers".
 >
-> The legacy boolean key `svg-auto-export-png: true` / `false` is still honored as a
-> fallback for older files (it controls PNG only), but new files should use
-> `svg-auto-export`.
+> The legacy boolean key `sketch-editor-auto-export-png: true` / `false` (and its
+> older `svg-auto-export-png` alias) is still honored as a fallback for older files
+> (it controls PNG only), but new files should use `sketch-editor-auto-export`.
 
 ---
 
-## svg-transparent-bg
+## sketch-editor-transparent-bg
 
 - **Values:** `true` / `false`
 - Controls whether **this file's** PNG export uses a transparent background (`true`)
@@ -86,7 +90,7 @@ when you want a specific file to behave differently.
 
 ---
 
-## svg-export-frame
+## sketch-editor-export-frame
 
 - **Values:** a frame name (text), or omit / leave blank for the whole canvas
 - A **frame** is a rectangle you draw with the editor's Frame tool to mark an export

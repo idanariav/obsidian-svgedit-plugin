@@ -1,17 +1,27 @@
 export const VIEW_TYPE_SVG = "svg-draw-view";
 export const PLUGIN_ID = "obsidian-svg-plugin";
 
-export const FRONTMATTER_KEY_PLUGIN = "svg-plugin";
-export const FRONTMATTER_KEY_OPEN_MD = "svg-open-md";
+export const FRONTMATTER_KEY_PLUGIN = "sketch-editor-plugin";
+export const FRONTMATTER_KEY_OPEN_MD = "sketch-editor-open-md";
 // List of formats to auto-export on save, e.g. `[svg, png]`. Present-but-empty
 // means "export nothing"; absent means "inherit folder/global".
-export const FRONTMATTER_KEY_AUTO_EXPORT = "svg-auto-export";
+export const FRONTMATTER_KEY_AUTO_EXPORT = "sketch-editor-auto-export";
 // Legacy boolean key, kept as a read-time fallback for files written before
 // FRONTMATTER_KEY_AUTO_EXPORT existed. Controls PNG export only.
-export const FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
-export const FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
-export const FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
+export const FRONTMATTER_KEY_AUTO_EXPORT_PNG = "sketch-editor-auto-export-png";
+export const FRONTMATTER_KEY_TRANSPARENT_BG = "sketch-editor-transparent-bg";
+export const FRONTMATTER_KEY_EXPORT_FRAME = "sketch-editor-export-frame";
 export const FRONTMATTER_PLUGIN_VALUE = "parsed";
+
+// Legacy svg-* frontmatter keys, kept as a read-time fallback for drawings
+// written before the "Sketch Editor" rename. Reads check the new key, then fall
+// back to these; writes only ever use the new keys above.
+export const LEGACY_FRONTMATTER_KEY_PLUGIN = "svg-plugin";
+export const LEGACY_FRONTMATTER_KEY_OPEN_MD = "svg-open-md";
+export const LEGACY_FRONTMATTER_KEY_AUTO_EXPORT = "svg-auto-export";
+export const LEGACY_FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
+export const LEGACY_FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
+export const LEGACY_FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
 
 // The drawing data lives inside a "# SVGEdit Data" section wrapped in `%%`
 // comment fences so Obsidian hides it from rendered/preview output. `## Drawing`

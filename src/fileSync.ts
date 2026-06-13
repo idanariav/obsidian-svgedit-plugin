@@ -4,6 +4,7 @@ import { getCompanionPath } from "./export/exporter";
 import { isSvgDrawingFile } from "./data/frontmatter";
 import {
   FRONTMATTER_KEY_PLUGIN,
+  LEGACY_FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
 } from "./constants";
 
@@ -18,7 +19,8 @@ export function registerFileSyncHandlers(plugin: SvgPlugin): void {
   plugin.registerEvent(
     plugin.app.metadataCache.on("changed", (file) => {
       const fm = plugin.app.metadataCache.getFileCache(file)?.frontmatter;
-      if (fm?.[FRONTMATTER_KEY_PLUGIN] === FRONTMATTER_PLUGIN_VALUE) {
+      const marker = fm?.[FRONTMATTER_KEY_PLUGIN] ?? fm?.[LEGACY_FRONTMATTER_KEY_PLUGIN];
+      if (marker === FRONTMATTER_PLUGIN_VALUE) {
         plugin.svgDrawingPaths.add(file.path);
       } else {
         plugin.svgDrawingPaths.delete(file.path);

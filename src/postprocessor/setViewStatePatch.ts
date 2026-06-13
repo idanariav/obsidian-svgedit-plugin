@@ -6,7 +6,7 @@ import type { SvgPluginSettings } from "../settings/defaults";
 
 /**
  * Monkey-patch WorkspaceLeaf.setViewState so that opening a markdown file that
- * is an SVG drawing (svg-plugin: parsed frontmatter) forces the SVG view type
+ * is an SVG drawing (sketch-editor-plugin: parsed frontmatter) forces the SVG view type
  * instead of the default markdown view — unless the resolved effective settings
  * say to open as markdown (via per-file frontmatter, folder config, or global
  * default).

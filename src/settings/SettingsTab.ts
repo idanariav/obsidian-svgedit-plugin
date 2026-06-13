@@ -28,7 +28,7 @@ export class SvgSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "SVG Draw" });
+    containerEl.createEl("h2", { text: "Sketch Editor" });
 
     // ── Open mode ────────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Open mode");

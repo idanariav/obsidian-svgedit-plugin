@@ -7,6 +7,12 @@ import {
   FRONTMATTER_KEY_AUTO_EXPORT_PNG,
   FRONTMATTER_KEY_TRANSPARENT_BG,
   FRONTMATTER_KEY_EXPORT_FRAME,
+  LEGACY_FRONTMATTER_KEY_OPEN_MD,
+  LEGACY_FRONTMATTER_KEY_PLUGIN,
+  LEGACY_FRONTMATTER_KEY_AUTO_EXPORT,
+  LEGACY_FRONTMATTER_KEY_AUTO_EXPORT_PNG,
+  LEGACY_FRONTMATTER_KEY_TRANSPARENT_BG,
+  LEGACY_FRONTMATTER_KEY_EXPORT_FRAME,
 } from "../constants";
 import type {
   SvgPluginSettings,
@@ -14,14 +20,23 @@ import type {
   EffectiveDrawingSettings,
 } from "../settings/defaults";
 
+// Read a frontmatter value, preferring the current key and falling back to the
+// legacy svg-* key for drawings written before the "Sketch Editor" rename. Uses
+// key *presence* (not nullishness) to choose, so a present-but-null new key
+// (e.g. `sketch-editor-auto-export:` meaning "export nothing") still wins.
+function readFm(fm: Record<string, unknown> | undefined, key: string, legacyKey: string): unknown {
+  if (fm && key in fm) return fm[key];
+  return fm?.[legacyKey];
+}
+
 export function isSvgDrawingFile(app: App, file: TFile): boolean {
   const fm = app.metadataCache.getFileCache(file)?.frontmatter;
-  return fm?.[FRONTMATTER_KEY_PLUGIN] === FRONTMATTER_PLUGIN_VALUE;
+  return readFm(fm, FRONTMATTER_KEY_PLUGIN, LEGACY_FRONTMATTER_KEY_PLUGIN) === FRONTMATTER_PLUGIN_VALUE;
 }
 
 export function shouldOpenAsMarkdown(app: App, file: TFile): boolean {
   const fm = app.metadataCache.getFileCache(file)?.frontmatter;
-  return !!fm?.[FRONTMATTER_KEY_OPEN_MD];
+  return !!readFm(fm, FRONTMATTER_KEY_OPEN_MD, LEGACY_FRONTMATTER_KEY_OPEN_MD);
 }
 
 export async function toggleOpenMd(app: App, file: TFile): Promise<void> {
@@ -60,25 +75,27 @@ export function resolveEffectiveSettings(
     if (folder.exportFrame           !== undefined) exportFrame           = folder.exportFrame;
   }
 
-  // 3. Apply per-file frontmatter overrides
-  if (fm?.[FRONTMATTER_KEY_OPEN_MD]         !== undefined && fm[FRONTMATTER_KEY_OPEN_MD]         !== null)
-    openAsMarkdown        = !!fm[FRONTMATTER_KEY_OPEN_MD];
+  // 3. Apply per-file frontmatter overrides (each key falls back to its legacy svg-* alias)
+  const openMd = readFm(fm, FRONTMATTER_KEY_OPEN_MD, LEGACY_FRONTMATTER_KEY_OPEN_MD);
+  if (openMd !== undefined && openMd !== null) openAsMarkdown = !!openMd;
 
-  // The `svg-auto-export` list, when present, fully determines both formats.
-  // Present-but-empty (null) means "export nothing". When absent, fall back to
-  // the legacy boolean `svg-auto-export-png` (PNG only) for older files.
-  if (fm?.[FRONTMATTER_KEY_AUTO_EXPORT] !== undefined) {
-    const formats = parseAutoExportList(fm[FRONTMATTER_KEY_AUTO_EXPORT]);
+  // The `sketch-editor-auto-export` list, when present, fully determines both
+  // formats. Present-but-empty (null) means "export nothing". When absent, fall
+  // back to the legacy boolean `*-auto-export-png` (PNG only) for older files.
+  const autoExport = readFm(fm, FRONTMATTER_KEY_AUTO_EXPORT, LEGACY_FRONTMATTER_KEY_AUTO_EXPORT);
+  const autoExportPngFlag = readFm(fm, FRONTMATTER_KEY_AUTO_EXPORT_PNG, LEGACY_FRONTMATTER_KEY_AUTO_EXPORT_PNG);
+  if (autoExport !== undefined) {
+    const formats = parseAutoExportList(autoExport);
     autoExportSvg = formats.svg;
     autoExportPng = formats.png;
-  } else if (fm?.[FRONTMATTER_KEY_AUTO_EXPORT_PNG] !== undefined && fm[FRONTMATTER_KEY_AUTO_EXPORT_PNG] !== null) {
-    autoExportPng = !!fm[FRONTMATTER_KEY_AUTO_EXPORT_PNG];
+  } else if (autoExportPngFlag !== undefined && autoExportPngFlag !== null) {
+    autoExportPng = !!autoExportPngFlag;
   }
 
-  if (fm?.[FRONTMATTER_KEY_TRANSPARENT_BG]  !== undefined && fm[FRONTMATTER_KEY_TRANSPARENT_BG]  !== null)
-    transparentBackground = !!fm[FRONTMATTER_KEY_TRANSPARENT_BG];
-  if (fm?.[FRONTMATTER_KEY_EXPORT_FRAME]    !== undefined && fm[FRONTMATTER_KEY_EXPORT_FRAME]    !== null)
-    exportFrame           = String(fm[FRONTMATTER_KEY_EXPORT_FRAME]);
+  const transparent = readFm(fm, FRONTMATTER_KEY_TRANSPARENT_BG, LEGACY_FRONTMATTER_KEY_TRANSPARENT_BG);
+  if (transparent !== undefined && transparent !== null) transparentBackground = !!transparent;
+  const frame = readFm(fm, FRONTMATTER_KEY_EXPORT_FRAME, LEGACY_FRONTMATTER_KEY_EXPORT_FRAME);
+  if (frame !== undefined && frame !== null) exportFrame = String(frame);
 
   return { openAsMarkdown, autoExportSvg, autoExportPng, transparentBackground, exportFrame };
 }

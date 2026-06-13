@@ -1,4 +1,4 @@
-# SVG Draw for Obsidian
+# Sketch Editor for Obsidian
 
 Embed and edit **SVG drawings** directly inside your Obsidian notes, powered by the
 open-source [SVG-Edit](https://github.com/SVG-Edit/svgedit) editor.
@@ -39,13 +39,13 @@ ready-to-embed `.svg` and `.png` image in sync automatically.
    `<your-vault>/.obsidian/plugins/obsidian-svg-plugin/` and copy the three files
    into it.
 3. In Obsidian, go to **Settings → Community plugins**, enable community plugins if
-   needed, and turn on **SVG Draw**.
+   needed, and turn on **Sketch Editor**.
 
 ---
 
 ## Getting started
 
-1. Click the **SVG Draw** icon in the left ribbon (or run **New SVG drawing** from
+1. Click the **Sketch Editor** icon in the left ribbon (or run **New SVG drawing** from
    the Command Palette).
 2. Choose a name and location, and a blank canvas opens in the editor.
 3. Draw something, then save (`Ctrl/Cmd + S`).
