@@ -48,6 +48,10 @@ export interface SvgPluginSettings {
   defaultCanvasWidth: number;
   defaultCanvasHeight: number;
   drawingsFolder: string;
+  /** Vault path of a drawing whose Sketch Editor Data seeds new/converted
+   *  drawings. Only its drawing content is used — the template's frontmatter and
+   *  other markdown are ignored. Empty = start from a blank canvas. */
+  defaultTemplate: string;
   /** Global default: open drawings in Markdown view (false = SVG view). */
   openAsMarkdown: boolean;
   /** Global default: export PNGs with transparent background (false = white fill). */
@@ -106,6 +110,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   defaultCanvasWidth: 800,
   defaultCanvasHeight: 600,
   drawingsFolder: "",
+  defaultTemplate: "",
   openAsMarkdown: false,
   transparentBackground: false,
   exportFrame: "",

@@ -41,16 +41,38 @@ function applyDrawingTag(fm: Record<string, unknown>, plugin: SvgPlugin): void {
   }
 }
 
+/**
+ * Resolve the configured template drawing's SVG (its Sketch Editor Data only),
+ * or EMPTY_SVG when no template is set / it can't be read.
+ */
+export async function resolveTemplateSvg(plugin: SvgPlugin): Promise<string> {
+  const path = plugin.settings.defaultTemplate.trim();
+  if (!path) return EMPTY_SVG;
+  const file = plugin.app.vault.getAbstractFileByPath(path);
+  if (!(file instanceof TFile)) {
+    new Notice(`Template not found, using blank canvas: ${path}`);
+    return EMPTY_SVG;
+  }
+  const svg = extractSvg(await plugin.app.vault.read(file));
+  if (!svg) {
+    new Notice(`Template has no drawing data, using blank canvas: ${path}`);
+    return EMPTY_SVG;
+  }
+  return svg;
+}
+
 export function registerCommands(plugin: SvgPlugin): void {
   // New drawing
   plugin.addCommand({
     id: "new-svg-drawing",
     name: "New SVG drawing",
-    callback: () => {
+    callback: async () => {
+      const templateSvg = await resolveTemplateSvg(plugin);
       new NewDrawingModal(
         plugin.app,
         plugin.settings.drawingsFolder,
         plugin.settings.compressDrawingData,
+        templateSvg,
         async ({ path, content }) => {
           try {
             const existing = plugin.app.vault.getAbstractFileByPath(path);
@@ -232,7 +254,8 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     // 2. Append the drawing block if it isn't there yet
     const content = await plugin.app.vault.read(file);
     if (!extractSvg(content)) {
-      await plugin.app.vault.modify(file, replaceSvg(content, EMPTY_SVG, plugin.settings.compressDrawingData));
+      const templateSvg = await resolveTemplateSvg(plugin);
+      await plugin.app.vault.modify(file, replaceSvg(content, templateSvg, plugin.settings.compressDrawingData));
     }
 
     // 3. Reopen — setViewState patch will now route it to SvgView

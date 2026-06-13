@@ -2,6 +2,7 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
 import type { ExportFolderMapping } from "./defaults";
 import { FolderSuggest } from "./FolderSuggest";
+import { FileSuggest } from "./FileSuggest";
 
 /** "inherit" maps to undefined; "true"/"false" map to the matching boolean. */
 type TriState = "inherit" | "true" | "false";
@@ -312,6 +313,26 @@ export class SvgSettingsTab extends PluginSettingTab {
           .setValue(this.plugin.settings.drawingsFolder)
           .onChange(async (v) => {
             this.plugin.settings.drawingsFolder = v.trim();
+            await this.plugin.saveSettings();
+          });
+      });
+
+    new Setting(containerEl)
+      .setName("Default template")
+      .setDesc(
+        "New and converted drawings start from this drawing's content (its "
+        + "frontmatter and other text are ignored). Leave blank for a blank canvas.",
+      )
+      .addText((t) => {
+        new FileSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.defaultTemplate = v.trim();
+          await this.plugin.saveSettings();
+        });
+        t
+          .setPlaceholder("Templates/Drawing.md")
+          .setValue(this.plugin.settings.defaultTemplate)
+          .onChange(async (v) => {
+            this.plugin.settings.defaultTemplate = v.trim();
             await this.plugin.saveSettings();
           });
       });
