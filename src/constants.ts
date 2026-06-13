@@ -23,13 +23,15 @@ export const LEGACY_FRONTMATTER_KEY_AUTO_EXPORT_PNG = "svg-auto-export-png";
 export const LEGACY_FRONTMATTER_KEY_TRANSPARENT_BG = "svg-transparent-bg";
 export const LEGACY_FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
 
-// The drawing data lives inside a "# SVGEdit Data" section wrapped in `%%`
+// The drawing data lives inside a "# Sketch Editor Data" section wrapped in `%%`
 // comment fences so Obsidian hides it from rendered/preview output. `## Drawing`
-// is a level-2 heading nested under that level-1 section heading.
-export const SVGEDIT_SECTION_HEADING = "# SVGEdit Data";
+// is a level-2 heading nested under that level-1 section heading. The legacy
+// name "# SVGEdit Data" is still accepted on read (see SvgData.ts) so older
+// drawings migrate to the new heading on their next save.
+export const SVGEDIT_SECTION_HEADING = "# Sketch Editor Data";
 // Opening `%%` comment fence plus the section heading, written as one unit and
 // also used as the anchor that the Linked Files section is inserted above.
-export const SVGEDIT_SECTION_OPEN = "%%\n# SVGEdit Data";
+export const SVGEDIT_SECTION_OPEN = "%%\n# Sketch Editor Data";
 export const DRAWING_SECTION_HEADING = "## Drawing";
 export const DRAWING_FENCE_OPEN = "```svg";
 // Fence used when the drawing is stored LZString-compressed (see SvgData.ts).
@@ -39,8 +41,8 @@ export const DRAWING_FENCE_CLOSE = "```";
 export const DRAWING_SECTION_END = "%%";
 
 // Auto-managed section of wikilinks to vault files referenced by the drawing
-// (imported images / linked shapes). Kept visible above the %%-hidden SVGEdit
-// Data section so Obsidian still generates real backlinks. Reconciled from the
+// (imported images / linked shapes). Kept visible above the %%-hidden Sketch
+// Editor Data section so Obsidian still generates real backlinks. Reconciled from the
 // SVG on every save.
 export const LINKED_FILES_HEADING = "## Linked Files";
 // SVG attribute that svgedit stamps onto every element originating from a vault

@@ -17,8 +17,8 @@ import {
 
 // Matches the fenced raw-SVG block between the ## Drawing heading and the %%
 // terminator, capturing the SVG content inside the fence. The optional
-// `%%\n# SVGEdit Data` prefix may sit just above; this regex only needs the
-// inner block.
+// section-heading wrapper may sit just above; this regex only needs the inner
+// block.
 const RAW_BLOCK_REGEX =
   /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
 
@@ -26,13 +26,20 @@ const RAW_BLOCK_REGEX =
 const COMPRESSED_BLOCK_REGEX =
   /## Drawing\n```compressed-svg\n([\s\S]*?)\n```\s*\n%%/;
 
-// Either block (raw or compressed), including the optional `%%\n# SVGEdit Data`
-// wrapper opening that precedes it. Matching the opening too means rebuilding
-// the block also migrates legacy (un-wrapped) files to the wrapped layout, and
-// the `(?:svg|compressed-svg)` alternation lets a save in either direction
-// rewrite whichever format currently exists.
-const BLOCK_REPLACE_REGEX =
-  /(?:%%\n# SVGEdit Data\n+)?## Drawing\n```(?:svg|compressed-svg)\n[\s\S]*?\n```\s*\n%%/;
+// One `%%` + section-heading wrapper opening. Accepts the current "Sketch Editor
+// Data" heading and the legacy "SVGEdit Data" name, and tolerates blank lines
+// after the `%%` fence (an older format left a `%%\n\n# … Data` variant behind).
+const WRAPPER_OPEN = "(?:%%\\n+#+ (?:Sketch Editor|SVGEdit) Data\\n+)";
+
+// Either block (raw or compressed), including any wrapper opening(s) that
+// precede it. Matching the opening too means rebuilding the block also migrates
+// legacy (un-wrapped) files to the wrapped layout, and the `(?:svg|compressed-svg)`
+// alternation lets a save in either direction rewrite whichever format currently
+// exists. The `+` on the wrapper collapses duplicated/stray wrapper openings
+// (the duplicate "# … Data" heading bug) back into the single one buildBlock writes.
+const BLOCK_REPLACE_REGEX = new RegExp(
+  WRAPPER_OPEN + "*## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%",
+);
 
 // Width to wrap the base64 payload at, so a compressed drawing is many modest
 // lines rather than one enormous line. Whitespace is stripped before decompress.
@@ -165,8 +172,8 @@ export function bakeGradientIntoSvg(svg: string, gradientXml: string): string {
 }
 
 // Matches the auto-managed "## Linked Files" section: the heading through every
-// following line up to (but not including) the "%%\n# SVGEdit Data" opening that
-// always follows it. Multiline so ^ anchors each line.
+// following line up to (but not including) the "%%\n# Sketch Editor Data"
+// opening that always follows it. Multiline so ^ anchors each line.
 const LINKED_FILES_BLOCK_REGEX = new RegExp(
   `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
   "m",
@@ -195,7 +202,7 @@ function collectVaultLinks(svg: string): string[] {
  * Rebuild the auto-managed "## Linked Files" section to match the vault links
  * still present in the SVG. Links survive as long as ≥1 stamped element remains;
  * the section is removed entirely when none do. The section sits above the
- * %%-hidden "# SVGEdit Data" section so its wikilinks stay outside the comment
+ * %%-hidden "# Sketch Editor Data" section so its wikilinks stay outside the comment
  * and produce real Obsidian backlinks.
  */
 export function reconcileLinkedFiles(content: string, svg: string): string {
