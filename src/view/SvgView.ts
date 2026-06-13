@@ -39,7 +39,13 @@ interface SvgEditorInstance {
     /** The mutable save-options object (apply, images, round_digits…). */
     getSvgOption(): { apply?: boolean; [k: string]: unknown };
     setSvgOption(key: string, value: unknown): void;
-    bind(event: string, cb: () => void): void;
+    /** Attach a handler to a canvas event. svgedit's `bind` *replaces* any
+     *  existing handler for that event and returns the previous one, so chain
+     *  it (see the `changed` binding below) rather than dropping it. */
+    bind(
+      event: string,
+      cb: (win: Window, elems: unknown) => void,
+    ): ((win: Window, elems: unknown) => void) | undefined;
   };
 }
 
@@ -179,7 +185,12 @@ export class SvgView extends TextFileView {
 
     this.setupThemeSync();
 
-    this.svgEditor.svgCanvas.bind("changed", () => {
+    // svgedit binds `changed` to its own Editor.elementChanged (which updates
+    // the context panel, the empty-canvas brand watermark, etc.). bind()
+    // *replaces* the handler, so preserve and chain svgedit's original instead
+    // of clobbering it — otherwise those updates stop firing after init.
+    const prevChanged = this.svgEditor.svgCanvas.bind("changed", (win, elems) => {
+      prevChanged?.(win, elems);
       if (!this.isLoading) this.requestSave();
     });
 
@@ -373,6 +384,13 @@ export class SvgView extends TextFileView {
       const el = parseGradientElement(gradientXml);
       if (el) {
         this.svgEditor.setBackground("gradient", "", el);
+        // Electron caches the background rect's paint-server resolution against
+        // the gradient's <defs> node. On reopen we restore the gradient right
+        // after loadFromString — before the canvas has painted — so it resolves
+        // against an unpainted canvas and sticks white. Re-apply once after the
+        // first paint: svgedit recreates the <defs> node on every apply, forcing
+        // a fresh resolution now that the canvas has rendered.
+        requestAnimationFrame(() => this.svgEditor?.setBackground("gradient", "", el));
         return;
       }
     }
