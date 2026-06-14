@@ -2,6 +2,7 @@ import {
   TextFileView,
   WorkspaceLeaf,
   Platform,
+  TFile,
   setIcon,
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
@@ -61,6 +62,10 @@ export class SvgView extends TextFileView {
    *  paired with pendingSvg and applied once init delivers the drawing. */
   private pendingBg: string | null = null;
   private isLoading = false;
+  /** Set when the canvas has unsaved edits since the last save; cleared by save().
+   *  Lets the periodic autosave skip work (no file re-write / PNG re-export) when
+   *  nothing changed since the last flush. */
+  private dirty = false;
   /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
   private loadGen = 0;
   /** Last theme applied to svgedit's root. Lets the theme-class MutationObserver
@@ -191,8 +196,13 @@ export class SvgView extends TextFileView {
     // of clobbering it — otherwise those updates stop firing after init.
     const prevChanged = this.svgEditor.svgCanvas.bind("changed", (win, elems) => {
       prevChanged?.(win, elems);
-      if (!this.isLoading) this.requestSave();
+      // Just flag the edit; the periodic timer (and the explicit flushes on
+      // toggle / close / file-switch) own the actual save+export. We deliberately
+      // don't save on every change — that would re-run the PNG export constantly.
+      if (!this.isLoading) this.dirty = true;
     });
+
+    this.startAutosaveTimer();
 
     // Deliver SVG that arrived before the editor was ready
     if (this.pendingSvg !== null) {
@@ -206,6 +216,21 @@ export class SvgView extends TextFileView {
         if (bg) this.applyCanvasBg(bg);
       } finally { this.isLoading = false; }
     }
+  }
+
+  /** Start the periodic autosave: every `autosaveMinutes` it flushes the drawing
+   *  to its note if there are unsaved edits. A safety net against losing
+   *  in-progress work to a crash — toggling view and closing/switching files
+   *  flush on their own. Disabled when the interval is set to 0. registerInterval
+   *  ties the timer to the view's lifecycle so it's cleared on unload. */
+  private startAutosaveTimer(): void {
+    const minutes = this.plugin.settings.autosaveMinutes;
+    if (!minutes || minutes <= 0) return;
+    this.registerInterval(
+      window.setInterval(() => {
+        if (this.dirty && this.svgEditor && this.file) void this.save();
+      }, minutes * 60 * 1000),
+    );
   }
 
   /** The svgedit bundle injects its stylesheet into document.head on init. That
@@ -409,6 +434,9 @@ export class SvgView extends TextFileView {
   }
 
   async save(clear?: boolean): Promise<void> {
+    // Cleared up front so edits made while the async export below is in flight
+    // re-mark the view dirty rather than being swallowed by this save.
+    this.dirty = false;
     await super.save(clear);
     if (!this.svgEditor || !this.file) return;
     try {
@@ -425,11 +453,21 @@ export class SvgView extends TextFileView {
     }
   }
 
+  /** Flush the outgoing drawing on a same-leaf file switch (this tab opening a
+   *  different file), which replaces the editor's content without unloading the
+   *  view. With per-edit saving gone, this is what persists unsaved work on
+   *  navigation — the periodic timer only covers staying on the same file. */
+  async onUnloadFile(file: TFile): Promise<void> {
+    if (this.dirty && this.svgEditor && this.file) {
+      try { await this.save(); } catch { /* best-effort */ }
+    }
+    await super.onUnloadFile(file);
+  }
+
   async onunload(): Promise<void> {
     // Snapshot the live SVG into currentData *before* nulling the editor.
     // This ensures getViewData() still returns the latest drawing if Obsidian
-    // calls save() after onunload, and also flushes any debounced requestSave()
-    // that hasn't fired yet (e.g. when the user closes the tab quickly).
+    // calls save() after onunload (e.g. when the user closes the tab quickly).
     if (this.svgEditor && this.file) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
@@ -493,6 +531,9 @@ export class SvgView extends TextFileView {
     this.isLoading = true;
     try { await this.svgEditor.loadFromString(serializer.serializeToString(root)); }
     finally { this.isLoading = false; }
-    this.requestSave();
+    // A deliberate one-off insert — flush it now rather than waiting on the
+    // periodic timer, so the embedded file can't be lost to a crash.
+    this.dirty = true;
+    await this.save();
   }
 }

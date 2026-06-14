@@ -128,6 +128,26 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName("Autosave interval (minutes)")
+      .setDesc(
+        "How often an open drawing with unsaved edits is written to its note. "
+        + "Toggling view and closing/switching files always save regardless — this "
+        + "just bounds how much in-progress work a crash could lose. Set to 0 to "
+        + "disable the timer. Takes effect on the next drawing you open.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder("10")
+          .setValue(String(this.plugin.settings.autosaveMinutes))
+          .onChange(async (v) => {
+            const n = Number(v);
+            if (!Number.isFinite(n) || n < 0) return;
+            this.plugin.settings.autosaveMinutes = Math.floor(n);
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");
 
