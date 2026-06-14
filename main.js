@@ -27847,10 +27847,16 @@ var cI = class extends HTMLElement {
     n10 + t.width > window.innerWidth - o && (n10 = Math.max(o, window.innerWidth - t.width - o));
     let s = e.bottom + r;
     if (s + t.height > window.innerHeight - o) {
-      const a = e.top - r - t.height;
-      s = a >= o ? a : Math.max(o, window.innerHeight - t.height - o);
+      const d = e.top - r - t.height;
+      s = d >= o ? d : Math.max(o, window.innerHeight - t.height - o);
     }
-    this.$popup.style.top = `${s}px`, this.$popup.style.left = `${n10}px`;
+    let a = n10, c = s;
+    for (let d = 0; d < 4; d++) {
+      this.$popup.style.left = `${a}px`, this.$popup.style.top = `${c}px`;
+      const h = this.$popup.getBoundingClientRect(), g = n10 - h.left, _ = s - h.top;
+      if (Math.abs(g) < 0.5 && Math.abs(_) < 0.5) break;
+      a += g, c += _;
+    }
   }
   apply() {
     const e = parseFloat(this.$dist.value);
@@ -31496,8 +31502,14 @@ var OR = class extends HTMLElement {
       this.isDropdownOpen = false, this.$optionsContainer.classList.add("closed");
     });
     __publicField(this, "setDropdownListPosition", () => {
-      const e = window.innerHeight, t = this.$selection.getBoundingClientRect(), r = this.$optionsContainer.getBoundingClientRect();
-      t.bottom + r.height > e ? (this.$optionsContainer.style.top = t.top - r.height + "px", this.$optionsContainer.style.left = t.left + "px") : (this.$optionsContainer.style.top = t.bottom + "px", this.$optionsContainer.style.left = t.left + "px");
+      const e = window.innerHeight, t = this.$selection.getBoundingClientRect(), r = this.$optionsContainer.getBoundingClientRect(), o = t.left, n10 = t.bottom + r.height > e ? t.top - r.height : t.bottom;
+      let s = o, a = n10;
+      for (let c = 0; c < 4; c++) {
+        this.$optionsContainer.style.left = `${s}px`, this.$optionsContainer.style.top = `${a}px`;
+        const d = this.$optionsContainer.getBoundingClientRect(), h = o - d.left, g = n10 - d.top;
+        if (Math.abs(h) < 0.5 && Math.abs(g) < 0.5) break;
+        s += h, a += g;
+      }
     });
     this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(zw.content.cloneNode(true)), this.$dropdown = this._shadowRoot.querySelector("#select-container"), this.$label = this._shadowRoot.querySelector("label"), this.$selection = this.$dropdown.querySelector("#selected-value"), this.items = this.querySelectorAll("se-list-item"), this.imgPath = svgEditor.configObj.curConfig.imgPath, this.$optionsContainer = this._shadowRoot.querySelector("#options-container"), this.$optionsContainer.classList.add("closed"), this.$selection.addEventListener("click", this.toggleList), this.staticIcon = this.hasAttribute("src"), this.staticIcon ? this.renderStaticIcon(this.getAttribute("src")) : this.updateSelectedValue(this.items[0].getAttribute("value")), this.isDropdownOpen = false;
   }
@@ -35458,7 +35470,14 @@ var OU = class extends HTMLElement {
     let o = e.left;
     o + t.width > window.innerWidth - 8 && (o = Math.max(8, window.innerWidth - t.width - 8));
     let n10 = e.bottom + r;
-    n10 + t.height > window.innerHeight - 8 && (n10 = Math.max(8, e.top - t.height - r)), this.$popover.style.top = `${n10}px`, this.$popover.style.left = `${o}px`;
+    n10 + t.height > window.innerHeight - 8 && (n10 = Math.max(8, e.top - t.height - r));
+    let s = o, a = n10;
+    for (let c = 0; c < 4; c++) {
+      this.$popover.style.left = `${s}px`, this.$popover.style.top = `${a}px`;
+      const d = this.$popover.getBoundingClientRect(), h = o - d.left, g = n10 - d.top;
+      if (Math.abs(h) < 0.5 && Math.abs(g) < 0.5) break;
+      s += h, a += g;
+    }
   }
   handleClose(e) {
     this.isOpen && e.target !== this && this.closeSave();

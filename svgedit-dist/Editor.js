@@ -26810,10 +26810,16 @@ class cI extends HTMLElement {
     n + t.width > window.innerWidth - o && (n = Math.max(o, window.innerWidth - t.width - o));
     let s = e.bottom + r;
     if (s + t.height > window.innerHeight - o) {
-      const a = e.top - r - t.height;
-      s = a >= o ? a : Math.max(o, window.innerHeight - t.height - o);
+      const d = e.top - r - t.height;
+      s = d >= o ? d : Math.max(o, window.innerHeight - t.height - o);
     }
-    this.$popup.style.top = `${s}px`, this.$popup.style.left = `${n}px`;
+    let a = n, c = s;
+    for (let d = 0; d < 4; d++) {
+      this.$popup.style.left = `${a}px`, this.$popup.style.top = `${c}px`;
+      const h = this.$popup.getBoundingClientRect(), g = n - h.left, _ = s - h.top;
+      if (Math.abs(g) < 0.5 && Math.abs(_) < 0.5) break;
+      a += g, c += _;
+    }
   }
   apply() {
     const e = parseFloat(this.$dist.value);
@@ -30530,8 +30536,14 @@ class OR extends HTMLElement {
     this.isDropdownOpen = !1, this.$optionsContainer.classList.add("closed");
   };
   setDropdownListPosition = () => {
-    const e = window.innerHeight, t = this.$selection.getBoundingClientRect(), r = this.$optionsContainer.getBoundingClientRect();
-    t.bottom + r.height > e ? (this.$optionsContainer.style.top = t.top - r.height + "px", this.$optionsContainer.style.left = t.left + "px") : (this.$optionsContainer.style.top = t.bottom + "px", this.$optionsContainer.style.left = t.left + "px");
+    const e = window.innerHeight, t = this.$selection.getBoundingClientRect(), r = this.$optionsContainer.getBoundingClientRect(), o = t.left, n = t.bottom + r.height > e ? t.top - r.height : t.bottom;
+    let s = o, a = n;
+    for (let c = 0; c < 4; c++) {
+      this.$optionsContainer.style.left = `${s}px`, this.$optionsContainer.style.top = `${a}px`;
+      const d = this.$optionsContainer.getBoundingClientRect(), h = o - d.left, g = n - d.top;
+      if (Math.abs(h) < 0.5 && Math.abs(g) < 0.5) break;
+      s += h, a += g;
+    }
   };
   /**
    * @function connectedCallback
@@ -34315,7 +34327,14 @@ class OU extends HTMLElement {
     let o = e.left;
     o + t.width > window.innerWidth - 8 && (o = Math.max(8, window.innerWidth - t.width - 8));
     let n = e.bottom + r;
-    n + t.height > window.innerHeight - 8 && (n = Math.max(8, e.top - t.height - r)), this.$popover.style.top = `${n}px`, this.$popover.style.left = `${o}px`;
+    n + t.height > window.innerHeight - 8 && (n = Math.max(8, e.top - t.height - r));
+    let s = o, a = n;
+    for (let c = 0; c < 4; c++) {
+      this.$popover.style.left = `${s}px`, this.$popover.style.top = `${a}px`;
+      const d = this.$popover.getBoundingClientRect(), h = o - d.left, g = n - d.top;
+      if (Math.abs(h) < 0.5 && Math.abs(g) < 0.5) break;
+      s += h, a += g;
+    }
   }
   handleClose(e) {
     this.isOpen && e.target !== this && this.closeSave();
