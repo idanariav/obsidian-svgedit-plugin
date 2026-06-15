@@ -30,7 +30,7 @@ export const LEGACY_FRONTMATTER_KEY_EXPORT_FRAME = "svg-export-frame";
 // drawings migrate to the new heading on their next save.
 export const SVGEDIT_SECTION_HEADING = "# Sketch Editor Data";
 // Opening `%%` comment fence plus the section heading, written as one unit and
-// also used as the anchor that the Linked Files section is inserted above.
+// also used as the anchor that the Linked Files section is inserted under.
 export const SVGEDIT_SECTION_OPEN = "%%\n# Sketch Editor Data";
 export const DRAWING_SECTION_HEADING = "## Drawing";
 export const DRAWING_FENCE_OPEN = "```svg";
@@ -41,9 +41,10 @@ export const DRAWING_FENCE_CLOSE = "```";
 export const DRAWING_SECTION_END = "%%";
 
 // Auto-managed section of wikilinks to vault files referenced by the drawing
-// (imported images / linked shapes). Kept visible above the %%-hidden Sketch
-// Editor Data section so Obsidian still generates real backlinks. Reconciled from the
-// SVG on every save.
+// (imported images / linked shapes). Lives under the "# Sketch Editor Data"
+// heading inside the %% comment; Obsidian still generates real backlinks for
+// wikilinks inside a %% comment, so this stays hidden from rendered output
+// without losing the backlinks. Reconciled from the SVG on every save.
 export const LINKED_FILES_HEADING = "## Linked Files";
 // SVG attribute that svgedit stamps onto every element originating from a vault
 // import. Its value is the wikilink text to record. This is the cross-repo

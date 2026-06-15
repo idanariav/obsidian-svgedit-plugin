@@ -190,10 +190,15 @@ export function bakeGradientIntoSvg(svg: string, gradientXml: string): string {
 }
 
 // Matches the auto-managed "## Linked Files" section: the heading through every
-// following line up to (but not including) the "%%\n# Sketch Editor Data"
-// opening that always follows it. Multiline so ^ anchors each line.
+// following line up to (but not including) the next structural anchor. The
+// section now lives under the "# Sketch Editor Data" heading and directly above
+// "## Drawing", so the new layout terminates on "## Drawing". The alternation
+// also accepts the legacy layout, where the section sat above the
+// "%%\n# Sketch Editor Data" opening; the lazy quantifier stops at whichever
+// anchor comes first, so old files migrate cleanly on their next save.
+// Multiline so ^ anchors each line.
 const LINKED_FILES_BLOCK_REGEX = new RegExp(
-  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
+  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^(?:${escapeRegExp(SVGEDIT_SECTION_OPEN)}|${escapeRegExp(DRAWING_SECTION_HEADING)}))`,
   "m",
 );
 
@@ -219,9 +224,11 @@ function collectVaultLinks(svg: string): string[] {
 /**
  * Rebuild the auto-managed "## Linked Files" section to match the vault links
  * still present in the SVG. Links survive as long as ≥1 stamped element remains;
- * the section is removed entirely when none do. The section sits above the
- * %%-hidden "# Sketch Editor Data" section so its wikilinks stay outside the comment
- * and produce real Obsidian backlinks.
+ * the section is removed entirely when none do. The section sits under the
+ * "# Sketch Editor Data" heading and just above "## Drawing", inside the `%%`
+ * comment. Obsidian still generates real backlinks for wikilinks inside a `%%`
+ * comment, so keeping it there hides it from rendered output without losing the
+ * backlinks.
  */
 export function reconcileLinkedFiles(content: string, svg: string): string {
   // Strip any existing section first so we always rebuild from scratch.
@@ -231,15 +238,18 @@ export function reconcileLinkedFiles(content: string, svg: string): string {
   if (links.length === 0) return stripped;
 
   const section =
-    `${LINKED_FILES_HEADING}\n` +
-    links.map((l) => `- [[${l}]]`).join("\n") +
-    "\n\n";
+    `${LINKED_FILES_HEADING}\n` + links.map((l) => `- [[${l}]]`).join("\n");
 
   if (stripped.includes(SVGEDIT_SECTION_OPEN)) {
+    // Insert under the section heading; buildBlock writes "\n\n## Drawing" after
+    // SVGEDIT_SECTION_OPEN, so the existing blank line separates us from it.
     // Function replacer so "$" sequences in link text aren't treated as patterns.
-    return stripped.replace(SVGEDIT_SECTION_OPEN, () => section + SVGEDIT_SECTION_OPEN);
+    return stripped.replace(
+      SVGEDIT_SECTION_OPEN,
+      () => `${SVGEDIT_SECTION_OPEN}\n\n${section}`,
+    );
   }
-  return stripped + "\n\n" + section.trimEnd() + "\n";
+  return stripped + "\n\n" + section + "\n";
 }
 
 /** Generate the initial markdown content for a brand-new drawing file. */

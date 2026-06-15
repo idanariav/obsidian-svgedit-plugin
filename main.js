@@ -94043,7 +94043,7 @@ function bakeGradientIntoSvg(svg, gradientXml) {
   return new XMLSerializer().serializeToString(doc);
 }
 var LINKED_FILES_BLOCK_REGEX = new RegExp(
-  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(SVGEDIT_SECTION_OPEN)})`,
+  `^${escapeRegExp(LINKED_FILES_HEADING)}\\n(?:.*\\n)*?(?=^(?:${escapeRegExp(SVGEDIT_SECTION_OPEN)}|${escapeRegExp(DRAWING_SECTION_HEADING)}))`,
   "m"
 );
 function escapeRegExp(s) {
@@ -94068,11 +94068,16 @@ function reconcileLinkedFiles(content, svg) {
   const links = collectVaultLinks(svg);
   if (links.length === 0) return stripped;
   const section = `${LINKED_FILES_HEADING}
-` + links.map((l) => `- [[${l}]]`).join("\n") + "\n\n";
+` + links.map((l) => `- [[${l}]]`).join("\n");
   if (stripped.includes(SVGEDIT_SECTION_OPEN)) {
-    return stripped.replace(SVGEDIT_SECTION_OPEN, () => section + SVGEDIT_SECTION_OPEN);
+    return stripped.replace(
+      SVGEDIT_SECTION_OPEN,
+      () => `${SVGEDIT_SECTION_OPEN}
+
+${section}`
+    );
   }
-  return stripped + "\n\n" + section.trimEnd() + "\n";
+  return stripped + "\n\n" + section + "\n";
 }
 function createDrawingTemplate(compress, svg) {
   const content = svg != null ? svg : EMPTY_SVG;
