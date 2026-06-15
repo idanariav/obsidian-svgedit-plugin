@@ -7,8 +7,10 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing } from "../data/SvgData";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
+import { putBackup, getBackup, deleteBackup } from "../data/drawingBackup";
+import { RestoreBackupModal } from "../modals/RestoreBackupModal";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
@@ -55,12 +57,17 @@ export class SvgView extends TextFileView {
   readonly plugin: SvgPlugin;
 
   private editorContainer!: HTMLElement;
+  /** Topbar save button; its red `.svg-plugin-dirty` state mirrors `dirty`. */
+  private saveBtn: HTMLButtonElement | null = null;
   private svgEditor: SvgEditorInstance | null = null;
   private currentData = "";
   private pendingSvg: string | null = null;
   /** Canvas background color awaiting an editor that isn't initialized yet;
    *  paired with pendingSvg and applied once init delivers the drawing. */
   private pendingBg: string | null = null;
+  /** Whether the pending content (delivered once the editor inits) must be
+   *  persisted — set when a backup was restored before the editor was ready. */
+  private pendingDirty = false;
   private isLoading = false;
   /** Set when the canvas has unsaved edits since the last save; cleared by save().
    *  Lets the periodic autosave skip work (no file re-write / PNG re-export) when
@@ -68,6 +75,10 @@ export class SvgView extends TextFileView {
   private dirty = false;
   /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
   private loadGen = 0;
+  /** True once the real drawing for the current file has actually been loaded
+   *  into the canvas. Until then the canvas holds clear()'s EMPTY_SVG, so it must
+   *  never be serialized back to the file (that's the empty-revert data loss). */
+  private hasLoadedContent = false;
   /** Last theme applied to svgedit's root. Lets the theme-class MutationObserver
    *  distinguish real theme changes from other class changes (e.g. `.open`) and
    *  ignore our own programmatic "auto"-follow updates. */
@@ -94,6 +105,15 @@ export class SvgView extends TextFileView {
     });
     setIcon(mdBtn, "code");
     mdBtn.addEventListener("click", () => this.switchToMarkdown());
+
+    // Save button — its icon goes red (`.svg-plugin-dirty`) while there are
+    // unsaved edits, mirroring the periodic-autosave/dirty state.
+    this.saveBtn = toolbar.createEl("button", {
+      cls: "svg-plugin-topbar-btn",
+      attr: { "aria-label": "Save drawing" },
+    });
+    setIcon(this.saveBtn, "save");
+    this.saveBtn.addEventListener("click", () => void this.save());
 
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
 
@@ -199,7 +219,7 @@ export class SvgView extends TextFileView {
       // Just flag the edit; the periodic timer (and the explicit flushes on
       // toggle / close / file-switch) own the actual save+export. We deliberately
       // don't save on every change — that would re-run the PNG export constantly.
-      if (!this.isLoading) this.dirty = true;
+      if (!this.isLoading) this.setDirty(true);
     });
 
     this.startAutosaveTimer();
@@ -214,8 +234,21 @@ export class SvgView extends TextFileView {
       try {
         await this.svgEditor.loadFromString(svg);
         if (bg) this.applyCanvasBg(bg);
+        this.hasLoadedContent = true;
       } finally { this.isLoading = false; }
+      // A backup restored before init must be written back to the empty file.
+      if (this.pendingDirty) {
+        this.pendingDirty = false;
+        this.setDirty(true);
+      }
     }
+  }
+
+  /** Single place that mutates `dirty`, so the topbar save button's red state
+   *  always tracks it. */
+  private setDirty(value: boolean): void {
+    this.dirty = value;
+    this.saveBtn?.toggleClass("svg-plugin-dirty", value);
   }
 
   /** Start the periodic autosave: every `autosaveMinutes` it flushes the drawing
@@ -228,7 +261,7 @@ export class SvgView extends TextFileView {
     if (!minutes || minutes <= 0) return;
     this.registerInterval(
       window.setInterval(() => {
-        if (this.dirty && this.svgEditor && this.file) void this.save();
+        if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) void this.save();
       }, minutes * 60 * 1000),
     );
   }
@@ -344,7 +377,29 @@ export class SvgView extends TextFileView {
   async setViewData(data: string, _clear: boolean): Promise<void> {
     this.currentData = data;
     const gen = ++this.loadGen; // uniquely identifies this load
-    const stored = extractSvg(data) ?? EMPTY_SVG;
+    let stored = extractSvg(data) ?? EMPTY_SVG;
+
+    // Recovery net: the saved drawing is empty but a non-empty backup from a
+    // previous session exists — the empty-revert bug (or a sync conflict/crash)
+    // likely struck. Offer to restore rather than silently loading blank.
+    let restored = false;
+    if (this.file && isEmptyDrawing(stored)) {
+      const backup = await getBackup(this.file.path);
+      if (this.loadGen !== gen) return;
+      if (backup && !isEmptyDrawing(backup)) {
+        const choice = await new Promise<"restore" | "discard" | "cancel">((resolve) =>
+          new RestoreBackupModal(this.app, this.file!.basename, resolve).open(),
+        );
+        if (this.loadGen !== gen) return;
+        if (choice === "restore") {
+          stored = backup;
+          restored = true;
+        } else if (choice === "discard") {
+          void deleteBackup(this.file.path);
+        }
+      }
+    }
+
     // The per-drawing canvas background is stashed on the saved root <svg>.
     // Pull it out and strip it before handing the SVG to the editor, so the
     // live canvas (and its exports) never carry our bookkeeping attribute.
@@ -362,18 +417,25 @@ export class SvgView extends TextFileView {
         // Restore after load; svgedit's loadFromString doesn't touch the
         // background, but a fresh editor instance starts from the white default.
         if (bg) this.applyCanvasBg(bg);
+        this.hasLoadedContent = true;
       } finally {
         // Only release the loading guard if a newer call hasn't already taken over.
         if (this.loadGen === gen) this.isLoading = false;
       }
+      // A restored backup must be written back to the (empty) file.
+      if (restored) this.setDirty(true);
     } else {
       this.pendingSvg = svg;
       this.pendingBg = bg;
+      this.pendingDirty = restored;
     }
   }
 
   getViewData(): string {
-    if (!this.svgEditor) return this.currentData;
+    // Until the real drawing has loaded, the canvas holds clear()'s EMPTY_SVG.
+    // Return the last-known file content instead, so any save during the load
+    // window is a no-op rather than overwriting the file with blank.
+    if (!this.svgEditor || !this.hasLoadedContent) return this.currentData;
     const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
     const compress = this.plugin.settings.compressDrawingData;
     return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
@@ -424,6 +486,11 @@ export class SvgView extends TextFileView {
 
   clear(): void {
     this.currentData = "";
+    // A new load lifecycle is starting; the canvas is about to become the empty
+    // seed, so nothing must be persisted until setViewData/init delivers content.
+    this.hasLoadedContent = false;
+    this.pendingDirty = false;
+    this.setDirty(false);
     // Do NOT call loadFromString here.  Obsidian guarantees that setViewData()
     // is always called immediately after clear(), so we let setViewData own all
     // canvas updates.  Calling loadFromString(EMPTY_SVG) here and letting it
@@ -434,11 +501,17 @@ export class SvgView extends TextFileView {
   }
 
   async save(clear?: boolean): Promise<void> {
+    // Never persist an un-loaded canvas: until the real drawing has loaded it
+    // still holds clear()'s EMPTY_SVG, and writing it would blank the file.
+    if (!this.hasLoadedContent) return;
     // Cleared up front so edits made while the async export below is in flight
     // re-mark the view dirty rather than being swallowed by this save.
-    this.dirty = false;
+    this.setDirty(false);
     await super.save(clear);
     if (!this.svgEditor || !this.file) return;
+    // Keep a non-empty backup so a future empty open can be recovered.
+    const backupSvg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+    if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
     try {
       const effective = resolveEffectiveSettings(this.app, this.file, this.plugin.settings);
       await autoExport(
@@ -458,7 +531,7 @@ export class SvgView extends TextFileView {
    *  view. With per-edit saving gone, this is what persists unsaved work on
    *  navigation — the periodic timer only covers staying on the same file. */
   async onUnloadFile(file: TFile): Promise<void> {
-    if (this.dirty && this.svgEditor && this.file) {
+    if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) {
       try { await this.save(); } catch { /* best-effort */ }
     }
     await super.onUnloadFile(file);
@@ -468,7 +541,8 @@ export class SvgView extends TextFileView {
     // Snapshot the live SVG into currentData *before* nulling the editor.
     // This ensures getViewData() still returns the latest drawing if Obsidian
     // calls save() after onunload (e.g. when the user closes the tab quickly).
-    if (this.svgEditor && this.file) {
+    // Skip when the real drawing never loaded — the canvas is the empty seed.
+    if (this.svgEditor && this.file && this.hasLoadedContent) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
@@ -533,7 +607,7 @@ export class SvgView extends TextFileView {
     finally { this.isLoading = false; }
     // A deliberate one-off insert — flush it now rather than waiting on the
     // periodic timer, so the embedded file can't be lost to a crash.
-    this.dirty = true;
+    this.setDirty(true);
     await this.save();
   }
 }

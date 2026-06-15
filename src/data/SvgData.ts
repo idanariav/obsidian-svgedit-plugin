@@ -53,6 +53,24 @@ export function extractSvg(content: string): string | null {
   return m ? m[1] : null;
 }
 
+// Graphics elements that count as actual drawn content. Structural nodes
+// (<g> layers, <title>, <defs>, <metadata>) are ignored so both the saved
+// EMPTY_SVG and svgedit's empty-layer serialization read as "empty".
+const DRAWABLE_SELECTOR =
+  "path,rect,circle,ellipse,line,polyline,polygon,text,image,use,foreignObject";
+
+/** True when an SVG drawing has no drawable content. Used to detect the
+ *  empty-canvas state for the backup-recovery net (offer restore on an empty
+ *  open) and to skip backing up empty canvases. */
+export function isEmptyDrawing(svg: string): boolean {
+  if (!svg || !svg.trim()) return true;
+  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  // A parse error means we can't tell — treat as non-empty so we neither nag
+  // with a restore prompt nor skip a backup on questionable input.
+  if (doc.querySelector("parsererror")) return false;
+  return doc.querySelector(DRAWABLE_SELECTOR) === null;
+}
+
 /** Replace the SVG block in an existing markdown drawing file with new SVG content. */
 export function replaceSvg(content: string, newSvg: string, compress: boolean): string {
   const block = buildBlock(newSvg, compress);

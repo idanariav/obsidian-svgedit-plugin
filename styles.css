@@ -43,6 +43,15 @@
   height: 15px;
 }
 
+/* Save button turns red while there are unsaved edits. */
+.svg-plugin-topbar-btn.svg-plugin-dirty {
+  color: var(--text-error);
+}
+
+.svg-plugin-topbar-btn.svg-plugin-dirty:hover {
+  color: var(--text-error);
+}
+
 /* ── svgedit editor container ───────────────────────────────────────────── */
 
 .svg-plugin-editor-container {
