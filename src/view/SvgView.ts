@@ -14,7 +14,8 @@ import { RestoreBackupModal } from "../modals/RestoreBackupModal";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
-import type { UserShapeStore } from "../settings/defaults";
+import type { UserShapeStore, ClassLibraryEntry } from "../settings/defaults";
+import { listFonts, saveFont } from "../data/fontVault";
 
 interface SvgEditorInstance {
   setConfig(cfg: Record<string, unknown>): void;
@@ -176,6 +177,24 @@ export class SvgView extends TextFileView {
           this.plugin.settings.favorites = ids;
           void this.plugin.saveSettings();
         },
+        getClasses: () => this.plugin.settings.classLibrary,
+        setClasses: (classes: ClassLibraryEntry[]) => {
+          this.plugin.settings.classLibrary = classes;
+          void this.plugin.saveSettings();
+          this.plugin.reloadUserDataInAllViews();
+        },
+        // Fonts live as .woff2 files in a synced vault folder (not data.json),
+        // so they sync like any vault content. Async because vault I/O is async;
+        // svgedit's fontStore already awaits these.
+        getFonts: () =>
+          listFonts(this.app.vault, this.plugin.settings.fontsFolder),
+        saveFont: (family: string, woff2Base64: string) =>
+          saveFont(
+            this.app.vault,
+            this.plugin.settings.fontsFolder,
+            family,
+            woff2Base64,
+          ),
       },
       // Leave the side panel closed by default (a "PANEL" handle on the right
       // edge), matching the native svgedit UI; the handle toggles it open.

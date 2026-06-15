@@ -148,6 +148,23 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName("Fonts folder")
+      .setDesc(
+        "Vault folder where custom fonts you add in the editor are stored as "
+        + ".woff2 files. As normal vault files they sync across devices. Created "
+        + "automatically when you first add a font.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder("svgedit-fonts")
+          .setValue(this.plugin.settings.fontsFolder)
+          .onChange(async (v) => {
+            this.plugin.settings.fontsFolder = v.trim() || "svgedit-fonts";
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");
 

@@ -31,6 +31,15 @@ export interface UserShapeStore {
   shapes: Record<string, Record<string, UserShapeEntry>>;
 }
 
+/** One saved style preset ("class"). Mirrors the svgedit fork's classLibrary
+ *  schema; persisted here so presets sync via data.json instead of the editor's
+ *  per-device localStorage. */
+export interface ClassLibraryEntry {
+  name: string;
+  scope: "text" | "shape" | "any";
+  attrs: Record<string, string>;
+}
+
 /** Resolved, concrete settings for a specific file (no undefined values). */
 export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
@@ -106,6 +115,14 @@ export interface SvgPluginSettings {
    *  survive plugin updates instead of in the editor's localStorage. Empty =
    *  the editor's built-in default seed (cut/copy/paste/delete). */
   favorites: string[];
+  /** Saved style-preset "class" library. Backs the svgedit userDataAdapter so
+   *  presets live in data.json and sync across vaults instead of the editor's
+   *  per-device localStorage. */
+  classLibrary: ClassLibraryEntry[];
+  /** Vault folder where downloaded custom fonts are stored as .woff2 files.
+   *  Backs the svgedit userDataAdapter's font methods; as normal vault files
+   *  they sync across devices independently of plugin-settings sync. */
+  fontsFolder: string;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -134,4 +151,6 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   userShapes: { categories: [], shapes: {} },
   hotkeyOverrides: {},
   favorites: [],
+  classLibrary: [],
+  fontsFolder: "svgedit-fonts",
 };
