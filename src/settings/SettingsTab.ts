@@ -155,15 +155,19 @@ export class SvgSettingsTab extends PluginSettingTab {
         + ".woff2 files. As normal vault files they sync across devices. Created "
         + "automatically when you first add a font.",
       )
-      .addText((t) =>
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.fontsFolder = v.trim() || "svgedit-fonts";
+          await this.plugin.saveSettings();
+        });
         t
           .setPlaceholder("svgedit-fonts")
           .setValue(this.plugin.settings.fontsFolder)
           .onChange(async (v) => {
             this.plugin.settings.fontsFolder = v.trim() || "svgedit-fonts";
             await this.plugin.saveSettings();
-          }),
-      );
+          });
+      });
 
     // ── Auto-export ──────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Auto-export");

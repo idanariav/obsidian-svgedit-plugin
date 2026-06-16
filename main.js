@@ -95246,12 +95246,16 @@ var SvgSettingsTab = class extends import_obsidian9.PluginSettingTab {
     );
     new import_obsidian9.Setting(containerEl).setName("Fonts folder").setDesc(
       "Vault folder where custom fonts you add in the editor are stored as .woff2 files. As normal vault files they sync across devices. Created automatically when you first add a font."
-    ).addText(
-      (t) => t.setPlaceholder("svgedit-fonts").setValue(this.plugin.settings.fontsFolder).onChange(async (v) => {
+    ).addText((t) => {
+      new FolderSuggest(this.app, t.inputEl, async (v) => {
         this.plugin.settings.fontsFolder = v.trim() || "svgedit-fonts";
         await this.plugin.saveSettings();
-      })
-    );
+      });
+      t.setPlaceholder("svgedit-fonts").setValue(this.plugin.settings.fontsFolder).onChange(async (v) => {
+        this.plugin.settings.fontsFolder = v.trim() || "svgedit-fonts";
+        await this.plugin.saveSettings();
+      });
+    });
     new import_obsidian9.Setting(containerEl).setHeading().setName("Auto-export");
     new import_obsidian9.Setting(containerEl).setName("Export SVG on save").setDesc("Write a companion .svg file next to the drawing on every save.").addToggle(
       (t) => t.setValue(this.plugin.settings.autoExportSvg).onChange(async (v) => {
