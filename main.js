@@ -94710,6 +94710,11 @@ var SvgView = class extends import_obsidian6.TextFileView {
     (0, import_obsidian6.setIcon)(this.saveBtn, "save");
     this.saveBtn.addEventListener("click", () => void this.save());
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
+    this.scope = new import_obsidian6.Scope(this.app.scope);
+    this.scope.register(["Mod"], "s", () => {
+      void this.save();
+      return false;
+    });
     try {
       await this.initEditor();
     } catch (e) {

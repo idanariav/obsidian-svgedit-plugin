@@ -3,6 +3,7 @@ import {
   WorkspaceLeaf,
   Platform,
   TFile,
+  Scope,
   setIcon,
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
@@ -117,6 +118,19 @@ export class SvgView extends TextFileView {
     this.saveBtn.addEventListener("click", () => void this.save());
 
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
+
+    // Obsidian's built-in "Save current file" (Mod+S) command does not route
+    // through a custom TextFileView's save() override, so the keyboard shortcut
+    // would persist the drawing without ever clearing the dirty indicator. A
+    // view-scoped handler (active while this view is focused) runs our own
+    // save() instead; returning false suppresses the default save command so it
+    // doesn't double-fire. (Same Obsidian limitation the Excalidraw plugin works
+    // around with its own scoped Ctrl+S handler.)
+    this.scope = new Scope(this.app.scope);
+    this.scope.register(["Mod"], "s", () => {
+      void this.save();
+      return false;
+    });
 
     try {
       await this.initEditor();
