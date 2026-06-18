@@ -71,10 +71,22 @@ export class SvgView extends TextFileView {
    *  persisted — set when a backup was restored before the editor was ready. */
   private pendingDirty = false;
   private isLoading = false;
-  /** Set when the canvas has unsaved edits since the last save; cleared by save().
-   *  Lets the periodic autosave skip work (no file re-write / PNG re-export) when
-   *  nothing changed since the last flush. */
+  /** Set when the canvas has unsaved edits since the last save; cleared by a
+   *  successful save. Drives the topbar dirty indicator and the autosave timer. */
   private dirty = false;
+  /** Pending edit-triggered autosave timeout, or null when none is armed.
+   *  Demand-armed from setDirty(true); cleared on the view lifecycle. */
+  private autosaveTimer: number | null = null;
+  /** Concurrency lock: true while a save is writing. Only runSave() mutates it.
+   *  Every other save path checks it so saves never overlap. */
+  private saving = false;
+  /** Set when an edit lands while a save is in flight, so the save knows not to
+   *  clear the dirty flag (the new edit still needs flushing). */
+  private dirtyDuringSave = false;
+  /** True when the companion PNG/SVG export is behind the live canvas. Lets a
+   *  settle event (switch-away / close) re-export even if a cheap markdown-only
+   *  autosave already cleared `dirty`. */
+  private companionStale = true;
   /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
   private loadGen = 0;
   /** True once the real drawing for the current file has actually been loaded
@@ -131,6 +143,23 @@ export class SvgView extends TextFileView {
       void this.save();
       return false;
     });
+
+    // Tie the edit-triggered autosave timer to the view lifecycle so a pending
+    // flush can't fire after the view is gone.
+    this.register(() => this.clearAutosaveTimer());
+
+    // Flush when the user switches away to another leaf/pane while this drawing
+    // has unsaved edits (the same-tab file switch and teardown paths cover the
+    // other transitions). Per-view registration auto-unregisters on unload.
+    this.registerEvent(
+      this.app.workspace.on("active-leaf-change", (leaf) => {
+        if (leaf === this.leaf) return;          // we are now the active leaf
+        if (!this.dirty) return;                  // nothing to flush (spurious fire)
+        if (!this.hasLoadedContent || this.isLoading) return; // still loading
+        if (!this.svgEditor || !this.file) return;
+        void this.settleFlush();
+      }),
+    );
 
     try {
       await this.initEditor();
@@ -249,13 +278,12 @@ export class SvgView extends TextFileView {
     // of clobbering it — otherwise those updates stop firing after init.
     const prevChanged = this.svgEditor.svgCanvas.bind("changed", (win, elems) => {
       prevChanged?.(win, elems);
-      // Just flag the edit; the periodic timer (and the explicit flushes on
-      // toggle / close / file-switch) own the actual save+export. We deliberately
-      // don't save on every change — that would re-run the PNG export constantly.
+      // Just flag the edit; the edit-triggered autosave timer (and the explicit
+      // flushes on switch-away / toggle / close / file-switch) own the actual
+      // save+export. We deliberately don't save on every change — that would
+      // re-run the PNG export constantly. setDirty arms the autosave timer.
       if (!this.isLoading) this.setDirty(true);
     });
-
-    this.startAutosaveTimer();
 
     // Deliver SVG that arrived before the editor was ready
     if (this.pendingSvg !== null) {
@@ -278,25 +306,54 @@ export class SvgView extends TextFileView {
   }
 
   /** Single place that mutates `dirty`, so the topbar save button's red state
-   *  always tracks it. */
+   *  always tracks it. An edit (`value === true`) arriving while a save is in
+   *  flight is recorded in `dirtyDuringSave` instead of mutating `dirty`, so the
+   *  running save won't clear it away — runSave's `finally` re-arms the timer. */
   private setDirty(value: boolean): void {
+    if (value && this.saving) { this.dirtyDuringSave = true; return; }
     this.dirty = value;
+    if (value) this.companionStale = true;
     this.saveBtn?.toggleClass("svg-plugin-dirty", value);
+    if (value) this.scheduleAutosave();
   }
 
-  /** Start the periodic autosave: every `autosaveMinutes` it flushes the drawing
-   *  to its note if there are unsaved edits. A safety net against losing
-   *  in-progress work to a crash — toggling view and closing/switching files
-   *  flush on their own. Disabled when the interval is set to 0. registerInterval
-   *  ties the timer to the view's lifecycle so it's cleared on unload. */
-  private startAutosaveTimer(): void {
-    const minutes = this.plugin.settings.autosaveMinutes;
-    if (!minutes || minutes <= 0) return;
-    this.registerInterval(
-      window.setInterval(() => {
-        if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) void this.save();
-      }, minutes * 60 * 1000),
-    );
+  /** Edit-triggered autosave. Armed from setDirty(true) and counted from the
+   *  user's last edit (not a fixed wall clock), so a drawing flushes ~N seconds
+   *  after they stop drawing. A safety net against losing in-progress work to a
+   *  crash — switching away, toggling view and closing/switching files flush on
+   *  their own. Disabled when the interval is 0. */
+  private scheduleAutosave(): void {
+    const seconds = this.plugin.settings.autosaveSeconds;
+    if (!seconds || seconds <= 0) return;
+    // Already armed: don't reset on every edit, or continuous drawing would
+    // starve the save indefinitely. The first edit since the last flush wins.
+    if (this.autosaveTimer !== null) return;
+    this.autosaveTimer = window.setTimeout(() => {
+      this.autosaveTimer = null;
+      if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file && !this.saving) {
+        void this.autosaveFlush();
+      } else if (this.dirty) {
+        // Blocked (a save is in flight) but still dirty — retry shortly.
+        this.autosaveTimer = window.setTimeout(() => {
+          this.autosaveTimer = null;
+          this.scheduleAutosave();
+        }, 1000);
+      }
+    }, seconds * 1000);
+  }
+
+  private clearAutosaveTimer(): void {
+    if (this.autosaveTimer !== null) {
+      window.clearTimeout(this.autosaveTimer);
+      this.autosaveTimer = null;
+    }
+  }
+
+  /** The autosave path: a cheap markdown + backup write, no companion export
+   *  (PNG/SVG re-rasterization is deferred to settle events). */
+  private async autosaveFlush(): Promise<void> {
+    if (this.saving || !this.hasLoadedContent) return;
+    await this.runSave({ export: false });
   }
 
   /** The svgedit bundle injects its stylesheet into document.head on init. That
@@ -524,6 +581,9 @@ export class SvgView extends TextFileView {
     this.hasLoadedContent = false;
     this.pendingDirty = false;
     this.setDirty(false);
+    // The drawing about to load matches its on-disk companion image (it was
+    // exported on the last save), so nothing is stale until an edit lands.
+    this.companionStale = false;
     // Do NOT call loadFromString here.  Obsidian guarantees that setViewData()
     // is always called immediately after clear(), so we let setViewData own all
     // canvas updates.  Calling loadFromString(EMPTY_SVG) here and letting it
@@ -533,18 +593,63 @@ export class SvgView extends TextFileView {
     this.pendingBg = null;
   }
 
+  /** Explicit/settle save: writes the markdown and refreshes the companion
+   *  export. The public entry point for the save button, Mod+S, switchToMarkdown
+   *  and insertSvgFragment; funnels through runSave so it can't overlap another
+   *  save in flight. */
   async save(clear?: boolean): Promise<void> {
     // Never persist an un-loaded canvas: until the real drawing has loaded it
     // still holds clear()'s EMPTY_SVG, and writing it would blank the file.
     if (!this.hasLoadedContent) return;
-    // Cleared up front so edits made while the async export below is in flight
-    // re-mark the view dirty rather than being swallowed by this save.
-    this.setDirty(false);
-    await super.save(clear);
+    if (this.saving) { this.dirtyDuringSave ||= this.dirty; return; }
+    await this.runSave({ export: true, clear });
+  }
+
+  /** The single owner of the `saving` lock. Writes the markdown, refreshes the
+   *  IndexedDB backup, and (when `export`) regenerates the companion PNG/SVG.
+   *  Dirty is cleared only on a successful write AND only if no edit arrived
+   *  while the write was in flight; a failure leaves the drawing dirty so the
+   *  edit isn't lost. */
+  private async runSave(opts: { export: boolean; clear?: boolean }): Promise<void> {
+    this.saving = true;
+    this.dirtyDuringSave = false;
+    const hadDirty = this.dirty;
+    try {
+      await super.save(opts.clear);
+      // Only clear dirty if no edit landed during the write (setDirty routed it
+      // into dirtyDuringSave). Otherwise keep it dirty for the next flush.
+      if (!this.dirtyDuringSave) {
+        this.dirty = false;
+        this.saveBtn?.toggleClass("svg-plugin-dirty", false);
+      }
+      if (this.svgEditor && this.file) {
+        // Keep a non-empty backup so a future empty open can be recovered.
+        const backupSvg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+        if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
+      }
+      if (opts.export) await this.exportCompanions();
+    } catch (e) {
+      // Don't swallow the edit: restore dirty so the next autosave retries.
+      if (hadDirty) {
+        this.dirty = true;
+        this.saveBtn?.toggleClass("svg-plugin-dirty", true);
+      }
+      console.error("[Sketch Editor] save failed:", e);
+    } finally {
+      this.saving = false;
+      // An edit arrived during the save — re-arm the autosave to flush it.
+      if (this.dirty || this.dirtyDuringSave) {
+        this.dirtyDuringSave = false;
+        this.scheduleAutosave();
+      }
+    }
+  }
+
+  /** Regenerate the companion PNG/SVG. Deferred off the frequent autosave path
+   *  to settle events (manual save / switch-away / close) so continuous drawing
+   *  doesn't thrash the rasterizer. No-ops when companion export is disabled. */
+  private async exportCompanions(): Promise<void> {
     if (!this.svgEditor || !this.file) return;
-    // Keep a non-empty backup so a future empty open can be recovered.
-    const backupSvg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
-    if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
     try {
       const effective = resolveEffectiveSettings(this.app, this.file, this.plugin.settings);
       await autoExport(
@@ -554,8 +659,27 @@ export class SvgView extends TextFileView {
         effective,
         this.getCanvasBgColor(),
       );
+      this.companionStale = false;
     } catch (e) {
       console.error("[Sketch Editor] auto-export failed:", e);
+    }
+  }
+
+  /** A settle-event flush (switch-away): writes the markdown and refreshes the
+   *  companion export. Runs even when a cheap autosave already cleared `dirty`,
+   *  as long as the companion image is stale, so the PNG catches up on leave. */
+  private async settleFlush(): Promise<void> {
+    if (this.saving || !this.hasLoadedContent) return;
+    if (!this.dirty && !this.companionStale) return;
+    await this.runSave({ export: true });
+  }
+
+  /** Wait (bounded) for an in-flight save to finish, so lifecycle teardown can
+   *  flush and destroy the editor without racing a running save. */
+  private async waitForSave(maxMs = 4000): Promise<void> {
+    const start = Date.now();
+    while (this.saving && Date.now() - start < maxMs) {
+      await new Promise((r) => window.setTimeout(r, 50));
     }
   }
 
@@ -564,13 +688,20 @@ export class SvgView extends TextFileView {
    *  view. With per-edit saving gone, this is what persists unsaved work on
    *  navigation — the periodic timer only covers staying on the same file. */
   async onUnloadFile(file: TFile): Promise<void> {
-    if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) {
-      try { await this.save(); } catch { /* best-effort */ }
+    this.clearAutosaveTimer();
+    // Let any in-flight autosave finish before we flush, so we don't race it.
+    await this.waitForSave();
+    if ((this.dirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
+      try { await this.runSave({ export: true }); } catch { /* best-effort */ }
     }
     await super.onUnloadFile(file);
   }
 
   async onunload(): Promise<void> {
+    this.clearAutosaveTimer();
+    // Wait for any in-flight save before snapshotting/destroying the canvas, so
+    // a running export can't read a torn-down editor.
+    await this.waitForSave();
     // Snapshot the live SVG into currentData *before* nulling the editor.
     // This ensures getViewData() still returns the latest drawing if Obsidian
     // calls save() after onunload (e.g. when the user closes the tab quickly).
@@ -579,7 +710,7 @@ export class SvgView extends TextFileView {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
-      try { await this.save(); } catch { /* best-effort */ }
+      try { await this.runSave({ export: true }); } catch { /* best-effort */ }
     }
     // Remove the editor's document-level listeners so a closed drawing can't
     // react to shortcuts/paste on a torn-down canvas or stay the "active" editor.

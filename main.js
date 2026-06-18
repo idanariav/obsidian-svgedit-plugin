@@ -94743,10 +94743,22 @@ var SvgView = class extends import_obsidian6.TextFileView {
      *  persisted — set when a backup was restored before the editor was ready. */
     this.pendingDirty = false;
     this.isLoading = false;
-    /** Set when the canvas has unsaved edits since the last save; cleared by save().
-     *  Lets the periodic autosave skip work (no file re-write / PNG re-export) when
-     *  nothing changed since the last flush. */
+    /** Set when the canvas has unsaved edits since the last save; cleared by a
+     *  successful save. Drives the topbar dirty indicator and the autosave timer. */
     this.dirty = false;
+    /** Pending edit-triggered autosave timeout, or null when none is armed.
+     *  Demand-armed from setDirty(true); cleared on the view lifecycle. */
+    this.autosaveTimer = null;
+    /** Concurrency lock: true while a save is writing. Only runSave() mutates it.
+     *  Every other save path checks it so saves never overlap. */
+    this.saving = false;
+    /** Set when an edit lands while a save is in flight, so the save knows not to
+     *  clear the dirty flag (the new edit still needs flushing). */
+    this.dirtyDuringSave = false;
+    /** True when the companion PNG/SVG export is behind the live canvas. Lets a
+     *  settle event (switch-away / close) re-export even if a cheap markdown-only
+     *  autosave already cleared `dirty`. */
+    this.companionStale = true;
     /** Incremented on every load; lets setViewData detect and discard stale clear() loads. */
     this.loadGen = 0;
     /** True once the real drawing for the current file has actually been loaded
@@ -94791,6 +94803,16 @@ var SvgView = class extends import_obsidian6.TextFileView {
       void this.save();
       return false;
     });
+    this.register(() => this.clearAutosaveTimer());
+    this.registerEvent(
+      this.app.workspace.on("active-leaf-change", (leaf) => {
+        if (leaf === this.leaf) return;
+        if (!this.dirty) return;
+        if (!this.hasLoadedContent || this.isLoading) return;
+        if (!this.svgEditor || !this.file) return;
+        void this.settleFlush();
+      })
+    );
     try {
       await this.initEditor();
     } catch (e) {
@@ -94894,7 +94916,6 @@ var SvgView = class extends import_obsidian6.TextFileView {
       prevChanged == null ? void 0 : prevChanged(win, elems);
       if (!this.isLoading) this.setDirty(true);
     });
-    this.startAutosaveTimer();
     if (this.pendingSvg !== null) {
       const svg = this.pendingSvg;
       const bg2 = this.pendingBg;
@@ -94915,25 +94936,52 @@ var SvgView = class extends import_obsidian6.TextFileView {
     }
   }
   /** Single place that mutates `dirty`, so the topbar save button's red state
-   *  always tracks it. */
+   *  always tracks it. An edit (`value === true`) arriving while a save is in
+   *  flight is recorded in `dirtyDuringSave` instead of mutating `dirty`, so the
+   *  running save won't clear it away — runSave's `finally` re-arms the timer. */
   setDirty(value) {
     var _a2;
+    if (value && this.saving) {
+      this.dirtyDuringSave = true;
+      return;
+    }
     this.dirty = value;
+    if (value) this.companionStale = true;
     (_a2 = this.saveBtn) == null ? void 0 : _a2.toggleClass("svg-plugin-dirty", value);
+    if (value) this.scheduleAutosave();
   }
-  /** Start the periodic autosave: every `autosaveMinutes` it flushes the drawing
-   *  to its note if there are unsaved edits. A safety net against losing
-   *  in-progress work to a crash — toggling view and closing/switching files
-   *  flush on their own. Disabled when the interval is set to 0. registerInterval
-   *  ties the timer to the view's lifecycle so it's cleared on unload. */
-  startAutosaveTimer() {
-    const minutes = this.plugin.settings.autosaveMinutes;
-    if (!minutes || minutes <= 0) return;
-    this.registerInterval(
-      window.setInterval(() => {
-        if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) void this.save();
-      }, minutes * 60 * 1e3)
-    );
+  /** Edit-triggered autosave. Armed from setDirty(true) and counted from the
+   *  user's last edit (not a fixed wall clock), so a drawing flushes ~N seconds
+   *  after they stop drawing. A safety net against losing in-progress work to a
+   *  crash — switching away, toggling view and closing/switching files flush on
+   *  their own. Disabled when the interval is 0. */
+  scheduleAutosave() {
+    const seconds = this.plugin.settings.autosaveSeconds;
+    if (!seconds || seconds <= 0) return;
+    if (this.autosaveTimer !== null) return;
+    this.autosaveTimer = window.setTimeout(() => {
+      this.autosaveTimer = null;
+      if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file && !this.saving) {
+        void this.autosaveFlush();
+      } else if (this.dirty) {
+        this.autosaveTimer = window.setTimeout(() => {
+          this.autosaveTimer = null;
+          this.scheduleAutosave();
+        }, 1e3);
+      }
+    }, seconds * 1e3);
+  }
+  clearAutosaveTimer() {
+    if (this.autosaveTimer !== null) {
+      window.clearTimeout(this.autosaveTimer);
+      this.autosaveTimer = null;
+    }
+  }
+  /** The autosave path: a cheap markdown + backup write, no companion export
+   *  (PNG/SVG re-rasterization is deferred to settle events). */
+  async autosaveFlush() {
+    if (this.saving || !this.hasLoadedContent) return;
+    await this.runSave({ export: false });
   }
   /** The svgedit bundle injects its stylesheet into document.head on init. That
    *  stylesheet declares its CSS variables on `:root, .svg_editor`, so the
@@ -95115,17 +95163,63 @@ var SvgView = class extends import_obsidian6.TextFileView {
     this.hasLoadedContent = false;
     this.pendingDirty = false;
     this.setDirty(false);
+    this.companionStale = false;
     this.pendingSvg = EMPTY_SVG;
     this.pendingBg = null;
   }
+  /** Explicit/settle save: writes the markdown and refreshes the companion
+   *  export. The public entry point for the save button, Mod+S, switchToMarkdown
+   *  and insertSvgFragment; funnels through runSave so it can't overlap another
+   *  save in flight. */
   async save(clear) {
-    var _a2;
     if (!this.hasLoadedContent) return;
-    this.setDirty(false);
-    await super.save(clear);
+    if (this.saving) {
+      this.dirtyDuringSave || (this.dirtyDuringSave = this.dirty);
+      return;
+    }
+    await this.runSave({ export: true, clear });
+  }
+  /** The single owner of the `saving` lock. Writes the markdown, refreshes the
+   *  IndexedDB backup, and (when `export`) regenerates the companion PNG/SVG.
+   *  Dirty is cleared only on a successful write AND only if no edit arrived
+   *  while the write was in flight; a failure leaves the drawing dirty so the
+   *  edit isn't lost. */
+  async runSave(opts) {
+    var _a2, _b2;
+    this.saving = true;
+    this.dirtyDuringSave = false;
+    const hadDirty = this.dirty;
+    try {
+      await super.save(opts.clear);
+      if (!this.dirtyDuringSave) {
+        this.dirty = false;
+        (_a2 = this.saveBtn) == null ? void 0 : _a2.toggleClass("svg-plugin-dirty", false);
+      }
+      if (this.svgEditor && this.file) {
+        const backupSvg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+        if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
+      }
+      if (opts.export) await this.exportCompanions();
+    } catch (e) {
+      if (hadDirty) {
+        this.dirty = true;
+        (_b2 = this.saveBtn) == null ? void 0 : _b2.toggleClass("svg-plugin-dirty", true);
+      }
+      console.error("[Sketch Editor] save failed:", e);
+    } finally {
+      this.saving = false;
+      if (this.dirty || this.dirtyDuringSave) {
+        this.dirtyDuringSave = false;
+        this.scheduleAutosave();
+      }
+    }
+  }
+  /** Regenerate the companion PNG/SVG. Deferred off the frequent autosave path
+   *  to settle events (manual save / switch-away / close) so continuous drawing
+   *  doesn't thrash the rasterizer. No-ops when companion export is disabled. */
+  async exportCompanions() {
+    var _a2;
     if (!this.svgEditor || !this.file) return;
-    const backupSvg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
-    if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
     try {
       const effective = resolveEffectiveSettings(this.app, this.file, this.plugin.settings);
       await autoExport(
@@ -95136,8 +95230,25 @@ var SvgView = class extends import_obsidian6.TextFileView {
         effective,
         this.getCanvasBgColor()
       );
+      this.companionStale = false;
     } catch (e) {
       console.error("[Sketch Editor] auto-export failed:", e);
+    }
+  }
+  /** A settle-event flush (switch-away): writes the markdown and refreshes the
+   *  companion export. Runs even when a cheap autosave already cleared `dirty`,
+   *  as long as the companion image is stale, so the PNG catches up on leave. */
+  async settleFlush() {
+    if (this.saving || !this.hasLoadedContent) return;
+    if (!this.dirty && !this.companionStale) return;
+    await this.runSave({ export: true });
+  }
+  /** Wait (bounded) for an in-flight save to finish, so lifecycle teardown can
+   *  flush and destroy the editor without racing a running save. */
+  async waitForSave(maxMs = 4e3) {
+    const start = Date.now();
+    while (this.saving && Date.now() - start < maxMs) {
+      await new Promise((r) => window.setTimeout(r, 50));
     }
   }
   /** Flush the outgoing drawing on a same-leaf file switch (this tab opening a
@@ -95145,9 +95256,11 @@ var SvgView = class extends import_obsidian6.TextFileView {
    *  view. With per-edit saving gone, this is what persists unsaved work on
    *  navigation — the periodic timer only covers staying on the same file. */
   async onUnloadFile(file) {
-    if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file) {
+    this.clearAutosaveTimer();
+    await this.waitForSave();
+    if ((this.dirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
       try {
-        await this.save();
+        await this.runSave({ export: true });
       } catch (e) {
       }
     }
@@ -95155,12 +95268,14 @@ var SvgView = class extends import_obsidian6.TextFileView {
   }
   async onunload() {
     var _a2, _b2, _c2;
+    this.clearAutosaveTimer();
+    await this.waitForSave();
     if (this.svgEditor && this.file && this.hasLoadedContent) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
       try {
-        await this.save();
+        await this.runSave({ export: true });
       } catch (e) {
       }
     }
@@ -95351,13 +95466,13 @@ var SvgSettingsTab = class extends import_obsidian9.PluginSettingTab {
         await this.plugin.saveSettings();
       })
     );
-    new import_obsidian9.Setting(containerEl).setName("Autosave interval (minutes)").setDesc(
-      "How often an open drawing with unsaved edits is written to its note. Toggling view and closing/switching files always save regardless \u2014 this just bounds how much in-progress work a crash could lose. Set to 0 to disable the timer. Takes effect on the next drawing you open."
+    new import_obsidian9.Setting(containerEl).setName("Autosave interval (seconds)").setDesc(
+      "How many seconds after you stop drawing an open drawing with unsaved edits is written to its note. Switching away, toggling view and closing always save and re-export the companion image immediately \u2014 this just bounds how much in-progress work a crash could lose. Set to 0 to disable the timer."
     ).addText(
-      (t) => t.setPlaceholder("10").setValue(String(this.plugin.settings.autosaveMinutes)).onChange(async (v) => {
+      (t) => t.setPlaceholder("15").setValue(String(this.plugin.settings.autosaveSeconds)).onChange(async (v) => {
         const n10 = Number(v);
         if (!Number.isFinite(n10) || n10 < 0) return;
-        this.plugin.settings.autosaveMinutes = Math.floor(n10);
+        this.plugin.settings.autosaveSeconds = Math.floor(n10);
         await this.plugin.saveSettings();
       })
     );
@@ -95644,7 +95759,7 @@ var DEFAULT_SETTINGS = {
   uiModeDesktop: "desktop",
   uiModeMobile: "tablet",
   compressDrawingData: true,
-  autosaveMinutes: 10,
+  autosaveSeconds: 15,
   paletteOverrides: {},
   userShapes: { categories: [], shapes: {} },
   hotkeyOverrides: {},
@@ -96574,11 +96689,15 @@ var SvgPlugin = class extends import_obsidian17.Plugin {
     };
   }
   async loadSettings() {
-    this.settings = Object.assign(
-      {},
-      DEFAULT_SETTINGS,
-      await this.loadData()
-    );
+    const data = await this.loadData();
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+    const legacy = data;
+    if (legacy && legacy.autosaveMinutes !== void 0 && legacy.autosaveSeconds === void 0) {
+      const m = legacy.autosaveMinutes;
+      this.settings.autosaveSeconds = m > 0 ? Math.max(5, m * 60) : 0;
+      delete this.settings.autosaveMinutes;
+      void this.saveSettings();
+    }
   }
   async saveSettings() {
     await this.saveData(this.settings);

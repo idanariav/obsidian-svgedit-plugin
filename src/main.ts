@@ -188,11 +188,18 @@ export default class SvgPlugin extends Plugin {
   }
 
   async loadSettings(): Promise<void> {
-    this.settings = Object.assign(
-      {},
-      DEFAULT_SETTINGS,
-      await this.loadData(),
-    );
+    const data = await this.loadData();
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+    // One-time migration: the autosave interval moved from minutes to seconds.
+    // Honor a user's deliberately long minutes value; new installs keep the 15s
+    // default. 0 (disabled) is preserved; otherwise clamp to a 5s floor.
+    const legacy = data as { autosaveMinutes?: number; autosaveSeconds?: number } | null;
+    if (legacy && legacy.autosaveMinutes !== undefined && legacy.autosaveSeconds === undefined) {
+      const m = legacy.autosaveMinutes;
+      this.settings.autosaveSeconds = m > 0 ? Math.max(5, m * 60) : 0;
+      delete (this.settings as { autosaveMinutes?: number }).autosaveMinutes;
+      void this.saveSettings();
+    }
   }
 
   async saveSettings(): Promise<void> {

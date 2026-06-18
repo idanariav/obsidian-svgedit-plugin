@@ -105,11 +105,12 @@ export interface SvgPluginSettings {
    *  svgedit userDataAdapter so keyboard customizations live in data.json and
    *  survive plugin updates instead of in the editor's localStorage. */
   hotkeyOverrides: Record<string, string[]>;
-  /** How often (minutes) an open drawing with unsaved edits is autosaved to its
-   *  note. Toggling view and closing/switching files always flush regardless;
-   *  this just bounds how much in-progress work a crash could lose. 0 disables
-   *  the timer (saves only happen on toggle/close/file-switch). */
-  autosaveMinutes: number;
+  /** How many seconds after the last edit an open drawing with unsaved changes is
+   *  flushed to its note. The timer is demand-armed: it counts from when you stop
+   *  drawing, not on a fixed clock. Switching away, toggling view and closing
+   *  always flush (and re-export) regardless; this just bounds how much
+   *  in-progress work a crash could lose. 0 disables the timer. */
+  autosaveSeconds: number;
   /** Ordered list of favorited action ids backing the right-click quick-action
    *  menu. Backs the svgedit userDataAdapter so favorites live in data.json and
    *  survive plugin updates instead of in the editor's localStorage. Empty =
@@ -146,7 +147,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   uiModeDesktop: "desktop",
   uiModeMobile: "tablet",
   compressDrawingData: true,
-  autosaveMinutes: 10,
+  autosaveSeconds: 15,
   paletteOverrides: {},
   userShapes: { categories: [], shapes: {} },
   hotkeyOverrides: {},
