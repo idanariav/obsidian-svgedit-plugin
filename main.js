@@ -94792,16 +94792,21 @@ var SvgView = class extends import_obsidian6.TextFileView {
     this.pendingDirty = false;
     this.isLoading = false;
     /** Set when the canvas has unsaved edits since the last save; cleared by a
-     *  successful save. Drives the topbar dirty indicator and the autosave timer. */
-    this.dirty = false;
+     *  successful save. Drives the topbar dirty indicator and the autosave timer.
+     *  NB: deliberately named `svgDirty`, not `dirty` — TextFileView already owns a
+     *  `dirty` field, and shadowing it crosses our save bookkeeping with Obsidian's. */
+    this.svgDirty = false;
     /** Pending edit-triggered autosave timeout, or null when none is armed.
      *  Demand-armed from setDirty(true); cleared on the view lifecycle. */
     this.autosaveTimer = null;
     /** Concurrency lock: true while a save is writing. Only runSave() mutates it.
-     *  Every other save path checks it so saves never overlap. */
-    this.saving = false;
+     *  Every other save path checks it so saves never overlap. NB: named `svgSaving`,
+     *  not `saving` — TextFileView.save() bails immediately when its own `this.svgSaving`
+     *  is truthy, so shadowing it would make every super.save() a silent no-op (the
+     *  file would never be written). */
+    this.svgSaving = false;
     /** Set when an edit lands while a save is in flight, so the save knows not to
-     *  clear the dirty flag (the new edit still needs flushing). */
+     *  clear the svgDirty flag (the new edit still needs flushing). */
     this.dirtyDuringSave = false;
     /** True when the companion PNG/SVG export is behind the live canvas. Lets a
      *  settle event (switch-away / close) re-export even if a cheap markdown-only
@@ -94855,7 +94860,7 @@ var SvgView = class extends import_obsidian6.TextFileView {
     this.registerEvent(
       this.app.workspace.on("active-leaf-change", (leaf) => {
         if (leaf === this.leaf) return;
-        if (!this.dirty) return;
+        if (!this.svgDirty) return;
         if (!this.hasLoadedContent || this.isLoading) return;
         if (!this.svgEditor || !this.file) return;
         void this.settleFlush();
@@ -94989,11 +94994,11 @@ var SvgView = class extends import_obsidian6.TextFileView {
    *  running save won't clear it away — runSave's `finally` re-arms the timer. */
   setDirty(value) {
     var _a2;
-    if (value && this.saving) {
+    if (value && this.svgSaving) {
       this.dirtyDuringSave = true;
       return;
     }
-    this.dirty = value;
+    this.svgDirty = value;
     if (value) this.companionStale = true;
     (_a2 = this.saveBtn) == null ? void 0 : _a2.toggleClass("svg-plugin-dirty", value);
     if (value) this.scheduleAutosave();
@@ -95009,9 +95014,9 @@ var SvgView = class extends import_obsidian6.TextFileView {
     if (this.autosaveTimer !== null) return;
     this.autosaveTimer = window.setTimeout(() => {
       this.autosaveTimer = null;
-      if (this.dirty && this.hasLoadedContent && this.svgEditor && this.file && !this.saving) {
+      if (this.svgDirty && this.hasLoadedContent && this.svgEditor && this.file && !this.svgSaving) {
         void this.autosaveFlush();
-      } else if (this.dirty) {
+      } else if (this.svgDirty) {
         this.autosaveTimer = window.setTimeout(() => {
           this.autosaveTimer = null;
           this.scheduleAutosave();
@@ -95028,7 +95033,7 @@ var SvgView = class extends import_obsidian6.TextFileView {
   /** The autosave path: a cheap markdown + backup write, no companion export
    *  (PNG/SVG re-rasterization is deferred to settle events). */
   async autosaveFlush() {
-    if (this.saving || !this.hasLoadedContent) return;
+    if (this.svgSaving || !this.hasLoadedContent) return;
     await this.runSave({ export: false });
   }
   /** The svgedit bundle injects its stylesheet into document.head on init. That
@@ -95221,8 +95226,8 @@ var SvgView = class extends import_obsidian6.TextFileView {
    *  save in flight. */
   async save(clear) {
     if (!this.hasLoadedContent) return;
-    if (this.saving) {
-      this.dirtyDuringSave || (this.dirtyDuringSave = this.dirty);
+    if (this.svgSaving) {
+      this.dirtyDuringSave || (this.dirtyDuringSave = this.svgDirty);
       return;
     }
     await this.runSave({ export: true, clear });
@@ -95234,13 +95239,13 @@ var SvgView = class extends import_obsidian6.TextFileView {
    *  edit isn't lost. */
   async runSave(opts) {
     var _a2, _b2;
-    this.saving = true;
+    this.svgSaving = true;
     this.dirtyDuringSave = false;
-    const hadDirty = this.dirty;
+    const hadDirty = this.svgDirty;
     try {
       await super.save(opts.clear);
       if (!this.dirtyDuringSave) {
-        this.dirty = false;
+        this.svgDirty = false;
         (_a2 = this.saveBtn) == null ? void 0 : _a2.toggleClass("svg-plugin-dirty", false);
       }
       if (this.svgEditor && this.file) {
@@ -95250,13 +95255,13 @@ var SvgView = class extends import_obsidian6.TextFileView {
       if (opts.export) await this.exportCompanions();
     } catch (e) {
       if (hadDirty) {
-        this.dirty = true;
+        this.svgDirty = true;
         (_b2 = this.saveBtn) == null ? void 0 : _b2.toggleClass("svg-plugin-dirty", true);
       }
       console.error("[Sketch Editor] save failed:", e);
     } finally {
-      this.saving = false;
-      if (this.dirty || this.dirtyDuringSave) {
+      this.svgSaving = false;
+      if (this.svgDirty || this.dirtyDuringSave) {
         this.dirtyDuringSave = false;
         this.scheduleAutosave();
       }
@@ -95287,15 +95292,15 @@ var SvgView = class extends import_obsidian6.TextFileView {
    *  companion export. Runs even when a cheap autosave already cleared `dirty`,
    *  as long as the companion image is stale, so the PNG catches up on leave. */
   async settleFlush() {
-    if (this.saving || !this.hasLoadedContent) return;
-    if (!this.dirty && !this.companionStale) return;
+    if (this.svgSaving || !this.hasLoadedContent) return;
+    if (!this.svgDirty && !this.companionStale) return;
     await this.runSave({ export: true });
   }
   /** Wait (bounded) for an in-flight save to finish, so lifecycle teardown can
    *  flush and destroy the editor without racing a running save. */
   async waitForSave(maxMs = 4e3) {
     const start = Date.now();
-    while (this.saving && Date.now() - start < maxMs) {
+    while (this.svgSaving && Date.now() - start < maxMs) {
       await new Promise((r) => window.setTimeout(r, 50));
     }
   }
@@ -95306,7 +95311,7 @@ var SvgView = class extends import_obsidian6.TextFileView {
   async onUnloadFile(file) {
     this.clearAutosaveTimer();
     await this.waitForSave();
-    if ((this.dirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
+    if ((this.svgDirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
       try {
         await this.runSave({ export: true });
       } catch (e) {
