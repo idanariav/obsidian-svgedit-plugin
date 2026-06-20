@@ -84029,6 +84029,18 @@ var kJ = (i11) => {
   return e && xJ(e.split("+").pop()) ? e : null;
 };
 var SJ = (i11) => String(i11).split("/").map((e) => z3(e)).filter(Boolean);
+var EJ = () => {
+  var _a2;
+  let i11 = document.activeElement;
+  for (; (_a2 = i11 == null ? void 0 : i11.shadowRoot) == null ? void 0 : _a2.activeElement; ) i11 = i11.shadowRoot.activeElement;
+  return i11;
+};
+var BJ = () => {
+  const i11 = EJ();
+  if (!i11) return false;
+  const e = i11.nodeName;
+  return e === "INPUT" || e === "TEXTAREA" || e === "SELECT" || i11.isContentEditable === true;
+};
 var Sb = (i11) => {
   const e = i11.key.toLowerCase();
   if (bJ.has(e)) return null;
@@ -84046,17 +84058,17 @@ var Eb = {
   backspace: "Backspace",
   tab: "Tab"
 };
-var EJ = () => ({
+var LJ = () => ({
   meta: oh() ? "\u2318" : "Meta",
   ctrl: "Ctrl",
   alt: oh() ? "\u2325" : "Alt",
   shift: oh() ? "\u21E7" : "Shift"
 });
-var BJ = (i11) => {
-  const e = EJ();
+var PJ = (i11) => {
+  const e = LJ();
   return i11.split("+").map((t) => e[t] ? e[t] : Eb[t] ? Eb[t] : t.length === 1 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1)).join(" + ");
 };
-var LJ = {
+var TJ = {
   // View toggles
   tool_frame: "View",
   tool_wireframe: "View",
@@ -84139,7 +84151,7 @@ var Fh = [
   "Selection",
   "Navigate"
 ];
-var PJ = class {
+var jJ = class {
   /**
    * @param {object} editor the SVGEditor instance
    */
@@ -84185,7 +84197,7 @@ var PJ = class {
     const n10 = kJ(o), a = !n10 && o && NE(o) ? o : null;
     this.actions.set(e, {
       id: e,
-      group: LJ[e] || "Tools",
+      group: TJ[e] || "Tools",
       defaultKeys: n10 ? [n10] : [],
       pd: true,
       run: null,
@@ -84327,13 +84339,16 @@ var PJ = class {
    */
   register() {
     this._load(), this._handler && document.removeEventListener("keydown", this._handler), this._handler = (e) => {
-      if (e.target.nodeName !== "BODY" || !i5(this.editor)) return;
-      const t = Sb(e);
-      if (!t) return;
-      const r = this.reverseMap().get(t);
-      if (!r) return;
-      const o = this.actions.get(r);
-      o && (o.run ? o.run() : o.el && o.el.click(), o.pd && e.preventDefault());
+      var _a2;
+      if (!i5(this.editor)) return;
+      const t = (_a2 = this.editor) == null ? void 0 : _a2.$container, { target: r } = e;
+      if (!(r === document.body || t && (r === t || t.contains(r))) || BJ()) return;
+      const n10 = Sb(e);
+      if (!n10) return;
+      const a = this.reverseMap().get(n10);
+      if (!a) return;
+      const s = this.actions.get(a);
+      s && (s.run ? s.run() : s.el && s.el.click(), s.pd && e.preventDefault());
     }, document.addEventListener("keydown", this._handler);
   }
   /**
@@ -84365,7 +84380,7 @@ var PJ = class {
   _commit() {
     for (const e of Object.keys(this.overrides)) {
       const t = this.actions.get(e);
-      t && TJ(this.overrides[e], t.defaultKeys) && delete this.overrides[e];
+      t && FJ(this.overrides[e], t.defaultKeys) && delete this.overrides[e];
     }
     this._persist();
   }
@@ -84379,7 +84394,7 @@ var PJ = class {
     }
   }
 };
-var TJ = (i11, e) => {
+var FJ = (i11, e) => {
   if (i11.length !== e.length) return false;
   const t = [...e].sort();
   return [...i11].sort().every((r, o) => r === t[o]);
@@ -84427,8 +84442,8 @@ var xp = {
   fill_color: Bb("fill", "favorites.label_fill_color", "fill.svg"),
   stroke_color: Bb("stroke", "favorites.label_stroke_color", "stroke.svg")
 };
-var jJ = (i11) => Object.prototype.hasOwnProperty.call(xp, i11);
-var FJ = (i11, e) => {
+var MJ = (i11) => Object.prototype.hasOwnProperty.call(xp, i11);
+var NJ = (i11, e) => {
   const t = xp[e];
   if (t) return { id: e, group: t.group, label: yr(t.labelKey) || t.labelKey, src: t.src, kind: "value" };
   const r = H3[e];
@@ -84442,7 +84457,7 @@ var FJ = (i11, e) => {
     kind: "trigger"
   } : null;
 };
-var MJ = (i11) => {
+var IJ = (i11) => {
   const e = /* @__PURE__ */ new Map(), t = (o, n10) => {
     e.has(o) || e.set(o, []), e.get(o).push(n10);
   };
@@ -84460,7 +84475,7 @@ var MJ = (i11) => {
     actions: e.get(o).sort((n10, a) => n10.label.localeCompare(a.label))
   }));
 };
-var NJ = (i11, e) => {
+var OJ = (i11, e) => {
   const t = H3[e];
   if (t) {
     t.exec(i11);
@@ -84471,14 +84486,14 @@ var NJ = (i11, e) => {
 };
 var IE = document.createElement("template");
 IE.innerHTML = gJ;
-var IJ = /* @__PURE__ */ new Set([
+var UJ = /* @__PURE__ */ new Set([
   "paste",
   "paste_in_place",
   "select_all",
   "zoom_in",
   "zoom_out"
 ]);
-var OJ = class extends HTMLElement {
+var RJ = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -84517,9 +84532,9 @@ var OJ = class extends HTMLElement {
     const t = !!(e.selectedElement || e.multiselected);
     let r = 0;
     if (FE().forEach((o) => {
-      const n10 = FJ(e, o);
+      const n10 = NJ(e, o);
       if (!n10) return;
-      const a = !t && !IJ.has(o), s = jJ(o) ? this._valueRow(e, o, n10, a) : this._triggerRow(e, o, n10, a);
+      const a = !t && !UJ.has(o), s = MJ(o) ? this._valueRow(e, o, n10, a) : this._triggerRow(e, o, n10, a);
       this.$dialog.append(s), r++;
     }), !r) {
       const o = document.createElement("li");
@@ -84539,7 +84554,7 @@ var OJ = class extends HTMLElement {
     s.className = "qa-icon", a.append(s);
     const l = document.createElement("span");
     return l.className = "qa-label", l.textContent = r.label, a.append(l), r.src && this._loadIcon(s, r.src), n10.append(a), svgEditor.$click(a, (d) => {
-      d.preventDefault(), this._hide(), NJ(e, t);
+      d.preventDefault(), this._hide(), OJ(e, t);
     }), n10;
   }
   /**
@@ -84574,11 +84589,11 @@ var OJ = class extends HTMLElement {
     }
   }
 };
-customElements.define("se-cmenu_canvas-dialog", OJ);
-var UJ = `<style>.contextMenu{position: fixed;z-index: 99999;border: solid 1px rgba(0,0,0,.33);background: rgba(255,255,255,.95);padding: 5px 0;margin: 0px;display: none;font: 12px/15px Lucida Sans,Helvetica,Verdana,sans-serif;border-radius: 5px;-moz-border-radius: 5px;-moz-box-shadow: 2px 5px 10px rgba(0,0,0,.3);-webkit-box-shadow: 2px 5px 10px rgba(0,0,0,.3);box-shadow: 2px 5px 10px rgba(0,0,0,.3);}.contextMenu li{list-style: none;padding: 0px;margin: 0px;}.contextMenu .shortcut{width: 115px;text-align: right;float: right;}.contextMenu a{-moz-user-select: none;-webkit-user-select: none;user-select: none;color: #222;text-decoration: none;display: block;line-height: 20px;height: 20px;background-position: 6px center;background-repeat: no-repeat;outline: none;padding: 0px 15px 1px 20px;}.contextMenu li.hover a{background-color: #2e5dea;color: white;cursor: default;}.contextMenu li.disabled a{color: #999;pointer-events: none;}.contextMenu li.hover.disabled a{background-color: transparent;}.contextMenu li.separator{border-top: solid 1px #E3E3E3;padding-top: 5px;margin-top: 5px;}</style><ul id="cmenu_layers" class="contextMenu"><li><a href="#dupe" id="se-dupe">#{svgEditor.i18next.t('layers.dupe')}</a></li><li><a href="#delete" id="se-layer-delete">#{svgEditor.i18next.t('layers.del')}</a></li><li><a href="#merge_down" id="se-merge-down">#{svgEditor.i18next.t('layers.merge_down')}</a></li><li><a href="#merge_all" id="se-merge-all">#{svgEditor.i18next.t('layers.merge_all')}</a></li></ul>`;
+customElements.define("se-cmenu_canvas-dialog", RJ);
+var DJ = `<style>.contextMenu{position: fixed;z-index: 99999;border: solid 1px rgba(0,0,0,.33);background: rgba(255,255,255,.95);padding: 5px 0;margin: 0px;display: none;font: 12px/15px Lucida Sans,Helvetica,Verdana,sans-serif;border-radius: 5px;-moz-border-radius: 5px;-moz-box-shadow: 2px 5px 10px rgba(0,0,0,.3);-webkit-box-shadow: 2px 5px 10px rgba(0,0,0,.3);box-shadow: 2px 5px 10px rgba(0,0,0,.3);}.contextMenu li{list-style: none;padding: 0px;margin: 0px;}.contextMenu .shortcut{width: 115px;text-align: right;float: right;}.contextMenu a{-moz-user-select: none;-webkit-user-select: none;user-select: none;color: #222;text-decoration: none;display: block;line-height: 20px;height: 20px;background-position: 6px center;background-repeat: no-repeat;outline: none;padding: 0px 15px 1px 20px;}.contextMenu li.hover a{background-color: #2e5dea;color: white;cursor: default;}.contextMenu li.disabled a{color: #999;pointer-events: none;}.contextMenu li.hover.disabled a{background-color: transparent;}.contextMenu li.separator{border-top: solid 1px #E3E3E3;padding-top: 5px;margin-top: 5px;}</style><ul id="cmenu_layers" class="contextMenu"><li><a href="#dupe" id="se-dupe">#{svgEditor.i18next.t('layers.dupe')}</a></li><li><a href="#delete" id="se-layer-delete">#{svgEditor.i18next.t('layers.del')}</a></li><li><a href="#merge_down" id="se-merge-down">#{svgEditor.i18next.t('layers.merge_down')}</a></li><li><a href="#merge_all" id="se-merge-all">#{svgEditor.i18next.t('layers.merge_all')}</a></li></ul>`;
 var OE = document.createElement("template");
-OE.innerHTML = UJ;
-var RJ = class extends HTMLElement {
+OE.innerHTML = DJ;
+var qJ = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -84678,8 +84693,8 @@ var RJ = class extends HTMLElement {
     this._workarea !== void 0 && (this._workarea.addEventListener("contextmenu", t), this.getAttribute("leftclick") === "true" && svgEditor.$click(this._workarea, t), this._workarea.addEventListener("mousedown", r), this.$sidePanels.addEventListener("mousedown", r)), svgEditor.$click(this.$duplicateLink, (n10) => o(n10, "dupe", this.source)), svgEditor.$click(this.$deleteLink, (n10) => o(n10, "delete", this.source)), svgEditor.$click(this.$mergeDownLink, (n10) => o(n10, "merge_down", this.source)), svgEditor.$click(this.$mergeAllLink, (n10) => o(n10, "merge_all", this.source));
   }
 };
-customElements.define("se-cmenu-layers", RJ);
-var DJ = class extends cx {
+customElements.define("se-cmenu-layers", qJ);
+var QJ = class extends cx {
   /**
    * The buttons created by the component to represent the choices in the
    * [choices](#choices) property.
@@ -84777,7 +84792,7 @@ var DJ = class extends cx {
       `), e;
   }
 };
-var qJ = class extends dx(DJ) {
+var zJ = class extends dx(QJ) {
   // @ts-ignore
   get [Mt]() {
     return Object.assign(super[Mt], {
@@ -84805,7 +84820,7 @@ var qJ = class extends dx(DJ) {
     ), e;
   }
 };
-var g1 = class extends qJ {
+var g1 = class extends zJ {
   constructor() {
     super(...arguments);
     /**
@@ -84872,20 +84887,20 @@ var g1 = class extends qJ {
   }
 };
 customElements.define("se-elix-alert-dialog", g1);
-var QJ = async (i11, e) => {
+var HJ = async (i11, e) => {
   const t = new g1();
   return t.textContent = i11, t.choices = e, t.open(), (await t.whenClosed()).choice;
 };
-window.seSelect = QJ;
-var zJ = async (i11, e) => {
+window.seSelect = HJ;
+var VJ = async (i11, e) => {
   var _a2;
   const t = new g1();
   t.textContent = i11, t.choices = e === void 0 ? ["Ok", "Cancel"] : e, t.open();
   const r = await t.whenClosed();
   return (_a2 = t.keyChoice) != null ? _a2 : r.choice;
 };
-window.seConfirm = zJ;
-var HJ = class extends HTMLElement {
+window.seConfirm = VJ;
+var GJ = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -84948,13 +84963,13 @@ var HJ = class extends HTMLElement {
     e ? this.setAttribute("close", "true") : this.removeAttribute("close");
   }
 };
-customElements.define("se-prompt-dialog", HJ);
-var VJ = (i11) => {
+customElements.define("se-prompt-dialog", GJ);
+var $J = (i11) => {
   const e = new g1();
   e.textContent = i11, e.choices = ["Ok"], e.open();
 };
-window.seAlert = VJ;
-var GJ = `<style>
+window.seAlert = $J;
+var KJ = `<style>
 #dialog_content {
 margin: 10px 10px 5px 10px;background: #5a6162;overflow: auto;border: 1px solid #c8c8c8;}
 #dialog_content p,
@@ -84971,8 +84986,8 @@ width: 90%;display: block;margin: 0 0 5px 11px;}
 #dialog_buttons input[type=button] {
 margin: 0 1em;}.se-select{text-align: center;}elix-number-spin-box{margin-left: 15px;}</style><elix-dialog id="export_box" aria-label="export svg" closed><div class="overlay"></div><div id="dialog_container"><div id="dialog_content"><p id="export_region_label">Region</p><se-select id="se-export-region" label=""></se-select><p id="export_select"></p><se-select id="se-storage-pref" label="" options="PNG,JPEG,BMP,WEBP,PDF" values="PNG::JPEG::BMP::WEBP::PDF"></se-select><se-spin-input id="se-quality" label="ui.quality" size="3" min="0" max="100" value="100" step="5"/><label id="se-include-bg-label" style="display:flex;align-items:center;gap:6px;margin:10px;"><input type="checkbox" id="se-include-bg"/><span id="export_include_bg_label">Include background color</span></label></div><div id="dialog_buttons"><button id="export_ok"></button><button id="export_cancel"></button></div></div></elix-dialog>`;
 var UE = document.createElement("template");
-UE.innerHTML = GJ;
-var $J = class extends HTMLElement {
+UE.innerHTML = KJ;
+var XJ = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -85085,8 +85100,8 @@ var $J = class extends HTMLElement {
     svgEditor.$click(this.$okBtn, (r) => e(r, "ok")), svgEditor.$click(this.$cancelBtn, (r) => e(r, "cancel")), this.$exportOption.addEventListener("change", (r) => t(r));
   }
 };
-customElements.define("se-export-dialog", $J);
-var KJ = `<style>:not(:defined){display: none;}/*The dialog is rendered outside the themed .svg_editor scope,so it cannot inherit the editor's design tokens. Mirror the relevant tokens hereand reflect the active theme onto the host(see imageImportDialog.js).Values must stay in sync with svgedit.css.*/:host{--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--fg: #1B1F24;--muted: #6B7280;--icon-hover-bg: #EEF1F5;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--group-bg: #F6F7F9;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-ring: rgba(41,98,255,0.16);--workarea-bg: #F8F9FB;}:host(.theme-dark){--chrome-bg: #1E2026;--chrome-border: #2C2F37;--fg: #ECEEF2;--muted: #9098A5;--icon-hover-bg: #2A2D35;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--group-bg: #181A20;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-ring: rgba(246,178,58,0.20);--workarea-bg: #0F1115;}
+customElements.define("se-export-dialog", XJ);
+var YJ = `<style>:not(:defined){display: none;}/*The dialog is rendered outside the themed .svg_editor scope,so it cannot inherit the editor's design tokens. Mirror the relevant tokens hereand reflect the active theme onto the host(see imageImportDialog.js).Values must stay in sync with svgedit.css.*/:host{--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--fg: #1B1F24;--muted: #6B7280;--icon-hover-bg: #EEF1F5;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--group-bg: #F6F7F9;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-ring: rgba(41,98,255,0.16);--workarea-bg: #F8F9FB;}:host(.theme-dark){--chrome-bg: #1E2026;--chrome-border: #2C2F37;--fg: #ECEEF2;--muted: #9098A5;--icon-hover-bg: #2A2D35;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--group-bg: #181A20;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-ring: rgba(246,178,58,0.20);--workarea-bg: #0F1115;}
 #image_import_container {
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;width: 360px;max-width: 92vw;background: var(--chrome-bg,#FFFFFF);color: var(--fg,#1B1F24);border: 1px solid var(--chrome-border,#E6E8EC);border-radius: 14px;box-shadow: 0 18px 48px rgba(0,0,0,0.22);overflow: hidden;}
 #image_import_header {
@@ -85156,8 +85171,8 @@ border: 1px solid var(--accent,#2962FF);background: var(--accent,#2962FF);color:
 #image_import_ok:disabled {
 opacity: 0.45;cursor: default;}:host(.theme-dark)#image_import_ok{color: #1B1F24;}</style><elix-dialog id="image_import_box" aria-label="insert image" closed><div id="image_import_container"><div id="image_import_header"><p id="image_import_title">Insert image</p><button id="image_import_close" type="button" aria-label="Close">&#x2715;</button></div><div id="image_import_body"><div id="image_dropzone" role="button" tabindex="0"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg><span id="image_dropzone_text">Drag an image here</span><button id="image_browse_btn" type="button">Browse\u2026</button></div><input type="file" id="image_file_input" accept="image/*"/><div class="image_import_or"><span id="image_import_or_text">or</span></div><label id="image_url_label" for="image_url_input">Image URL</label><input type="text" id="image_url_input" placeholder="Paste an image URL"/><div class="image_import_or" id="image_vault_or" style="display:none"><span>or</span></div><button type="button" id="image_vault_btn" style="display:none">Import from vault\u2026</button><div id="image_preview_row"><img id="image_preview" alt=""/><span id="image_preview_name"></span></div><div id="image_import_error">Could not load that image URL.</div><label id="image_paths_row"><input type="checkbox" id="image_paths_toggle"/><span id="image_paths_label">Import as editable paths</span></label></div><div id="image_import_footer"><button id="image_import_cancel" type="button">Cancel</button><button id="image_import_ok" type="button" disabled>Insert</button></div></div></elix-dialog>`;
 var RE = document.createElement("template");
-RE.innerHTML = KJ;
-var XJ = class extends HTMLElement {
+RE.innerHTML = YJ;
+var WJ = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -85327,8 +85342,8 @@ var XJ = class extends HTMLElement {
     });
   }
 };
-customElements.define("se-image-import-dialog", XJ);
-var YJ = `<style>:not(:defined){display: none;}
+customElements.define("se-image-import-dialog", WJ);
+var ZJ = `<style>:not(:defined){display: none;}
 #hotkey_dialog::part(frame) {
 padding: 0;background: transparent;border: none;box-shadow: none;}
 #hk_container {
@@ -85360,9 +85375,9 @@ background: transparent;border: 1px solid var(--field-border,#d1d5db);color: var
 #hk_reset_all:hover {
 background: var(--icon-hover-bg,#eef1f5);}</style><elix-dialog id="hotkey_dialog" aria-label="Hotkey Manager" closed><div id="hk_container"><div id="hk_header"><span id="hk_title">Keyboard shortcuts</span><button id="hk_close" aria-label="Close">\u2715</button></div><div id="hk_toolbar"><input id="hk_search" type="text" placeholder="Search" autocomplete="off"/><label id="hk_filter"><input id="hk_filter_assigned" type="checkbox"/><span id="hk_filter_text">Assigned only</span></label></div><div id="hk_list"></div><div id="hk_footer"><button id="hk_reset_all">Reset all</button><button id="hk_done">Done</button></div></div></elix-dialog>`;
 var DE = document.createElement("template");
-DE.innerHTML = YJ;
+DE.innerHTML = ZJ;
 var Ro = (i11) => String(i11).replace(/[&<>"']/g, (e) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[e]);
-var WJ = class extends HTMLElement {
+var JJ = class extends HTMLElement {
   constructor() {
     super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(DE.content.cloneNode(true)), this.$dialog = this._shadowRoot.querySelector("#hotkey_dialog"), this.$list = this._shadowRoot.querySelector("#hk_list"), this.$title = this._shadowRoot.querySelector("#hk_title"), this.$close = this._shadowRoot.querySelector("#hk_close"), this.$done = this._shadowRoot.querySelector("#hk_done"), this.$resetAll = this._shadowRoot.querySelector("#hk_reset_all"), this.$search = this._shadowRoot.querySelector("#hk_search"), this.$filterAssigned = this._shadowRoot.querySelector("#hk_filter_assigned"), this.$filterText = this._shadowRoot.querySelector("#hk_filter_text"), this._recording = null, this._captureHandler = null, this._query = "", this._assignedOnly = false;
   }
@@ -85416,7 +85431,7 @@ var WJ = class extends HTMLElement {
   _rowHtml(e) {
     const t = this._recording && this._recording.id === e.id;
     let r;
-    e.readonly ? r = `<span class="hk-readonly">${Ro(e.decorative)}</span>` : t ? r = `<span class="hk-recording">${Ro(yr("hotkeys.press_key"))}</span>` : e.keys.length ? r = e.keys.map((a) => `<span class="hk-chip">${Ro(BJ(a))}<button class="hk-chip-remove" data-act="remove" data-id="${Ro(e.id)}" data-key="${Ro(a)}" title="${Ro(yr("hotkeys.remove"))}">\u2715</button></span>`).join("") : r = `<span class="hk-none">${Ro(yr("hotkeys.unassigned"))}</span>`;
+    e.readonly ? r = `<span class="hk-readonly">${Ro(e.decorative)}</span>` : t ? r = `<span class="hk-recording">${Ro(yr("hotkeys.press_key"))}</span>` : e.keys.length ? r = e.keys.map((a) => `<span class="hk-chip">${Ro(PJ(a))}<button class="hk-chip-remove" data-act="remove" data-id="${Ro(e.id)}" data-key="${Ro(a)}" title="${Ro(yr("hotkeys.remove"))}">\u2715</button></span>`).join("") : r = `<span class="hk-none">${Ro(yr("hotkeys.unassigned"))}</span>`;
     let o = "";
     e.readonly || (o = `<button class="hk-btn" data-act="add" data-id="${Ro(e.id)}">${Ro(yr(t ? "common.cancel" : "hotkeys.add"))}</button>`, e.customised && (o += `<button class="hk-btn" data-act="reset" data-id="${Ro(e.id)}">${Ro(yr("hotkeys.reset"))}</button>`));
     const n10 = t && this._recording.error ? `<div class="hk-conflict">${Ro(this._recording.error)}</div>` : "";
@@ -85454,8 +85469,8 @@ var WJ = class extends HTMLElement {
     this._captureHandler && (document.removeEventListener("keydown", this._captureHandler, true), this._captureHandler = null), this._recording = null;
   }
 };
-customElements.define("se-hotkey-dialog", WJ);
-var ZJ = `<style>:not(:defined){display: none;}
+customElements.define("se-hotkey-dialog", JJ);
+var eee = `<style>:not(:defined){display: none;}
 #favorites_dialog::part(frame) {
 padding: 0;background: transparent;border: none;box-shadow: none;}
 #fav_container {
@@ -85485,10 +85500,10 @@ display: flex;justify-content: flex-end;align-items: center;padding: 12px 16px;b
 #fav_done {
 background: var(--accent,#2563eb);color: #fff;border: none;border-radius: 6px;padding: 6px 16px;font-size: 13px;cursor: pointer;}</style><elix-dialog id="favorites_dialog" aria-label="Favorites" closed><div id="fav_container"><div id="fav_header"><span id="fav_title">Favorites</span><button id="fav_close" aria-label="Close">\u2715</button></div><div id="fav_hint"></div><div id="fav_toolbar"><input id="fav_search" type="text" placeholder="Search" autocomplete="off"/><label id="fav_filter"><input id="fav_filter_fav" type="checkbox"/><span id="fav_filter_text">Favorited only</span></label></div><div id="fav_list"></div><div id="fav_footer"><button id="fav_done">Done</button></div></div></elix-dialog>`;
 var qE = document.createElement("template");
-qE.innerHTML = ZJ;
+qE.innerHTML = eee;
 var X0 = (i11) => String(i11).replace(/[&<>"']/g, (e) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[e]);
-var JJ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>';
-var eee = class extends HTMLElement {
+var tee = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>';
+var ree = class extends HTMLElement {
   constructor() {
     super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(qE.content.cloneNode(true)), this.$dialog = this._shadowRoot.querySelector("#favorites_dialog"), this.$list = this._shadowRoot.querySelector("#fav_list"), this.$title = this._shadowRoot.querySelector("#fav_title"), this.$hint = this._shadowRoot.querySelector("#fav_hint"), this.$close = this._shadowRoot.querySelector("#fav_close"), this.$done = this._shadowRoot.querySelector("#fav_done"), this.$search = this._shadowRoot.querySelector("#fav_search"), this.$filterFav = this._shadowRoot.querySelector("#fav_filter_fav"), this.$filterText = this._shadowRoot.querySelector("#fav_filter_text"), this._query = "", this._favOnly = false;
   }
@@ -85523,7 +85538,7 @@ var eee = class extends HTMLElement {
   _render() {
     const e = svgEditor;
     if (!(e == null ? void 0 : e.hotkeys)) return;
-    const t = new Set(FE()), r = this._query.trim().toLowerCase(), o = MJ(e).map((n10) => ({
+    const t = new Set(FE()), r = this._query.trim().toLowerCase(), o = IJ(e).map((n10) => ({
       group: n10.group,
       actions: n10.actions.filter((a) => !(this._favOnly && !t.has(a.id) || r && !a.label.toLowerCase().includes(r)))
     })).filter((n10) => n10.actions.length);
@@ -85538,7 +85553,7 @@ var eee = class extends HTMLElement {
   }
   /** @param {{id:string, label:string}} a @param {boolean} isFav */
   _rowHtml(e, t) {
-    return `<div class="fav-row"><span class="fav-label">${X0(e.label)}</span><button class="fav-star${t ? " is-fav" : ""}" data-id="${X0(e.id)}" aria-pressed="${t}" title="${X0(yr("favorites.toggle"))}">${JJ}</button></div>`;
+    return `<div class="fav-row"><span class="fav-label">${X0(e.label)}</span><button class="fav-star${t ? " is-fav" : ""}" data-id="${X0(e.id)}" aria-pressed="${t}" title="${X0(yr("favorites.toggle"))}">${tee}</button></div>`;
   }
   /** @param {MouseEvent} e */
   _onListClick(e) {
@@ -85546,14 +85561,14 @@ var eee = class extends HTMLElement {
     t && (_J(t.dataset.id), this._render());
   }
 };
-customElements.define("se-favorites-dialog", eee);
-var tee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+customElements.define("se-favorites-dialog", ree);
+var iee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null
 }, Symbol.toStringTag, { value: "Module" }));
-var ree = {
+var oee = {
   SVG: "http://www.w3.org/2000/svg"
 };
-document.createElementNS(ree.SVG, "svg");
+document.createElementNS(oee.SVG, "svg");
 var Gf = (i11) => i11 && typeof i11 == "object" && !Array.isArray(i11);
 var k_ = (i11, e) => {
   const t = { ...i11 };
@@ -85562,7 +85577,7 @@ var k_ = (i11, e) => {
       Gf(e[r]) ? t[r] = r in i11 ? k_(i11[r], e[r]) : e[r] : t[r] = e[r];
   return t;
 };
-var iee = (i11, e, t) => {
+var nee = (i11, e, t) => {
   const r = [], o = {
     ".": (s, l) => {
       var _a2;
@@ -85584,7 +85599,7 @@ var iee = (i11, e, t) => {
     r.push(s);
   return r.length > 0 ? r : null;
 };
-var oee = (i11) => !i11 || typeof URL > "u" || !URL.createObjectURL ? "" : URL.createObjectURL(i11);
+var aee = (i11) => !i11 || typeof URL > "u" || !URL.createObjectURL ? "" : URL.createObjectURL(i11);
 (() => {
   if (typeof Blob > "u")
     return "";
@@ -85592,7 +85607,7 @@ var oee = (i11) => !i11 || typeof URL > "u" || !URL.createObjectURL ? "" : URL.c
     ["<html><head><title>SVG-edit</title></head><body>&nbsp;</body></html>"],
     { type: "text/html" }
   );
-  return oee(i11);
+  return aee(i11);
 })();
 var $f = (i11) => i11.map(([e, t]) => {
   const r = [];
@@ -85600,7 +85615,7 @@ var $f = (i11) => i11.map(([e, t]) => {
     r.push(`${t[o]},${t[o + 1]}`);
   return e + r.join(" ");
 }).join(" ");
-var nee = (i11) => {
+var see = (i11) => {
   let e = 1.81, t, r, o;
   switch (i11.tagName) {
     case "ellipse":
@@ -85711,10 +85726,10 @@ var Kf = class {
     return this.constructor.name;
   }
 };
-var aee = function(i11) {
+var lee = function(i11) {
   return String(i11).replace(/[.\\+*?[^\]$(){}=!<>|:-]/g, "\\$&");
 };
-var see = class {
+var cee = class {
   /**
    * @param {PlainObject} editor
    */
@@ -85943,7 +85958,7 @@ var see = class {
         this.defaultPrefs[e] = window.widget.preferenceForKey(t);
       else {
         const r = document.cookie.match(
-          new RegExp("(?:^|;\\s*)" + aee(
+          new RegExp("(?:^|;\\s*)" + lee(
             encodeURIComponent(t)
           ) + "=([^;]+)")
         );
@@ -86041,25 +86056,25 @@ var see = class {
   }
 };
 var Cp = {};
-var lee = function(i11) {
+var dee = function(i11) {
   return !!Cp[i11];
 };
-var cee = function(i11) {
+var uee = function(i11) {
   return Cp[i11].action;
 };
-var dee = function(i11) {
+var hee = function(i11) {
   Object.keys(Cp).length || document.getElementById("cmenu_canvas").appendChild("<li class='separator'>");
   const e = i11.shortcut || "";
   document.getElementById("cmenu_canvas").appendChild(`
     <li class='disabled'><a href='#${i11.id}'>${i11.label}<span class='shortcut'>${e}</span></a></li>`);
 };
-var uee = function() {
+var pee = function() {
   Object.values(Cp).forEach((i11) => {
-    dee(i11);
+    hee(i11);
   });
 };
-var hee = '<div class="svg_editor"><div id="workarea"><div id="svgcanvas"><!--Faint brand watermark shown only on an empty drawing(no objects yet).--><div id="canvas_watermark" aria-hidden="true"></div></div></div><!--Not visible,but still used(text edit buffer). Lives at the editor root(not inside a panel)so it stays focusable when a panel is hidden \u2014 e.g.in tablet mode,where #tools_top is display:none and a focus()on adisplay:none subtree is a no-op(keystrokes would otherwise fall throughto the global tool shortcuts). Positioned offscreen via #text in svgedit.css.--><input id="text" type="text" size="35"/></div>';
-var pee = `<style>/*Rulers\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014*/
+var Aee = '<div class="svg_editor"><div id="workarea"><div id="svgcanvas"><!--Faint brand watermark shown only on an empty drawing(no objects yet).--><div id="canvas_watermark" aria-hidden="true"></div></div></div><!--Not visible,but still used(text edit buffer). Lives at the editor root(not inside a panel)so it stays focusable when a panel is hidden \u2014 e.g.in tablet mode,where #tools_top is display:none and a focus()on adisplay:none subtree is a no-op(keystrokes would otherwise fall throughto the global tool shortcuts). Positioned offscreen via #text in svgedit.css.--><input id="text" type="text" size="35"/></div>';
+var gee = `<style>/*Rulers\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014*/
 #ruler_corner {
 background: var(--ruler-color);grid-area: corner;width: 15px;height: 15px;overflow: hidden;}
 #ruler_x {
@@ -86068,8 +86083,8 @@ background: var(--ruler-color);grid-area: rulerX;height: 15px;border-bottom: 1px
 background: var(--ruler-color);grid-area: rulerY;width: 15px;border-right: 1px solid;border-top: 1px solid #777;overflow: hidden;}
 #ruler_x canvas {
 float: left;}</style><div id="ruler_corner"></div><div id="ruler_x"><div><canvas height="15"></canvas></div></div><div id="ruler_y"><div><canvas width="15"></canvas></div></div>`;
-var { getTypeMap: Aee } = $r;
-var gee = class {
+var { getTypeMap: fee } = $r;
+var _ee = class {
   /**
    * @type {Module}
   */
@@ -86079,7 +86094,7 @@ var gee = class {
       this.rulerIntervals.push(o), this.rulerIntervals.push(2 * o), this.rulerIntervals.push(5 * o);
     this.svgCanvas = e.svgCanvas, this.editor = e;
     const t = document.createElement("template");
-    t.innerHTML = pee, this.editor.$svgEditor.append(t.content.cloneNode(true));
+    t.innerHTML = gee, this.editor.$svgEditor.append(t.content.cloneNode(true));
     const { $id: r } = this.editor;
     this.rulerX = r("ruler_x"), this.rulerY = r("ruler_y"), this.rulerCorner = r("ruler_corner");
   }
@@ -86102,7 +86117,7 @@ var gee = class {
     const { $id: r } = this.editor;
     t || (t = this.svgCanvas.getZoom()), e || (e = r("svgcanvas"));
     let o, n10;
-    const a = 3e4, s = this.svgCanvas.getSvgContent(), d = Aee()[this.editor.configObj.curConfig.baseUnit];
+    const a = 3e4, s = this.svgCanvas.getSvgContent(), d = fee()[this.editor.configObj.curConfig.baseUnit];
     for (o = 0; o < 2; o++) {
       const h = o === 0, g = h ? "x" : "y", _ = h ? "width" : "height", u = Number(s.getAttribute(g)), x = r("ruler_" + g).querySelector("canvas"), v = x.cloneNode(true);
       x.replaceWith(v);
@@ -86181,7 +86196,7 @@ var zE = (i11, e) => {
   t && t.classList.toggle("ui-tablet", HE(i11));
 };
 var HE = (i11) => i11 === true || i11 === "true";
-var fee = {
+var mee = {
   name: "Color Shift",
   panelTitle: "Color Shift",
   hint: "Select one or more shapes to shift colours.",
@@ -86197,18 +86212,18 @@ var fee = {
   },
   reset: { title: "Revert to original colours and zero all inputs" }
 };
-var _ee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var yee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: fee
+  default: mee
 }, Symbol.toStringTag, { value: "Module" }));
 var S_ = "color-shift";
-var mee = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": _ee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var vee = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": yee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, S_, r.default);
 };
 var Ya = (i11, e, t) => Math.max(e, Math.min(t, i11));
 var Y0;
-var yee = (i11) => {
+var bee = (i11) => {
   Y0 || (Y0 = document.createElement("canvas").getContext("2d")), Y0.fillStyle = "#000";
   try {
     Y0.fillStyle = i11;
@@ -86246,7 +86261,7 @@ var E_ = (i11) => {
     const r = t[1].split(/[,\s/]+/).filter(Boolean), o = B_({ h: +r[0], s: +String(r[1]).replace("%", ""), l: +String(r[2]).replace("%", "") });
     return o.a = r[3] != null ? +r[3] : 1, o;
   }
-  return yee(e);
+  return bee(e);
 };
 var Lb = ({ r: i11, g: e, b: t }) => {
   i11 /= 255, e /= 255, t /= 255;
@@ -86271,7 +86286,7 @@ var B_ = ({ h: i11, s: e, l: t }) => {
   };
 };
 var Pb = ({ r: i11, g: e, b: t }) => "#" + [i11, e, t].map((r) => Ya(Math.round(r), 0, 255).toString(16).padStart(2, "0")).join("");
-var vee = /* @__PURE__ */ new Set([
+var wee = /* @__PURE__ */ new Set([
   "rect",
   "circle",
   "ellipse",
@@ -86283,12 +86298,12 @@ var vee = /* @__PURE__ */ new Set([
   "tspan",
   "foreignObject"
 ]);
-var bee = {
+var xee = {
   name: S_,
   async init() {
     const i11 = this, { svgCanvas: e } = i11, { BatchCommand: t, ChangeElementCommand: r } = e.history, { $id: o } = e;
-    await mee(i11);
-    const n10 = /* @__PURE__ */ new WeakMap(), a = (m) => m && vee.has(m.tagName), s = () => e.getSelectedElements().filter(a), l = (m) => {
+    await vee(i11);
+    const n10 = /* @__PURE__ */ new WeakMap(), a = (m) => m && wee.has(m.tagName), s = () => e.getSelectedElements().filter(a), l = (m) => {
       var _a2, _b2;
       const y = m.getAttribute("fill"), S = m.getAttribute("stroke"), P = y != null ? y : "#000000", L = S != null ? S : "none", M = parseFloat((_a2 = m.getAttribute("fill-opacity")) != null ? _a2 : "1"), I = parseFloat((_b2 = m.getAttribute("stroke-opacity")) != null ? _b2 : "1"), Q = E_(P), N = E_(L);
       return {
@@ -86406,11 +86421,11 @@ var bee = {
     };
   }
 };
-var wee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Cee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: bee
+  default: xee
 }, Symbol.toStringTag, { value: "Module" }));
-var xee = {
+var kee = {
   name: "Connector",
   langListTitle: "Connect two objects",
   langList: [
@@ -86427,11 +86442,11 @@ var xee = {
     leader: "Leader-line style"
   }
 };
-var Cee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var See = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: xee
+  default: kee
 }, Symbol.toStringTag, { value: "Module" }));
-var kee = {
+var Eee = {
   name: "Connecteur",
   langListTitle: "Connecter deux objets",
   langList: [
@@ -86448,11 +86463,11 @@ var kee = {
     leader: "Style ligne de rep\xE8re"
   }
 };
-var See = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Bee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: kee
+  default: Eee
 }, Symbol.toStringTag, { value: "Module" }));
-var Eee = {
+var Lee = {
   name: "\u8FDE\u63A5\u5668",
   langListTitle: "\u8FDE\u63A5\u4E24\u4E2A\u5BF9\u8C61",
   langList: [
@@ -86469,20 +86484,20 @@ var Eee = {
     leader: "\u5F15\u5BFC\u7EBF\u6837\u5F0F"
   }
 };
-var Bee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Pee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Eee
+  default: Lee
 }, Symbol.toStringTag, { value: "Module" }));
 var Tl = "connector";
-var Lee = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Cee, "./locale/fr.js": See, "./locale/zh-CN.js": Bee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Tee = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": See, "./locale/fr.js": Bee, "./locale/zh-CN.js": Pee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, Tl, r.default);
 };
-var Pee = {
+var jee = {
   name: Tl,
   async init(i11) {
     const e = this, { svgCanvas: t } = e, { getElement: r, $id: o, $click: n10, addSVGElementsFromJson: a } = t, { svgroot: s, selectorManager: l } = i11, d = t.getEditorNS();
-    await Lee(e);
+    await Tee(e);
     let h, g, _, u = false, x = [];
     const v = t.groupSelectedElements;
     t.groupSelectedElements = function(...T) {
@@ -86758,11 +86773,11 @@ var Pee = {
     };
   }
 };
-var Tee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Fee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Pee
+  default: jee
 }, Symbol.toStringTag, { value: "Module" }));
-var jee = {
+var Mee = {
   name: "Curvature",
   buttons: [
     {
@@ -86773,11 +86788,11 @@ var jee = {
     label: "Curve"
   }
 };
-var Fee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Nee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: jee
+  default: Mee
 }, Symbol.toStringTag, { value: "Module" }));
-function Mee(i11) {
+function Iee(i11) {
   if (Object.prototype.hasOwnProperty.call(i11, "__esModule")) return i11;
   var e = i11.default;
   if (typeof e == "function") {
@@ -87101,7 +87116,7 @@ function lB(i11) {
 function cB(i11, e) {
   return Object.defineProperty ? Object.defineProperty(i11, "raw", { value: e }) : i11.raw = e, i11;
 }
-var Nee = Object.create ? function(i11, e) {
+var Oee = Object.create ? function(i11, e) {
   Object.defineProperty(i11, "default", { enumerable: true, value: e });
 } : function(i11, e) {
   i11.default = e;
@@ -87117,7 +87132,7 @@ function dB(i11) {
   if (i11 && i11.__esModule) return i11;
   var e = {};
   if (i11 != null) for (var t = P_(i11), r = 0; r < t.length; r++) t[r] !== "default" && kp(e, i11, t[r]);
-  return Nee(e, i11), e;
+  return Oee(e, i11), e;
 }
 function uB(i11) {
   return i11 && i11.__esModule ? i11 : { default: i11 };
@@ -87160,13 +87175,13 @@ function gB(i11, e, t) {
   } else t && i11.stack.push({ async: true });
   return e;
 }
-var Iee = typeof SuppressedError == "function" ? SuppressedError : function(i11, e, t) {
+var Uee = typeof SuppressedError == "function" ? SuppressedError : function(i11, e, t) {
   var r = new Error(t);
   return r.name = "SuppressedError", r.error = i11, r.suppressed = e, r;
 };
 function fB(i11) {
   function e(n10) {
-    i11.error = i11.hasError ? new Iee(n10, i11.error, "An error was suppressed during disposal.") : n10, i11.hasError = true;
+    i11.error = i11.hasError ? new Uee(n10, i11.error, "An error was suppressed during disposal.") : n10, i11.hasError = true;
   }
   var t, r = 0;
   function o() {
@@ -87192,7 +87207,7 @@ function _B(i11, e) {
     return r ? e ? ".jsx" : ".js" : o && (!n10 || !a) ? t : o + n10 + "." + a.toLowerCase() + "js";
   }) : i11;
 }
-var Oee = {
+var Ree = {
   __extends: VE,
   __assign: Mh,
   __rest: GE,
@@ -87226,7 +87241,7 @@ var Oee = {
   __disposeResources: fB,
   __rewriteRelativeImportExtension: _B
 };
-var Uee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Dee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   __addDisposableResource: gB,
   get __assign() {
@@ -87262,9 +87277,9 @@ var Uee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __spreadArray: nB,
   __spreadArrays: oB,
   __values: Nh,
-  default: Oee
+  default: Ree
 }, Symbol.toStringTag, { value: "Module" }));
-var Ree = /* @__PURE__ */ Mee(Uee);
+var qee = /* @__PURE__ */ Iee(Dee);
 var Sl = {};
 var Tb;
 function jb() {
@@ -87404,15 +87419,15 @@ function Mb() {
 }
 var Wf = {};
 var Nb;
-function Dee() {
+function Qee() {
   return Nb || (Nb = 1, Object.defineProperty(Wf, "__esModule", { value: true })), Wf;
 }
 var Ib;
-function qee() {
+function zee() {
   return Ib || (Ib = 1, function(i11) {
     Object.defineProperty(i11, "__esModule", { value: true }), i11.spiroToBezier = i11.spiroToBezierOnContext = i11.spiroToArcsOnContext = i11.spiroToArcs = i11.SpiroArc = void 0;
-    const e = Ree, t = jb(), r = Mb();
-    e.__exportStar(Dee(), i11), e.__exportStar(jb(), i11);
+    const e = qee, t = jb(), r = Mb();
+    e.__exportStar(Qee(), i11), e.__exportStar(jb(), i11);
     var o = Mb();
     Object.defineProperty(i11, "SpiroArc", { enumerable: true, get: function() {
       return o.SpiroArc;
@@ -87683,11 +87698,11 @@ function qee() {
     i11.spiroToBezier = K;
   }(Yf)), Yf;
 }
-var Qee = qee();
+var Hee = zee();
 var hd = "curvature";
 var pd = "catmull";
-var zee = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Fee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Vee = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Nee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, hd, r.default);
 };
 var Ur = (i11) => Math.round(i11 * 100) / 100;
@@ -87704,7 +87719,7 @@ function T_(i11, e) {
   }
   return e && (t += " Z"), t;
 }
-function Hee(i11, e) {
+function Gee(i11, e) {
   if (i11.length === 2)
     return `M ${Ur(i11[0].x)},${Ur(i11[0].y)} L ${Ur(i11[1].x)},${Ur(i11[1].y)}${e ? " Z" : ""}`;
   const t = [];
@@ -87720,7 +87735,7 @@ function Hee(i11, e) {
   }
   return e && (s += " Z"), s;
 }
-var Vee = class {
+var $ee = class {
   constructor() {
     this.d = "";
   }
@@ -87738,13 +87753,13 @@ var Vee = class {
     this.d += ` C ${Ur(e)},${Ur(t)} ${Ur(r)},${Ur(o)} ${Ur(n10)},${Ur(a)}`;
   }
 };
-function Gee(i11, e) {
+function Kee(i11, e) {
   const t = i11.length - 1, r = i11.map((a, s) => {
     let l = "g2";
     return a.corner ? l = "corner" : !e && s === 0 ? l = "open" : !e && s === t && (l = "open_end"), { x: a.x, y: a.y, type: l };
-  }), o = new Vee();
+  }), o = new $ee();
   try {
-    Qee.spiroToBezierOnContext(r, e, o);
+    Hee.spiroToBezierOnContext(r, e, o);
   } catch (e10) {
     return T_(i11, e);
   }
@@ -87757,18 +87772,18 @@ function Ob(i11, e = null, t = false) {
   if (r.length === 1) return `M ${Ur(r[0].x)},${Ur(r[0].y)}`;
   switch (pd) {
     case "bspline":
-      return Hee(r, t);
-    case "spiro":
       return Gee(r, t);
+    case "spiro":
+      return Kee(r, t);
     default:
       return T_(r, t);
   }
 }
-var $ee = {
+var Xee = {
   name: hd,
   async init() {
     const i11 = this, { svgCanvas: e } = i11, { $id: t, $click: r } = e;
-    await zee(i11);
+    await Vee(i11);
     const o = (y) => {
       if (e.getMode() !== "curvature") return;
       const S = t("svgcanvas");
@@ -87862,11 +87877,11 @@ var $ee = {
     };
   }
 };
-var Kee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Yee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: $ee
+  default: Xee
 }, Symbol.toStringTag, { value: "Module" }));
-var Xee = {
+var Wee = {
   name: "Cutter",
   buttons: [
     {
@@ -87874,20 +87889,20 @@ var Xee = {
     }
   ]
 };
-var Yee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Zee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Xee
+  default: Wee
 }, Symbol.toStringTag, { value: "Module" }));
 var nh = "cutter";
-var Wee = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Yee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Jee = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Zee }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, nh, r.default);
 };
-var Zee = {
+var ete = {
   name: nh,
   async init() {
     const i11 = this, { svgCanvas: e } = i11, { $id: t, $click: r } = e;
-    await Wee(i11);
+    await Jee(i11);
     let o = false, n10 = 0, a = 0, s = null;
     const l = (h, g) => {
       const u = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -87928,28 +87943,15 @@ var Zee = {
     };
   }
 };
-var Jee = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: Zee
-}, Symbol.toStringTag, { value: "Module" }));
-var ete = {
-  name: "eyedropper",
-  buttons: [
-    {
-      title: "Eye Dropper Tool",
-      key: "I"
-    }
-  ]
-};
 var tte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ete
 }, Symbol.toStringTag, { value: "Module" }));
 var rte = {
-  name: "pipette",
+  name: "eyedropper",
   buttons: [
     {
-      title: "Outil pipette",
+      title: "Eye Dropper Tool",
       key: "I"
     }
   ]
@@ -87959,10 +87961,10 @@ var ite = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: rte
 }, Symbol.toStringTag, { value: "Module" }));
 var ote = {
-  name: "pipett",
+  name: "pipette",
   buttons: [
     {
-      title: "pipettverktyg",
+      title: "Outil pipette",
       key: "I"
     }
   ]
@@ -87972,10 +87974,10 @@ var nte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: ote
 }, Symbol.toStringTag, { value: "Module" }));
 var ate = {
-  name: "renkse\xE7ici",
+  name: "pipett",
   buttons: [
     {
-      title: "Renk Se\xE7im Arac\u0131",
+      title: "pipettverktyg",
       key: "I"
     }
   ]
@@ -87985,10 +87987,10 @@ var ste = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: ate
 }, Symbol.toStringTag, { value: "Module" }));
 var lte = {
-  name: "eyedropper",
+  name: "renkse\xE7ici",
   buttons: [
     {
-      title: "\u041F\u0456\u043F\u0435\u0442\u043A\u0430",
+      title: "Renk Se\xE7im Arac\u0131",
       key: "I"
     }
   ]
@@ -87998,10 +88000,10 @@ var cte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: lte
 }, Symbol.toStringTag, { value: "Module" }));
 var dte = {
-  name: "\u6EF4\u7BA1",
+  name: "eyedropper",
   buttons: [
     {
-      title: "\u6EF4\u7BA1\u5DE5\u5177",
+      title: "\u041F\u0456\u043F\u0435\u0442\u043A\u0430",
       key: "I"
     }
   ]
@@ -88010,16 +88012,29 @@ var ute = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: dte
 }, Symbol.toStringTag, { value: "Module" }));
+var hte = {
+  name: "\u6EF4\u7BA1",
+  buttons: [
+    {
+      title: "\u6EF4\u7BA1\u5DE5\u5177",
+      key: "I"
+    }
+  ]
+};
+var pte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: hte
+}, Symbol.toStringTag, { value: "Module" }));
 var Aa = "eyedropper";
-var hte = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": tte, "./locale/fr.js": ite, "./locale/sv.js": nte, "./locale/tr.js": ste, "./locale/uk.js": cte, "./locale/zh-CN.js": ute }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Ate = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": ite, "./locale/fr.js": nte, "./locale/sv.js": ste, "./locale/tr.js": cte, "./locale/uk.js": ute, "./locale/zh-CN.js": pte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, Aa, r.default);
 };
-var pte = {
+var gte = {
   name: Aa,
   async init() {
     const i11 = this, { svgCanvas: e } = i11;
-    await hte(i11);
+    await Ate(i11);
     const { ChangeElementCommand: t } = e.history, r = (_) => {
       e.undoMgr.addCommandToHistory(_);
     }, o = {}, { $id: n10, $click: a } = e, s = document.createElement("div");
@@ -88078,13 +88093,13 @@ var pte = {
     };
   }
 };
-var Ate = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var fte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: pte
+  default: gte
 }, Symbol.toStringTag, { value: "Module" }));
-var gte = "fonts";
-var fte = {
-  name: gte,
+var _te = "fonts";
+var mte = {
+  name: _te,
   async init() {
     const i11 = this, e = i11.svgCanvas, { $id: t } = e;
     return {
@@ -88102,27 +88117,15 @@ var fte = {
     };
   }
 };
-var _te = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: fte
-}, Symbol.toStringTag, { value: "Module" }));
-var mte = {
-  name: "View Grid",
-  buttons: [
-    {
-      title: "Grid settings"
-    }
-  ]
-};
 var yte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: mte
 }, Symbol.toStringTag, { value: "Module" }));
 var vte = {
-  name: "Grille",
+  name: "View Grid",
   buttons: [
     {
-      title: "Afficher/Cacher Grille"
+      title: "Grid settings"
     }
   ]
 };
@@ -88131,10 +88134,10 @@ var bte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: vte
 }, Symbol.toStringTag, { value: "Module" }));
 var wte = {
-  name: "Visa rutn\xE4t",
+  name: "Grille",
   buttons: [
     {
-      title: "Visa/d\xF6lj rutn\xE4t"
+      title: "Afficher/Cacher Grille"
     }
   ]
 };
@@ -88143,10 +88146,10 @@ var xte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: wte
 }, Symbol.toStringTag, { value: "Module" }));
 var Cte = {
-  name: "Izgaray\u0131 G\xF6r\xFCnt\xFCle",
+  name: "Visa rutn\xE4t",
   buttons: [
     {
-      title: "Izgara G\xF6ster/Gizle"
+      title: "Visa/d\xF6lj rutn\xE4t"
     }
   ]
 };
@@ -88155,10 +88158,10 @@ var kte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: Cte
 }, Symbol.toStringTag, { value: "Module" }));
 var Ste = {
-  name: "\u0421\u0456\u0442\u043A\u0430",
+  name: "Izgaray\u0131 G\xF6r\xFCnt\xFCle",
   buttons: [
     {
-      title: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438/\u0417\u0430\u043A\u043E\u0432\u0430\u0442\u0438 \u0421\u0456\u0442\u043A\u0443"
+      title: "Izgara G\xF6ster/Gizle"
     }
   ]
 };
@@ -88167,10 +88170,10 @@ var Ete = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   default: Ste
 }, Symbol.toStringTag, { value: "Module" }));
 var Bte = {
-  name: "\u7F51\u683C\u89C6\u56FE",
+  name: "\u0421\u0456\u0442\u043A\u0430",
   buttons: [
     {
-      title: "\u663E\u793A/\u9690\u85CF\u7F51\u683C"
+      title: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438/\u0417\u0430\u043A\u043E\u0432\u0430\u0442\u0438 \u0421\u0456\u0442\u043A\u0443"
     }
   ]
 };
@@ -88178,16 +88181,28 @@ var Lte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Bte
 }, Symbol.toStringTag, { value: "Module" }));
+var Pte = {
+  name: "\u7F51\u683C\u89C6\u56FE",
+  buttons: [
+    {
+      title: "\u663E\u793A/\u9690\u85CF\u7F51\u683C"
+    }
+  ]
+};
+var Tte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Pte
+}, Symbol.toStringTag, { value: "Module" }));
 var ah = "grid";
-var Pte = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": yte, "./locale/fr.js": bte, "./locale/sv.js": xte, "./locale/tr.js": kte, "./locale/uk.js": Ete, "./locale/zh-CN.js": Lte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var jte = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": bte, "./locale/fr.js": xte, "./locale/sv.js": kte, "./locale/tr.js": Ete, "./locale/uk.js": Lte, "./locale/zh-CN.js": Tte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, ah, r.default);
 };
-var Tte = {
+var Fte = {
   name: ah,
   async init() {
     const i11 = this;
-    await Pte(i11);
+    await jte(i11);
     const { svgCanvas: e } = i11, { $id: t, NS: r } = e, o = t("svgcanvas").ownerDocument, { assignAttributes: n10 } = e, a = document.createElement("canvas"), s = t("canvasBackground"), l = e.getTypeMap(), d = [0.01, 0.1, 1, 10, 100, 1e3], h = i11.configObj.curConfig;
     a.style.display = "none", i11.$svgEditor.appendChild(a);
     const g = o.createElementNS(r.SVG, "svg");
@@ -88339,11 +88354,11 @@ var Tte = {
     };
   }
 };
-var jte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Mte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Tte
+  default: Fte
 }, Symbol.toStringTag, { value: "Module" }));
-var Fte = {
+var Nte = {
   name: "Hello World",
   text: `Hello World!
 
@@ -88354,11 +88369,11 @@ You clicked here: {{x}}, {{y}}`,
     }
   ]
 };
-var Mte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Ite = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Fte
+  default: Nte
 }, Symbol.toStringTag, { value: "Module" }));
-var Nte = {
+var Ote = {
   name: "Bonjour le Monde",
   text: `Bonjour le Monde!
 
@@ -88369,11 +88384,11 @@ Vous avez cliqu\xE9 ici: {{x}}, {{y}}`,
     }
   ]
 };
-var Ite = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Ute = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Nte
+  default: Ote
 }, Symbol.toStringTag, { value: "Module" }));
-var Ote = {
+var Rte = {
   name: "Merhaba D\xFCnya",
   text: `Merhaba D\xFCnya!
 
@@ -88384,11 +88399,11 @@ Buraya T\u0131klad\u0131n\u0131z: {{x}}, {{y}}`,
     }
   ]
 };
-var Ute = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Dte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Ote
+  default: Rte
 }, Symbol.toStringTag, { value: "Module" }));
-var Rte = {
+var qte = {
   name: "\u041F\u0440\u0438\u0432\u0456\u0442 \u0421\u0432\u0456\u0442",
   text: `\u041F\u0440\u0438\u0432\u0456\u0442 \u0421\u0432\u0456\u0442!
 
@@ -88399,11 +88414,11 @@ var Rte = {
     }
   ]
 };
-var Dte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Qte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Rte
+  default: qte
 }, Symbol.toStringTag, { value: "Module" }));
-var qte = {
+var zte = {
   name: "Hello World",
   text: `Hello World!
 
@@ -88414,20 +88429,20 @@ var qte = {
     }
   ]
 };
-var Qte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Hte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: qte
+  default: zte
 }, Symbol.toStringTag, { value: "Module" }));
 var Ad = "helloworld";
-var zte = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Mte, "./locale/fr.js": Ite, "./locale/tr.js": Ute, "./locale/uk.js": Dte, "./locale/zh-CN.js": Qte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Vte = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Ite, "./locale/fr.js": Ute, "./locale/tr.js": Dte, "./locale/uk.js": Qte, "./locale/zh-CN.js": Hte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, Ad, r.default);
 };
-var Hte = {
+var Gte = {
   name: Ad,
   async init({ _importLocale: i11 }) {
     const e = this;
-    await zte(e);
+    await Vte(e);
     const { svgCanvas: t } = e, { $id: r, $click: o } = t;
     return {
       name: e.i18next.t(`${Ad}:name`),
@@ -88456,11 +88471,11 @@ var Hte = {
     };
   }
 };
-var Vte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var $te = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Hte
+  default: Gte
 }, Symbol.toStringTag, { value: "Module" }));
-var Gte = {
+var Kte = {
   name: "layerview",
   buttons: [
     {
@@ -88469,11 +88484,11 @@ var Gte = {
     }
   ]
 };
-var $te = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Xte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Gte
+  default: Kte
 }, Symbol.toStringTag, { value: "Module" }));
-var Kte = {
+var Yte = {
   name: "\u56FE\u5C42\u89C6\u56FE",
   buttons: [
     {
@@ -88482,20 +88497,20 @@ var Kte = {
     }
   ]
 };
-var Xte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Wte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Kte
+  default: Yte
 }, Symbol.toStringTag, { value: "Module" }));
 var gd = "layer_view";
-var Yte = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": $te, "./locale/zh-CN.js": Xte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Zte = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Xte, "./locale/zh-CN.js": Wte }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, gd, r.default);
 };
-var Wte = {
+var Jte = {
   name: gd,
   async init(i11) {
     const e = this, { svgCanvas: t } = e, { $id: r, $click: o } = t;
-    await Yte(e);
+    await Zte(e);
     const n10 = (s) => {
       r("tool_layerView").pressed = !r("tool_layerView").pressed, a();
     }, a = (s) => {
@@ -88529,11 +88544,11 @@ var Wte = {
     };
   }
 };
-var Zte = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var ere = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Wte
+  default: Jte
 }, Symbol.toStringTag, { value: "Module" }));
-var Jte = {
+var tre = {
   name: "markers",
   async init() {
     const i11 = this, { svgCanvas: e } = i11, { BatchCommand: t, RemoveElementCommand: r, InsertElementCommand: o } = e.history, { $id: n10, addSVGElementsFromJson: a } = e, s = ["start", "mid", "end"], l = ["line", "path", "polyline", "polygon"], d = {
@@ -88677,28 +88692,16 @@ var Jte = {
     };
   }
 };
-var ere = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: Jte
-}, Symbol.toStringTag, { value: "Module" }));
-var tre = {
-  opensave: {
-    new_doc: "New Image",
-    open_image_doc: "Open SVG",
-    save_doc: "Save SVG",
-    save_as_doc: "Save as SVG"
-  }
-};
 var rre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: tre
 }, Symbol.toStringTag, { value: "Module" }));
 var ire = {
   opensave: {
-    new_doc: "Nouvelle image",
-    open_image_doc: "Ouvrir le SVG",
-    save_doc: "Enregistrer l'image",
-    save_as_doc: "Enregistrer en tant qu'image"
+    new_doc: "New Image",
+    open_image_doc: "Open SVG",
+    save_doc: "Save SVG",
+    save_as_doc: "Save as SVG"
   }
 };
 var ore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -88707,10 +88710,10 @@ var ore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
 }, Symbol.toStringTag, { value: "Module" }));
 var nre = {
   opensave: {
-    new_doc: "Ny bild",
-    open_image_doc: "\xD6ppna SVG",
-    save_doc: "Spara SVG",
-    save_as_doc: "Spara som SVG"
+    new_doc: "Nouvelle image",
+    open_image_doc: "Ouvrir le SVG",
+    save_doc: "Enregistrer l'image",
+    save_as_doc: "Enregistrer en tant qu'image"
   }
 };
 var are = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -88719,10 +88722,10 @@ var are = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
 }, Symbol.toStringTag, { value: "Module" }));
 var sre = {
   opensave: {
-    new_doc: "Yeni Resim",
-    open_image_doc: "SVG A\xE7",
-    save_doc: "SVG Kaydet",
-    save_as_doc: "SVG olarak Kaydet"
+    new_doc: "Ny bild",
+    open_image_doc: "\xD6ppna SVG",
+    save_doc: "Spara SVG",
+    save_as_doc: "Spara som SVG"
   }
 };
 var lre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -88731,10 +88734,10 @@ var lre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
 }, Symbol.toStringTag, { value: "Module" }));
 var cre = {
   opensave: {
-    new_doc: "\u041D\u043E\u0432\u0435 \u0417\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043D\u044F",
-    open_image_doc: "\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 SVG",
-    save_doc: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG",
-    save_as_doc: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG \u044F\u043A"
+    new_doc: "Yeni Resim",
+    open_image_doc: "SVG A\xE7",
+    save_doc: "SVG Kaydet",
+    save_as_doc: "SVG olarak Kaydet"
   }
 };
 var dre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -88743,15 +88746,27 @@ var dre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
 }, Symbol.toStringTag, { value: "Module" }));
 var ure = {
   opensave: {
+    new_doc: "\u041D\u043E\u0432\u0435 \u0417\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043D\u044F",
+    open_image_doc: "\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 SVG",
+    save_doc: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG",
+    save_as_doc: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG \u044F\u043A"
+  }
+};
+var hre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: ure
+}, Symbol.toStringTag, { value: "Module" }));
+var pre = {
+  opensave: {
     new_doc: "\u65B0\u56FE\u7247",
     open_image_doc: "\u6253\u5F00 SVG",
     save_doc: "\u4FDD\u5B58\u56FE\u50CF",
     save_as_doc: "\u53E6\u5B58\u4E3A\u56FE\u50CF"
   }
 };
-var hre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Are = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: ure
+  default: pre
 }, Symbol.toStringTag, { value: "Module" }));
 var G3 = (() => {
   if (typeof self > "u") return false;
@@ -88762,32 +88777,32 @@ var G3 = (() => {
   }
   return "showOpenFilePicker" in self;
 })();
-var pre = G3 ? Promise.resolve().then(function() {
-  return mre;
-}) : Promise.resolve().then(function() {
-  return Cre;
-});
-async function Are(...i11) {
-  return (await pre).default(...i11);
-}
-G3 ? Promise.resolve().then(function() {
+var gre = G3 ? Promise.resolve().then(function() {
   return vre;
 }) : Promise.resolve().then(function() {
   return Sre;
 });
-var gre = G3 ? Promise.resolve().then(function() {
+async function fre(...i11) {
+  return (await gre).default(...i11);
+}
+G3 ? Promise.resolve().then(function() {
   return wre;
 }) : Promise.resolve().then(function() {
   return Bre;
 });
+var _re = G3 ? Promise.resolve().then(function() {
+  return Cre;
+}) : Promise.resolve().then(function() {
+  return Pre;
+});
 async function Ub(...i11) {
-  return (await gre).default(...i11);
+  return (await _re).default(...i11);
 }
-var fre = async (i11) => {
+var mre = async (i11) => {
   const e = await i11.getFile();
   return e.handle = i11, e;
 };
-var _re = async (i11 = [{}]) => {
+var yre = async (i11 = [{}]) => {
   Array.isArray(i11) || (i11 = [i11]);
   const e = [];
   i11.forEach((o, n10) => {
@@ -88795,10 +88810,10 @@ var _re = async (i11 = [{}]) => {
       e[n10].accept[a] = o.extensions || [];
     }) : e[n10].accept["*/*"] = o.extensions || [];
   });
-  const t = await window.showOpenFilePicker({ id: i11[0].id, startIn: i11[0].startIn, types: e, multiple: i11[0].multiple || false, excludeAcceptAllOption: i11[0].excludeAcceptAllOption || false }), r = await Promise.all(t.map(fre));
+  const t = await window.showOpenFilePicker({ id: i11[0].id, startIn: i11[0].startIn, types: e, multiple: i11[0].multiple || false, excludeAcceptAllOption: i11[0].excludeAcceptAllOption || false }), r = await Promise.all(t.map(mre));
   return i11[0].multiple ? r : r[0];
 };
-var mre = { __proto__: null, default: _re };
+var vre = { __proto__: null, default: yre };
 function sh(i11) {
   function e(t) {
     if (Object(t) !== t) return Promise.reject(new TypeError(t + " is not an object."));
@@ -88846,13 +88861,13 @@ var mB = async (i11, e, t = i11.name, r) => {
   }
   return [...(await Promise.all(o)).flat(), ...await Promise.all(n10)];
 };
-var yre = async (i11 = {}) => {
+var bre = async (i11 = {}) => {
   i11.recursive = i11.recursive || false, i11.mode = i11.mode || "read";
   const e = await window.showDirectoryPicker({ id: i11.id, startIn: i11.startIn, mode: i11.mode });
   return (await (await e.values()).next()).done ? [e] : mB(e, i11.recursive, void 0, i11.skipDirectory);
 };
-var vre = { __proto__: null, default: yre };
-var bre = async (i11, e = [{}], t = null, r = false, o = null) => {
+var wre = { __proto__: null, default: bre };
+var xre = async (i11, e = [{}], t = null, r = false, o = null) => {
   Array.isArray(e) || (e = [e]), e[0].fileName = e[0].fileName || "Untitled";
   const n10 = [];
   let a = null;
@@ -88870,8 +88885,8 @@ var bre = async (i11, e = [{}], t = null, r = false, o = null) => {
   const l = await s.createWritable();
   return "stream" in i11 ? (await i11.stream().pipeTo(l), s) : "body" in i11 ? (await i11.body.pipeTo(l), s) : (await l.write(await i11), await l.close(), s);
 };
-var wre = { __proto__: null, default: bre };
-var xre = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), new Promise((e, t) => {
+var Cre = { __proto__: null, default: xre };
+var kre = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), new Promise((e, t) => {
   const r = document.createElement("input");
   r.type = "file";
   const o = [...i11.map((n10) => n10.mimeTypes || []), ...i11.map((n10) => n10.extensions || [])].join();
@@ -88881,8 +88896,8 @@ var xre = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), new Promis
     r.remove(), e(r.multiple ? Array.from(r.files) : r.files[0]);
   }), "showPicker" in HTMLInputElement.prototype ? r.showPicker() : r.click();
 }));
-var Cre = { __proto__: null, default: xre };
-var kre = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), i11[0].recursive = i11[0].recursive || false, new Promise((e, t) => {
+var Sre = { __proto__: null, default: kre };
+var Ere = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), i11[0].recursive = i11[0].recursive || false, new Promise((e, t) => {
   const r = document.createElement("input");
   r.type = "file", r.webkitdirectory = true, r.style.display = "none", document.body.append(r), r.addEventListener("cancel", () => {
     r.remove(), t(new DOMException("The user aborted a request.", "AbortError"));
@@ -88892,8 +88907,8 @@ var kre = async (i11 = [{}]) => (Array.isArray(i11) || (i11 = [i11]), i11[0].rec
     i11[0].recursive ? i11[0].recursive && i11[0].skipDirectory && (o = o.filter((n10) => n10.webkitRelativePath.split("/").every((a) => !i11[0].skipDirectory({ name: a, kind: "directory" })))) : o = o.filter((n10) => n10.webkitRelativePath.split("/").length === 2), e(o);
   }), "showPicker" in HTMLInputElement.prototype ? r.showPicker() : r.click();
 }));
-var Sre = { __proto__: null, default: kre };
-var Ere = async (i11, e = {}) => {
+var Bre = { __proto__: null, default: Ere };
+var Lre = async (i11, e = {}) => {
   Array.isArray(e) && (e = e[0]);
   const t = document.createElement("a");
   let r = i11;
@@ -88913,16 +88928,16 @@ var Ere = async (i11, e = {}) => {
     setTimeout(() => URL.revokeObjectURL(t.href), 3e4), o();
   }), t.click(), null;
 };
-var Bre = { __proto__: null, default: Ere };
+var Pre = { __proto__: null, default: Lre };
 var Rb = ["rect", "circle", "ellipse", "line", "polyline", "polygon"];
-var Lre = ["x", "y", "width", "height", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "points"];
+var Tre = ["x", "y", "width", "height", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "points"];
 var Db = (i11, e, t) => {
-  const r = nee(i11);
+  const r = see(i11);
   if (!r) return i11;
   const o = e.createElementNS(t.NS.SVG, "path");
-  return Array.from(i11.attributes).forEach(({ name: n10, value: a }) => o.setAttribute(n10, a)), Lre.forEach((n10) => o.removeAttribute(n10)), o.setAttribute("d", r), i11.replaceWith(o), o;
+  return Array.from(i11.attributes).forEach(({ name: n10, value: a }) => o.setAttribute(n10, a)), Tre.forEach((n10) => o.removeAttribute(n10)), o.setAttribute("d", r), i11.replaceWith(o), o;
 };
-var Pre = (i11, e, t) => Rb.includes(i11.localName) ? Db(i11, e, t) : (i11.querySelectorAll(Rb.join(",")).forEach((r) => Db(r, e, t)), i11);
+var jre = (i11, e, t) => Rb.includes(i11.localName) ? Db(i11, e, t) : (i11.querySelectorAll(Rb.join(",")).forEach((r) => Db(r, e, t)), i11);
 var yB = (i11, e = {}) => {
   const t = svgEditor.svgCanvas, r = (n10, a) => {
     const s = t.addSVGElementsFromJson({
@@ -88945,7 +88960,7 @@ var yB = (i11, e = {}) => {
     r(100, 100);
   }), o.src = i11;
 };
-var Tre = (i11, e = {}) => {
+var Fre = (i11, e = {}) => {
   const t = svgEditor.svgCanvas, r = t.getDOMDocument(), n10 = new DOMParser().parseFromString(i11, "image/svg+xml").documentElement;
   if (!n10 || n10.getElementsByTagName("parsererror").length) return;
   const a = [], s = [], l = (y) => {
@@ -88973,7 +88988,7 @@ var Tre = (i11, e = {}) => {
   s.forEach((y) => {
     u.appendChild(y), e.vaultLink && y.setAttribute("data-vault-link", e.vaultLink);
   });
-  const x = e.asPaths ? s.map((y) => Pre(y, r, t)) : s, v = new t.history.BatchCommand("Insert SVG elements");
+  const x = e.asPaths ? s.map((y) => jre(y, r, t)) : s, v = new t.history.BatchCommand("Insert SVG elements");
   a.forEach((y) => {
     v.addSubCommand(new t.history.InsertElementCommand(y));
   });
@@ -89002,15 +89017,15 @@ var Tre = (i11, e = {}) => {
 };
 var qb = "opensave";
 var js = null;
-var jre = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": rre, "./locale/fr.js": ore, "./locale/sv.js": are, "./locale/tr.js": lre, "./locale/uk.js": dre, "./locale/zh-CN.js": hre }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Mre = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": ore, "./locale/fr.js": are, "./locale/sv.js": lre, "./locale/tr.js": dre, "./locale/uk.js": hre, "./locale/zh-CN.js": Are }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, "translation", r.default, true, true);
 };
-var Fre = {
+var Nre = {
   name: qb,
   async init(i11) {
     const e = this, { svgCanvas: t } = e, { $id: r, $click: o } = t;
-    await jre(e);
+    await Mre(e);
     const n10 = (g) => {
       var _a2;
       const _ = g.target && g.target.type === "file" ? g.target : null, u = () => {
@@ -89043,7 +89058,7 @@ var Fre = {
       if (await e.openPrep() !== "Cancel") {
         t.clear();
         try {
-          const _ = await Are({
+          const _ = await fre({
             mimeTypes: ["image/*"]
           }), u = await _.text();
           await e.loadSvgString(u), e.updateCanvas(), js = _.handle, e.topPanel.updateTitle(_.name), e.svgCanvas.runExtensions("onOpenedDocument", {
@@ -89112,14 +89127,14 @@ var Fre = {
     };
   }
 };
-var Mre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Ire = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Fre
+  default: Nre
 }, Symbol.toStringTag, { value: "Module" }));
 var Qb = false;
 var Zf = [];
 var Ou = window.ontouchstart !== void 0;
-var Nre = function(i11, e, t, r, o, n10) {
+var Ore = function(i11, e, t, r, o, n10) {
   Qb || document.addEventListener(Ou ? "touchmove" : "mousemove", function(_) {
     let u = _;
     _.touches && (u = _.touches[0]);
@@ -89140,7 +89155,7 @@ var Nre = function(i11, e, t, r, o, n10) {
     a && (s || (s = true, r && r(i11, h, g)), h = u + l, g = x + d, !(i11.dataset.dragBoundary === "true" && (h < 1 || h >= window.innerWidth - i11.offsetWidth || g < 1 || g >= window.innerHeight - i11.offsetHeight)) && (i11.style.left = h + "px", i11.style.top = g + "px"));
   });
 };
-var Ire = {
+var Ure = {
   name: "overview_window",
   init({ _$: i11 }) {
     const e = this, { $id: t, $click: r } = e.svgCanvas, o = {};
@@ -89167,7 +89182,7 @@ var Ire = {
     }, g = function() {
       l();
     }, _ = document.querySelector("#overview_window_view_box"), u = document.querySelector("#overviewMiniView");
-    return Nre(_, _, u, d, h, g), r(t("overviewMiniView"), (x) => {
+    return Ore(_, _, u, d, h, g), r(t("overviewMiniView"), (x) => {
       const v = x.offsetX || x.originalEvent.layerX, w = x.offsetY || x.originalEvent.layerY, m = parseFloat(getComputedStyle(t("overviewMiniView"), null).width.replace("px", "")), y = parseFloat(getComputedStyle(t("overviewMiniView"), null).height.replace("px", "")), S = parseFloat(getComputedStyle(t("overview_window_view_box"), null).getPropertyValue("min-width").replace("px", "")), P = parseFloat(getComputedStyle(t("overview_window_view_box"), null).getPropertyValue("min-height").replace("px", ""));
       let L = v - 0.5 * S, M = w - 0.5 * P;
       L < 0 && (L = 0), M < 0 && (M = 0), L + S > m && (L = m - S), M + P > y && (M = y - P), t("overview_window_view_box").style.top = M + "px", t("overview_window_view_box").style.left = L + "px", l();
@@ -89178,11 +89193,11 @@ var Ire = {
     };
   }
 };
-var Ore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Rre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Ire
+  default: Ure
 }, Symbol.toStringTag, { value: "Module" }));
-var Ure = {
+var Dre = {
   name: "Extension Panning",
   buttons: [
     {
@@ -89191,11 +89206,11 @@ var Ure = {
     }
   ]
 };
-var Rre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var qre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Ure
+  default: Dre
 }, Symbol.toStringTag, { value: "Module" }));
-var Dre = {
+var Qre = {
   name: "Panorering av till\xE4gg",
   buttons: [
     {
@@ -89204,11 +89219,11 @@ var Dre = {
     }
   ]
 };
-var qre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var zre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Dre
+  default: Qre
 }, Symbol.toStringTag, { value: "Module" }));
-var Qre = {
+var Hre = {
   name: "Kayd\u0131rma Arac\u0131 ",
   buttons: [
     {
@@ -89217,11 +89232,11 @@ var Qre = {
     }
   ]
 };
-var zre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Vre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Qre
+  default: Hre
 }, Symbol.toStringTag, { value: "Module" }));
-var Hre = {
+var Gre = {
   name: "\u0420\u043E\u0437\u0448\u0438\u0440\u0435\u043D\u043D\u044F: \u041C\u0430\u043B\u044E\u0432\u0430\u043D\u043D\u044F",
   buttons: [
     {
@@ -89230,11 +89245,11 @@ var Hre = {
     }
   ]
 };
-var Vre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var $re = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Hre
+  default: Gre
 }, Symbol.toStringTag, { value: "Module" }));
-var Gre = {
+var Kre = {
   name: "\u79FB\u52A8",
   buttons: [
     {
@@ -89243,20 +89258,20 @@ var Gre = {
     }
   ]
 };
-var $re = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Xre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Gre
+  default: Kre
 }, Symbol.toStringTag, { value: "Module" }));
 var fd = "panning";
-var Kre = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Rre, "./locale/sv.js": qre, "./locale/tr.js": zre, "./locale/uk.js": Vre, "./locale/zh-CN.js": $re }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Yre = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": qre, "./locale/sv.js": zre, "./locale/tr.js": Vre, "./locale/uk.js": $re, "./locale/zh-CN.js": Xre }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, fd, r.default);
 };
-var Xre = {
+var Wre = {
   name: fd,
   async init() {
     const i11 = this;
-    await Kre(i11);
+    await Yre(i11);
     const {
       svgCanvas: e
     } = i11, { $id: t, $click: r } = e, o = (n10, a) => {
@@ -89288,11 +89303,11 @@ var Xre = {
     };
   }
 };
-var Yre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Zre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Xre
+  default: Wre
 }, Symbol.toStringTag, { value: "Module" }));
-var Wre = {
+var Jre = {
   name: "star",
   title: "Polygone/Star Tool",
   buttons: [
@@ -89322,11 +89337,11 @@ var Wre = {
     }
   ]
 };
-var Zre = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var eie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Wre
+  default: Jre
 }, Symbol.toStringTag, { value: "Module" }));
-var Jre = {
+var tie = {
   name: "etoile",
   title: "Outil Polygone/Etoile",
   buttons: [
@@ -89356,11 +89371,11 @@ var Jre = {
     }
   ]
 };
-var eie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var rie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Jre
+  default: tie
 }, Symbol.toStringTag, { value: "Module" }));
-var tie = {
+var iie = {
   name: "stj\xE4rna",
   title: "Polygon/stj\xE4rnverktyg",
   buttons: [
@@ -89390,11 +89405,11 @@ var tie = {
     }
   ]
 };
-var rie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var oie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tie
+  default: iie
 }, Symbol.toStringTag, { value: "Module" }));
-var iie = {
+var nie = {
   name: "y\u0131ld\u0131z",
   title: "\xC7okgen/Y\u0131ld\u0131z Arac\u0131",
   buttons: [
@@ -89424,11 +89439,11 @@ var iie = {
     }
   ]
 };
-var oie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var aie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: iie
+  default: nie
 }, Symbol.toStringTag, { value: "Module" }));
-var nie = {
+var sie = {
   name: "\u0437\u0456\u0440\u043A\u0430",
   title: "\u041F\u043E\u043B\u0456\u0433\u043E\u043D/\u0417\u0456\u0440\u043A\u0430",
   buttons: [
@@ -89458,11 +89473,11 @@ var nie = {
     }
   ]
 };
-var aie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var lie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: nie
+  default: sie
 }, Symbol.toStringTag, { value: "Module" }));
-var sie = {
+var cie = {
   name: "\u661F\u5F62",
   title: "\u591A\u8FB9\u5F62/\u661F\u5F62\u5DE5\u5177",
   buttons: [
@@ -89492,23 +89507,23 @@ var sie = {
     }
   ]
 };
-var lie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var die = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: sie
+  default: cie
 }, Symbol.toStringTag, { value: "Module" }));
 var Jo = "polystar";
-var cie = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": Zre, "./locale/fr.js": eie, "./locale/sv.js": rie, "./locale/tr.js": oie, "./locale/uk.js": aie, "./locale/zh-CN.js": lie }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var uie = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": eie, "./locale/fr.js": rie, "./locale/sv.js": oie, "./locale/tr.js": aie, "./locale/uk.js": lie, "./locale/zh-CN.js": die }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, Jo, r.default);
 };
-var die = {
+var hie = {
   name: Jo,
   async init() {
     const i11 = this, { svgCanvas: e } = i11, { ChangeElementCommand: t } = e.history, r = (v) => {
       e.undoMgr.addCommandToHistory(v);
     }, { $id: o, $click: n10 } = e;
     let a, s, l;
-    await cie(i11);
+    await uie(i11);
     const d = (v, w) => {
       const m = o(`${w}_panel`);
       m && (v ? m.style.removeProperty("display") : m.style.display = "none");
@@ -89716,11 +89731,11 @@ var die = {
     };
   }
 };
-var uie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var pie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: die
+  default: hie
 }, Symbol.toStringTag, { value: "Module" }));
-var hie = {
+var Aie = {
   name: "Drop Shadow",
   contextTools: {
     angle: { title: "Shadow angle \u2014 0\xB0=up, 90\xB0=right, 180\xB0=down (clockwise)" },
@@ -89731,16 +89746,16 @@ var hie = {
     remove: { title: "Remove shadow" }
   }
 };
-var pie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var gie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: hie
+  default: Aie
 }, Symbol.toStringTag, { value: "Module" }));
 var ga = "shadow";
-var Aie = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": pie }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var fie = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": gie }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, ga, r.default);
 };
-var gie = {
+var _ie = {
   name: ga,
   async init() {
     const i11 = this, { svgCanvas: e } = i11, {
@@ -89749,7 +89764,7 @@ var gie = {
       RemoveElementCommand: o,
       ChangeElementCommand: n10
     } = e.history, { $id: a } = e;
-    await Aie(i11);
+    await fie(i11);
     const s = {}, l = (v, w) => {
       const m = v * Math.PI / 180;
       return { dx: w * Math.sin(m), dy: -w * Math.cos(m) };
@@ -89879,11 +89894,11 @@ var gie = {
     };
   }
 };
-var fie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var mie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: gie
+  default: _ie
 }, Symbol.toStringTag, { value: "Module" }));
-var _ie = {
+var yie = {
   loading: "Loading...",
   categories: {
     basic: "Basic",
@@ -89907,11 +89922,11 @@ var _ie = {
     }
   ]
 };
-var mie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var vie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: _ie
+  default: yie
 }, Symbol.toStringTag, { value: "Module" }));
-var yie = {
+var bie = {
   loading: "Chargement...",
   categories: {
     basic: "Basique",
@@ -89935,11 +89950,11 @@ var yie = {
     }
   ]
 };
-var vie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var wie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: yie
+  default: bie
 }, Symbol.toStringTag, { value: "Module" }));
-var bie = {
+var xie = {
   loading: "L\xE4ser in...",
   categories: {
     basic: "Grundl\xE4ggande",
@@ -89963,11 +89978,11 @@ var bie = {
     }
   ]
 };
-var wie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Cie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: bie
+  default: xie
 }, Symbol.toStringTag, { value: "Module" }));
-var xie = {
+var kie = {
   loading: "Y\xFCkleniyor...",
   categories: {
     basic: "Temel",
@@ -89991,11 +90006,11 @@ var xie = {
     }
   ]
 };
-var Cie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Sie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: xie
+  default: kie
 }, Symbol.toStringTag, { value: "Module" }));
-var kie = {
+var Eie = {
   loading: "\u0417\u0430\u0432\u0430\u043D\u0442\u0430\u0436\u0435\u043D\u043D\u044F...",
   categories: {
     basic: "\u041E\u0441\u043D\u043E\u0432\u043D\u0456",
@@ -90019,11 +90034,11 @@ var kie = {
     }
   ]
 };
-var Sie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Bie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: kie
+  default: Eie
 }, Symbol.toStringTag, { value: "Module" }));
-var Eie = {
+var Lie = {
   loading: "\u6B63\u5728\u52A0\u8F7D...",
   categories: {
     basic: "\u57FA\u672C",
@@ -90047,21 +90062,21 @@ var Eie = {
     }
   ]
 };
-var Bie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Pie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Eie
+  default: Lie
 }, Symbol.toStringTag, { value: "Module" }));
 var j_ = "shapes";
-var Lie = function(i11) {
-  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": mie, "./locale/fr.js": vie, "./locale/sv.js": wie, "./locale/tr.js": Cie, "./locale/uk.js": Sie, "./locale/zh-CN.js": Bie }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
+var Tie = function(i11) {
+  const e = i11.configObj.pref("lang"), t = /* @__PURE__ */ Object.assign({ "./locale/en.js": vie, "./locale/fr.js": wie, "./locale/sv.js": Cie, "./locale/tr.js": Sie, "./locale/uk.js": Bie, "./locale/zh-CN.js": Pie }), r = t[`./locale/${e}.js`] || t["./locale/en.js"];
   r && i11.i18next.addResourceBundle(e, j_, r.default);
 };
-var Pie = {
+var jie = {
   name: j_,
   async init() {
     const i11 = this, e = i11.svgCanvas, { $id: t } = e, r = e.getSvgRoot();
     let o = {};
-    await Lie(i11);
+    await Tie(i11);
     const n10 = "shapelib", a = {};
     let s, l, d, h = null, g = null;
     const _ = (u = {}, x) => {
@@ -90172,11 +90187,11 @@ var Pie = {
     };
   }
 };
-var Tie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Fie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Pie
+  default: jie
 }, Symbol.toStringTag, { value: "Module" }));
-var jie = `<style>
+var Mie = `<style>
 #dialog_content {
 margin: 10px 10px 5px 10px;background: #DDD;overflow: auto;text-align: left;border: 1px solid #5a6162;}
 #dialog_content p,
@@ -90193,8 +90208,8 @@ width: 90%;display: block;margin: 0 0 5px 11px;}
 #dialog_buttons input[type=button] {
 margin: 0 1em;}</style><elix-dialog id="dialog_box" aria-label="Sketch Editor storage preferences" closed><div class="overlay"></div><div id="dialog_container"><div id="dialog_content"><p id="notificationNote"></p><select id="se-storage-pref"><option value="prefsAndContent" id="prefsAndContent"></option><option value="prefsOnly" id="prefsOnly"></option><option value="noPrefsOrContent" id="noPrefsOrContent"></option></select><label title="" id="se-remember-title"><input type="checkbox" id="se-remember" value="" checked></label></div><div id="dialog_buttons"><button id="storage_ok"></button><button id="storage_cancel"></button></div></div></elix-dialog>`;
 var vB = document.createElement("template");
-vB.innerHTML = jie;
-var Fie = class extends HTMLElement {
+vB.innerHTML = Mie;
+var Nie = class extends HTMLElement {
   /**
     * @function constructor
     */
@@ -90293,7 +90308,7 @@ var Fie = class extends HTMLElement {
     svgEditor.$click(this.$okBtn, (t) => e(t, "ok")), svgEditor.$click(this.$cancelBtn, (t) => e(t, "cancel"));
   }
 };
-customElements.define("se-storage-dialog", Fie);
+customElements.define("se-storage-dialog", Nie);
 var zb = () => {
   bB("svgeditstore");
 };
@@ -90307,7 +90322,7 @@ var Hb = (i11) => {
     return (i11 ? r : "") + i11 + (!i11 && o ? r : o || "");
   }) : e.href += (e.href.includes("?") ? "&" : "?") + i11;
 };
-var Mie = {
+var Iie = {
   name: "storage",
   init() {
     var _a2;
@@ -90400,12 +90415,12 @@ var Mie = {
     };
   }
 };
-var Nie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Oie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Mie
+  default: Iie
 }, Symbol.toStringTag, { value: "Module" }));
 var Vb = "theme_toggle";
-var Iie = {
+var Uie = {
   name: Vb,
   async init(i11) {
     const e = this, { svgCanvas: t } = e, { $id: r, $click: o } = t, n10 = () => e.configObj.pref("theme") || "light", a = (h) => h === "dark" ? "light_theme.svg" : "dark_theme.svg", s = (h) => h === "dark" ? "Switch to light theme" : "Switch to dark theme", l = () => {
@@ -90427,21 +90442,21 @@ var Iie = {
     };
   }
 };
-var Oie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var Rie = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Iie
+  default: Uie
 }, Symbol.toStringTag, { value: "Module" }));
-var Uie = /* @__PURE__ */ Object.assign({ "./ext-color-shift/ext-color-shift.js": wee, "./ext-connector/ext-connector.js": Tee, "./ext-curvature/ext-curvature.js": Kee, "./ext-cutter/ext-cutter.js": Jee, "./ext-eyedropper/ext-eyedropper.js": Ate, "./ext-fonts/ext-fonts.js": _te, "./ext-grid/ext-grid.js": jte, "./ext-helloworld/ext-helloworld.js": Vte, "./ext-layer_view/ext-layer_view.js": Zte, "./ext-markers/ext-markers.js": ere, "./ext-opensave/ext-opensave.js": Mre, "./ext-overview_window/ext-overview_window.js": Ore, "./ext-panning/ext-panning.js": Yre, "./ext-polystar/ext-polystar.js": uie, "./ext-shadow/ext-shadow.js": fie, "./ext-shapes/ext-shapes.js": Tie, "./ext-storage/ext-storage.js": Nie, "./ext-theme-toggle/ext-theme-toggle.js": Oie });
+var Die = /* @__PURE__ */ Object.assign({ "./ext-color-shift/ext-color-shift.js": Cee, "./ext-connector/ext-connector.js": Fee, "./ext-curvature/ext-curvature.js": Yee, "./ext-cutter/ext-cutter.js": tte, "./ext-eyedropper/ext-eyedropper.js": fte, "./ext-fonts/ext-fonts.js": yte, "./ext-grid/ext-grid.js": Mte, "./ext-helloworld/ext-helloworld.js": $te, "./ext-layer_view/ext-layer_view.js": ere, "./ext-markers/ext-markers.js": rre, "./ext-opensave/ext-opensave.js": Ire, "./ext-overview_window/ext-overview_window.js": Rre, "./ext-panning/ext-panning.js": Zre, "./ext-polystar/ext-polystar.js": pie, "./ext-shadow/ext-shadow.js": mie, "./ext-shapes/ext-shapes.js": Fie, "./ext-storage/ext-storage.js": Oie, "./ext-theme-toggle/ext-theme-toggle.js": Rie });
 var wB = {};
-for (const [i11, e] of Object.entries(Uie)) {
+for (const [i11, e] of Object.entries(Die)) {
   const t = i11.match(/\.\/([^/]+)\//);
   t && (wB[t[1]] = e);
 }
-function Rie(i11) {
+function qie(i11) {
   return wB[i11];
 }
-var Die = '.svg_editor.ui-tablet{--hit: 56px;--hit-sm: 46px;--r-md: 16px;--r-lg: 22px;--r-pill: 999px;grid-template-rows:0 0 1fr 0;grid-template-columns:0 0 0 1fr 0}.svg_editor.ui-tablet #tools_top,.svg_editor.ui-tablet #tools_left,.svg_editor.ui-tablet #sidepanels,.svg_editor.ui-tablet #tools_bottom,.svg_editor.ui-tablet #ruler_corner,.svg_editor.ui-tablet #ruler_x,.svg_editor.ui-tablet #ruler_y{display:none!important}.svg_editor:not(.ui-tablet) .tablet-shell{display:none}.svg_editor.ui-tablet #workarea{padding:84px 32px 32px;touch-action:none}.svg_editor.ui-tablet #main_button{position:absolute;top:11px;left:12px;z-index:60;border:none;padding:0;background:transparent}.svg_editor.ui-tablet .tablet-shell{position:absolute;inset:0;z-index:40;pointer-events:none}.svg_editor.ui-tablet .tablet-shell>*{pointer-events:auto}.svg_editor.ui-tablet .ts-topbar{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;gap:12px;padding:0 16px 0 150px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border)}.svg_editor.ui-tablet .ts-grow{flex:1}.svg_editor.ui-tablet .ts-toolgroup{display:flex;align-items:center;gap:2px;background:var(--app-bg, var(--workarea-bg));border:1px solid var(--chrome-border);border-radius:var(--r-pill);padding:5px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:46px;height:46px;border-radius:99px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:24px;height:24px}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 46px;--sl-tool-icon-size: 34px;--sl-tool-radius: 99px;display:inline-flex;align-items:center;justify-content:center}.svg_editor.ui-tablet .ts-tool-select svg{transform:translate(2px,1px)}.svg_editor.ui-tablet .ts-zlabel{font-size:13px;font-weight:600;min-width:46px;text-align:center;font-variant-numeric:tabular-nums;color:var(--fg)}.svg_editor.ui-tablet .ts-stylechip{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid var(--field-border);border-radius:50%;background:var(--field-bg);cursor:pointer;flex:0 0 auto}.svg_editor.ui-tablet .ts-stylechip .dot{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px #0000002e}.svg_editor.ui-tablet .ts-done{height:44px;padding:0 20px;border-radius:var(--r-pill);border:none;cursor:pointer;background:var(--accent);color:#fff;font-size:14px;font-weight:600;font-family:inherit}.svg_editor.ui-tablet .tbtn{appearance:none;border:none;background:transparent;color:var(--icon);width:var(--hit);height:var(--hit);border-radius:var(--r-md);display:grid;place-items:center;cursor:pointer;position:relative;transition:background .14s ease,color .14s ease,transform .08s ease;flex:0 0 auto}.svg_editor.ui-tablet .tbtn svg{width:26px;height:26px;display:block}.svg_editor.ui-tablet .tbtn:active{transform:scale(.92)}.svg_editor.ui-tablet .tbtn.is-active{background:var(--accent);color:#fff}.svg_editor.ui-tablet .tbtn:not(.is-active):hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.ui-tablet .tbtn[disabled]{opacity:.32;pointer-events:none}.svg_editor.ui-tablet .tbtn.sm{width:var(--hit-sm);height:var(--hit-sm);border-radius:10px}.svg_editor.ui-tablet .tbtn.sm svg{width:22px;height:22px}.svg_editor.ui-tablet .tbtn.has-caret:after{content:"";position:absolute;right:6px;bottom:6px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55}.svg_editor.ui-tablet .ts-sep{width:1px;align-self:stretch;margin:10px 4px;background:var(--chrome-border);flex:0 0 auto}.svg_editor.ui-tablet .ts-row{display:flex;align-items:center;gap:4px}.svg_editor.ui-tablet .ts-row.gap8{gap:8px}.svg_editor.ui-tablet .swatch{width:40px;height:40px;border-radius:var(--r-pill);cursor:pointer;position:relative;flex:0 0 auto;box-shadow:inset 0 0 0 1px #00000024,0 1px 2px #14192314;transition:transform .1s ease}.svg_editor.ui-tablet .swatch:active{transform:scale(.9)}.svg_editor.ui-tablet .swatch.is-on{box-shadow:inset 0 0 0 1px #00000024,0 0 0 3px var(--accent)}.svg_editor.ui-tablet .swatch.none{background:linear-gradient(45deg,transparent 45%,#E11D48 45%,#E11D48 55%,transparent 55%),#fff}.svg_editor.ui-tablet .slider-row{display:flex;align-items:center;gap:12px}.svg_editor.ui-tablet .slider-row .lab{font-size:13px;font-weight:600;color:var(--muted);min-width:50px}.svg_editor.ui-tablet .slider-row .val{font-size:13px;font-weight:600;color:var(--fg);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}.svg_editor.ui-tablet input[type=range].te-range{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:var(--icon-hover-bg);outline:none}.svg_editor.ui-tablet input[type=range].te-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:1.5px solid var(--accent-border);box-shadow:0 2px 6px #14192333;cursor:pointer}.svg_editor.ui-tablet .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}.svg_editor.ui-tablet .ts-pop{position:absolute;z-index:50;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-md);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:16px}.svg_editor.ui-tablet .swrow{display:flex;gap:9px;flex-wrap:wrap;max-width:232px}.svg_editor.ui-tablet .menu{display:flex;flex-direction:column;min-width:188px}.svg_editor.ui-tablet .menu-item{appearance:none;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;color:var(--fg);text-align:left}.svg_editor.ui-tablet .menu-item:hover{background:var(--icon-hover-bg)}.svg_editor.ui-tablet .menu-item .mi-ic{width:22px;height:22px;display:grid;place-items:center;color:var(--icon);flex:0 0 auto}.svg_editor.ui-tablet .menu-item .mi-ic svg{width:21px;height:21px}.svg_editor.ui-tablet .lib-grid{display:grid;grid-template-columns:repeat(5,56px);gap:8px}.svg_editor.ui-tablet .lib-cell{width:56px;height:56px;border-radius:12px;border:1px solid var(--field-border);background:var(--field-bg);cursor:pointer;display:grid;place-items:center;color:var(--fg)}.svg_editor.ui-tablet .lib-cell:hover{background:var(--icon-hover-bg);border-color:var(--accent-border)}.svg_editor.ui-tablet .lib-cell svg{width:30px;height:30px;display:block}.svg_editor.ui-tablet .ts-sheet{position:absolute;left:16px;right:16px;bottom:16px;z-index:30;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-lg);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:12px 22px 20px;transform:translateY(calc(100% + 28px));transition:transform .28s cubic-bezier(.2,.8,.25,1)}.svg_editor.ui-tablet .ts-sheet.show{transform:translateY(0)}.svg_editor.ui-tablet .ts-sheet-handle{width:44px;height:5px;border-radius:99px;background:var(--chrome-border);margin:0 auto 12px}.svg_editor.ui-tablet .ts-sheet .kind{font-size:13px;font-weight:700;color:var(--accent);text-transform:capitalize;position:absolute;top:16px;left:22px}.svg_editor.ui-tablet .ts-sheet .closeb{position:absolute;top:12px;right:16px}.svg_editor.ui-tablet .ts-sheet-row{display:flex;align-items:flex-end;gap:22px}.svg_editor.ui-tablet .sheet-col{display:flex;flex-direction:column;gap:9px}.svg_editor.ui-tablet .sheet-sep{width:1px;align-self:stretch;background:var(--chrome-border);margin:2px}.svg_editor.ui-tablet .slider-mini{width:170px}.svg_editor.ui-tablet .ts-actions{display:flex;gap:6px}:root,.svg_editor,.svg_editor.theme-light{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #F4F5F7;--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--canvas-bg: #F8F9FB;--ruler-bg: #FFFFFF;--paper-bg: #FFFFFF;--paper-border: #DCDFE5;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(20,25,35,.05), 0 12px 28px -10px rgba(20,25,35,.18), 0 30px 60px -30px rgba(20,25,35,.25);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(20,25,35,.1)) drop-shadow(0 12px 24px rgba(20,25,35,.16));--fg: #1B1F24;--muted: #6B7280;--icon: #4B5563;--icon-hover: #0F172A;--icon-hover-bg: #EEF1F5;--icon-active-bg: #E2E6EC;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-border: #C7D7FF;--active-shadow: 0 1px 2px rgba(41,98,255,.18);--brand-bg: #F6F7F9;--brand-bg-hover: #EEF1F5;--brand-border: #E6E8EC;--brand-fg: #1B1F24;--file-bg: #F4F5F7;--file-border: #E6E8EC;--group-bg: #F6F7F9;--group-border: #E6E8EC;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--accent-ring: rgba(41,98,255,.16);--section-rule: #EEF0F3;--swatch-bg: #FFFFFF;--swatch-border: #C3C8D1;--swatch-border-hover: #2962FF;--swatch-inset: rgba(0,0,0,.18);--swatch-shadow: 0 1px 2px rgba(20,25,35,.08);--checker: rgba(0,0,0,.07);--cp-modal-bg: #FFFFFF;--cp-head-bg: #FAFBFC;--cp-stage-bg: #ECEEF2;--cp-backdrop: rgba(20, 24, 35, .06);--cp-field-hover: #B6BFCE;--cp-focus-ring: rgba(41, 98, 255, .18);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--cp-stop-ring: rgba(20, 24, 35, .3);--cp-danger: #E11D48;--cp-danger-bg: #FEE9EE;--cp-btn-primary-fg: #FFFFFF;--cp-btn-primary-shadow: rgba(41, 98, 255, .28);--cp-dial-bg: #F4F5F7;--cp-dial-border: #DDE1E7;--cp-dial-tick: #B6BFCE;--cp-swatch-bg: #FFFFFF;--cp-swatch-border: #C3C8D1;--cp-swatch-inset: rgba(0, 0, 0, .18);--cp-checker: rgba(0, 0, 0, .07);--sl-modal-bg: #FFFFFF;--sl-head-bg: #FAFBFC;--sl-side-bg: #F6F7F9;--sl-field-hover: #B6BFCE;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--sl-tile-shadow: 0 2px 6px rgba(41,98,255,.12);--sl-btn-primary-fg: #FFFFFF;--sl-btn-primary-shadow: rgba(41,98,255,.28);--sl-shape: #4B5563;--sl-shape-hover: #0F172A;--ruler-tick: #B5BAC3;--ruler-text: #8A8F99;--main-bg-color: var(--chrome-bg);--text-color: var(--fg);--border-color: var(--chrome-border);--canvas-bg-color: var(--paper-bg);--workarea-bg: var(--canvas-bg);--layer-bg: var(--chrome-bg);--layer-selected-bg: var(--accent-soft);--link-color: var(--accent);--ruler-color: var(--ruler-bg);--icon-bg-color: transparent;--icon-bg-color-hover: var(--icon-hover-bg);--input-color: var(--field-bg);--dropdown-bg: var(--chrome-bg);--dropdown-pressed-bg: var(--icon-hover-bg);--hover-highlight: var(--icon-hover-bg);--main-menu-bg: var(--chrome-bg);--main-menu-shadow: rgba(0,0,0,.12);--bevel-light: var(--chrome-border);--scrollbar-thumb: rgba(80,80,80,.3);--orange-color: var(--accent);--global-se-spin-input-width: 82px;--top-toolbar-min-height: 56px}.svg_editor.theme-dark{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #16181D;--chrome-bg: #1E2026;--chrome-border: #2C2F37;--canvas-bg: #0F1115;--ruler-bg: #1A1C22;--paper-bg: #FAFAF8;--paper-border: #1A1C22;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -10px rgba(0,0,0,.5), 0 40px 80px -30px rgba(0,0,0,.65);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 14px 30px rgba(0,0,0,.5));--fg: #ECEEF2;--muted: #9098A5;--icon: #B7BDC8;--icon-hover: #FFFFFF;--icon-hover-bg: #2A2D35;--icon-active-bg: #353944;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-border: #5A4422;--active-shadow: 0 1px 0 rgba(246,178,58,.15), 0 0 0 1px rgba(246,178,58,.18) inset;--brand-bg: #25282F;--brand-bg-hover: #2C2F37;--brand-border: #353944;--brand-fg: #ECEEF2;--file-bg: #16181D;--file-border: #2C2F37;--group-bg: #181A20;--group-border: #2C2F37;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--accent-ring: rgba(246,178,58,.2);--section-rule: #23262E;--swatch-bg: #2F333C;--swatch-border: #6A7180;--swatch-border-hover: #F6B23A;--swatch-inset: rgba(255,255,255,.22);--swatch-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 2px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.35);--checker: rgba(255,255,255,.06);--cp-modal-bg: #22252C;--cp-head-bg: #1E2026;--cp-stage-bg: #0F1115;--cp-backdrop: rgba(0, 0, 0, .5);--cp-field-hover: #4B5160;--cp-focus-ring: rgba(246, 178, 58, .22);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--cp-stop-ring: rgba(0, 0, 0, .6);--cp-danger: #FB7185;--cp-danger-bg: #3A1A22;--cp-btn-primary-fg: #1A1208;--cp-btn-primary-shadow: rgba(246, 178, 58, .3);--cp-dial-bg: #1A1C22;--cp-dial-border: #353944;--cp-dial-tick: #4B5160;--cp-swatch-bg: #2F333C;--cp-swatch-border: #6A7180;--cp-swatch-inset: rgba(255, 255, 255, .22);--cp-checker: rgba(255, 255, 255, .06);--sl-modal-bg: #22252C;--sl-head-bg: #1E2026;--sl-side-bg: #1A1C22;--sl-field-hover: #4B5160;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--sl-tile-shadow: 0 2px 8px rgba(246,178,58,.18);--sl-btn-primary-fg: #1A1208;--sl-btn-primary-shadow: rgba(246,178,58,.3);--sl-shape: #B7BDC8;--sl-shape-hover: #FFFFFF;--ruler-tick: #4A4F5A;--ruler-text: #7A8190;--main-bg-color: var(--chrome-bg);--text-color: var(--fg);--border-color: var(--chrome-border);--canvas-bg-color: var(--paper-bg);--workarea-bg: var(--canvas-bg);--layer-bg: var(--chrome-bg);--layer-selected-bg: var(--accent-soft);--link-color: var(--accent);--ruler-color: var(--ruler-bg);--icon-bg-color: transparent;--icon-bg-color-hover: var(--icon-hover-bg);--input-color: var(--field-bg);--dropdown-bg: var(--chrome-bg);--dropdown-pressed-bg: var(--icon-hover-bg);--hover-highlight: var(--icon-hover-bg);--main-menu-bg: var(--chrome-bg);--main-menu-shadow: rgba(0,0,0,.5);--bevel-light: var(--chrome-border);--scrollbar-thumb: rgba(180,180,180,.25);--orange-color: var(--accent)}.svg_editor *{transform-origin:0 0}.svg_editor{display:grid;grid-template-rows:minmax(var(--top-toolbar-min-height),auto) 15px 1fr 40px;grid-template-columns:56px 15px 50px 1fr 15px;grid-template-areas:"main main   main top top" "left corner rulerX rulerX side" "left rulerY workarea workarea side" "left bottom bottom bottom bottom";font-size:8pt;background:var(--app-bg);font-family:var(--ui-font, "Inter", -apple-system, system-ui, sans-serif);color:var(--fg);-webkit-user-select:text;user-select:text;width:100%;height:100%}#title_panel>p{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;background:var(--file-bg);border:1px solid var(--file-border);color:var(--fg);font-size:13px;font-weight:500;letter-spacing:-.003em;cursor:text;margin:0}.svg_editor.open{grid-template-columns:34px 15px 50px 1fr 280px}#svgroot{-webkit-user-select:none;user-select:none;position:absolute;top:0;left:0}#workarea{grid-area:workarea;background-color:var(--canvas-bg);border:none;overflow:auto;text-align:center;padding:56px 80px 80px 56px}#svgcanvas{line-height:normal;display:inline-block;background:transparent;text-align:center;vertical-align:middle;position:relative}#canvas_watermark{position:absolute;inset:0;z-index:1;display:none;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:160px 160px;opacity:.07}#canvas_watermark.visible{display:block}#canvasBackground{filter:var(--paper-shadow-filter)}#canvasBackground>rect{stroke:var(--paper-border);stroke-width:1px;vector-effect:non-scaling-stroke}#sidepanels{grid-area:side;position:relative;min-height:0}#sidepanel_content{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-gutter:stable}#sidepanel_handle{writing-mode:vertical-rl;text-orientation:mixed;color:var(--muted);position:absolute;right:0;top:50%;margin-top:-60px;cursor:pointer;height:120px;width:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-right:none;border-top-left-radius:10px;border-bottom-left-radius:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .12s,color .12s;z-index:4}#sidepanel_handle:hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.open #sidepanel_handle{right:100%}.svg_editor:not(.open) #sidepanel_content{display:none}a{color:var(--link-color)}hr{border:none;border-bottom:1px solid var(--border-color)}#linkLabel>svg{height:20px;padding-top:4px}#sidepanel_tabs{display:flex;gap:2px;padding:6px 8px 0;position:sticky;top:0;background:var(--chrome-bg);border-bottom:1px solid var(--section-rule, #EEF0F3);z-index:1}.sidepanel_tab{flex:1;appearance:none;border:none;background:transparent;color:var(--muted);font:600 12.5px var(--ui-font);padding:9px 4px 11px;cursor:pointer;position:relative;border-radius:7px 7px 0 0;transition:color .12s,background .12s}.sidepanel_tab:hover{color:var(--fg);background:var(--icon-hover-bg)}.sidepanel_tab.active{color:var(--accent)}.sidepanel_tab.active:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}.sidepanel_tabpanel{display:none;padding:2px 0 10px}.sidepanel_tabpanel.active{display:block}.sidepanel_section,#color_shift_panel,#shadow_panel{padding:14px 16px;margin:0;border-top:1px solid var(--section-rule, #EEF0F3);color:var(--fg);-webkit-user-select:none;user-select:none}.sidepanel_tabpanel>.sidepanel_section:first-child{border-top:none}.sidepanel_section_label,#color_shift_label{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;white-space:nowrap}.sidepanel_section_grid,.color_shift_grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;align-items:start}.sidepanel_section_grid .span2,.sidepanel_section_grid se-input[size="15"],.sidepanel_section_grid .image_url_field{grid-column:1 / -1}.sub_label{font:600 10px var(--ui-font);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 5px 2px}.sidepanel_subsection{margin-top:12px}.sidepanel_btn_row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.sidepanel_seg{display:inline-flex;align-items:center;background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;overflow:hidden;height:34px}.sidepanel_seg se-list,.sidepanel_seg se-button{--seg: 1}.sidepanel_text_font{display:flex;align-items:center;gap:8px;margin-top:12px}.sidepanel_text_font se-font-select{flex:1;min-width:0}.shadow_panel_footer,.clipmask_panel_footer{display:flex;align-items:center;gap:10px;margin-top:12px}.shadow_panel_footer input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--field-border);border-radius:8px;background:var(--field-bg);cursor:pointer}.color_shift_toggles{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:4px}.color_shift_toggles label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer}.color_shift_toggles input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;margin:0}#color_shift_reset{margin-left:auto;height:32px;padding:0 14px;font:600 12.5px var(--ui-font);color:var(--fg);background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;cursor:pointer}#color_shift_reset:hover{background:var(--icon-hover-bg);border-color:var(--field-border-h, #C8CDD6)}#color_shift_hint{font-size:12px;color:var(--muted);line-height:1.45}#layerpanel{-webkit-user-select:none;user-select:none;padding:14px 16px}#layersLabel{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}#layerbuttons{margin:0 0 12px;padding:0;width:100%;height:auto;border:0;display:flex;gap:4px;align-items:center;justify-content:flex-start}#layerlist{margin:0;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--field-border);border-radius:9px;overflow:hidden;background:var(--field-bg)}#layerlist tr.layer{background:transparent}#layerlist tr.layer+tr.layer td{border-top:1px solid var(--section-rule, #EEF0F3)}#layerlist tr.layersel{background:var(--accent-soft)}#layerlist td{padding:9px 6px;cursor:pointer}#layerlist td.layervis{width:30px;padding-left:11px;text-align:center}#layerlist td.layervis *{display:block}#layerlist td.layerinvis *{display:none}#layerlist td.layername{font-size:13px;font-weight:500;color:var(--fg)}#layerlist td.layername:hover{color:var(--accent)}#layerlist tr.layersel td.layername{font-weight:600}#selLayerLabel{white-space:nowrap}#selLayerNames{display:block;position:static;top:0;margin-top:12px}#main_button{grid-area:main;display:inline-flex;align-items:center;padding:0 10px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border)}#main_icon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 8px;border-radius:10px;background:var(--brand-bg);border:1px solid var(--brand-border);color:var(--brand-fg);cursor:pointer;transition:background .12s;white-space:nowrap;height:36px}#main_icon:hover{background:var(--brand-bg-hover)!important}#main_icon.buttondown{background:var(--brand-bg-hover)!important;box-shadow:none!important;border-radius:10px}#logo{display:inline-flex;align-items:center;justify-content:center}#logo svg,#logo img{width:22px;height:22px;display:block}#logo img{filter:none}#main_icon>div{display:inline-flex;align-items:center}#main_button .dropdown{opacity:.55;display:inline-flex;align-items:center;margin-left:2px}#main_icon span{font-weight:600;font-size:13px;letter-spacing:-.005em;color:var(--brand-fg);font-family:var(--ui-font, inherit);display:inline;position:static;padding:0;line-height:normal}#main_menu{z-index:12;background:var(--chrome-bg);color:var(--fg);position:relative;width:230px;padding:6px;box-shadow:0 4px 16px -2px var(--main-menu-shadow);border:1px solid var(--chrome-border);border-radius:10px;font-size:1.1em;display:none;overflow:hidden;clear:both;top:4px}#main_menu ul,#main_menu li{list-style:none;margin:0;padding:0}#main_menu li{line-height:22px;padding:7px 10px;overflow:auto;cursor:pointer;border-radius:7px;color:var(--fg)}#main_menu li:hover{background:var(--icon-hover-bg)}#main_menu li>div{float:left;padding-right:5px}#main_menu p{margin-top:5px}#tools_top{grid-area:top;display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);min-height:var(--top-toolbar-min-height);padding:0 10px;gap:6px;position:relative;z-index:5;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}#tools_top::-webkit-scrollbar{height:3px}#tools_top>*{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:2px;flex-shrink:0}#editor_panel,#history_panel,#zoom_panel,.quick_tray{display:inline-flex;align-items:center;gap:2px;padding:4px;background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px}.path_node_panel se-spin-input,.path_node_panel se-select,#curvature_panel se-select,.multiselected_panel se-select{flex-direction:row;align-items:center;gap:6px}#star_panel se-spin-input,#polygon_panel se-spin-input{width:58px}#history_panel{margin-left:auto}#title_panel{display:inline-flex;align-items:center}#tools_bottom{grid-area:bottom;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--chrome-bg);border-top:1px solid var(--chrome-border);height:56px;scrollbar-width:thin}#tools_bottom::-webkit-scrollbar{width:3px;height:3px}#tools_left{grid-area:left;border-right:1px solid var(--chrome-border);background:var(--chrome-bg);margin-left:auto;margin-right:auto;overflow-y:scroll;scrollbar-width:none;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px}#tools_left::-webkit-scrollbar{width:3px}#tools_left::-webkit-scrollbar-track,#tools_bottom::-webkit-scrollbar-track{background:transparent}#tools_left::-webkit-scrollbar-thumb,#tools_bottom::-webkit-scrollbar-thumb{background-color:var(--scrollbar-thumb)}#workarea.wireframe #svgcontent *{fill:none;stroke:#000;stroke-width:1px;stroke-opacity:1;stroke-dasharray:0;opacity:1;pointer-events:stroke;filter:none}#workarea.wireframe #svgcontent text{fill:#000;stroke:none}#workarea.wireframe #canvasBackground>rect{fill:#fff!important}#cur_context_panel{grid-area:rulerX;line-height:22px;overflow:auto;padding-left:5px;font-size:12px;background:#000c;color:#ccc}#cur_context_panel a{float:none;text-decoration:none}#cur_context_panel a:hover{text-decoration:underline}input[type=text]{padding:2px}.dropdown{position:relative}.dropdown button{width:15px;height:21px;margin:6px 0 0 1px;padding:0;border-left:1px solid var(--bevel-light);border-top:1px solid var(--bevel-light);border-right:1px solid var(--border-color);border-bottom:1px solid var(--border-color);background-color:var(--dropdown-bg)}.dropdown button.down{border-left:1px solid var(--border-color);border-top:1px solid var(--border-color);border-right:1px solid var(--bevel-light);border-bottom:1px solid var(--bevel-light);background-color:var(--dropdown-pressed-bg)}.dropdown ul{list-style:none;position:absolute;margin:0;padding:0;left:-85px;top:26px;z-index:4;display:none}.dropup ul{top:auto;bottom:24px}.dropdown li{display:block;width:120px;padding:4px;background:var(--dropdown-bg);border:1px solid var(--dropdown-pressed-bg);margin:0 0 -1px;line-height:16px}.dropdown li:hover{background-color:var(--hover-highlight)}.dropdown li.special{padding:10px 4px}.dropdown li.special:hover{background:var(--hover-highlight)}#font_family_dropdown-list li{font-size:1.4em}#font_family{margin-left:5px;margin-right:0}#main_menu li#tool_open,#main_menu li#tool_import{position:relative;overflow:hidden}#tool_open input,#tool_import input{position:absolute;opacity:0;font-size:10em;top:-5px;right:-5px;margin:0;cursor:pointer}.disabled{opacity:.5;cursor:default}.tool_sep{width:1px;height:22px;background:var(--chrome-border);border:none;margin:0 4px;flex-shrink:0}.width_label{padding-right:5px}#text{position:absolute;left:-9999px}.bottom-icon{width:22px}#palette{margin-left:auto;display:flex;align-items:center;flex:1;min-width:0}#stroke_expand{width:0;overflow:hidden}#toggle_stroke_tools{position:absolute;right:0;top:0;bottom:0;width:25px;text-align:center;border-radius:0 3px 3px 0;margin:0}#toggle_stroke_tools:before{content:">>";letter-spacing:-3px;font-weight:700;color:var(--text-color)}.expanded #toggle_stroke_tools:before{content:"<<"}#toggle_stroke_tools:hover{background:var(--icon-bg-color-hover)}#tool_opacity{right:0}#tool_opacity{overflow:visible}ul li.current{background-color:var(--hover-highlight)}#copyright{text-align:right;padding-right:.3em}.overlay{position:absolute;inset:0;background-color:#000;opacity:.6;z-index:5}#save_output_btns{display:none;text-align:left}#save_output_btns p{margin:.5em 1.5em;display:inline-block}#bg_blocks{overflow:auto;margin-left:30px}.dropdown li.tool_button{width:24px}#svgcontent{color:unset}#zoom{color:var(--fg);background-color:var(--chrome-bg);border:none}#stroke_width,#opacity{color:var(--fg)}';
-var qie = () => {
+var Qie = '.svg_editor.ui-tablet{--hit: 56px;--hit-sm: 46px;--r-md: 16px;--r-lg: 22px;--r-pill: 999px;grid-template-rows:0 0 1fr 0;grid-template-columns:0 0 0 1fr 0}.svg_editor.ui-tablet #tools_top,.svg_editor.ui-tablet #tools_left,.svg_editor.ui-tablet #sidepanels,.svg_editor.ui-tablet #tools_bottom,.svg_editor.ui-tablet #ruler_corner,.svg_editor.ui-tablet #ruler_x,.svg_editor.ui-tablet #ruler_y{display:none!important}.svg_editor:not(.ui-tablet) .tablet-shell{display:none}.svg_editor.ui-tablet #workarea{padding:84px 32px 32px;touch-action:none}.svg_editor.ui-tablet #main_button{position:absolute;top:11px;left:12px;z-index:60;border:none;padding:0;background:transparent}.svg_editor.ui-tablet .tablet-shell{position:absolute;inset:0;z-index:40;pointer-events:none}.svg_editor.ui-tablet .tablet-shell>*{pointer-events:auto}.svg_editor.ui-tablet .ts-topbar{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;gap:12px;padding:0 16px 0 150px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border)}.svg_editor.ui-tablet .ts-grow{flex:1}.svg_editor.ui-tablet .ts-toolgroup{display:flex;align-items:center;gap:2px;background:var(--app-bg, var(--workarea-bg));border:1px solid var(--chrome-border);border-radius:var(--r-pill);padding:5px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:46px;height:46px;border-radius:99px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:24px;height:24px}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 46px;--sl-tool-icon-size: 34px;--sl-tool-radius: 99px;display:inline-flex;align-items:center;justify-content:center}.svg_editor.ui-tablet .ts-tool-select svg{transform:translate(2px,1px)}.svg_editor.ui-tablet .ts-zlabel{font-size:13px;font-weight:600;min-width:46px;text-align:center;font-variant-numeric:tabular-nums;color:var(--fg)}.svg_editor.ui-tablet .ts-stylechip{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid var(--field-border);border-radius:50%;background:var(--field-bg);cursor:pointer;flex:0 0 auto}.svg_editor.ui-tablet .ts-stylechip .dot{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px #0000002e}.svg_editor.ui-tablet .ts-done{height:44px;padding:0 20px;border-radius:var(--r-pill);border:none;cursor:pointer;background:var(--accent);color:#fff;font-size:14px;font-weight:600;font-family:inherit}.svg_editor.ui-tablet .tbtn{appearance:none;border:none;background:transparent;color:var(--icon);width:var(--hit);height:var(--hit);border-radius:var(--r-md);display:grid;place-items:center;cursor:pointer;position:relative;transition:background .14s ease,color .14s ease,transform .08s ease;flex:0 0 auto}.svg_editor.ui-tablet .tbtn svg{width:26px;height:26px;display:block}.svg_editor.ui-tablet .tbtn:active{transform:scale(.92)}.svg_editor.ui-tablet .tbtn.is-active{background:var(--accent);color:#fff}.svg_editor.ui-tablet .tbtn:not(.is-active):hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.ui-tablet .tbtn[disabled]{opacity:.32;pointer-events:none}.svg_editor.ui-tablet .tbtn.sm{width:var(--hit-sm);height:var(--hit-sm);border-radius:10px}.svg_editor.ui-tablet .tbtn.sm svg{width:22px;height:22px}.svg_editor.ui-tablet .tbtn.has-caret:after{content:"";position:absolute;right:6px;bottom:6px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55}.svg_editor.ui-tablet .ts-sep{width:1px;align-self:stretch;margin:10px 4px;background:var(--chrome-border);flex:0 0 auto}.svg_editor.ui-tablet .ts-row{display:flex;align-items:center;gap:4px}.svg_editor.ui-tablet .ts-row.gap8{gap:8px}.svg_editor.ui-tablet .swatch{width:40px;height:40px;border-radius:var(--r-pill);cursor:pointer;position:relative;flex:0 0 auto;box-shadow:inset 0 0 0 1px #00000024,0 1px 2px #14192314;transition:transform .1s ease}.svg_editor.ui-tablet .swatch:active{transform:scale(.9)}.svg_editor.ui-tablet .swatch.is-on{box-shadow:inset 0 0 0 1px #00000024,0 0 0 3px var(--accent)}.svg_editor.ui-tablet .swatch.none{background:linear-gradient(45deg,transparent 45%,#E11D48 45%,#E11D48 55%,transparent 55%),#fff}.svg_editor.ui-tablet .slider-row{display:flex;align-items:center;gap:12px}.svg_editor.ui-tablet .slider-row .lab{font-size:13px;font-weight:600;color:var(--muted);min-width:50px}.svg_editor.ui-tablet .slider-row .val{font-size:13px;font-weight:600;color:var(--fg);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}.svg_editor.ui-tablet input[type=range].te-range{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:var(--icon-hover-bg);outline:none}.svg_editor.ui-tablet input[type=range].te-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:1.5px solid var(--accent-border);box-shadow:0 2px 6px #14192333;cursor:pointer}.svg_editor.ui-tablet .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}.svg_editor.ui-tablet .ts-pop{position:absolute;z-index:50;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-md);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:16px}.svg_editor.ui-tablet .swrow{display:flex;gap:9px;flex-wrap:wrap;max-width:232px}.svg_editor.ui-tablet .menu{display:flex;flex-direction:column;min-width:188px}.svg_editor.ui-tablet .menu-item{appearance:none;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;color:var(--fg);text-align:left}.svg_editor.ui-tablet .menu-item:hover{background:var(--icon-hover-bg)}.svg_editor.ui-tablet .menu-item .mi-ic{width:22px;height:22px;display:grid;place-items:center;color:var(--icon);flex:0 0 auto}.svg_editor.ui-tablet .menu-item .mi-ic svg{width:21px;height:21px}.svg_editor.ui-tablet .lib-grid{display:grid;grid-template-columns:repeat(5,56px);gap:8px}.svg_editor.ui-tablet .lib-cell{width:56px;height:56px;border-radius:12px;border:1px solid var(--field-border);background:var(--field-bg);cursor:pointer;display:grid;place-items:center;color:var(--fg)}.svg_editor.ui-tablet .lib-cell:hover{background:var(--icon-hover-bg);border-color:var(--accent-border)}.svg_editor.ui-tablet .lib-cell svg{width:30px;height:30px;display:block}.svg_editor.ui-tablet .ts-sheet{position:absolute;left:16px;right:16px;bottom:16px;z-index:30;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-lg);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:12px 22px 20px;transform:translateY(calc(100% + 28px));transition:transform .28s cubic-bezier(.2,.8,.25,1)}.svg_editor.ui-tablet .ts-sheet.show{transform:translateY(0)}.svg_editor.ui-tablet .ts-sheet-handle{width:44px;height:5px;border-radius:99px;background:var(--chrome-border);margin:0 auto 12px}.svg_editor.ui-tablet .ts-sheet .kind{font-size:13px;font-weight:700;color:var(--accent);text-transform:capitalize;position:absolute;top:16px;left:22px}.svg_editor.ui-tablet .ts-sheet .closeb{position:absolute;top:12px;right:16px}.svg_editor.ui-tablet .ts-sheet-row{display:flex;align-items:flex-end;gap:22px}.svg_editor.ui-tablet .sheet-col{display:flex;flex-direction:column;gap:9px}.svg_editor.ui-tablet .sheet-sep{width:1px;align-self:stretch;background:var(--chrome-border);margin:2px}.svg_editor.ui-tablet .slider-mini{width:170px}.svg_editor.ui-tablet .ts-actions{display:flex;gap:6px}:root,.svg_editor,.svg_editor.theme-light{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #F4F5F7;--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--canvas-bg: #F8F9FB;--ruler-bg: #FFFFFF;--paper-bg: #FFFFFF;--paper-border: #DCDFE5;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(20,25,35,.05), 0 12px 28px -10px rgba(20,25,35,.18), 0 30px 60px -30px rgba(20,25,35,.25);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(20,25,35,.1)) drop-shadow(0 12px 24px rgba(20,25,35,.16));--fg: #1B1F24;--muted: #6B7280;--icon: #4B5563;--icon-hover: #0F172A;--icon-hover-bg: #EEF1F5;--icon-active-bg: #E2E6EC;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-border: #C7D7FF;--active-shadow: 0 1px 2px rgba(41,98,255,.18);--brand-bg: #F6F7F9;--brand-bg-hover: #EEF1F5;--brand-border: #E6E8EC;--brand-fg: #1B1F24;--file-bg: #F4F5F7;--file-border: #E6E8EC;--group-bg: #F6F7F9;--group-border: #E6E8EC;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--accent-ring: rgba(41,98,255,.16);--section-rule: #EEF0F3;--swatch-bg: #FFFFFF;--swatch-border: #C3C8D1;--swatch-border-hover: #2962FF;--swatch-inset: rgba(0,0,0,.18);--swatch-shadow: 0 1px 2px rgba(20,25,35,.08);--checker: rgba(0,0,0,.07);--cp-modal-bg: #FFFFFF;--cp-head-bg: #FAFBFC;--cp-stage-bg: #ECEEF2;--cp-backdrop: rgba(20, 24, 35, .06);--cp-field-hover: #B6BFCE;--cp-focus-ring: rgba(41, 98, 255, .18);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--cp-stop-ring: rgba(20, 24, 35, .3);--cp-danger: #E11D48;--cp-danger-bg: #FEE9EE;--cp-btn-primary-fg: #FFFFFF;--cp-btn-primary-shadow: rgba(41, 98, 255, .28);--cp-dial-bg: #F4F5F7;--cp-dial-border: #DDE1E7;--cp-dial-tick: #B6BFCE;--cp-swatch-bg: #FFFFFF;--cp-swatch-border: #C3C8D1;--cp-swatch-inset: rgba(0, 0, 0, .18);--cp-checker: rgba(0, 0, 0, .07);--sl-modal-bg: #FFFFFF;--sl-head-bg: #FAFBFC;--sl-side-bg: #F6F7F9;--sl-field-hover: #B6BFCE;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--sl-tile-shadow: 0 2px 6px rgba(41,98,255,.12);--sl-btn-primary-fg: #FFFFFF;--sl-btn-primary-shadow: rgba(41,98,255,.28);--sl-shape: #4B5563;--sl-shape-hover: #0F172A;--ruler-tick: #B5BAC3;--ruler-text: #8A8F99;--main-bg-color: var(--chrome-bg);--text-color: var(--fg);--border-color: var(--chrome-border);--canvas-bg-color: var(--paper-bg);--workarea-bg: var(--canvas-bg);--layer-bg: var(--chrome-bg);--layer-selected-bg: var(--accent-soft);--link-color: var(--accent);--ruler-color: var(--ruler-bg);--icon-bg-color: transparent;--icon-bg-color-hover: var(--icon-hover-bg);--input-color: var(--field-bg);--dropdown-bg: var(--chrome-bg);--dropdown-pressed-bg: var(--icon-hover-bg);--hover-highlight: var(--icon-hover-bg);--main-menu-bg: var(--chrome-bg);--main-menu-shadow: rgba(0,0,0,.12);--bevel-light: var(--chrome-border);--scrollbar-thumb: rgba(80,80,80,.3);--orange-color: var(--accent);--global-se-spin-input-width: 82px;--top-toolbar-min-height: 56px}.svg_editor.theme-dark{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #16181D;--chrome-bg: #1E2026;--chrome-border: #2C2F37;--canvas-bg: #0F1115;--ruler-bg: #1A1C22;--paper-bg: #FAFAF8;--paper-border: #1A1C22;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -10px rgba(0,0,0,.5), 0 40px 80px -30px rgba(0,0,0,.65);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 14px 30px rgba(0,0,0,.5));--fg: #ECEEF2;--muted: #9098A5;--icon: #B7BDC8;--icon-hover: #FFFFFF;--icon-hover-bg: #2A2D35;--icon-active-bg: #353944;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-border: #5A4422;--active-shadow: 0 1px 0 rgba(246,178,58,.15), 0 0 0 1px rgba(246,178,58,.18) inset;--brand-bg: #25282F;--brand-bg-hover: #2C2F37;--brand-border: #353944;--brand-fg: #ECEEF2;--file-bg: #16181D;--file-border: #2C2F37;--group-bg: #181A20;--group-border: #2C2F37;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--accent-ring: rgba(246,178,58,.2);--section-rule: #23262E;--swatch-bg: #2F333C;--swatch-border: #6A7180;--swatch-border-hover: #F6B23A;--swatch-inset: rgba(255,255,255,.22);--swatch-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 2px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.35);--checker: rgba(255,255,255,.06);--cp-modal-bg: #22252C;--cp-head-bg: #1E2026;--cp-stage-bg: #0F1115;--cp-backdrop: rgba(0, 0, 0, .5);--cp-field-hover: #4B5160;--cp-focus-ring: rgba(246, 178, 58, .22);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--cp-stop-ring: rgba(0, 0, 0, .6);--cp-danger: #FB7185;--cp-danger-bg: #3A1A22;--cp-btn-primary-fg: #1A1208;--cp-btn-primary-shadow: rgba(246, 178, 58, .3);--cp-dial-bg: #1A1C22;--cp-dial-border: #353944;--cp-dial-tick: #4B5160;--cp-swatch-bg: #2F333C;--cp-swatch-border: #6A7180;--cp-swatch-inset: rgba(255, 255, 255, .22);--cp-checker: rgba(255, 255, 255, .06);--sl-modal-bg: #22252C;--sl-head-bg: #1E2026;--sl-side-bg: #1A1C22;--sl-field-hover: #4B5160;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--sl-tile-shadow: 0 2px 8px rgba(246,178,58,.18);--sl-btn-primary-fg: #1A1208;--sl-btn-primary-shadow: rgba(246,178,58,.3);--sl-shape: #B7BDC8;--sl-shape-hover: #FFFFFF;--ruler-tick: #4A4F5A;--ruler-text: #7A8190;--main-bg-color: var(--chrome-bg);--text-color: var(--fg);--border-color: var(--chrome-border);--canvas-bg-color: var(--paper-bg);--workarea-bg: var(--canvas-bg);--layer-bg: var(--chrome-bg);--layer-selected-bg: var(--accent-soft);--link-color: var(--accent);--ruler-color: var(--ruler-bg);--icon-bg-color: transparent;--icon-bg-color-hover: var(--icon-hover-bg);--input-color: var(--field-bg);--dropdown-bg: var(--chrome-bg);--dropdown-pressed-bg: var(--icon-hover-bg);--hover-highlight: var(--icon-hover-bg);--main-menu-bg: var(--chrome-bg);--main-menu-shadow: rgba(0,0,0,.5);--bevel-light: var(--chrome-border);--scrollbar-thumb: rgba(180,180,180,.25);--orange-color: var(--accent)}.svg_editor *{transform-origin:0 0}.svg_editor{display:grid;grid-template-rows:minmax(var(--top-toolbar-min-height),auto) 15px 1fr 40px;grid-template-columns:56px 15px 50px 1fr 15px;grid-template-areas:"main main   main top top" "left corner rulerX rulerX side" "left rulerY workarea workarea side" "left bottom bottom bottom bottom";font-size:8pt;background:var(--app-bg);font-family:var(--ui-font, "Inter", -apple-system, system-ui, sans-serif);color:var(--fg);-webkit-user-select:text;user-select:text;width:100%;height:100%}#title_panel>p{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;background:var(--file-bg);border:1px solid var(--file-border);color:var(--fg);font-size:13px;font-weight:500;letter-spacing:-.003em;cursor:text;margin:0}.svg_editor.open{grid-template-columns:34px 15px 50px 1fr 280px}#svgroot{-webkit-user-select:none;user-select:none;position:absolute;top:0;left:0}#workarea{grid-area:workarea;background-color:var(--canvas-bg);border:none;overflow:auto;text-align:center;padding:56px 80px 80px 56px}#svgcanvas{line-height:normal;display:inline-block;background:transparent;text-align:center;vertical-align:middle;position:relative}#canvas_watermark{position:absolute;inset:0;z-index:1;display:none;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:160px 160px;opacity:.07}#canvas_watermark.visible{display:block}#canvasBackground{filter:var(--paper-shadow-filter)}#canvasBackground>rect{stroke:var(--paper-border);stroke-width:1px;vector-effect:non-scaling-stroke}#sidepanels{grid-area:side;position:relative;min-height:0}#sidepanel_content{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-gutter:stable}#sidepanel_handle{writing-mode:vertical-rl;text-orientation:mixed;color:var(--muted);position:absolute;right:0;top:50%;margin-top:-60px;cursor:pointer;height:120px;width:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-right:none;border-top-left-radius:10px;border-bottom-left-radius:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .12s,color .12s;z-index:4}#sidepanel_handle:hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.open #sidepanel_handle{right:100%}.svg_editor:not(.open) #sidepanel_content{display:none}a{color:var(--link-color)}hr{border:none;border-bottom:1px solid var(--border-color)}#linkLabel>svg{height:20px;padding-top:4px}#sidepanel_tabs{display:flex;gap:2px;padding:6px 8px 0;position:sticky;top:0;background:var(--chrome-bg);border-bottom:1px solid var(--section-rule, #EEF0F3);z-index:1}.sidepanel_tab{flex:1;appearance:none;border:none;background:transparent;color:var(--muted);font:600 12.5px var(--ui-font);padding:9px 4px 11px;cursor:pointer;position:relative;border-radius:7px 7px 0 0;transition:color .12s,background .12s}.sidepanel_tab:hover{color:var(--fg);background:var(--icon-hover-bg)}.sidepanel_tab.active{color:var(--accent)}.sidepanel_tab.active:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}.sidepanel_tabpanel{display:none;padding:2px 0 10px}.sidepanel_tabpanel.active{display:block}.sidepanel_section,#color_shift_panel,#shadow_panel{padding:14px 16px;margin:0;border-top:1px solid var(--section-rule, #EEF0F3);color:var(--fg);-webkit-user-select:none;user-select:none}.sidepanel_tabpanel>.sidepanel_section:first-child{border-top:none}.sidepanel_section_label,#color_shift_label{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;white-space:nowrap}.sidepanel_section_grid,.color_shift_grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;align-items:start}.sidepanel_section_grid .span2,.sidepanel_section_grid se-input[size="15"],.sidepanel_section_grid .image_url_field{grid-column:1 / -1}.sub_label{font:600 10px var(--ui-font);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 5px 2px}.sidepanel_subsection{margin-top:12px}.sidepanel_btn_row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.sidepanel_seg{display:inline-flex;align-items:center;background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;overflow:hidden;height:34px}.sidepanel_seg se-list,.sidepanel_seg se-button{--seg: 1}.sidepanel_text_font{display:flex;align-items:center;gap:8px;margin-top:12px}.sidepanel_text_font se-font-select{flex:1;min-width:0}.shadow_panel_footer,.clipmask_panel_footer{display:flex;align-items:center;gap:10px;margin-top:12px}.shadow_panel_footer input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--field-border);border-radius:8px;background:var(--field-bg);cursor:pointer}.color_shift_toggles{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:4px}.color_shift_toggles label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer}.color_shift_toggles input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;margin:0}#color_shift_reset{margin-left:auto;height:32px;padding:0 14px;font:600 12.5px var(--ui-font);color:var(--fg);background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;cursor:pointer}#color_shift_reset:hover{background:var(--icon-hover-bg);border-color:var(--field-border-h, #C8CDD6)}#color_shift_hint{font-size:12px;color:var(--muted);line-height:1.45}#layerpanel{-webkit-user-select:none;user-select:none;padding:14px 16px}#layersLabel{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}#layerbuttons{margin:0 0 12px;padding:0;width:100%;height:auto;border:0;display:flex;gap:4px;align-items:center;justify-content:flex-start}#layerlist{margin:0;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--field-border);border-radius:9px;overflow:hidden;background:var(--field-bg)}#layerlist tr.layer{background:transparent}#layerlist tr.layer+tr.layer td{border-top:1px solid var(--section-rule, #EEF0F3)}#layerlist tr.layersel{background:var(--accent-soft)}#layerlist td{padding:9px 6px;cursor:pointer}#layerlist td.layervis{width:30px;padding-left:11px;text-align:center}#layerlist td.layervis *{display:block}#layerlist td.layerinvis *{display:none}#layerlist td.layername{font-size:13px;font-weight:500;color:var(--fg)}#layerlist td.layername:hover{color:var(--accent)}#layerlist tr.layersel td.layername{font-weight:600}#selLayerLabel{white-space:nowrap}#selLayerNames{display:block;position:static;top:0;margin-top:12px}#main_button{grid-area:main;display:inline-flex;align-items:center;padding:0 10px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border)}#main_icon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 8px;border-radius:10px;background:var(--brand-bg);border:1px solid var(--brand-border);color:var(--brand-fg);cursor:pointer;transition:background .12s;white-space:nowrap;height:36px}#main_icon:hover{background:var(--brand-bg-hover)!important}#main_icon.buttondown{background:var(--brand-bg-hover)!important;box-shadow:none!important;border-radius:10px}#logo{display:inline-flex;align-items:center;justify-content:center}#logo svg,#logo img{width:22px;height:22px;display:block}#logo img{filter:none}#main_icon>div{display:inline-flex;align-items:center}#main_button .dropdown{opacity:.55;display:inline-flex;align-items:center;margin-left:2px}#main_icon span{font-weight:600;font-size:13px;letter-spacing:-.005em;color:var(--brand-fg);font-family:var(--ui-font, inherit);display:inline;position:static;padding:0;line-height:normal}#main_menu{z-index:12;background:var(--chrome-bg);color:var(--fg);position:relative;width:230px;padding:6px;box-shadow:0 4px 16px -2px var(--main-menu-shadow);border:1px solid var(--chrome-border);border-radius:10px;font-size:1.1em;display:none;overflow:hidden;clear:both;top:4px}#main_menu ul,#main_menu li{list-style:none;margin:0;padding:0}#main_menu li{line-height:22px;padding:7px 10px;overflow:auto;cursor:pointer;border-radius:7px;color:var(--fg)}#main_menu li:hover{background:var(--icon-hover-bg)}#main_menu li>div{float:left;padding-right:5px}#main_menu p{margin-top:5px}#tools_top{grid-area:top;display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);min-height:var(--top-toolbar-min-height);padding:0 10px;gap:6px;position:relative;z-index:5;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}#tools_top::-webkit-scrollbar{height:3px}#tools_top>*{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:2px;flex-shrink:0}#editor_panel,#history_panel,#zoom_panel,.quick_tray{display:inline-flex;align-items:center;gap:2px;padding:4px;background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px}.path_node_panel se-spin-input,.path_node_panel se-select,#curvature_panel se-select,.multiselected_panel se-select{flex-direction:row;align-items:center;gap:6px}#star_panel se-spin-input,#polygon_panel se-spin-input{width:58px}#history_panel{margin-left:auto}#title_panel{display:inline-flex;align-items:center}#tools_bottom{grid-area:bottom;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--chrome-bg);border-top:1px solid var(--chrome-border);height:56px;scrollbar-width:thin}#tools_bottom::-webkit-scrollbar{width:3px;height:3px}#tools_left{grid-area:left;border-right:1px solid var(--chrome-border);background:var(--chrome-bg);margin-left:auto;margin-right:auto;overflow-y:scroll;scrollbar-width:none;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px}#tools_left::-webkit-scrollbar{width:3px}#tools_left::-webkit-scrollbar-track,#tools_bottom::-webkit-scrollbar-track{background:transparent}#tools_left::-webkit-scrollbar-thumb,#tools_bottom::-webkit-scrollbar-thumb{background-color:var(--scrollbar-thumb)}#workarea.wireframe #svgcontent *{fill:none;stroke:#000;stroke-width:1px;stroke-opacity:1;stroke-dasharray:0;opacity:1;pointer-events:stroke;filter:none}#workarea.wireframe #svgcontent text{fill:#000;stroke:none}#workarea.wireframe #canvasBackground>rect{fill:#fff!important}#cur_context_panel{grid-area:rulerX;line-height:22px;overflow:auto;padding-left:5px;font-size:12px;background:#000c;color:#ccc}#cur_context_panel a{float:none;text-decoration:none}#cur_context_panel a:hover{text-decoration:underline}input[type=text]{padding:2px}.dropdown{position:relative}.dropdown button{width:15px;height:21px;margin:6px 0 0 1px;padding:0;border-left:1px solid var(--bevel-light);border-top:1px solid var(--bevel-light);border-right:1px solid var(--border-color);border-bottom:1px solid var(--border-color);background-color:var(--dropdown-bg)}.dropdown button.down{border-left:1px solid var(--border-color);border-top:1px solid var(--border-color);border-right:1px solid var(--bevel-light);border-bottom:1px solid var(--bevel-light);background-color:var(--dropdown-pressed-bg)}.dropdown ul{list-style:none;position:absolute;margin:0;padding:0;left:-85px;top:26px;z-index:4;display:none}.dropup ul{top:auto;bottom:24px}.dropdown li{display:block;width:120px;padding:4px;background:var(--dropdown-bg);border:1px solid var(--dropdown-pressed-bg);margin:0 0 -1px;line-height:16px}.dropdown li:hover{background-color:var(--hover-highlight)}.dropdown li.special{padding:10px 4px}.dropdown li.special:hover{background:var(--hover-highlight)}#font_family_dropdown-list li{font-size:1.4em}#font_family{margin-left:5px;margin-right:0}#main_menu li#tool_open,#main_menu li#tool_import{position:relative;overflow:hidden}#tool_open input,#tool_import input{position:absolute;opacity:0;font-size:10em;top:-5px;right:-5px;margin:0;cursor:pointer}.disabled{opacity:.5;cursor:default}.tool_sep{width:1px;height:22px;background:var(--chrome-border);border:none;margin:0 4px;flex-shrink:0}.width_label{padding-right:5px}#text{position:absolute;left:-9999px}.bottom-icon{width:22px}#palette{margin-left:auto;display:flex;align-items:center;flex:1;min-width:0}#stroke_expand{width:0;overflow:hidden}#toggle_stroke_tools{position:absolute;right:0;top:0;bottom:0;width:25px;text-align:center;border-radius:0 3px 3px 0;margin:0}#toggle_stroke_tools:before{content:">>";letter-spacing:-3px;font-weight:700;color:var(--text-color)}.expanded #toggle_stroke_tools:before{content:"<<"}#toggle_stroke_tools:hover{background:var(--icon-bg-color-hover)}#tool_opacity{right:0}#tool_opacity{overflow:visible}ul li.current{background-color:var(--hover-highlight)}#copyright{text-align:right;padding-right:.3em}.overlay{position:absolute;inset:0;background-color:#000;opacity:.6;z-index:5}#save_output_btns{display:none;text-align:left}#save_output_btns p{margin:.5em 1.5em;display:inline-block}#bg_blocks{overflow:auto;margin-left:30px}.dropdown li.tool_button{width:24px}#svgcontent{color:unset}#zoom{color:var(--fg);background-color:var(--chrome-bg);border:none}#stroke_width,#opacity{color:var(--fg)}';
+var zie = () => {
   const i11 = window.opener || window.parent;
   if (i11)
     try {
@@ -90453,13 +90468,13 @@ var qie = () => {
     } catch (e) {
     }
 };
-var Qie = () => {
+var Hie = () => {
   if (document.querySelector("style[data-svgedit-css]")) return;
   const i11 = document.createElement("style");
-  i11.setAttribute("data-svgedit-css", ""), i11.textContent = Die, document.head.append(i11);
+  i11.setAttribute("data-svgedit-css", ""), i11.textContent = Qie, document.head.append(i11);
 };
-var { $click: zie, convertUnit: Gb, scopedId: Hie, scopedQa: Vie, scopedQq: Gie } = $r;
-var $ie = class {
+var { $click: Vie, convertUnit: Gb, scopedId: Gie, scopedQa: $ie, scopedQq: Kie } = $r;
+var Xie = class {
   /**
    *
    */
@@ -90469,7 +90484,7 @@ var $ie = class {
       var _a2, _b2;
       ew(this), (_b2 = (_a2 = this.svgCanvas) == null ? void 0 : _a2.activateUtilities) == null ? void 0 : _b2.call(_a2);
     };
-    this.$container.addEventListener("pointerdown", t, true), this.$container.addEventListener("focusin", t, true), this.$id = Hie(this.$container), this.$qa = Vie(this.$container), this.$qq = Gie(this.$container);
+    this.$container.addEventListener("pointerdown", t, true), this.$container.addEventListener("focusin", t, true), this.$id = Gie(this.$container), this.$qa = $ie(this.$container), this.$qq = Kie(this.$container);
   }
   /**
   * Auto-run after a Promise microtask.
@@ -90478,12 +90493,12 @@ var $ie = class {
   */
   async init() {
     const { $id: e } = this;
-    IN(this.configObj.curConfig.userDataAdapter), Qie(), "localStorage" in window && (this.storage = window.localStorage), this.configObj.load();
+    IN(this.configObj.curConfig.userDataAdapter), Hie(), "localStorage" in window && (this.storage = window.localStorage), this.configObj.load();
     const { i18next: t } = await FT(this.configObj.pref("lang"), this.goodLangs);
-    this.i18next = t, await Promise.resolve().then(() => VR), await Promise.resolve().then(() => tee);
+    this.i18next = t, await Promise.resolve().then(() => VR), await Promise.resolve().then(() => iee);
     try {
       const T = document.createElement("template");
-      T.innerHTML = hee, this.$container.append(T.content.cloneNode(true)), this.$svgEditor = this.$container.querySelector(".svg_editor"), QE(this.configObj.pref("theme") || "light", this.$svgEditor), zE(this.configObj.pref("tabletMode"), this.$svgEditor), this.$svgEditor.style.visibility = "hidden", this.workarea = e("workarea");
+      T.innerHTML = Aee, this.$container.append(T.content.cloneNode(true)), this.$svgEditor = this.$container.querySelector(".svg_editor"), QE(this.configObj.pref("theme") || "light", this.$svgEditor), zE(this.configObj.pref("tabletMode"), this.$svgEditor), this.$svgEditor.style.visibility = "hidden", this.workarea = e("workarea");
       const O = document.createElement("se-img-prop-dialog");
       O.setAttribute("id", "se-img-prop"), this.$container.append(O), O.init(this.i18next);
       const D = document.createElement("se-edit-prefs-dialog");
@@ -90514,9 +90529,9 @@ var $ie = class {
     const { undoMgr: r } = this.svgCanvas;
     this.canvMenu = e("se-cmenu_canvas"), this.exportWindow = null, this.defaultImageURL = `${this.configObj.curConfig.imgPath}/logo.svg`;
     const o = "crosshair", n10 = "crosshair";
-    this.uiContext = "toolbars", qie(), this.rulers = new gee(this), this.rightPanel.populateLayers(), this.selectedElement = null, this.multiselected = false;
+    this.uiContext = "toolbars", zie(), this.rulers = new _ee(this), this.rightPanel.populateLayers(), this.selectedElement = null, this.multiselected = false;
     const a = e("cur_context_panel");
-    zie(a, (T) => {
+    Vie(a, (T) => {
       const O = T.target;
       return O.hasAttribute("data-root") ? this.svgCanvas.leaveContext() : this.svgCanvas.setContext(O.textContent), this.svgCanvas.clearSelection(), false;
     }), this.svgCanvas.bind("selected", this.selectedChanged.bind(this)), this.svgCanvas.bind("transition", this.elementTransition.bind(this)), this.svgCanvas.bind("changed", this.elementChanged.bind(this)), this.svgCanvas.bind("exported", this.exportHandler.bind(this)), this.svgCanvas.bind("exportedPDF", function(T, O) {
@@ -90734,7 +90749,7 @@ var $ie = class {
           this._addSelectedToShapeLibrary();
           break;
         default:
-          lee(O) && cee(O).call();
+          dee(O) && uee(O).call();
           break;
       }
     }.bind(this)), this.ready(function() {
@@ -90745,7 +90760,7 @@ var $ie = class {
     }.bind(this), { signal: this.listenerAbort.signal }), window.addEventListener("beforeunload", function(T) {
       return r.getUndoStackSize() === 0 && (this.showSaveWarning = false), !this.configObj.curConfig.no_save_warning && this.showSaveWarning ? (T.returnValue = this.i18next.t("notification.unsavedChanges"), this.i18next.t("notification.unsavedChanges")) : true;
     }.bind(this), { signal: this.listenerAbort.signal }), this.workarea.addEventListener("dragenter", this.onDragEnter), this.workarea.addEventListener("dragover", this.onDragOver), this.workarea.addEventListener("dragleave", this.onDragLeave), this.updateCanvas(true), this.extAndLocaleFunc(), this.ready(() => {
-      uee();
+      pee();
     }), await this.runCallbacks(), document.dispatchEvent(new CustomEvent("svgedit:ready", { detail: this }));
   }
   /**
@@ -90954,7 +90969,7 @@ var $ie = class {
       await Promise.all(
         this.configObj.curConfig.extensions.map(async (e) => {
           try {
-            const t = Rie(e);
+            const t = qie(e);
             if (!t) throw new Error(`Unknown extension: ${e}`);
             const { name: r = e, init: o } = t.default;
             return this.addExtension(r, o && o.bind(this), { langParam: "en" });
@@ -91053,9 +91068,9 @@ var $ie = class {
     ["zoom", "rect", "square", "circle", "ellipse", "line", "text", "star", "polygon", "shapelib", "image"].includes(e) && this.leftPanel.clickSelect();
   }
 };
-var Kie = '<div id="tools_left"><se-button id="tool_select" title="tools.mode_select" src="select.svg"></se-button><se-button id="tool_zoom" title="tools.mode_zoom" src="zoom.svg" shortcut="Z/Ctrl+wheel"></se-button><se-button id="tool_fhpath" title="tools.mode_fhpath" src="pencil.svg" shortcut="Q"></se-button><se-button id="tool_line" title="tools.mode_line" src="line_tool.svg" shortcut="L"></se-button><se-button id="tool_path" title="tools.mode_path" src="pen.svg" shortcut="P"></se-button><se-flyingbutton id="tools_rect" title="tools.square_rect_tool"><se-button id="tool_rect" title="tools.mode_rect" src="rect.svg" shortcut="R"></se-button><se-button id="tool_square" title="tools.mode_square" src="square.svg"></se-button><se-button id="tool_fhrect" title="tools.mode_fhrect" src="fh_rect.svg"></se-button></se-flyingbutton><se-flyingbutton id="tools_ellipse" title="tools.ellipse_circle_tool"><se-button id="tool_ellipse" title="tools.mode_ellipse" src="ellipse.svg" shortcut="E"></se-button><se-button id="tool_circle" title="tools.mode_circle" src="circle.svg"></se-button><se-button id="tool_fhellipse" title="tools.mode_fhellipse" src="fh_ellipse.svg"></se-button></se-flyingbutton><se-button id="tool_text" title="tools.mode_text" src="text.svg" shortcut="T"></se-button><se-button id="tool_image" title="tools.mode_image" src="image.svg"></se-button></div>';
+var Yie = '<div id="tools_left"><se-button id="tool_select" title="tools.mode_select" src="select.svg"></se-button><se-button id="tool_zoom" title="tools.mode_zoom" src="zoom.svg" shortcut="Z/Ctrl+wheel"></se-button><se-button id="tool_fhpath" title="tools.mode_fhpath" src="pencil.svg" shortcut="Q"></se-button><se-button id="tool_line" title="tools.mode_line" src="line_tool.svg" shortcut="L"></se-button><se-button id="tool_path" title="tools.mode_path" src="pen.svg" shortcut="P"></se-button><se-flyingbutton id="tools_rect" title="tools.square_rect_tool"><se-button id="tool_rect" title="tools.mode_rect" src="rect.svg" shortcut="R"></se-button><se-button id="tool_square" title="tools.mode_square" src="square.svg"></se-button><se-button id="tool_fhrect" title="tools.mode_fhrect" src="fh_rect.svg"></se-button></se-flyingbutton><se-flyingbutton id="tools_ellipse" title="tools.ellipse_circle_tool"><se-button id="tool_ellipse" title="tools.mode_ellipse" src="ellipse.svg" shortcut="E"></se-button><se-button id="tool_circle" title="tools.mode_circle" src="circle.svg"></se-button><se-button id="tool_fhellipse" title="tools.mode_fhellipse" src="fh_ellipse.svg"></se-button></se-flyingbutton><se-button id="tool_text" title="tools.mode_text" src="text.svg" shortcut="T"></se-button><se-button id="tool_image" title="tools.mode_image" src="image.svg"></se-button></div>';
 var { $click: Zo } = $r;
-var Xie = class {
+var Wie = class {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -91158,7 +91173,7 @@ var Xie = class {
     var _a2, _b2;
     if (!(((_a2 = e == null ? void 0 : e.detail) == null ? void 0 : _a2.trigger) !== "ok" || !((_b2 = e == null ? void 0 : e.detail) == null ? void 0 : _b2.href))) {
       if (e.detail.editableSvg) {
-        Tre(e.detail.editableSvg, { vaultLink: e.detail.vaultLink, asPaths: e.detail.asPaths });
+        Fre(e.detail.editableSvg, { vaultLink: e.detail.vaultLink, asPaths: e.detail.asPaths });
         return;
       }
       yB(e.detail.href, { vaultLink: e.detail.vaultLink, locked: e.detail.locked });
@@ -91206,12 +91221,12 @@ var Xie = class {
    */
   init() {
     const { $id: e } = this.editor, t = document.createElement("template");
-    t.innerHTML = Kie, this.editor.$svgEditor.append(t.content.cloneNode(true)), Zo(e("tool_select"), this.clickSelect.bind(this)), Zo(e("tool_fhpath"), this.clickFHPath.bind(this)), Zo(e("tool_text"), this.clickText.bind(this)), Zo(e("tool_image"), this.clickImage.bind(this)), e("se-image-import-dialog").addEventListener("change", this.handleImageImport.bind(this)), Zo(e("tool_zoom"), this.clickZoom.bind(this)), e("tool_zoom").addEventListener("dblclick", this.dblclickZoom.bind(this)), Zo(e("tool_path"), this.clickPath.bind(this)), Zo(e("tool_line"), this.clickLine.bind(this)), Zo(e("tool_rect"), this.clickRect.bind(this)), Zo(e("tool_square"), this.clickSquare.bind(this)), Zo(e("tool_fhrect"), this.clickFHRect.bind(this)), Zo(e("tool_ellipse"), this.clickEllipse.bind(this)), Zo(e("tool_circle"), this.clickCircle.bind(this)), Zo(e("tool_fhellipse"), this.clickFHEllipse.bind(this));
+    t.innerHTML = Yie, this.editor.$svgEditor.append(t.content.cloneNode(true)), Zo(e("tool_select"), this.clickSelect.bind(this)), Zo(e("tool_fhpath"), this.clickFHPath.bind(this)), Zo(e("tool_text"), this.clickText.bind(this)), Zo(e("tool_image"), this.clickImage.bind(this)), e("se-image-import-dialog").addEventListener("change", this.handleImageImport.bind(this)), Zo(e("tool_zoom"), this.clickZoom.bind(this)), e("tool_zoom").addEventListener("dblclick", this.dblclickZoom.bind(this)), Zo(e("tool_path"), this.clickPath.bind(this)), Zo(e("tool_line"), this.clickLine.bind(this)), Zo(e("tool_rect"), this.clickRect.bind(this)), Zo(e("tool_square"), this.clickSquare.bind(this)), Zo(e("tool_fhrect"), this.clickFHRect.bind(this)), Zo(e("tool_ellipse"), this.clickEllipse.bind(this)), Zo(e("tool_circle"), this.clickCircle.bind(this)), Zo(e("tool_fhellipse"), this.clickFHEllipse.bind(this));
   }
 };
-var Yie = '<div id="tools_top"><div id="title_panel"><p>untitled.svg</p></div><!--title panel--><div id="editor_panel"><se-button id="tool_frame" title="tools.tool_frame" shortcut="U" src="frame.svg"></se-button><se-button id="tool_wireframe" title="tools.wireframe_mode" shortcut="F" src="wireframe.svg"></se-button><se-canvas-settings id="tool_canvas_settings" title="Canvas settings" src="canvas.svg"></se-canvas-settings></div><!--editor_panel(view toggles)--><div id="theme_panel"></div><!--theme_panel--><!--Path node editing(transient,pathedit mode)--><div class="path_node_panel quick_tray"><se-button id="tool_node_link" title="tools.node_link" src="tool_node_link.svg" pressed></se-button><se-spin-input id="path_node_x" data-attr="x" size="4" title="properties.node_x" label="properties.x_label"></se-spin-input><se-spin-input id="path_node_y" data-attr="y" size="4" title="properties.node_y" label="properties.y_label"></se-spin-input><se-select id="seg_type" title="properties.seg_type" label=""options="properties.straight_segments,properties.curve_segments" values="4::6"></se-select><se-button id="tool_node_clone" title="tools.node_clone" src="tool_node_clone.svg"></se-button><se-button id="tool_node_delete" title="tools.node_delete" src="tool_node_delete.svg"></se-button><se-button id="tool_openclose_path" title="tools.openclose_path" src="tool_openclose_path.svg"></se-button><se-button id="tool_add_subpath" title="tools.add_subpath" src="tool_add_subpath.svg"></se-button></div><!--path_node_panel--><div id="history_panel"><se-button id="tool_undo" title="tools.undo" shortcut="ctrl+Z" src="undo.svg" disabled></se-button><se-button id="tool_redo" title="tools.redo" shortcut="ctrl+Y" src="redo.svg" disabled></se-button></div><!--history_panel(pushed to the right)--><!--Object actions when a single element is selected: clone/delete/arrange/flip/align--><div class="selected_panel quick_tray" style="display:none"><se-button id="tool_clone" title="tools.clone" shortcut="D" src="clone.svg"></se-button><se-button id="tool_delete" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-list id="tool_arrange" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward" value="backward" title="tools.move_backward" src="move_backwards.svg"img-height="22px"></se-list-item><se-list-item id="arrange_back" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item></se-list><se-button id="tool_flip_h" title="tools.flip_horizontal" src="flip_horizontal.svg"></se-button><se-button id="tool_flip_v" title="tools.flip_vertical" src="flip_vertical.svg"></se-button><se-list id="tool_position" src="align.svg" title="tools.align_to_page" label="" width="28px" height="28px"><se-list-item id="tool_posleft" value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item id="tool_poscenter" value="c" title="tools.align_center" src="align_center.svg"img-height="22px"></se-list-item><se-list-item id="tool_posright" value="r" title="tools.align_right" src="align_right.svg"img-height="22px"></se-list-item><se-list-item id="tool_postop" value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item id="tool_posmiddle" value="m" title="tools.align_middle" src="align_middle.svg"img-height="22px"></se-list-item><se-list-item id="tool_posbottom" value="b" src="align_bottom.svg" title="tools.align_bottom"img-height="22px"></se-list-item><se-list-item id="tool_poshoriz" value="dh" src="align_distrib_horiz.svg" title="tools.align_distrib_horiz"img-height="22px"></se-list-item><se-list-item id="tool_posverti" value="dv" src="align_distrib_verti.svg" title="tools.align_distrib_verti"img-height="22px"></se-list-item></se-list></div><!--Object actions when multiple elements are selected: clone/delete/group/arrange/align--><div class="multiselected_panel quick_tray" style="display:none"><se-button id="tool_clone_multi" title="tools.clone" shortcut="C" src="clone.svg"></se-button><se-button id="tool_delete_multi" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-button id="tool_group_elements" title="tools.group_elements" shortcut="G" src="group_elements.svg"></se-button><se-list id="tool_arrange_multi" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front_multi" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward_multi" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward_multi" value="backward" title="tools.move_backward"src="move_backwards.svg" img-height="22px"></se-list-item><se-list-item id="arrange_back_multi" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item><se-list-item id="arrange_switch" value="switch" title="tools.switch_layers" src="switch_layer.svg"img-height="22px"></se-list-item></se-list><se-list id="tool_align_multi" src="align.svg" title="tools.align_to_page" width="28px" height="28px"><se-list-item value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item value="c" title="tools.align_center" src="align_center.svg" img-height="22px"></se-list-item><se-list-item value="r" title="tools.align_right" src="align_right.svg" img-height="22px"></se-list-item><se-list-item value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item value="m" title="tools.align_middle" src="align_middle.svg" img-height="22px"></se-list-item><se-list-item value="b" title="tools.align_bottom" src="align_bottom.svg" img-height="22px"></se-list-item><se-list-item value="dh" title="tools.align_distrib_horiz" src="align_distrib_horiz.svg"img-height="22px"></se-list-item><se-list-item value="dv" title="tools.align_distrib_verti" src="align_distrib_verti.svg"img-height="22px"></se-list-item></se-list><se-select id="tool_align_relative" label="tools.relativeTo"options="tools.selected_objects,tools.largest_object,tools.smallest_object,tools.page"values="selected::largest::smallest::page"></se-select></div><!--Ungroup(shown for a selected group/link)--><div class="g_panel quick_tray" style="display:none"><se-button id="tool_ungroup" title="tools.ungroup" src="ungroup.svg"></se-button></div><!--Zoom(far right)--><div id="zoom_panel"><se-zoom id="zoom" src="zoom.svg" title="Change zoom level" inputsize="40px"><se-text value="1000" text="1000%"></se-text><se-text value="400" text="400%"></se-text><se-text value="200" text="200%"></se-text><se-text value="100" text="100%"></se-text><se-text value="50" text="50%"></se-text><se-text value="25" text="25%"></se-text><se-text value="canvas" text="tools.fit_to_canvas"></se-text><se-text value="selection" text="tools.fit_to_sel"></se-text><se-text value="layer" text="tools.fit_to_layer_content"></se-text><se-text value="content" text="tools.fit_to_all"></se-text></se-zoom></div><!--The text edit buffer(#text)moved to editorTemplate.html so it staysfocusable when this panel is hidden(e.g. tablet mode).--><div id="cur_context_panel"></div></div>';
-var { $click: Fr, isValidUnit: Wie, getTypeMap: Zie, convertUnit: W0 } = $r;
-var Jie = class {
+var Zie = '<div id="tools_top"><div id="title_panel"><p>untitled.svg</p></div><!--title panel--><div id="editor_panel"><se-button id="tool_frame" title="tools.tool_frame" shortcut="U" src="frame.svg"></se-button><se-button id="tool_wireframe" title="tools.wireframe_mode" shortcut="F" src="wireframe.svg"></se-button><se-canvas-settings id="tool_canvas_settings" title="Canvas settings" src="canvas.svg"></se-canvas-settings></div><!--editor_panel(view toggles)--><div id="theme_panel"></div><!--theme_panel--><!--Path node editing(transient,pathedit mode)--><div class="path_node_panel quick_tray"><se-button id="tool_node_link" title="tools.node_link" src="tool_node_link.svg" pressed></se-button><se-spin-input id="path_node_x" data-attr="x" size="4" title="properties.node_x" label="properties.x_label"></se-spin-input><se-spin-input id="path_node_y" data-attr="y" size="4" title="properties.node_y" label="properties.y_label"></se-spin-input><se-select id="seg_type" title="properties.seg_type" label=""options="properties.straight_segments,properties.curve_segments" values="4::6"></se-select><se-button id="tool_node_clone" title="tools.node_clone" src="tool_node_clone.svg"></se-button><se-button id="tool_node_delete" title="tools.node_delete" src="tool_node_delete.svg"></se-button><se-button id="tool_openclose_path" title="tools.openclose_path" src="tool_openclose_path.svg"></se-button><se-button id="tool_add_subpath" title="tools.add_subpath" src="tool_add_subpath.svg"></se-button></div><!--path_node_panel--><div id="history_panel"><se-button id="tool_undo" title="tools.undo" shortcut="ctrl+Z" src="undo.svg" disabled></se-button><se-button id="tool_redo" title="tools.redo" shortcut="ctrl+Y" src="redo.svg" disabled></se-button></div><!--history_panel(pushed to the right)--><!--Object actions when a single element is selected: clone/delete/arrange/flip/align--><div class="selected_panel quick_tray" style="display:none"><se-button id="tool_clone" title="tools.clone" shortcut="D" src="clone.svg"></se-button><se-button id="tool_delete" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-list id="tool_arrange" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward" value="backward" title="tools.move_backward" src="move_backwards.svg"img-height="22px"></se-list-item><se-list-item id="arrange_back" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item></se-list><se-button id="tool_flip_h" title="tools.flip_horizontal" src="flip_horizontal.svg"></se-button><se-button id="tool_flip_v" title="tools.flip_vertical" src="flip_vertical.svg"></se-button><se-list id="tool_position" src="align.svg" title="tools.align_to_page" label="" width="28px" height="28px"><se-list-item id="tool_posleft" value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item id="tool_poscenter" value="c" title="tools.align_center" src="align_center.svg"img-height="22px"></se-list-item><se-list-item id="tool_posright" value="r" title="tools.align_right" src="align_right.svg"img-height="22px"></se-list-item><se-list-item id="tool_postop" value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item id="tool_posmiddle" value="m" title="tools.align_middle" src="align_middle.svg"img-height="22px"></se-list-item><se-list-item id="tool_posbottom" value="b" src="align_bottom.svg" title="tools.align_bottom"img-height="22px"></se-list-item><se-list-item id="tool_poshoriz" value="dh" src="align_distrib_horiz.svg" title="tools.align_distrib_horiz"img-height="22px"></se-list-item><se-list-item id="tool_posverti" value="dv" src="align_distrib_verti.svg" title="tools.align_distrib_verti"img-height="22px"></se-list-item></se-list></div><!--Object actions when multiple elements are selected: clone/delete/group/arrange/align--><div class="multiselected_panel quick_tray" style="display:none"><se-button id="tool_clone_multi" title="tools.clone" shortcut="C" src="clone.svg"></se-button><se-button id="tool_delete_multi" title="tools.del" shortcut="Delete/Backspace" src="delete.svg"></se-button><se-button id="tool_group_elements" title="tools.group_elements" shortcut="G" src="group_elements.svg"></se-button><se-list id="tool_arrange_multi" src="move_top.svg" title="tools.arrange" width="28px" height="28px"><se-list-item id="arrange_front_multi" value="front" title="tools.move_top" src="move_top.svg"img-height="22px"></se-list-item><se-list-item id="arrange_forward_multi" value="forward" title="tools.move_forward" src="move_forward.svg"img-height="22px"></se-list-item><se-list-item id="arrange_backward_multi" value="backward" title="tools.move_backward"src="move_backwards.svg" img-height="22px"></se-list-item><se-list-item id="arrange_back_multi" value="back" title="tools.move_bottom" src="move_bottom.svg"img-height="22px"></se-list-item><se-list-item id="arrange_switch" value="switch" title="tools.switch_layers" src="switch_layer.svg"img-height="22px"></se-list-item></se-list><se-list id="tool_align_multi" src="align.svg" title="tools.align_to_page" width="28px" height="28px"><se-list-item value="l" title="tools.align_left" src="align_left.svg" img-height="22px"></se-list-item><se-list-item value="c" title="tools.align_center" src="align_center.svg" img-height="22px"></se-list-item><se-list-item value="r" title="tools.align_right" src="align_right.svg" img-height="22px"></se-list-item><se-list-item value="t" title="tools.align_top" src="align_top.svg" img-height="22px"></se-list-item><se-list-item value="m" title="tools.align_middle" src="align_middle.svg" img-height="22px"></se-list-item><se-list-item value="b" title="tools.align_bottom" src="align_bottom.svg" img-height="22px"></se-list-item><se-list-item value="dh" title="tools.align_distrib_horiz" src="align_distrib_horiz.svg"img-height="22px"></se-list-item><se-list-item value="dv" title="tools.align_distrib_verti" src="align_distrib_verti.svg"img-height="22px"></se-list-item></se-list><se-select id="tool_align_relative" label="tools.relativeTo"options="tools.selected_objects,tools.largest_object,tools.smallest_object,tools.page"values="selected::largest::smallest::page"></se-select></div><!--Ungroup(shown for a selected group/link)--><div class="g_panel quick_tray" style="display:none"><se-button id="tool_ungroup" title="tools.ungroup" src="ungroup.svg"></se-button></div><!--Zoom(far right)--><div id="zoom_panel"><se-zoom id="zoom" src="zoom.svg" title="Change zoom level" inputsize="40px"><se-text value="1000" text="1000%"></se-text><se-text value="400" text="400%"></se-text><se-text value="200" text="200%"></se-text><se-text value="100" text="100%"></se-text><se-text value="50" text="50%"></se-text><se-text value="25" text="25%"></se-text><se-text value="canvas" text="tools.fit_to_canvas"></se-text><se-text value="selection" text="tools.fit_to_sel"></se-text><se-text value="layer" text="tools.fit_to_layer_content"></se-text><se-text value="content" text="tools.fit_to_all"></se-text></se-zoom></div><!--The text edit buffer(#text)moved to editorTemplate.html so it staysfocusable when this panel is hidden(e.g. tablet mode).--><div id="cur_context_panel"></div></div>';
+var { $click: Fr, isValidUnit: Jie, getTypeMap: eoe, convertUnit: W0 } = $r;
+var toe = class {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -91620,13 +91635,13 @@ var Jie = class {
     let r = e.target.value;
     if (((_a2 = this.selectedElement) == null ? void 0 : _a2.tagName) === "path" && this.selectedElement.hasAttribute("data-arc") && ["cx", "cy", "r", "rx", "ry"].includes(t))
       return this.editor.svgCanvas.setCircleArcAttr(t, Number(r)), true;
-    if (!Wie(t, r, this.selectedElement))
+    if (!Jie(t, r, this.selectedElement))
       return e.target.value = this.selectedElement.getAttribute(t), alert(this.editor.i18next.t("notification.invalidAttrValGiven")), false;
     if (t !== "id" && t !== "class") {
       if (isNaN(r))
         r = this.editor.svgCanvas.convertToNum(t, r);
       else if (this.editor.configObj.curConfig.baseUnit !== "px") {
-        const a = Zie();
+        const a = eoe();
         (this.editor.selectedElement[t] || this.editor.svgCanvas.getMode() === "pathedit" || t === "x" || t === "y") && (r *= a[this.editor.configObj.curConfig.baseUnit]);
       }
     }
@@ -91872,7 +91887,7 @@ var Jie = class {
    */
   init() {
     const { $id: e } = this.editor, t = document.createElement("template"), { i18next: r } = this.editor;
-    if (t.innerHTML = Yie, this.editor.$svgEditor.append(t.content.cloneNode(true)), this.editor.configObj.curConfig.hideTitle) {
+    if (t.innerHTML = Zie, this.editor.$svgEditor.append(t.content.cloneNode(true)), this.editor.configObj.curConfig.hideTitle) {
       const a = e("title_panel");
       a && (a.style.display = "none");
     }
@@ -91951,8 +91966,8 @@ var Jie = class {
     );
   }
 };
-var eoe = '<div id="tools_bottom"><se-colorpicker id="fill_color" src="fill.svg" label="properties.fill_color" type="fill"></se-colorpicker><se-colorpicker id="stroke_color" src="stroke.svg" label="properties.stroke_color" type="stroke"></se-colorpicker><se-colorpicker id="bg_color" src="canvas_bg.svg" label="Background Color" type="background"></se-colorpicker><se-palette id="palette"></se-palette></div>';
-var toe = class {
+var roe = '<div id="tools_bottom"><se-colorpicker id="fill_color" src="fill.svg" label="properties.fill_color" type="fill"></se-colorpicker><se-colorpicker id="stroke_color" src="stroke.svg" label="properties.stroke_color" type="stroke"></se-colorpicker><se-colorpicker id="bg_color" src="canvas_bg.svg" label="Background Color" type="background"></se-colorpicker><se-palette id="palette"></se-palette></div>';
+var ioe = class {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -91994,7 +92009,7 @@ var toe = class {
         if (this.editor.svgCanvas.getMode() === "pathedit")
           this.editor.zoomImage(t / r);
         else {
-          const { workarea: o } = this.editor, n10 = roe(o, r);
+          const { workarea: o } = this.editor, n10 = ooe(o, r);
           this.editor.zoomChanged(
             window,
             {
@@ -92095,7 +92110,7 @@ var toe = class {
    */
   init() {
     const { $id: e } = this.editor, t = document.createElement("template"), { i18next: r } = this.editor;
-    t.innerHTML = eoe, this.editor.$svgEditor.append(t.content.cloneNode(true)), e("palette").addEventListener("change", this.handlePalette.bind(this)), e("palette").init(r);
+    t.innerHTML = roe, this.editor.$svgEditor.append(t.content.cloneNode(true)), e("palette").addEventListener("change", this.handlePalette.bind(this)), e("palette").init(r);
     const { curConfig: o } = this.editor.configObj;
     e("fill_color").setPaint(
       new Ei({ alpha: 100, solidColor: o.initFill.color })
@@ -92134,16 +92149,16 @@ var toe = class {
     );
   }
 };
-var roe = (i11, e) => {
+var ooe = (i11, e) => {
   const t = parseFloat(getComputedStyle(i11).width.replace("px", "")), r = parseFloat(getComputedStyle(i11).height.replace("px", ""));
   return {
     x: (i11.scrollLeft + t / 2) / e,
     y: (i11.scrollTop + r / 2) / e
   };
 };
-var ioe = '<div id="sidepanels"><se-text id="sidepanel_handle" title="ui.panel_action" text="ui.panel"></se-text><div id="sidepanel_content"><div id="sidepanel_tabs"><button type="button" class="sidepanel_tab active" data-tab="design">Design</button><button type="button" class="sidepanel_tab" data-tab="text">Text</button><button type="button" class="sidepanel_tab" data-tab="effects">Effects</button><button type="button" class="sidepanel_tab" data-tab="layers">Layers</button></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 DESIGN TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_design" class="sidepanel_tabpanel active"><!--General: position first,then identity--><div id="sidepanel_general" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">General</div><div class="sidepanel_section_grid"><se-spin-input id="selected_x" data-attr="x" size="4" type="text" label="properties.x_label"title="properties.pos_x"></se-spin-input><se-spin-input id="selected_y" data-attr="y" size="4" type="text" label="properties.y_label"title="properties.pos_y"></se-spin-input><se-spin-input id="angle" size="3" min="-180" max="180" step="5" label="Rotate"title="properties.angle"></se-spin-input><se-input id="elem_id" class="span2" data-attr="id" size="10" label="properties.id_label"title="properties.id"></se-input><se-class-select id="elem_class" class="span2" label="properties.class_label"title="properties.class"></se-class-select></div></div><!--Frame name(export region;shown only for data-frame rects)--><div class="frame_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Frame</div><div class="sidepanel_section_grid"><se-input id="frame_name" class="span2" data-attr="title" size="10"label="properties.frame_name" title="properties.frame_name"></se-input></div></div><!--Shape dimensions(contextual)--><div class="rect_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="rect_width" data-attr="width" size="4" label="properties.w_label"title="properties.rect_width"></se-spin-input><se-spin-input id="rect_height" data-attr="height" size="4" label="properties.h_label"title="properties.rect_height"></se-spin-input><se-spin-input id="rect_rx" min=0 max=1000 step=1 size="3" label="Radius"title="properties.corner_radius" data-attr="Corner Radius"></se-spin-input></div></div><div class="image_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="image_width" data-attr="width" size="4" type="text" label="properties.w_label"title="properties.image_width"></se-spin-input><se-spin-input id="image_height" data-attr="height" size="4" type="text" label="properties.h_label"title="properties.image_height"></se-spin-input><se-input id="image_url" class="span2" data-attr="image_url" size="15"label="properties.image_url"></se-input></div></div><div class="circle_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="circle_cx" data-attr="cx" size="4" label="properties.cx_label"></se-spin-input><se-spin-input id="circle_cy" data-attr="cy" size="4" label="properties.cy_label"></se-spin-input><se-spin-input id="circle_r" data-attr="r" size="4" label="properties.r_label"></se-spin-input><se-spin-input id="circle_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="ellipse_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="ellipse_cx" data-attr="cx" size="4" title="properties.ellipse_cx"label="properties.cx_label"></se-spin-input><se-spin-input id="ellipse_cy" data-attr="cy" size="4" title="properties.ellipse_cy"label="properties.cy_label"></se-spin-input><se-spin-input id="ellipse_rx" data-attr="rx" size="4" title="properties.ellipse_rx"label="properties.rx_label"></se-spin-input><se-spin-input id="ellipse_ry" data-attr="ry" size="4" title="properties.ellipse_ry"label="properties.ry_label"></se-spin-input><se-spin-input id="ellipse_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="line_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="line_x1" data-attr="x1" size="4" title="properties.line_x1"label="properties.x1_label"></se-spin-input><se-spin-input id="line_y1" data-attr="y1" size="4" title="properties.line_y1"label="properties.y1_label"></se-spin-input><se-spin-input id="line_x2" data-attr="x2" size="4" title="properties.line_x2"label="properties.x2_label"></se-spin-input><se-spin-input id="line_y2" data-attr="y2" size="4" title="properties.line_y2"label="properties.y2_label"></se-spin-input></div></div><!--Stroke&opacity(always available;sets defaults when nothing selected)--><div class="sidepanel_section"><div class="sidepanel_section_label">Stroke&amp;Opacity</div><div class="sidepanel_section_grid"><se-spin-input id="stroke_width" min=0 max=99 step=1 label="Stroke"title="properties.stroke_width" src="stroke-width.svg"></se-spin-input><se-spin-input id="opacity" min=0 max=100 step=5 label="Opacity"title="properties.opacity" src="opacity.svg"></se-spin-input></div><div class="sidepanel_subsection"><div class="sub_label">Dash</div><se-select id="stroke_style" title="properties.stroke_style"options="&#8212;,...,--,-.,-.." values="none::2,2::5,5::5,2,2,2::5,2,2,2,2,2"></se-select></div><div class="sidepanel_subsection"><div class="sub_label">Joins&amp;caps</div><div class="sidepanel_btn_row"><se-list id="stroke_linejoin" title="properties.linejoin_miter" label="" width="22px" height="22px"><se-list-item id="linejoin_miter" value="miter" src="linejoin_miter.svg"title="properties.linejoin_miter" img-height="22px"></se-list-item><se-list-item id="linejoin_round" value="round" src="linejoin_round.svg"title="properties.linejoin_round" img-height="22px"></se-list-item><se-list-item id="linejoin_bevel" value="bevel" src="linejoin_bevel.svg"title="properties.linejoin_bevel" img-height="22px"></se-list-item></se-list><se-list id="stroke_linecap" title="properties.linecap_butt" label="" width="22px" height="22px"><se-list-item id="linecap_butt" value="butt" src="linecap_butt.svg"title="properties.linecap_butt" img-height="22px"></se-list-item><se-list-item id="linecap_square" value="square" src="linecap_square.svg"title="properties.linecap_square" img-height="22px"></se-list-item><se-list-item id="linecap_round" value="round" src="linecap_round.svg"title="properties.linecap_round" img-height="22px"></se-list-item></se-list></div></div></div><!--Convert/object actions(single element)--><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Object</div><div class="sidepanel_btn_row"><se-button id="tool_topath" size="small" title="tools.to_path" src="to_path.svg"></se-button><se-offset-settings id="tool_path_offset" title="tools.path_offset" src="path_offset.svg"></se-offset-settings><se-button id="tool_stroke_to_path" size="small" title="tools.stroke_to_path" src="stroke_to_path.svg"></se-button><se-button id="tool_reorient" size="small" title="tools.reorient_path" src="reorient.svg"></se-button><se-button id="tool_make_link" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div><div class="container_panel sidepanel_subsection" style="display:none"><se-input id="g_title" data-attr="title" size="8" label="properties.label"></se-input></div><div class="use_panel sidepanel_subsection" style="display:none"><se-button id="tool_unlink_use" size="small" title="tools.tool_unlink_use" src="unlink_use.svg"></se-button></div><div class="a_panel sidepanel_subsection" style="display:none"><label id="tool_link_url"><span id="linkLabel" class="icon_label"></span><input id="link_url" type="text" size="35"/></label></div></div><!--Combine(multiple elements)--><div class="multiselected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Combine</div><div class="sidepanel_btn_row"><se-button id="tool_bool_union" size="small" title="tools.bool_union" src="bool_union.svg"></se-button><se-button id="tool_bool_intersect" size="small" title="tools.bool_intersect"src="bool_intersect.svg"></se-button><se-button id="tool_bool_subtract" size="small" title="tools.bool_subtract" src="bool_subtract.svg"></se-button><se-button id="tool_bool_exclude" size="small" title="tools.bool_exclude" src="bool_exclude.svg"></se-button><se-button id="tool_bool_divide" size="small" title="tools.bool_divide" src="bool_divide.svg"></se-button><se-button id="tool_clip_set" size="small" title="tools.clip_set" src="clip_set.svg"></se-button><se-button id="tool_mask_set" size="small" title="tools.mask_set" src="mask_set.svg"></se-button><se-button id="tool_make_link_multi" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div></div></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 TEXT TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_text" class="sidepanel_tabpanel"><div class="text_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Font</div><div class="sidepanel_text_font"><se-font-select id="tool_font_family" src="font.svg" title="properties.font_family"options="properties.serif,properties.sans_serif,properties.cursive,properties.fantasy,properties.monospace,properties.courier,properties.helvetica,properties.times"values="Serif::Sans-serif::Cursive::Fantasy::Monospace::Courier::Helvetica::Times"></se-font-select><se-font-library id="tool_font_library" title="Browse&embed custom fonts"></se-font-library></div><div class="sidepanel_section_grid sidepanel_subsection"><se-spin-input size="2" id="font_size" min=1 max=1000 step=1 label="Size"title="properties.font_size" src="fontsize.svg"></se-spin-input><div><div class="sub_label">Align</div><se-list id="tool_text_anchor" label="" width="22px" height="22px"><se-list-item id="tool_text_anchor_start" value="start" title="properties.text_anchor_start"src="anchor_start.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_middle" value="middle" title="properties.text_anchor_middle"src="anchor_middle.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_end" value="end" title="properties.text_anchor_end"src="anchor_end.svg" img-height="25px"></se-list-item></se-list></div></div><div class="sidepanel_subsection"><div class="sub_label">Style</div><div class="sidepanel_btn_row"><se-button id="tool_bold" size="small" title="properties.bold" src="bold.svg" shortcut="B"></se-button><se-button id="tool_italic" size="small" title="properties.italic" src="italic.svg" shortcut="I"></se-button><se-button id="tool_text_decoration_underline" size="small" title="properties.text_decoration_underline"src="text_decoration_underline.svg"></se-button><se-button id="tool_text_decoration_linethrough" size="small" title="properties.text_decoration_linethrough"src="text_decoration_linethrough.svg"></se-button><se-button id="tool_text_decoration_overline" size="small" title="properties.text_decoration_overline"src="text_decoration_overline.svg"></se-button></div></div></div><div id="sidepanel_text" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Spacing&amp;Shape</div><div class="sidepanel_section_grid"><se-spin-input size="2" id="tool_letter_spacing" min=0 max=100 step=1 label="Letter"title="properties.text_letter_spacing" src="letter_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_word_spacing" min=0 max=1000 step=1 label="Word"title="properties.text_word_spacing" src="word_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_text_length" min=0 max=1000 step=1 label="Length"title="properties.text_length" src="text_length.svg"></se-spin-input><se-select id="tool_length_adjust" label="Adjust" title="properties.text_length_adjust"options="properties.text_length_adjust_spacing,properties.text_length_adjust_spacing_and_glyphs"values="spacing::spacingAndGlyphs"></se-select><se-spin-input size="3" id="tool_perspective_x" min=-80 max=80 step=1 label="Skew X"title="properties.text_perspective_x" src="perspective_x.svg"></se-spin-input><se-spin-input size="3" id="tool_perspective_y" min=-80 max=80 step=1 label="Skew Y"title="properties.text_perspective_y" src="perspective_y.svg"></se-spin-input></div></div></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 EFFECTS TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_effects" class="sidepanel_tabpanel"><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Blur</div><div class="sidepanel_section_grid"><se-spin-input id="blur" class="span2" size="2" min="0" max="100" step="5" label="Amount"title="properties.blur" src="blur.svg"></se-spin-input></div></div><div id="clipmask_panel" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Clip&amp;Mask</div><div class="sidepanel_section_grid"><se-spin-input id="clipmask_feather" class="span2" size="3" min="-50" max="50" step="1" label="Feather"title="properties.feather" src="feather.svg"></se-spin-input></div><div class="clipmask_panel_footer"><se-button id="clipmask_release" size="small" title="tools.clip_release" src="clip_release.svg"></se-button></div></div><!--ext-shadow(#shadow_panel)and ext-color-shift(#color_shift_panel)inject here--></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 LAYERS TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_layers" class="sidepanel_tabpanel"><div id="layerpanel"><se-text id="layersLabel" text="layers.layers"></se-text><fieldset id="layerbuttons"><se-button id="layer_new" title="layers.new" size="small" src="new.svg"></se-button><se-button id="layer_delete" title="layers.del" size="small" src="delete.svg"></se-button><se-button id="layer_rename" title="layers.rename" size="small" src="text.svg"></se-button><se-button id="layer_up" title="layers.move_up" size="small" src="go_up.svg"></se-button><se-button id="layer_down" title="layers.move_down" size="small" src="go_down.svg"></se-button><se-button id="layer_moreopts" title="common.more_opts" size="small" src="context_menu.svg"></se-button></fieldset><table id="layerlist"><tr class="layer"><td class="layervis"></td><td class="layername">Layer 1</td></tr></table><se-select id="selLayerNames" title="layers.move_selected" label="layers.move_elems_to"options="Layer 1" values="layer1" value="layer1" disabled="disabled"></se-select></div></div></div></div>';
+var noe = '<div id="sidepanels"><se-text id="sidepanel_handle" title="ui.panel_action" text="ui.panel"></se-text><div id="sidepanel_content"><div id="sidepanel_tabs"><button type="button" class="sidepanel_tab active" data-tab="design">Design</button><button type="button" class="sidepanel_tab" data-tab="text">Text</button><button type="button" class="sidepanel_tab" data-tab="effects">Effects</button><button type="button" class="sidepanel_tab" data-tab="layers">Layers</button></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 DESIGN TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_design" class="sidepanel_tabpanel active"><!--General: position first,then identity--><div id="sidepanel_general" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">General</div><div class="sidepanel_section_grid"><se-spin-input id="selected_x" data-attr="x" size="4" type="text" label="properties.x_label"title="properties.pos_x"></se-spin-input><se-spin-input id="selected_y" data-attr="y" size="4" type="text" label="properties.y_label"title="properties.pos_y"></se-spin-input><se-spin-input id="angle" size="3" min="-180" max="180" step="5" label="Rotate"title="properties.angle"></se-spin-input><se-input id="elem_id" class="span2" data-attr="id" size="10" label="properties.id_label"title="properties.id"></se-input><se-class-select id="elem_class" class="span2" label="properties.class_label"title="properties.class"></se-class-select></div></div><!--Frame name(export region;shown only for data-frame rects)--><div class="frame_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Frame</div><div class="sidepanel_section_grid"><se-input id="frame_name" class="span2" data-attr="title" size="10"label="properties.frame_name" title="properties.frame_name"></se-input></div></div><!--Shape dimensions(contextual)--><div class="rect_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="rect_width" data-attr="width" size="4" label="properties.w_label"title="properties.rect_width"></se-spin-input><se-spin-input id="rect_height" data-attr="height" size="4" label="properties.h_label"title="properties.rect_height"></se-spin-input><se-spin-input id="rect_rx" min=0 max=1000 step=1 size="3" label="Radius"title="properties.corner_radius" data-attr="Corner Radius"></se-spin-input></div></div><div class="image_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="image_width" data-attr="width" size="4" type="text" label="properties.w_label"title="properties.image_width"></se-spin-input><se-spin-input id="image_height" data-attr="height" size="4" type="text" label="properties.h_label"title="properties.image_height"></se-spin-input><se-input id="image_url" class="span2" data-attr="image_url" size="15"label="properties.image_url"></se-input></div></div><div class="circle_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="circle_cx" data-attr="cx" size="4" label="properties.cx_label"></se-spin-input><se-spin-input id="circle_cy" data-attr="cy" size="4" label="properties.cy_label"></se-spin-input><se-spin-input id="circle_r" data-attr="r" size="4" label="properties.r_label"></se-spin-input><se-spin-input id="circle_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="ellipse_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="ellipse_cx" data-attr="cx" size="4" title="properties.ellipse_cx"label="properties.cx_label"></se-spin-input><se-spin-input id="ellipse_cy" data-attr="cy" size="4" title="properties.ellipse_cy"label="properties.cy_label"></se-spin-input><se-spin-input id="ellipse_rx" data-attr="rx" size="4" title="properties.ellipse_rx"label="properties.rx_label"></se-spin-input><se-spin-input id="ellipse_ry" data-attr="ry" size="4" title="properties.ellipse_ry"label="properties.ry_label"></se-spin-input><se-spin-input id="ellipse_arc" min="1" max="360" step="1" size="4"label="properties.arc_label"></se-spin-input></div></div><div class="line_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Dimensions</div><div class="sidepanel_section_grid"><se-spin-input id="line_x1" data-attr="x1" size="4" title="properties.line_x1"label="properties.x1_label"></se-spin-input><se-spin-input id="line_y1" data-attr="y1" size="4" title="properties.line_y1"label="properties.y1_label"></se-spin-input><se-spin-input id="line_x2" data-attr="x2" size="4" title="properties.line_x2"label="properties.x2_label"></se-spin-input><se-spin-input id="line_y2" data-attr="y2" size="4" title="properties.line_y2"label="properties.y2_label"></se-spin-input></div></div><!--Stroke&opacity(always available;sets defaults when nothing selected)--><div class="sidepanel_section"><div class="sidepanel_section_label">Stroke&amp;Opacity</div><div class="sidepanel_section_grid"><se-spin-input id="stroke_width" min=0 max=99 step=1 label="Stroke"title="properties.stroke_width" src="stroke-width.svg"></se-spin-input><se-spin-input id="opacity" min=0 max=100 step=5 label="Opacity"title="properties.opacity" src="opacity.svg"></se-spin-input></div><div class="sidepanel_subsection"><div class="sub_label">Dash</div><se-select id="stroke_style" title="properties.stroke_style"options="&#8212;,...,--,-.,-.." values="none::2,2::5,5::5,2,2,2::5,2,2,2,2,2"></se-select></div><div class="sidepanel_subsection"><div class="sub_label">Joins&amp;caps</div><div class="sidepanel_btn_row"><se-list id="stroke_linejoin" title="properties.linejoin_miter" label="" width="22px" height="22px"><se-list-item id="linejoin_miter" value="miter" src="linejoin_miter.svg"title="properties.linejoin_miter" img-height="22px"></se-list-item><se-list-item id="linejoin_round" value="round" src="linejoin_round.svg"title="properties.linejoin_round" img-height="22px"></se-list-item><se-list-item id="linejoin_bevel" value="bevel" src="linejoin_bevel.svg"title="properties.linejoin_bevel" img-height="22px"></se-list-item></se-list><se-list id="stroke_linecap" title="properties.linecap_butt" label="" width="22px" height="22px"><se-list-item id="linecap_butt" value="butt" src="linecap_butt.svg"title="properties.linecap_butt" img-height="22px"></se-list-item><se-list-item id="linecap_square" value="square" src="linecap_square.svg"title="properties.linecap_square" img-height="22px"></se-list-item><se-list-item id="linecap_round" value="round" src="linecap_round.svg"title="properties.linecap_round" img-height="22px"></se-list-item></se-list></div></div></div><!--Convert/object actions(single element)--><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Object</div><div class="sidepanel_btn_row"><se-button id="tool_topath" size="small" title="tools.to_path" src="to_path.svg"></se-button><se-offset-settings id="tool_path_offset" title="tools.path_offset" src="path_offset.svg"></se-offset-settings><se-button id="tool_stroke_to_path" size="small" title="tools.stroke_to_path" src="stroke_to_path.svg"></se-button><se-button id="tool_reorient" size="small" title="tools.reorient_path" src="reorient.svg"></se-button><se-button id="tool_make_link" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div><div class="container_panel sidepanel_subsection" style="display:none"><se-input id="g_title" data-attr="title" size="8" label="properties.label"></se-input></div><div class="use_panel sidepanel_subsection" style="display:none"><se-button id="tool_unlink_use" size="small" title="tools.tool_unlink_use" src="unlink_use.svg"></se-button></div><div class="a_panel sidepanel_subsection" style="display:none"><label id="tool_link_url"><span id="linkLabel" class="icon_label"></span><input id="link_url" type="text" size="35"/></label></div></div><!--Combine(multiple elements)--><div class="multiselected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Combine</div><div class="sidepanel_btn_row"><se-button id="tool_bool_union" size="small" title="tools.bool_union" src="bool_union.svg"></se-button><se-button id="tool_bool_intersect" size="small" title="tools.bool_intersect"src="bool_intersect.svg"></se-button><se-button id="tool_bool_subtract" size="small" title="tools.bool_subtract" src="bool_subtract.svg"></se-button><se-button id="tool_bool_exclude" size="small" title="tools.bool_exclude" src="bool_exclude.svg"></se-button><se-button id="tool_bool_divide" size="small" title="tools.bool_divide" src="bool_divide.svg"></se-button><se-button id="tool_clip_set" size="small" title="tools.clip_set" src="clip_set.svg"></se-button><se-button id="tool_mask_set" size="small" title="tools.mask_set" src="mask_set.svg"></se-button><se-button id="tool_make_link_multi" size="small" title="tools.make_link" src="globe_link.svg"></se-button></div></div></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 TEXT TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_text" class="sidepanel_tabpanel"><div class="text_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Font</div><div class="sidepanel_text_font"><se-font-select id="tool_font_family" src="font.svg" title="properties.font_family"options="properties.serif,properties.sans_serif,properties.cursive,properties.fantasy,properties.monospace,properties.courier,properties.helvetica,properties.times"values="Serif::Sans-serif::Cursive::Fantasy::Monospace::Courier::Helvetica::Times"></se-font-select><se-font-library id="tool_font_library" title="Browse&embed custom fonts"></se-font-library></div><div class="sidepanel_section_grid sidepanel_subsection"><se-spin-input size="2" id="font_size" min=1 max=1000 step=1 label="Size"title="properties.font_size" src="fontsize.svg"></se-spin-input><div><div class="sub_label">Align</div><se-list id="tool_text_anchor" label="" width="22px" height="22px"><se-list-item id="tool_text_anchor_start" value="start" title="properties.text_anchor_start"src="anchor_start.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_middle" value="middle" title="properties.text_anchor_middle"src="anchor_middle.svg" img-height="25px"></se-list-item><se-list-item id="tool_text_anchor_end" value="end" title="properties.text_anchor_end"src="anchor_end.svg" img-height="25px"></se-list-item></se-list></div></div><div class="sidepanel_subsection"><div class="sub_label">Style</div><div class="sidepanel_btn_row"><se-button id="tool_bold" size="small" title="properties.bold" src="bold.svg" shortcut="B"></se-button><se-button id="tool_italic" size="small" title="properties.italic" src="italic.svg" shortcut="I"></se-button><se-button id="tool_text_decoration_underline" size="small" title="properties.text_decoration_underline"src="text_decoration_underline.svg"></se-button><se-button id="tool_text_decoration_linethrough" size="small" title="properties.text_decoration_linethrough"src="text_decoration_linethrough.svg"></se-button><se-button id="tool_text_decoration_overline" size="small" title="properties.text_decoration_overline"src="text_decoration_overline.svg"></se-button></div></div></div><div id="sidepanel_text" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Spacing&amp;Shape</div><div class="sidepanel_section_grid"><se-spin-input size="2" id="tool_letter_spacing" min=0 max=100 step=1 label="Letter"title="properties.text_letter_spacing" src="letter_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_word_spacing" min=0 max=1000 step=1 label="Word"title="properties.text_word_spacing" src="word_spacing.svg"></se-spin-input><se-spin-input size="2" id="tool_text_length" min=0 max=1000 step=1 label="Length"title="properties.text_length" src="text_length.svg"></se-spin-input><se-select id="tool_length_adjust" label="Adjust" title="properties.text_length_adjust"options="properties.text_length_adjust_spacing,properties.text_length_adjust_spacing_and_glyphs"values="spacing::spacingAndGlyphs"></se-select><se-spin-input size="3" id="tool_perspective_x" min=-80 max=80 step=1 label="Skew X"title="properties.text_perspective_x" src="perspective_x.svg"></se-spin-input><se-spin-input size="3" id="tool_perspective_y" min=-80 max=80 step=1 label="Skew Y"title="properties.text_perspective_y" src="perspective_y.svg"></se-spin-input></div></div></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 EFFECTS TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_effects" class="sidepanel_tabpanel"><div class="selected_panel sidepanel_section" style="display:none"><div class="sidepanel_section_label">Blur</div><div class="sidepanel_section_grid"><se-spin-input id="blur" class="span2" size="2" min="0" max="100" step="5" label="Amount"title="properties.blur" src="blur.svg"></se-spin-input></div></div><div id="clipmask_panel" class="sidepanel_section" style="display:none"><div class="sidepanel_section_label">Clip&amp;Mask</div><div class="sidepanel_section_grid"><se-spin-input id="clipmask_feather" class="span2" size="3" min="-50" max="50" step="1" label="Feather"title="properties.feather" src="feather.svg"></se-spin-input></div><div class="clipmask_panel_footer"><se-button id="clipmask_release" size="small" title="tools.clip_release" src="clip_release.svg"></se-button></div></div><!--ext-shadow(#shadow_panel)and ext-color-shift(#color_shift_panel)inject here--></div><!--\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 LAYERS TAB \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500--><div id="tab_layers" class="sidepanel_tabpanel"><div id="layerpanel"><se-text id="layersLabel" text="layers.layers"></se-text><fieldset id="layerbuttons"><se-button id="layer_new" title="layers.new" size="small" src="new.svg"></se-button><se-button id="layer_delete" title="layers.del" size="small" src="delete.svg"></se-button><se-button id="layer_rename" title="layers.rename" size="small" src="text.svg"></se-button><se-button id="layer_up" title="layers.move_up" size="small" src="go_up.svg"></se-button><se-button id="layer_down" title="layers.move_down" size="small" src="go_down.svg"></se-button><se-button id="layer_moreopts" title="common.more_opts" size="small" src="context_menu.svg"></se-button></fieldset><table id="layerlist"><tr class="layer"><td class="layervis"></td><td class="layername">Layer 1</td></tr></table><se-select id="selLayerNames" title="layers.move_selected" label="layers.move_elems_to"options="Layer 1" values="layer1" value="layer1" disabled="disabled"></se-select></div></div></div></div>';
 var { $click: Fs } = $r;
-var ooe = class {
+var aoe = class {
   /**
    * @param {PlainObject} editor
    */
@@ -92200,7 +92215,7 @@ var ooe = class {
    */
   init() {
     const { $id: e } = this.editor, t = document.createElement("template"), { i18next: r } = this.editor;
-    t.innerHTML = ioe, this.editor.$svgEditor.append(t.content.cloneNode(true));
+    t.innerHTML = noe, this.editor.$svgEditor.append(t.content.cloneNode(true));
     const o = document.createElement("se-cmenu-layers");
     o.setAttribute("id", "se-cmenu-layers-more"), o.value = "layer_moreopts", o.setAttribute("leftclick", true), this.editor.$container.append(o), o.init(r);
     const n10 = document.createElement("se-cmenu-layers");
@@ -92370,8 +92385,8 @@ var ooe = class {
     );
   }
 };
-var noe = '<div class="tablet-shell"><div class="ts-topbar"><div class="ts-grow"></div><div class="ts-toolgroup" id="ts_toolgroup"></div><div class="ts-grow"></div><div class="ts-stylechip" id="ts_stylechip" title="Default style"><span class="dot" id="ts_styledot"></span></div><div class="ts-row" id="ts_zoom"></div><div class="ts-sep"></div><div class="ts-row" id="ts_hist"></div><button class="ts-done" id="ts_done">Done</button></div><div class="ts-sheet" id="ts_sheet"><div class="ts-sheet-handle"></div><span class="kind" id="ts_sheet_kind">Shape</span><span class="closeb" id="ts_sheet_close"></span><div class="ts-sheet-row" id="ts_sheet_row"></div></div></div>';
-var aoe = [
+var soe = '<div class="tablet-shell"><div class="ts-topbar"><div class="ts-grow"></div><div class="ts-toolgroup" id="ts_toolgroup"></div><div class="ts-grow"></div><div class="ts-stylechip" id="ts_stylechip" title="Default style"><span class="dot" id="ts_styledot"></span></div><div class="ts-row" id="ts_zoom"></div><div class="ts-sep"></div><div class="ts-row" id="ts_hist"></div><button class="ts-done" id="ts_done">Done</button></div><div class="ts-sheet" id="ts_sheet"><div class="ts-sheet-handle"></div><span class="kind" id="ts_sheet_kind">Shape</span><span class="closeb" id="ts_sheet_close"></span><div class="ts-sheet-row" id="ts_sheet_row"></div></div></div>';
+var loe = [
   "#000000",
   "#FFFFFF",
   "#E11D48",
@@ -92382,7 +92397,7 @@ var aoe = [
   "#7C3AED",
   "none"
 ];
-var soe = [
+var coe = [
   ["select", "select.svg", "Select"],
   null,
   ["fhpath", "pencil.svg", "Draw"],
@@ -92399,8 +92414,8 @@ var lh = [
   ["star", "star.svg", "Star"],
   ["polygon", "polygon.svg", "Polygon"]
 ];
-var loe = new Set(lh.map((i11) => i11[0]));
-var coe = class {
+var doe = new Set(lh.map((i11) => i11[0]));
+var uoe = class {
   /** @param {PlainObject} editor svgedit handler */
   constructor(e) {
     this.editor = e, this.currentShape = "rect", this.toolBtns = {}, this.selectedElems = [], this._pop = null, this._onDoc = null;
@@ -92414,7 +92429,7 @@ var coe = class {
   /** @returns {void} */
   init() {
     const { $id: e } = this.editor, t = document.createElement("template");
-    t.innerHTML = noe, this.editor.$svgEditor.append(t.content.cloneNode(true)), this.shell = this.editor.$svgEditor.querySelector(".tablet-shell"), this.sheet = e("ts_sheet"), this.sheetRow = e("ts_sheet_row"), this.buildToolgroup(), this.buildRightControls();
+    t.innerHTML = soe, this.editor.$svgEditor.append(t.content.cloneNode(true)), this.shell = this.editor.$svgEditor.querySelector(".tablet-shell"), this.sheet = e("ts_sheet"), this.sheetRow = e("ts_sheet_row"), this.buildToolgroup(), this.buildRightControls();
     const r = this.makeBtn("cancel.svg", { cls: "sm", tap: () => this.svgCanvas.clearSelection() });
     e("ts_sheet_close").append(r), this.bindEvents(), this.paintStyleDot(), this.syncTools(this.svgCanvas.getMode());
   }
@@ -92436,7 +92451,7 @@ var coe = class {
   /* ─────────────────── command bar ─────────────────── */
   buildToolgroup() {
     const { $id: e } = this.editor, t = e("ts_toolgroup"), r = () => t.append(this.el("div", "ts-sep"));
-    soe.forEach((a) => {
+    coe.forEach((a) => {
       if (!a) {
         r();
         return;
@@ -92522,7 +92537,7 @@ var coe = class {
   // A row of preset swatches + a "More…" entry that opens the full seColorPicker.
   swatchRow(e, t, r) {
     const { $id: o } = this.editor, n10 = this.el("div", "swrow");
-    if (aoe.forEach((a) => {
+    if (loe.forEach((a) => {
       const s = this.swatchEl(a);
       a === e && s.classList.add("is-on"), s.addEventListener("click", () => {
         n10.querySelectorAll(".swatch").forEach((l) => l.classList.remove("is-on")), s.classList.add("is-on"), t(a);
@@ -92676,7 +92691,7 @@ var coe = class {
   }
   syncTools(e) {
     Object.entries(this.toolBtns).forEach(([r, o]) => o.classList.toggle("is-active", r === e));
-    const t = loe.has(e);
+    const t = doe.has(e);
     this.shapesBtn && (this.shapesBtn.classList.toggle("is-active", t), t && e !== this.currentShape && (this.currentShape = e, this.setIcon(this.shapesBtn, this.shapeIcon())));
   }
   syncZoom() {
@@ -92693,7 +92708,7 @@ var coe = class {
   }
 };
 var { $click: Uu } = $r;
-var doe = class {
+var hoe = class {
   /**
    * @param {PlainObject} editor svgedit handler
    */
@@ -92820,13 +92835,13 @@ var doe = class {
     );
   }
 };
-var { $click: uoe, decode64: hoe } = $r;
-var Soe = class extends $ie {
+var { $click: poe, decode64: Aoe } = $r;
+var Boe = class extends Xie {
   /**
    *
    */
   constructor(e = null) {
-    super(e), this.langChanged = false, this.showSaveWarning = false, this.storagePromptState = "ignore", this.title = "untitled.svg", this.svgCanvas = null, this.$click = uoe, this.isReady = false, this.customExportImage = false, this.customExportPDF = false, this.configObj = new see(this), this.configObj.pref = this.configObj.pref.bind(this.configObj), this.setConfig = this.configObj.setConfig.bind(this.configObj), this.callbacks = [], this.curContext = null, this.exportWindowName = null, this.docprops = false, this.configObj.preferences = false, this.canvMenu = null, this.goodLangs = [
+    super(e), this.langChanged = false, this.showSaveWarning = false, this.storagePromptState = "ignore", this.title = "untitled.svg", this.svgCanvas = null, this.$click = poe, this.isReady = false, this.customExportImage = false, this.customExportPDF = false, this.configObj = new cee(this), this.configObj.pref = this.configObj.pref.bind(this.configObj), this.setConfig = this.configObj.setConfig.bind(this.configObj), this.callbacks = [], this.curContext = null, this.exportWindowName = null, this.docprops = false, this.configObj.preferences = false, this.canvMenu = null, this.goodLangs = [
       "ar",
       "cs",
       "de",
@@ -93231,7 +93246,7 @@ var Soe = class extends $ie {
           this._addSelectedToShapeLibrary();
         }
       }
-    ], this.hotkeys = new PJ(this), this.hotkeys.ingestEditorShortcuts(this.shortcuts), this.leftPanel = new Xie(this), this.bottomPanel = new toe(this), this.topPanel = new Jie(this), this.rightPanel = new ooe(this), this.tabletShell = new coe(this), this.mainMenu = new doe(this), window.svgEditor = this;
+    ], this.hotkeys = new jJ(this), this.hotkeys.ingestEditorShortcuts(this.shortcuts), this.leftPanel = new Wie(this), this.bottomPanel = new ioe(this), this.topPanel = new toe(this), this.rightPanel = new aoe(this), this.tabletShell = new uoe(this), this.mainMenu = new hoe(this), window.svgEditor = this;
   }
   // end Constructor
   /**
@@ -93658,7 +93673,7 @@ var Soe = class extends $ie {
     let o = "";
     if (t) {
       let n10 = "";
-      o = '<a href="#" data-root="y">' + this.svgCanvas.getCurrentDrawing().getCurrentLayerName() + "</a>", iee(t, "#svgcontent").forEach(function(s) {
+      o = '<a href="#" data-root="y">' + this.svgCanvas.getCurrentDrawing().getCurrentLayerName() + "</a>", nee(t, "#svgcontent").forEach(function(s) {
         s.id && (n10 += " > " + s.id, o += s !== t ? ` > <a href="#">${s.id}</a>` : ` > ${s.id}`);
       }), this.curContext = n10;
     } else
@@ -94005,7 +94020,7 @@ var Soe = class extends $ie {
       o ? r = true : o = e.match(/^data:image\/svg\+xml(?:;|;utf8)?,/), o && (o = o[0]);
       const n10 = e.slice(o.length);
       return this.loadSvgString(
-        r ? hoe(n10) : decodeURIComponent(n10),
+        r ? Aoe(n10) : decodeURIComponent(n10),
         { noAlert: t }
       );
     });
@@ -94854,7 +94869,7 @@ var SvgView = class extends import_obsidian6.TextFileView {
     }
   }
   async initEditor() {
-    const EditorCtor = Soe;
+    const EditorCtor = Boe;
     this.svgEditor = new EditorCtor(this.editorContainer);
     this.svgEditor.setConfig({
       no_save_warning: true,
