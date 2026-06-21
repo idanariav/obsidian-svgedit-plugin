@@ -96638,7 +96638,38 @@ function registerFileSyncHandlers(plugin) {
     })
   );
 }
+function updateShapeLinksOnRename(plugin, file, oldPath) {
+  const store = plugin.settings.userShapes;
+  let changed = false;
+  const newLink = plugin.app.metadataCache.fileToLinktext(file, "");
+  for (const category of Object.values(store.shapes)) {
+    for (const entry of Object.values(category)) {
+      if (!entry.linkedFile) continue;
+      const hashIdx = entry.linkedFile.indexOf("#");
+      const base = hashIdx >= 0 ? entry.linkedFile.slice(0, hashIdx) : entry.linkedFile;
+      const frame = hashIdx >= 0 ? entry.linkedFile.slice(hashIdx) : "";
+      if (!linktextPointsTo(base, oldPath)) continue;
+      entry.linkedFile = frame ? `${newLink}${frame}` : newLink;
+      changed = true;
+    }
+  }
+  return changed;
+}
+function linktextPointsTo(base, oldPath) {
+  const stripMd = (s) => s.replace(/\.md$/i, "");
+  const baseName = (s) => {
+    const slash = s.lastIndexOf("/");
+    return slash >= 0 ? s.slice(slash + 1) : s;
+  };
+  const baseAsPath = /\.[^/]+$/.test(base) ? base : `${base}.md`;
+  if (baseAsPath === oldPath) return true;
+  return stripMd(baseName(base)) === stripMd(baseName(oldPath));
+}
 async function handleRename(plugin, file, oldPath) {
+  if (updateShapeLinksOnRename(plugin, file, oldPath)) {
+    await plugin.saveSettings();
+    plugin.reloadUserDataInAllViews();
+  }
   if (!plugin.settings.keepInSync) return;
   if (!isSvgDrawingFile(plugin.app, file) && !plugin.svgDrawingPaths.has(oldPath)) {
     return;

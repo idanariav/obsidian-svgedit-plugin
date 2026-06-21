@@ -43,11 +43,61 @@ export function registerFileSyncHandlers(plugin: SvgPlugin): void {
   );
 }
 
+/**
+ * After a file rename, repoint any shape-library entry whose `linkedFile`
+ * referred to the old path, so future imports of that shape stamp a live
+ * wikilink instead of a broken one. Returns true if any entry changed.
+ *
+ * Stored links come from `fileToLinktext(file, "")` (see resolveVaultLink),
+ * which is the basename under Obsidian's default "shortest path" but can be a
+ * longer path when ambiguous. A `#frame` suffix, if present, is preserved.
+ */
+function updateShapeLinksOnRename(
+  plugin: SvgPlugin,
+  file: TFile,
+  oldPath: string,
+): boolean {
+  const store = plugin.settings.userShapes;
+  let changed = false;
+  const newLink = plugin.app.metadataCache.fileToLinktext(file, "");
+  for (const category of Object.values(store.shapes)) {
+    for (const entry of Object.values(category)) {
+      if (!entry.linkedFile) continue;
+      const hashIdx = entry.linkedFile.indexOf("#");
+      const base = hashIdx >= 0 ? entry.linkedFile.slice(0, hashIdx) : entry.linkedFile;
+      const frame = hashIdx >= 0 ? entry.linkedFile.slice(hashIdx) : ""; // includes '#'
+      if (!linktextPointsTo(base, oldPath)) continue;
+      entry.linkedFile = frame ? `${newLink}${frame}` : newLink;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+/** True if a stored linktext base referred to the file now at `oldPath`. */
+function linktextPointsTo(base: string, oldPath: string): boolean {
+  const stripMd = (s: string) => s.replace(/\.md$/i, "");
+  const baseName = (s: string) => {
+    const slash = s.lastIndexOf("/");
+    return slash >= 0 ? s.slice(slash + 1) : s;
+  };
+  // Full-path match (the link carried the folder path)
+  const baseAsPath = /\.[^/]+$/.test(base) ? base : `${base}.md`;
+  if (baseAsPath === oldPath) return true;
+  // Basename match (shortest-path link — the common case)
+  return stripMd(baseName(base)) === stripMd(baseName(oldPath));
+}
+
 async function handleRename(
   plugin: SvgPlugin,
   file: TFile,
   oldPath: string,
 ): Promise<void> {
+  if (updateShapeLinksOnRename(plugin, file, oldPath)) {
+    await plugin.saveSettings();
+    plugin.reloadUserDataInAllViews();
+  }
+
   if (!plugin.settings.keepInSync) return;
 
   // Identify the drawing by reading the renamed file's frontmatter directly,
