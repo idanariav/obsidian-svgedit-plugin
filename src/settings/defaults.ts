@@ -29,6 +29,12 @@ export interface UserShapeEntry {
 export interface UserShapeStore {
   categories: string[];
   shapes: Record<string, Record<string, UserShapeEntry>>;
+  /** Display-name overrides per category id (built-in or user). Lets the editor
+   *  rename categories — including read-only built-ins — non-destructively. */
+  categoryLabels?: Record<string, string>;
+  /** Built-in category ids hidden from the library (restorable; bundled data
+   *  is never mutated). */
+  hidden?: string[];
 }
 
 /** One saved style preset ("class"). Mirrors the svgedit fork's classLibrary
