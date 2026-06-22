@@ -31,14 +31,23 @@ const COMPRESSED_BLOCK_REGEX =
 // after the `%%` fence (an older format left a `%%\n\n# … Data` variant behind).
 const WRAPPER_OPEN = "(?:%%\\n+#+ (?:Sketch Editor|SVGEdit) Data\\n+)";
 
-// Either block (raw or compressed), including any wrapper opening(s) that
-// precede it. Matching the opening too means rebuilding the block also migrates
-// legacy (un-wrapped) files to the wrapped layout, and the `(?:svg|compressed-svg)`
-// alternation lets a save in either direction rewrite whichever format currently
-// exists. The `+` on the wrapper collapses duplicated/stray wrapper openings
-// (the duplicate "# … Data" heading bug) back into the single one buildBlock writes.
+// Either block (raw or compressed), including any wrapper opening(s) — and an
+// auto-managed "## Linked Files" section — that precede it. Matching the opening
+// too means rebuilding the block also migrates legacy (un-wrapped) files to the
+// wrapped layout, and the `(?:svg|compressed-svg)` alternation lets a save in
+// either direction rewrite whichever format currently exists. The `*` on the
+// wrapper collapses duplicated/stray wrapper openings back into the single one
+// buildBlock writes.
+//
+// The optional "## Linked Files" segment is the crucial part: reconcileLinkedFiles
+// inserts that section *between* the wrapper opening and "## Drawing", so without
+// matching it here the wrapper is no longer adjacent to "## Drawing" and would be
+// left behind — buildBlock would then prepend a *second* wrapper, duplicating the
+// "# … Data" heading on every save. Swallowing it lets the single fresh wrapper
+// replace the whole region; reconcileLinkedFiles re-adds Linked Files immediately
+// after, under that one surviving wrapper.
 const BLOCK_REPLACE_REGEX = new RegExp(
-  WRAPPER_OPEN + "*## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%",
+  WRAPPER_OPEN + "*(?:## Linked Files\\n(?:.*\\n)*?)?## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%",
 );
 
 // Width to wrap the base64 payload at, so a compressed drawing is many modest

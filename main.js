@@ -94470,7 +94470,7 @@ var RAW_BLOCK_REGEX = /## Drawing\n```svg\n([\s\S]*?)\n```\s*\n%%/;
 var COMPRESSED_BLOCK_REGEX = /## Drawing\n```compressed-svg\n([\s\S]*?)\n```\s*\n%%/;
 var WRAPPER_OPEN = "(?:%%\\n+#+ (?:Sketch Editor|SVGEdit) Data\\n+)";
 var BLOCK_REPLACE_REGEX = new RegExp(
-  WRAPPER_OPEN + "*## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%"
+  WRAPPER_OPEN + "*(?:## Linked Files\\n(?:.*\\n)*?)?## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%"
 );
 var BASE64_LINE_WIDTH = 76;
 function extractSvg(content) {
