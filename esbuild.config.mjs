@@ -17,6 +17,11 @@ const context = await esbuild.context({
   logLevel: "info",
   sourcemap: prod ? false : "inline",
   treeShaking: true,
+  // Minify production builds. The inlined svgedit Editor.js ships unminified
+  // (Vite's ES-lib output deliberately preserves whitespace), so minifying the
+  // whole combined bundle here is what keeps main.js under Obsidian Sync's 5MB
+  // per-file limit. Dev/watch builds stay readable.
+  minify: prod,
   outfile: "main.js",
   define: {
     "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development"),
