@@ -46,6 +46,15 @@ export interface ClassLibraryEntry {
   attrs: Record<string, string>;
 }
 
+/** One user-curated canvas-size preset. Mirrors the svgedit fork's
+ *  seCanvasSettings schema; persisted here so presets sync via data.json
+ *  instead of the editor's per-device localStorage. */
+export interface CanvasPreset {
+  ratio: string;
+  w: number;
+  h: number;
+}
+
 /** Resolved, concrete settings for a specific file (no undefined values). */
 export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
@@ -126,6 +135,11 @@ export interface SvgPluginSettings {
    *  presets live in data.json and sync across vaults instead of the editor's
    *  per-device localStorage. */
   classLibrary: ClassLibraryEntry[];
+  /** User-curated canvas-size presets shown in the editor's Canvas settings
+   *  popover. Backs the svgedit userDataAdapter so presets live in data.json and
+   *  sync across vaults instead of the editor's per-device localStorage. Empty =
+   *  the editor's built-in default presets. */
+  canvasPresets: CanvasPreset[];
   /** Vault folder where downloaded custom fonts are stored as .woff2 files.
    *  Backs the svgedit userDataAdapter's font methods; as normal vault files
    *  they sync across devices independently of plugin-settings sync. */
@@ -159,5 +173,6 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   hotkeyOverrides: {},
   favorites: [],
   classLibrary: [],
+  canvasPresets: [],
   fontsFolder: "svgedit-fonts",
 };

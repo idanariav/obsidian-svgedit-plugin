@@ -15,7 +15,11 @@ import { RestoreBackupModal } from "../modals/RestoreBackupModal";
 import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
-import type { UserShapeStore, ClassLibraryEntry } from "../settings/defaults";
+import type {
+  UserShapeStore,
+  ClassLibraryEntry,
+  CanvasPreset,
+} from "../settings/defaults";
 import { listFonts, saveFont } from "../data/fontVault";
 
 interface SvgEditorInstance {
@@ -230,6 +234,11 @@ export class SvgView extends TextFileView {
           this.plugin.settings.classLibrary = classes;
           void this.plugin.saveSettings();
           this.plugin.reloadUserDataInAllViews();
+        },
+        getCanvasPresets: () => this.plugin.settings.canvasPresets,
+        setCanvasPresets: (presets: CanvasPreset[]) => {
+          this.plugin.settings.canvasPresets = presets;
+          void this.plugin.saveSettings();
         },
         // Fonts live as .woff2 files in a synced vault folder (not data.json),
         // so they sync like any vault content. Async because vault I/O is async;
