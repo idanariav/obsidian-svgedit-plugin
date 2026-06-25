@@ -55,6 +55,17 @@ export interface CanvasPreset {
   h: number;
 }
 
+/** One saved canvas "layout" (template). Mirrors the svgedit fork's
+ *  canvasLayouts schema; persisted here so layouts sync via data.json instead of
+ *  the editor's per-device localStorage. `svg` holds the full captured canvas. */
+export interface CanvasLayout {
+  name: string;
+  w: number;
+  h: number;
+  bg: string;
+  svg: string;
+}
+
 /** Resolved, concrete settings for a specific file (no undefined values). */
 export interface EffectiveDrawingSettings {
   openAsMarkdown: boolean;
@@ -140,6 +151,11 @@ export interface SvgPluginSettings {
    *  sync across vaults instead of the editor's per-device localStorage. Empty =
    *  the editor's built-in default presets. */
   canvasPresets: CanvasPreset[];
+  /** Saved canvas layouts (templates) shown in the editor's Canvas settings
+   *  popover. Backs the svgedit userDataAdapter so layouts live in data.json and
+   *  sync across vaults instead of the editor's per-device localStorage. Each
+   *  entry stores the full captured canvas SVG, so this can be sizable. */
+  canvasLayouts: CanvasLayout[];
   /** Vault folder where downloaded custom fonts are stored as .woff2 files.
    *  Backs the svgedit userDataAdapter's font methods; as normal vault files
    *  they sync across devices independently of plugin-settings sync. */
@@ -174,5 +190,6 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   favorites: [],
   classLibrary: [],
   canvasPresets: [],
+  canvasLayouts: [],
   fontsFolder: "svgedit-fonts",
 };

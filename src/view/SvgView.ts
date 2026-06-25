@@ -19,6 +19,7 @@ import type {
   UserShapeStore,
   ClassLibraryEntry,
   CanvasPreset,
+  CanvasLayout,
 } from "../settings/defaults";
 import { listFonts, saveFont } from "../data/fontVault";
 
@@ -238,6 +239,11 @@ export class SvgView extends TextFileView {
         getCanvasPresets: () => this.plugin.settings.canvasPresets,
         setCanvasPresets: (presets: CanvasPreset[]) => {
           this.plugin.settings.canvasPresets = presets;
+          void this.plugin.saveSettings();
+        },
+        getCanvasLayouts: () => this.plugin.settings.canvasLayouts,
+        setCanvasLayouts: (layouts: CanvasLayout[]) => {
+          this.plugin.settings.canvasLayouts = layouts;
           void this.plugin.saveSettings();
         },
         // Fonts live as .woff2 files in a synced vault folder (not data.json),
