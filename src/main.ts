@@ -2,7 +2,7 @@
 // svgedit bundle (pulled in via SvgView) runs its top-level element definitions,
 // so re-enabling the plugin doesn't throw "already used with this registry".
 import "./compat/customElementsGuard";
-import { Plugin, WorkspaceLeaf } from "obsidian";
+import { Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import { SvgView } from "./view/SvgView";
 import { SvgSettingsTab } from "./settings/SettingsTab";
 import { DEFAULT_SETTINGS, SvgPluginSettings } from "./settings/defaults";
@@ -25,7 +25,7 @@ import { IMAGE_EXTENSIONS } from "./constants";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { registerCommands, resolveTemplateSvg } from "./commands";
 import { registerFileSyncHandlers } from "./fileSync";
-import { isSvgDrawingFile } from "./data/frontmatter";
+import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { VIEW_TYPE_SVG } from "./constants";
 
 const RIBBON_ICON = "pencil";
@@ -35,6 +35,11 @@ export default class SvgPlugin extends Plugin {
   _loaded = false;
   /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
   bypassLeaves = new Set<WorkspaceLeaf>();
+  /** leafId → path of a drawing the user explicitly chose to view as markdown.
+   *  The file-open fallback (and layout sweep) skip re-redirecting that leaf back
+   *  to the SVG editor only for that file, so "Edit as Markdown" sticks without
+   *  trapping other drawings later opened into the same leaf. Cleared on detach. */
+  markdownModeLeaves = new Map<string, string>();
   /** Paths of all currently known SVG drawing files (used by fileSync handlers). */
   svgDrawingPaths = new Set<string>();
 
@@ -76,6 +81,7 @@ export default class SvgPlugin extends Plugin {
       () => this._loaded,
       this.bypassLeaves,
       () => this.settings,
+      this.markdownModeLeaves,
     );
 
     // Commands
@@ -101,7 +107,41 @@ export default class SvgPlugin extends Plugin {
       this.app.vault.getMarkdownFiles().forEach((f) => {
         if (isSvgDrawingFile(this.app, f)) this.svgDrawingPaths.add(f.path);
       });
+
+      // One-time sweep: convert any already-open markdown leaf showing a drawing
+      // (e.g. the last-open file restored at launch) to the SVG editor.
+      for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+        const f = (leaf.view as { file?: TFile }).file;
+        if (f) this.convertMarkdownLeafIfDrawing(leaf, f);
+      }
+
+      // Runtime fallback for open paths the setViewState patch misses (notably
+      // the Quick Switcher reusing the single markdown leaf on mobile, where
+      // Obsidian may not call setViewState at all).
+      this.registerEvent(
+        this.app.workspace.on("file-open", (file) => {
+          if (!file || file.extension !== "md") return;
+          for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+            if ((leaf.view as { file?: TFile }).file?.path === file.path) {
+              this.convertMarkdownLeafIfDrawing(leaf, file);
+            }
+          }
+        }),
+      );
     });
+  }
+
+  /** If `leaf` shows `file` as a markdown view but the drawing should open in the
+   *  SVG editor (per effective settings) and the user hasn't intentionally chosen
+   *  markdown for it, switch the leaf to the SVG view. Backs up the preemptive
+   *  setViewStatePatch for open paths it misses. */
+  private convertMarkdownLeafIfDrawing(leaf: WorkspaceLeaf, file: TFile): void {
+    if (leaf.view?.getViewType() !== "markdown") return;
+    const leafId = (leaf as unknown as { id?: string }).id ?? file.path;
+    if (this.markdownModeLeaves.get(leafId) === file.path) return; // user chose markdown
+    if (!isSvgDrawingFile(this.app, file)) return;
+    if (resolveEffectiveSettings(this.app, file, this.settings).openAsMarkdown) return;
+    void leaf.setViewState({ type: VIEW_TYPE_SVG, state: { file: file.path } });
   }
 
   async onunload(): Promise<void> {

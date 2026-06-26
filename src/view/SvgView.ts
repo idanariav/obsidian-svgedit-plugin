@@ -479,6 +479,12 @@ export class SvgView extends TextFileView {
     // Bypass the setViewState patch for this one call so Obsidian opens the
     // file as a plain markdown view instead of redirecting back to SVG.
     this.plugin.bypassLeaves.add(this.leaf);
+    // Remember this is a deliberate markdown view so the file-open fallback
+    // doesn't bounce it straight back to the editor.
+    this.plugin.markdownModeLeaves.set(
+      (this.leaf as unknown as { id?: string }).id ?? file.path,
+      file.path,
+    );
     await this.leaf.setViewState({ type: "markdown", state: { file: file.path } });
   }
 

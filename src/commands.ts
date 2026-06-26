@@ -141,6 +141,25 @@ export function registerCommands(plugin: SvgPlugin): void {
     },
   });
 
+  // Surface the drawing/markdown toggle in the file/tab "more options" menu so it
+  // is reachable on mobile (no keyboard for the command). The file-menu event
+  // also powers the tab-header "3-dots" menu. Scoped to the drawing currently
+  // shown in the active leaf, so toggleViewMode acts on the right leaf.
+  plugin.registerEvent(
+    plugin.app.workspace.on("file-menu", (menu, file) => {
+      if (!(file instanceof TFile) || !isSvgDrawingFile(plugin.app, file)) return;
+      const leaf = plugin.app.workspace.getMostRecentLeaf();
+      if ((leaf?.view as { file?: TFile })?.file?.path !== file.path) return;
+      const inSvg = leaf?.view?.getViewType() === VIEW_TYPE_SVG;
+      menu.addItem((item) =>
+        item
+          .setTitle(inSvg ? "Open as markdown" : "Open as drawing")
+          .setIcon(inSvg ? "code" : "pencil")
+          .onClick(() => void toggleViewMode(plugin, file)),
+      );
+    }),
+  );
+
   // Export drawing (menu) — pick format, transparency and region
   plugin.addCommand({
     id: "export-drawing",
@@ -280,15 +299,19 @@ async function toggleViewMode(plugin: SvgPlugin, file: TFile): Promise<void> {
     const leaf = getActiveLeaf(plugin);
     const view = leaf.view;
 
+    const leafId = (leaf as unknown as { id?: string }).id ?? file.path;
     if (view?.getViewType() === VIEW_TYPE_SVG) {
       // Currently in SVG view → switch to markdown.
       // Save first so drawing changes are not lost.
       await (view as SvgView).save();
-      // Bypass the redirect patch for this one setViewState call.
+      // Bypass the redirect patch for this one setViewState call, and mark the
+      // leaf as deliberately markdown so the file-open fallback leaves it alone.
       plugin.bypassLeaves.add(leaf);
+      plugin.markdownModeLeaves.set(leafId, file.path);
       await leaf.setViewState({ type: "markdown", state: { file: file.path } });
     } else {
       // Currently in markdown view → switch to SVG.
+      plugin.markdownModeLeaves.delete(leafId);
       await leaf.setViewState({ type: VIEW_TYPE_SVG, state: { file: file.path } });
     }
   } catch (e: unknown) {

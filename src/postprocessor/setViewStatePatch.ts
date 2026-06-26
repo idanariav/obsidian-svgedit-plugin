@@ -21,8 +21,18 @@ export function installViewStatePatch(
   isLoaded: () => boolean,
   bypassLeaves: Set<WorkspaceLeaf>,
   getSettings: () => SvgPluginSettings,
+  markdownModeLeaves: Map<string, string>,
 ): () => void {
   return around(WorkspaceLeaf.prototype, {
+    // Drop a closed leaf's intentional-markdown marker so its id can't leak or
+    // wrongly apply if Obsidian reuses it.
+    detach(next) {
+      return function (this: WorkspaceLeaf) {
+        const id = (this as unknown as { id?: string }).id;
+        if (id) markdownModeLeaves.delete(id);
+        return next.call(this);
+      };
+    },
     setViewState(next) {
       return function (
         this: WorkspaceLeaf,
