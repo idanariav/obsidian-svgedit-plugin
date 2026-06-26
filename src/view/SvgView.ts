@@ -272,6 +272,7 @@ export class SvgView extends TextFileView {
       extensions: [
         "ext-connector",
         "ext-grid",
+        "ext-proportion-markers",
         "ext-markers",
         "ext-panning",
         "ext-shapes",
