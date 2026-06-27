@@ -198,6 +198,94 @@ export function bakeGradientIntoSvg(svg: string, gradientXml: string): string {
   return new XMLSerializer().serializeToString(doc);
 }
 
+// ── Per-drawing id namespacing (multi-instance fill bug) ───────────────────────
+// Obsidian can mount several svgedit editors into the *same* document at once
+// (split panes). SVG paint references (`fill="url(#id)"`, `filter`, `clip-path`,
+// `href="#id"`, …) resolve document-wide to the *first* matching id, but every
+// saved drawing carries ids minted from its own per-document counter (`svg_31`,
+// `ellipse_1`, …). So a second drawing's gradient/filter fill binds to the first
+// drawing's same-id element — usually not a paint server — and renders with no
+// fill (white) until the first drawing closes. svgedit's own fix for external
+// multi-instance hosts is the `se:nonce` mechanism: an `se:nonce` on the root
+// makes every generated id `type_<nonce>_num`, and the editor honours a nonce it
+// finds on load. We stamp a per-file nonce and rewrite the saved drawing's ids
+// (and their references) to carry it, so concurrently open drawings never share
+// an id. Idempotent: a drawing that already has `se:nonce` is left untouched.
+
+// svgedit reads the nonce from this namespace (see Drawing's constructor).
+const SE_NS = "http://svg-edit.googlecode.com";
+const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+
+/** A stable, compact numeric nonce derived from a string (the file path), so a
+ *  given drawing keeps the same id namespace across opens and two different
+ *  files get different namespaces. Random fallback for an unsaved (pathless)
+ *  drawing, whose ids are transient until it is first written. */
+function nonceFromSeed(seed: string): string {
+  if (!seed) return String(Math.floor(Math.random() * 1e9) + 1);
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
+  // Keep it non-zero so the namespace is always visibly present.
+  return String((h >>> 0) + 1);
+}
+
+/** Insert the nonce into an id at svgedit's position — before the first numeric
+ *  run, matching its `type_<nonce>_num` scheme (`svg_31` → `svg_<n>_31`,
+ *  `svg_7_blur` → `svg_<n>_7_blur`). Ids without a numeric run get the nonce
+ *  suffixed, which is enough to make them unique. */
+function namespaceId(id: string, nonce: string): string {
+  const m = /^([A-Za-z][\w-]*?_)(\d)/.exec(id);
+  if (m) return id.replace(/^([A-Za-z][\w-]*?_)(\d)/, `$1${nonce}_$2`);
+  return `${id}_${nonce}`;
+}
+
+/**
+ * Rewrite a saved drawing's element ids — and every `#id` reference in its
+ * attribute values — to carry a per-file nonce, so it can't collide with another
+ * drawing open in the same document. Stamps `se:nonce` on the root so svgedit
+ * keeps minting matching ids for elements created during the session. A no-op
+ * (returns the input) when the drawing already carries a nonce or fails to parse.
+ */
+export function namespaceSvgIds(svg: string, seed: string): string {
+  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  if (doc.querySelector("parsererror")) return svg;
+  const root = doc.documentElement;
+  if (root.getAttributeNS(SE_NS, "nonce")) return svg; // already namespaced
+
+  const idEls = Array.from(doc.querySelectorAll("[id]"));
+  const nonce = nonceFromSeed(seed);
+  const map = new Map<string, string>();
+  for (const el of idEls) {
+    const oldId = el.getAttribute("id");
+    if (!oldId) continue;
+    const newId = namespaceId(oldId, nonce);
+    map.set(oldId, newId);
+    el.setAttribute("id", newId);
+  }
+  if (map.size === 0 && !seed) {
+    // Empty drawing with no ids and no path — nothing to namespace yet.
+    return svg;
+  }
+
+  // Repoint every `#id` reference (url(#id), href="#id", clip-path, mask, …) by
+  // rewriting it in any attribute value. The greedy \w+ captures the whole id
+  // token, so `svg_3` and `svg_31` are never confused.
+  if (map.size > 0) {
+    for (const el of Array.from(doc.querySelectorAll("*"))) {
+      for (const attr of Array.from(el.attributes)) {
+        if (!attr.value.includes("#")) continue;
+        const next = attr.value.replace(/#([A-Za-z][\w:.-]*)/g, (whole, id) =>
+          map.has(id) ? `#${map.get(id)}` : whole,
+        );
+        if (next !== attr.value) attr.value = next;
+      }
+    }
+  }
+
+  root.setAttributeNS(XMLNS_NS, "xmlns:se", SE_NS);
+  root.setAttributeNS(SE_NS, "se:nonce", nonce);
+  return new XMLSerializer().serializeToString(doc);
+}
+
 // Matches the auto-managed "## Linked Files" section: the heading through every
 // following line up to (but not including) the next structural anchor. The
 // section now lives under the "# Sketch Editor Data" heading and directly above

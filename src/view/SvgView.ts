@@ -8,7 +8,7 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds } from "../data/SvgData";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { putBackup, getBackup, deleteBackup } from "../data/drawingBackup";
 import { RestoreBackupModal } from "../modals/RestoreBackupModal";
@@ -524,8 +524,12 @@ export class SvgView extends TextFileView {
     const raw = setCanvasBg(stored, null);
     // Locked imports are re-baked from their source on every open so a drawing
     // always reflects the latest version of what it embeds.
-    const svg = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
+    const embedded = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
     if (this.loadGen !== gen) return; // a newer load superseded us during the re-bake
+    // Namespace this drawing's element ids so its paint references (url(#id),
+    // href, filter, …) can't bind to a same-id element in another drawing open in
+    // the same document — the cause of the second pane rendering with no fill.
+    const svg = namespaceSvgIds(embedded, this.file?.path ?? "");
 
     if (this.svgEditor) {
       this.isLoading = true;
