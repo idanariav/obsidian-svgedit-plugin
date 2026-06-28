@@ -92289,7 +92289,7 @@ class ane extends Loe {
    */
   loadSvgString(e, { noAlert: t } = {}) {
     if (this.svgCanvas.setSvgString(e) !== !1) {
-      this.updateCanvas(), this.updateCanvasWatermark();
+      this.updateCanvas(), this.rightPanel.populateLayers(), this.updateCanvasWatermark();
       return;
     }
     throw t || seAlert(this.i18next.t("notification.errorLoadingSVG")), new Error("Error loading SVG");
