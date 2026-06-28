@@ -238,26 +238,49 @@ function namespaceId(id: string, nonce: string): string {
   return `${id}_${nonce}`;
 }
 
+/** Reverse `namespaceId` for a known nonce: `svg_<nonce>_7_blur3` → `svg_7_blur3`
+ *  (and the suffix form `id_<nonce>` → `id`). Lets a drawing that arrived with a
+ *  stale nonce — e.g. created from a template that baked one in — be stripped
+ *  back to bare ids before being re-stamped for the file it now lives in. */
+function stripNonce(id: string, nonce: string): string {
+  const infix = new RegExp(`^([A-Za-z][\\w-]*?_)${nonce}_(\\d)`);
+  if (infix.test(id)) return id.replace(infix, "$1$2");
+  const suffix = `_${nonce}`;
+  if (id.endsWith(suffix)) return id.slice(0, -suffix.length);
+  return id;
+}
+
 /**
  * Rewrite a saved drawing's element ids — and every `#id` reference in its
  * attribute values — to carry a per-file nonce, so it can't collide with another
  * drawing open in the same document. Stamps `se:nonce` on the root so svgedit
- * keeps minting matching ids for elements created during the session. A no-op
- * (returns the input) when the drawing already carries a nonce or fails to parse.
+ * keeps minting matching ids for elements created during the session.
+ *
+ * The nonce is derived deterministically from the file path, so a drawing whose
+ * baked-in nonce doesn't match its own path was copied in (e.g. created from a
+ * template that already carried a namespace) — those re-stamp to the current
+ * file's nonce, otherwise every note made from one template would share ids. A
+ * no-op (returns the input) when the drawing already carries this file's nonce,
+ * when it carries any nonce but we have no path to derive a stable one, or when
+ * the SVG fails to parse.
  */
 export function namespaceSvgIds(svg: string, seed: string): string {
   const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
   if (doc.querySelector("parsererror")) return svg;
   const root = doc.documentElement;
-  if (root.getAttributeNS(SE_NS, "nonce")) return svg; // already namespaced
+  const nonce = nonceFromSeed(seed);
+  const existing = root.getAttributeNS(SE_NS, "nonce");
+  // Already namespaced to this file's nonce, or carrying some nonce with no seed
+  // to compute a stable replacement — leave it untouched either way.
+  if (existing && (existing === nonce || !seed)) return svg;
 
   const idEls = Array.from(doc.querySelectorAll("[id]"));
-  const nonce = nonceFromSeed(seed);
   const map = new Map<string, string>();
   for (const el of idEls) {
     const oldId = el.getAttribute("id");
     if (!oldId) continue;
-    const newId = namespaceId(oldId, nonce);
+    const base = existing ? stripNonce(oldId, existing) : oldId;
+    const newId = namespaceId(base, nonce);
     map.set(oldId, newId);
     el.setAttribute("id", newId);
   }
