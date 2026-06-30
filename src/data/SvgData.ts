@@ -54,11 +54,23 @@ const BLOCK_REPLACE_REGEX = new RegExp(
 // lines rather than one enormous line. Whitespace is stripped before decompress.
 const BASE64_LINE_WIDTH = 76;
 
+/** Normalize CRLF (and lone CR) line endings to LF. The drawing-block regexes
+ *  anchor on literal `\n`, so a file that arrived with Windows line endings
+ *  (cross-device sync, an external editor, git autocrlf) would fail to match —
+ *  the drawing would read as empty on open, then a save could persist that
+ *  empty over the real content. Normalizing every read/write through here keeps
+ *  the matching line-ending agnostic and rewrites the file to consistent LF
+ *  (what Obsidian uses natively) on its next save. */
+function normalizeEol(content: string): string {
+  return content.replace(/\r\n?/g, "\n");
+}
+
 /** Extract the SVG string from a markdown drawing file. Returns null if not found. */
 export function extractSvg(content: string): string | null {
-  const c = COMPRESSED_BLOCK_REGEX.exec(content);
+  const normalized = normalizeEol(content);
+  const c = COMPRESSED_BLOCK_REGEX.exec(normalized);
   if (c) return LZString.decompressFromBase64(c[1].replace(/\s+/g, "")) || null;
-  const m = RAW_BLOCK_REGEX.exec(content);
+  const m = RAW_BLOCK_REGEX.exec(normalized);
   return m ? m[1] : null;
 }
 
@@ -82,11 +94,14 @@ export function isEmptyDrawing(svg: string): boolean {
 
 /** Replace the SVG block in an existing markdown drawing file with new SVG content. */
 export function replaceSvg(content: string, newSvg: string, compress: boolean): string {
+  // Normalize line endings first so the block regex (anchored on `\n`) matches a
+  // CRLF file and we replace the existing block rather than appending a duplicate.
+  const normalized = normalizeEol(content);
   const block = buildBlock(newSvg, compress);
-  if (BLOCK_REPLACE_REGEX.test(content)) {
-    return content.replace(BLOCK_REPLACE_REGEX, () => block);
+  if (BLOCK_REPLACE_REGEX.test(normalized)) {
+    return normalized.replace(BLOCK_REPLACE_REGEX, () => block);
   }
-  return content + "\n\n" + block;
+  return normalized + "\n\n" + block;
 }
 
 function buildBlock(svg: string, compress: boolean): string {
