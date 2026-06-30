@@ -278,6 +278,7 @@ export class SvgView extends TextFileView {
         "ext-shapes",
         "ext-polystar",
         "ext-cutter",
+        "ext-brush",
         "ext-curvature",
         "ext-layer_view",
         "ext-theme-toggle",
