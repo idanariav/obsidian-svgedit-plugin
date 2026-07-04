@@ -67,6 +67,16 @@ export class SvgView extends TextFileView {
   /** Topbar save button; its red `.svg-plugin-dirty` state mirrors `dirty`. */
   private saveBtn: HTMLButtonElement | null = null;
   private svgEditor: SvgEditorInstance | null = null;
+  /** True only once svgEditor.init() has resolved. `svgEditor` itself goes
+   *  non-null the instant the editor is constructed, well before init()
+   *  finishes — setViewData must not treat construction as readiness, or a
+   *  setViewData that lands during init() (the file is already cached, so no
+   *  disk read delays it — e.g. the markdown⇄SVG toggle on the same leaf)
+   *  calls loadFromString on a not-yet-initialized editor. That's a silent
+   *  no-op, but hasLoadedContent still flips true, disarming the "never
+   *  persist an un-loaded canvas" guard and letting the next save overwrite
+   *  the file with svgedit's blank default canvas. */
+  private editorReady = false;
   private currentData = "";
   private pendingSvg: string | null = null;
   /** Canvas background color awaiting an editor that isn't initialized yet;
@@ -290,6 +300,7 @@ export class SvgView extends TextFileView {
     });
 
     await this.svgEditor.init();
+    this.editorReady = true;
     this.scopeInjectedCss();
 
     this.setupThemeSync();
@@ -532,7 +543,7 @@ export class SvgView extends TextFileView {
     // the same document — the cause of the second pane rendering with no fill.
     const svg = namespaceSvgIds(embedded, this.file?.path ?? "");
 
-    if (this.svgEditor) {
+    if (this.svgEditor && this.editorReady) {
       this.isLoading = true;
       try {
         await this.svgEditor.loadFromString(svg);
@@ -748,6 +759,7 @@ export class SvgView extends TextFileView {
     // react to shortcuts/paste on a torn-down canvas or stay the "active" editor.
     try { this.svgEditor?.destroy?.(); } catch { /* best-effort */ }
     this.svgEditor = null;
+    this.editorReady = false;
     this.editorContainer?.empty();
   }
 
