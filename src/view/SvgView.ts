@@ -39,6 +39,11 @@ interface SvgEditorInstance {
   /** Tear down document-level listeners this editor registered (multi-instance
    *  cleanup). Present on the reentrant svgedit build. */
   destroy?(): void;
+  /** Mark this editor instance as the one document-level shortcuts/paste route
+   *  to. svgedit tracks this itself on pointerdown/focusin *inside* its own
+   *  container, but switching Obsidian panes doesn't necessarily click inside
+   *  the target drawing's canvas — so call this when this leaf becomes active. */
+  activate?(): void;
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
@@ -173,7 +178,16 @@ export class SvgView extends TextFileView {
     // other transitions). Per-view registration auto-unregisters on unload.
     this.registerEvent(
       this.app.workspace.on("active-leaf-change", (leaf) => {
-        if (leaf === this.leaf) return;          // we are now the active leaf
+        if (leaf === this.leaf) {
+          // We are now the active leaf. Obsidian's pane switch doesn't
+          // necessarily click inside our editor's own container, but that's
+          // the only thing svgedit itself watches to know which mounted
+          // editor should handle document-level shortcuts/paste — without
+          // this, Ctrl+V after switching panes keeps targeting whichever
+          // drawing was last clicked into, not the one now on screen.
+          this.svgEditor?.activate?.();
+          return;
+        }
         if (!this.svgDirty) return;                  // nothing to flush (spurious fire)
         if (!this.hasLoadedContent || this.isLoading) return; // still loading
         if (!this.svgEditor || !this.file) return;
@@ -305,6 +319,10 @@ export class SvgView extends TextFileView {
     await this.svgEditor.init();
     this.editorReady = true;
     this.scopeInjectedCss();
+    // If this view is already the active leaf when init finishes (e.g. it was
+    // just opened), mark its editor active — matches the active-leaf-change
+    // handler below, which only fires on a *subsequent* leaf switch.
+    if (this.app.workspace.getActiveViewOfType(SvgView) === this) this.svgEditor.activate?.();
 
     this.setupThemeSync();
 

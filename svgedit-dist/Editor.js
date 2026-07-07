@@ -44756,7 +44756,7 @@ class D7 {
     const e = () => {
       T0(this), window.svgEditor = this, this.svgCanvas?.activateUtilities?.();
     };
-    this.$container.addEventListener("pointerdown", e, !0), this.$container.addEventListener("focusin", e, !0), this.$id = R7(this.$container), this.$qa = z7(this.$container), this.$qq = G7(this.$container);
+    this.$container.addEventListener("pointerdown", e, !0), this.$container.addEventListener("focusin", e, !0), this.activate = e, this.$id = R7(this.$container), this.$qa = z7(this.$container), this.$qq = G7(this.$container);
   }
   /**
   * Auto-run after a Promise microtask.
