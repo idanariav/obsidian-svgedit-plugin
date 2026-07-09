@@ -16430,11 +16430,22 @@ class oo {
     i && Kr !== rr.NEVER_RANDOMIZE ? this.nonce_ = i : Kr === rr.ALWAYS_RANDOMIZE && this.setNonce(Math.floor(Math.random() * 100001));
   }
   /**
+   * Looks up an id within this canvas's own subtree, then falls back to the
+   * whole owner document. Several editor instances can be mounted in the same
+   * document (one per open drawing, e.g. multiple Obsidian panes), and SVG
+   * paint-server references (fill="url(#id)", xlink:href="#id") resolve
+   * against the whole document regardless of which canvas minted the id.
+   * getNextId/getNextIdWithPrefix rely on this for uniqueness — checking only
+   * svgElem_ let a freshly minted id collide with one already used by another
+   * live drawing (e.g. a pasted gradient landing on an id an open source
+   * drawing still uses for an unrelated element), silently breaking its paint
+   * ref. The subtree check runs first so a detached svgElem_ (never inserted
+   * into a document, e.g. in unit tests) still resolves correctly.
    * @param {string} id Element ID to retrieve
    * @returns {Element} SVG element within the root SVGSVGElement
    */
   getElem_(t) {
-    return this.svgElem_.querySelector ? this.svgElem_.querySelector(`#${t}`) : this.svgElem_.querySelector(`[id=${t}]`);
+    return this.svgElem_.querySelector ? this.svgElem_.querySelector(`#${t}`) || this.svgElem_.ownerDocument && this.svgElem_.ownerDocument.querySelector(`#${t}`) || null : this.svgElem_.querySelector(`[id=${t}]`);
   }
   /**
    * @returns {SVGSVGElement}
