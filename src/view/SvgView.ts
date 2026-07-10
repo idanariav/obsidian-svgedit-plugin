@@ -331,12 +331,11 @@ export class SvgView extends TextFileView {
 
     this.setupThemeSync();
 
-    // svgedit binds `changed` to its own Editor.elementChanged (which updates
-    // the context panel, the empty-canvas brand watermark, etc.). bind()
-    // *replaces* the handler, so preserve and chain svgedit's original instead
-    // of clobbering it — otherwise those updates stop firing after init.
-    const prevChanged = this.svgEditor.svgCanvas.bind("changed", (win, elems) => {
-      prevChanged?.(win, elems);
+    // svgCanvas.bind() is backed by a native EventTarget: every bound handler
+    // fires, so this coexists with svgedit's own `changed` binding (which
+    // updates the context panel, the empty-canvas brand watermark, etc.)
+    // instead of replacing it.
+    this.svgEditor.svgCanvas.bind("changed", () => {
       // Just flag the edit; the edit-triggered autosave timer (and the explicit
       // flushes on switch-away / toggle / close / file-switch) own the actual
       // save+export. We deliberately don't save on every change — that would
