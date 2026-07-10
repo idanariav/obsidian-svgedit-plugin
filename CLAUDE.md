@@ -69,6 +69,30 @@ the bundle is read-only and no patching should occur.
 
 ---
 
+## Automated tests
+
+`npm test` runs vitest (`vitest.config.mts`, jsdom environment) over
+`tests/**/*.test.ts`. When adding a feature or fixing a bug in `src/`, add or
+update a test alongside it rather than relying solely on manual verification.
+
+- Pure-logic modules (`src/data/SvgData.ts`, `src/export/frames.ts`, …) are
+  straightforward to cover directly.
+- DOM-dependent code needing real `<canvas>`/`<img>` rendering
+  (`src/export/raster.ts`) needs a real browser — see the Headless subsection
+  below and `tests/export/raster.test.ts`.
+- Code that imports `obsidian` (e.g. `src/view/SvgView.ts`) can't be
+  instantiated directly — the installed `obsidian` package is types-only, no
+  runtime JS. Either write a static/source-level test instead (see
+  `tests/view/SvgView-reserved-fields.test.ts`), or construct the real class
+  against `tests/mocks/obsidian.ts` (aliased in for tests via
+  `vitest.config.mts`'s `resolve.alias`) as `tests/view/SvgView-init-race.test.ts`
+  does — that mock is deliberately partial (only what that one test's code
+  path touches), so expand it rather than starting a second one if the next
+  test needs more of the `obsidian` surface.
+
+Check `.claude/techdebt.md` for already-identified gaps before assuming
+something isn't testable.
+
 ## Testing features
 
 **Deploy/test vault: `/Users/idanariav/GitProjects/Obsidian_Vault`.**
@@ -100,15 +124,21 @@ is truly needed.
 
 ### Headless (logic only, no Obsidian)
 
-DOM-dependent code (`src/export/raster.ts`, `src/export/frames.ts`) can be
-verified without Obsidian using the sibling fork's dev deps:
+DOM-dependent code (`src/export/raster.ts`, `src/export/frames.ts`) is
+verified without Obsidian, both under `tests/`:
 
-- `jsdom` for parsing/serialization checks; `playwright` (Chromium) when real
-  `<img>`/`<canvas>` rasterization matters — jsdom and a real browser differ
-  on SVG serialization and rendering.
-- Run the throwaway script from **inside `../svgedit`** so Node resolves that
-  repo's `node_modules` (this repo doesn't depend on jsdom/playwright). Read the
-  real SVG out of an `Obsidian_Vault` `.md` drawing to test against authentic input.
+- Parsing/serialization checks (e.g. `src/export/frames.ts`) run fine under
+  vitest's jsdom environment — see `tests/export/frames.test.ts`.
+- Real `<img>`/`<canvas>` rasterization (`src/export/raster.ts`) needs a real
+  browser — jsdom doesn't implement canvas 2D rendering or image decoding,
+  and jsdom/a real browser differ on SVG serialization and rendering anyway.
+  `tests/export/raster.test.ts` covers this: it's forced to vitest's `node`
+  environment (jsdom's `TextEncoder` polyfill breaks esbuild's own sanity
+  check, so esbuild — used there to strip TS without a full bundle — can't
+  run under jsdom), transforms `raster.ts` into a global-exposing IIFE, and
+  drives it inside a real Playwright/Chromium page. For a one-off manual
+  check against a real vault drawing instead, read the SVG out of an
+  `Obsidian_Vault` `.md` file and run a throwaway script the same way.
 
 ---
 

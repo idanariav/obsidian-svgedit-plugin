@@ -11,44 +11,22 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-## No test framework in this repo
+## No CI
 
-There is no jest/vitest/mocha, and no CI (no `.github/workflows`). The only
-thing resembling a test today is `scripts/check-extension-sync.mjs`
-(wired to `npm test`), a plain Node script that diffs the hand-maintained
-`extensions: [...]` list in `src/view/SvgView.ts` against svgedit's
-`defaultExtensions` (`../svgedit/src/editor/ConfigObj.js`) — added after that
-list silently drifted (missing `ext-repeat` and six other upstream defaults;
-carrying a stale `ext-eyedropper` inclusion). A real regression test would
-look different (a unit test asserting the diff), but standing up a whole
-framework for one assertion wasn't worth it in the moment.
+`npm test` runs vitest (`vitest.config.mts`, `tests/**/*.test.ts`), covering:
+the `SvgView` extensions-list sync check, an `extractSvg`/`replaceSvg`
+round-trip (incl. the CRLF regression case), `src/export/frames.ts`,
+`src/export/raster.ts` (real Chromium rasterization via Playwright —
+`tests/export/raster.test.ts`), a static guard that `SvgView` doesn't declare
+a field name reserved by Obsidian's `TextFileView`
+(`tests/view/SvgView-reserved-fields.test.ts`), and the `SvgView` init race
+around `editorReady` (`tests/view/SvgView-init-race.test.ts`, built against
+`tests/mocks/obsidian.ts` — a minimal runtime stand-in for the types-only
+`obsidian` package, aliased in for tests via `vitest.config.mts`; expand it
+if a future test needs to drive more of `SvgView`, e.g. a real
+save()/backup-restore flow needs `Vault`/IndexedDB wired up too).
 
-Not done now: pick a framework (vitest is the obvious choice — same as
-`../svgedit`, keeps tooling consistent across the two repos), wire `npm
-test` to it, decide whether to add CI. Medium effort, low risk — mostly
-plumbing, plus rewriting `check-extension-sync.mjs`'s logic as an actual test.
-
-Candidate tests worth adding once a framework exists, roughly in priority
-order:
-
-- **Promote `check-extension-sync.mjs`** into a real test instead of a
-  standalone script — same diff logic, but fails the test suite instead of
-  a separate `npm test` invocation.
-- **extractSvg/replaceSvg round-trip, including CRLF input** — regression
-  test for the CRLF empty-open bug (CRLF line endings broke LF-only block
-  regexes → empty open + data loss; fixed by `normalizeEol`).
-- **SvgView init race** — toggling the md↔SVG view before
-  `svgEditor.init()` resolves must not blank the drawing (the `editorReady`
-  flag exists specifically to guard this; a passing-today test would catch
-  a future regression if that flag's check is ever removed or reordered).
-- **Frame export (`src/export/frames.ts`) and raster export
-  (`src/export/raster.ts`)** — CLAUDE.md already documents these as
-  headless-testable via jsdom/playwright (run from inside `../svgedit` so
-  Node resolves those dev deps), but no actual test files exist yet, only
-  the documented recipe for throwaway scripts.
-- **TextFileView reserved-field guard** — assert `SvgView` doesn't declare
-  fields (`saving`, `dirty`, `data`, etc.) that shadow Obsidian's
-  `TextFileView` base class; this class of bug has bitten this repo before.
+Not done now: no `.github/workflows` runs `npm test` on push/PR yet.
 
 ## `installViewStatePatch` monkey-patches a private Obsidian API
 

@@ -8,7 +8,7 @@
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "sync-svgedit": "node scripts/fetch-svgedit-dist.mjs",
     "prepare": "node scripts/fetch-svgedit-dist.mjs",
-    "test": "node scripts/check-extension-sync.mjs"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +17,12 @@
     "@types/node": "^22.0.0",
     "builtin-modules": "^3.3.0",
     "esbuild": "^0.21.3",
+    "jsdom": "^27.4.0",
     "obsidian": "latest",
+    "playwright": "^1.61.1",
     "tslib": "^2.6.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@svgedit/svgcanvas": "file:/Users/idanariav/GitProjects/svgedit/packages/svgcanvas",
