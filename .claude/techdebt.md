@@ -75,14 +75,56 @@ different id-minting site rather than a shared root cause:
    came first in DOM order, wiring dblclick handlers/highlight colors to the
    wrong pane's grip (`packages/svgcanvas/core/path-method.js`, the fork).
 
-Not done now: each fix closed the specific reported case, not the class. A
-systemic fix (e.g. every id-minting site going through one shared "is this id
-free *document-wide*" check, or genuinely isolating each editor instance's ids
-via Shadow DOM/`getRootNode()`-scoped lookups instead of a global
-`querySelector`) would prevent the next flavor of this bug instead of waiting
-for it to surface. Spans both repos, so needs a design pass before starting —
-worth a note in `../svgedit`'s own techdebt too. Medium-high effort; the
-payoff is not re-discovering this bug a fifth time.
+6. `ext-grid`'s grid pattern/clip used hardcoded literal ids (`gridpattern`,
+   `gridclip`) referenced via `fill:url(#gridpattern)` /
+   `clip-path:url(#gridclip)` — a native SVG paint/clip reference, resolved
+   by the browser itself document-wide, not through any of svgedit's scoped
+   `$id` lookups. Two panes with the grid on could end up rendering one
+   pane's grid color/shape via the *other* pane's pattern
+   (`src/editor/extensions/ext-grid/ext-grid.js`, the fork).
+
+Addressed as a systemic mechanism rather than a sixth ad hoc patch: audited
+every SVG-content id-minting site in `packages/svgcanvas` and every
+extension. Ordinary content ids all already funnel through
+`getNextId()`/`getNextIdWithPrefix()` (`packages/svgcanvas/core/draw.js`),
+which check document-wide uniqueness via `getElem_` (fix #4) — that half of
+the "one shared uniqueness check" idea already existed and audits clean. What
+was missing was the other half: a few call sites (facet #3's background
+gradient, and now #6's grid pattern/clip) mint a *hardcoded* id by
+convention, referenced via `url(#id)`/`href="#id"`, without going through
+that path — each one had hand-rolled its own nonce-suffixing inline instead
+of sharing logic. Added `Drawing#getNonceId(base)` /
+`SvgCanvas#getNonceId(base)` (`packages/svgcanvas/core/draw.js` +
+`packages/svgcanvas/svgcanvas.js`) as the one canonical helper for this case,
+refactored #3's background-gradient fix onto it, and used it to fix #6. Any
+future extension or core code minting a `url()`/`href`-referenced literal id
+should call this instead of re-deriving the nonce by hand.
+
+Not done: genuinely isolating each editor instance's DOM via Shadow
+DOM/`getRootNode()`-scoped lookups instead of nonce-suffixing string ids —
+would prevent this specific bug shape architecturally rather than by
+convention, but is a much larger, riskier change (svgedit's canvas is real
+SVG DOM, not canvas-based rendering, so paint-server refs would still need to
+resolve correctly across a shadow boundary). Not pursued given the lighter
+fix above closes every currently-known case. If a *seventh* hardcoded
+referenced id turns up, that's the signal the convention-based approach isn't
+holding and the Shadow DOM redesign is worth the cost.
+
+Related but distinct — found during this audit, not fixed (out of scope: not
+an id/ref collision, a **UI-chrome cross-talk** bug): several web components
+resolve "my editor's root" via `document.querySelector('.svg_editor')`
+(first match in the whole document) instead of an instance-scoped lookup
+(e.g. `this.closest('.svg_editor')`, available since each is a light-DOM
+custom element). With two panes open, every one of these sync their
+dark/light theme to whichever pane's `.svg_editor` happens to come first in
+the DOM, not their own: `seFontSelect.js`, `seFontLibrary.js`,
+`seShapeLibrary.js`, `colorPicker/ColorDialog.js`, `seTraceDialog.js`,
+`imageImportDialog.js`, `seTextPromptDialog.js` (all under
+`src/editor/components`/`src/editor/dialogs`). `contextmenu.js`'s
+`contextMenuExtensions` registry is also module-level singleton state shared
+by every instance, and `commandSearch.js`/`EditorStartup.js` resolve command
+targets via bare `document.getElementById`. Worth its own techdebt entry with
+a design pass if picked up.
 
 ## `installViewStatePatch` monkey-patches a private Obsidian API
 
