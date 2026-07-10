@@ -62,6 +62,17 @@ export class TFile {
   basename = "";
 }
 
+/** Bare enough for `around(WorkspaceLeaf.prototype, ...)` (monkey-around) to
+ *  patch: it just needs real own methods on the prototype to wrap. Tests
+ *  construct instances and call setViewState/detach directly rather than
+ *  going through a real Workspace. */
+export class WorkspaceLeaf {
+  id?: string;
+  view: unknown;
+  detach(): void {}
+  async setViewState(_state: unknown, _eState?: unknown): Promise<void> {}
+}
+
 export class Scope {
   register(): void {}
 }

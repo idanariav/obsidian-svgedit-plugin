@@ -28,24 +28,6 @@ save()/backup-restore flow needs `Vault`/IndexedDB wired up too).
 
 Not done now: no `.github/workflows` runs `npm test` on push/PR yet.
 
-## `installViewStatePatch` monkey-patches a private Obsidian API
-
-`src/postprocessor/setViewStatePatch.ts` patches
-`WorkspaceLeaf.prototype.setViewState` (via `monkey-around`) to redirect
-drawing files from the markdown view to the SVG view. It's already known to
-be incomplete — `src/main.ts`'s `file-open` handler exists specifically as a
-fallback for "open paths the setViewState patch misses (notably the Quick
-Switcher reusing the single markdown leaf on mobile)". There's no test
-coverage for the redirect logic itself (bypass-leaf handling, same-file mode
-changes vs. new-file opens, the markdown-mode-leaves override).
-
-Not done now: works today, and there's no cleaner public Obsidian API for
-"redirect this markdown file to a custom view type based on its frontmatter."
-Worth revisiting if a future Obsidian release changes `setViewState`'s
-signature/behavior (patch would silently stop firing or throw), or if another
-edge case like the mobile Quick Switcher one turns up needing its own
-fallback.
-
 ## Toggling the plugin off/on doesn't reload svgedit's custom elements
 
 `src/compat/customElementsGuard.ts` makes `customElements.define()` a no-op
