@@ -50,81 +50,40 @@ order:
   fields (`saving`, `dirty`, `data`, etc.) that shadow Obsidian's
   `TextFileView` base class; this class of bug has bitten this repo before.
 
-## Cross-instance SVG id/ref collisions keep resurfacing as new facets
+## Cross-instance UI-chrome cross-talk via document-wide lookups
 
 Multiple svgedit instances (one per open pane) mount into the same top-level
-`document`, so any element `id` — and anything that references one via
-`url(#id)`/`href`/`filter` — resolves document-wide, not per-instance. This
-family of bugs has been found and patched **four separate times**, each a
-different id-minting site rather than a shared root cause:
+`document`. SVG content-id/ref collisions (fill/clip-path/href pointing at
+the wrong pane's element) have been fully audited and fixed — see git
+history (`../svgedit` commits `205ac0a1`, `70c4cd31` and this repo's synced
+bundles) and `Drawing#getNonceId`/`SvgCanvas#getNonceId` in the fork, the
+now-canonical helper for namespacing any hand-rolled id referenced via
+`url()`/`href`. A distinct, still-open bug class turned up during that
+audit: non-SVG **UI-chrome** state that's resolved or stored document/module
+-wide instead of per-instance.
 
-1. Load-time: two drawings' own ids collided → `namespaceSvgIds()` stamps a
-   per-file nonce (`src/data/SvgData.ts`, this repo).
-2. Template-derived drawings shared one baked nonce → re-namespace when the
-   baked nonce doesn't match the current file's derived nonce (this repo).
-3. Canvas-background gradient ids used a reset-to-0 runtime counter → namespaced
-   with the drawing's nonce (`packages/svgcanvas/core/elem-get-set.js`, the fork).
-4. Paste between two open drawings only checked the pasting canvas's own
-   subtree for collisions, not the whole document → fixed to fall back to
-   `ownerDocument.querySelector` (`packages/svgcanvas/core/draw.js`, the fork).
-5. Path node-edit grips (`pathpointgrip_N`, `ctrlpointgrip_Nc1`/`c2`) were
-   looked up via bare `document.getElementById` after creation instead of
-   using the just-created element (or the instance-scoped `this.ctrlpts`
-   refs already held by `Segment`) → with two panes both editing a path at
-   the same node index, the global lookup returned whichever pane's grip
-   came first in DOM order, wiring dblclick handlers/highlight colors to the
-   wrong pane's grip (`packages/svgcanvas/core/path-method.js`, the fork).
+- Several web components resolve "my editor's root" via
+  `document.querySelector('.svg_editor')` (first match in the whole
+  document) instead of an instance-scoped lookup (e.g.
+  `this.closest('.svg_editor')`, available since each is a light-DOM custom
+  element). With two panes open, every one of these syncs its dark/light
+  theme to whichever pane's `.svg_editor` happens to come first in the DOM,
+  not its own: `seFontSelect.js`, `seFontLibrary.js`, `seShapeLibrary.js`,
+  `colorPicker/ColorDialog.js`, `seTraceDialog.js`, `imageImportDialog.js`,
+  `seTextPromptDialog.js` (all under `src/editor/components`/`src/editor/dialogs`
+  in the fork).
+- `contextmenu.js`'s `contextMenuExtensions` registry is module-level
+  singleton state shared by every instance rather than per-canvas.
+- `commandSearch.js`/`EditorStartup.js` resolve command targets via bare
+  `document.getElementById`, which has the same first-instance-wins problem.
 
-6. `ext-grid`'s grid pattern/clip used hardcoded literal ids (`gridpattern`,
-   `gridclip`) referenced via `fill:url(#gridpattern)` /
-   `clip-path:url(#gridclip)` — a native SVG paint/clip reference, resolved
-   by the browser itself document-wide, not through any of svgedit's scoped
-   `$id` lookups. Two panes with the grid on could end up rendering one
-   pane's grid color/shape via the *other* pane's pattern
-   (`src/editor/extensions/ext-grid/ext-grid.js`, the fork).
-
-Addressed as a systemic mechanism rather than a sixth ad hoc patch: audited
-every SVG-content id-minting site in `packages/svgcanvas` and every
-extension. Ordinary content ids all already funnel through
-`getNextId()`/`getNextIdWithPrefix()` (`packages/svgcanvas/core/draw.js`),
-which check document-wide uniqueness via `getElem_` (fix #4) — that half of
-the "one shared uniqueness check" idea already existed and audits clean. What
-was missing was the other half: a few call sites (facet #3's background
-gradient, and now #6's grid pattern/clip) mint a *hardcoded* id by
-convention, referenced via `url(#id)`/`href="#id"`, without going through
-that path — each one had hand-rolled its own nonce-suffixing inline instead
-of sharing logic. Added `Drawing#getNonceId(base)` /
-`SvgCanvas#getNonceId(base)` (`packages/svgcanvas/core/draw.js` +
-`packages/svgcanvas/svgcanvas.js`) as the one canonical helper for this case,
-refactored #3's background-gradient fix onto it, and used it to fix #6. Any
-future extension or core code minting a `url()`/`href`-referenced literal id
-should call this instead of re-deriving the nonce by hand.
-
-Not done: genuinely isolating each editor instance's DOM via Shadow
-DOM/`getRootNode()`-scoped lookups instead of nonce-suffixing string ids —
-would prevent this specific bug shape architecturally rather than by
-convention, but is a much larger, riskier change (svgedit's canvas is real
-SVG DOM, not canvas-based rendering, so paint-server refs would still need to
-resolve correctly across a shadow boundary). Not pursued given the lighter
-fix above closes every currently-known case. If a *seventh* hardcoded
-referenced id turns up, that's the signal the convention-based approach isn't
-holding and the Shadow DOM redesign is worth the cost.
-
-Related but distinct — found during this audit, not fixed (out of scope: not
-an id/ref collision, a **UI-chrome cross-talk** bug): several web components
-resolve "my editor's root" via `document.querySelector('.svg_editor')`
-(first match in the whole document) instead of an instance-scoped lookup
-(e.g. `this.closest('.svg_editor')`, available since each is a light-DOM
-custom element). With two panes open, every one of these sync their
-dark/light theme to whichever pane's `.svg_editor` happens to come first in
-the DOM, not their own: `seFontSelect.js`, `seFontLibrary.js`,
-`seShapeLibrary.js`, `colorPicker/ColorDialog.js`, `seTraceDialog.js`,
-`imageImportDialog.js`, `seTextPromptDialog.js` (all under
-`src/editor/components`/`src/editor/dialogs`). `contextmenu.js`'s
-`contextMenuExtensions` registry is also module-level singleton state shared
-by every instance, and `commandSearch.js`/`EditorStartup.js` resolve command
-targets via bare `document.getElementById`. Worth its own techdebt entry with
-a design pass if picked up.
+Not done now: each of these needs its own instance-scoped fix (mostly
+`this.closest('.svg_editor')` swaps, same shape as the id/ref fixes), but
+they're a different bug family (DOM/module state, not SVG id/ref
+resolution) so bundling them into the same pass would've conflated two
+audits. Low-medium effort per site; worth a design pass on whether to unify
+around one "get my editor instance" helper before fixing all of them
+piecemeal.
 
 ## `installViewStatePatch` monkey-patches a private Obsidian API
 
