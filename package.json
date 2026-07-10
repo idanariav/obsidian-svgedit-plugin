@@ -7,7 +7,8 @@
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "sync-svgedit": "node scripts/fetch-svgedit-dist.mjs",
-    "prepare": "node scripts/fetch-svgedit-dist.mjs"
+    "prepare": "node scripts/fetch-svgedit-dist.mjs",
+    "test": "node scripts/check-extension-sync.mjs"
   },
   "keywords": [],
   "author": "",

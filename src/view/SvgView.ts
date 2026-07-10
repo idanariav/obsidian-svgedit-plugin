@@ -292,27 +292,32 @@ export class SvgView extends TextFileView {
       // omit are the file-I/O extensions (ext-opensave, ext-storage), which need
       // browser file-system / localStorage APIs unavailable in Obsidian's
       // context, and ext-overview_window (disabled upstream for performance).
-      // ext-eyedropper is kept even though it is not an upstream default.
       extensions: [
         "ext-connector",
         "ext-grid",
         "ext-proportion-markers",
         "ext-smart-guides",
+        "ext-corner-radius",
+        "ext-repeat",
         "ext-mirror",
         "ext-guides",
+        "ext-motion-lines",
+        "ext-taper",
+        "ext-text-path",
+        "ext-shape-builder",
         "ext-markers",
         "ext-panning",
+        "ext-brush",
         "ext-shapes",
         "ext-polystar",
         "ext-cutter",
-        "ext-brush",
         "ext-curvature",
         "ext-layer_view",
         "ext-theme-toggle",
         "ext-shadow",
+        "ext-outline",
         "ext-color-shift",
         "ext-fonts",
-        "ext-eyedropper",
       ],
     });
 

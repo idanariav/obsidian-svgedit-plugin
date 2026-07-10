@@ -86,6 +86,14 @@ user's other vaults unless they ask.
 4. `test_svg.md` is a ready-made drawing that already contains a `[data-frame]`
    frame — handy for exercising frame/export behavior.
 
+**Toggling the plugin off/on does not reload svgedit's custom elements** —
+`src/compat/customElementsGuard.ts` makes repeat `customElements.define()`
+calls a no-op (needed so a second plugin load doesn't throw), so if a change
+touches a shadow-DOM component (`se-button` and friends), the toggle-reload
+will keep rendering the *old* class. If a UI/component change doesn't seem to
+take effect after reload, do a full Obsidian window reload (Cmd+R / restart)
+before assuming the change is wrong. See `.claude/techdebt.md`.
+
 Do **not** relaunch the user's running Obsidian with a debug port — it's
 single-instance and would disrupt their session. Ask first if live UI driving
 is truly needed.
@@ -101,3 +109,13 @@ verified without Obsidian using the sibling fork's dev deps:
 - Run the throwaway script from **inside `../svgedit`** so Node resolves that
   repo's `node_modules` (this repo doesn't depend on jsdom/playwright). Read the
   real SVG out of an `Obsidian_Vault` `.md` drawing to test against authentic input.
+
+---
+
+## Tech debt
+
+[`.claude/techdebt.md`](.claude/techdebt.md) — deferred refactors and
+follow-ups from past sessions; check before starting non-trivial work in an
+area it covers. When a task surfaces a fix worth doing but out of scope for
+the moment, add an entry there instead of letting it get lost; remove the
+entry once it's addressed.
