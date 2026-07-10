@@ -67,6 +67,13 @@ different id-minting site rather than a shared root cause:
 4. Paste between two open drawings only checked the pasting canvas's own
    subtree for collisions, not the whole document → fixed to fall back to
    `ownerDocument.querySelector` (`packages/svgcanvas/core/draw.js`, the fork).
+5. Path node-edit grips (`pathpointgrip_N`, `ctrlpointgrip_Nc1`/`c2`) were
+   looked up via bare `document.getElementById` after creation instead of
+   using the just-created element (or the instance-scoped `this.ctrlpts`
+   refs already held by `Segment`) → with two panes both editing a path at
+   the same node index, the global lookup returned whichever pane's grip
+   came first in DOM order, wiring dblclick handlers/highlight colors to the
+   wrong pane's grip (`packages/svgcanvas/core/path-method.js`, the fork).
 
 Not done now: each fix closed the specific reported case, not the class. A
 systemic fix (e.g. every id-minting site going through one shared "is this id
