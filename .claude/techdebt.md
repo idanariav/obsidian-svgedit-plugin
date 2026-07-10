@@ -50,40 +50,25 @@ order:
   fields (`saving`, `dirty`, `data`, etc.) that shadow Obsidian's
   `TextFileView` base class; this class of bug has bitten this repo before.
 
-## Cross-instance UI-chrome cross-talk via document-wide lookups
+## `contextmenu.js`'s custom-menu registry is a module-level singleton
 
 Multiple svgedit instances (one per open pane) mount into the same top-level
-`document`. SVG content-id/ref collisions (fill/clip-path/href pointing at
-the wrong pane's element) have been fully audited and fixed — see git
-history (`../svgedit` commits `205ac0a1`, `70c4cd31` and this repo's synced
-bundles) and `Drawing#getNonceId`/`SvgCanvas#getNonceId` in the fork, the
-now-canonical helper for namespacing any hand-rolled id referenced via
-`url()`/`href`. A distinct, still-open bug class turned up during that
-audit: non-SVG **UI-chrome** state that's resolved or stored document/module
--wide instead of per-instance.
+`document`; most fixed-id chrome lookups now resolve through
+`editor.$id`/`closestRoot()` (see git history — `../svgedit` commits
+`205ac0a1`, `70c4cd31`, `84834f2f` and this repo's synced bundles) rather
+than a global `document.getElementById`/`querySelector`. One spot missed by
+that pass: `contextMenuExtensions` in `src/editor/contextmenu.js` (the fork)
+is module-level state (`let contextMenuExtensions = {}`), not per-canvas. A
+third-party extension calling `contextmenu.add()` from two open editor
+instances would throw ("Cannot add extension … already exists") on the
+second instance's init, and `injectExtendedContextMenuItemIntoDom` reads
+`document.getElementById('cmenu_canvas')` (also global) to inject items.
 
-- Several web components resolve "my editor's root" via
-  `document.querySelector('.svg_editor')` (first match in the whole
-  document) instead of an instance-scoped lookup (e.g.
-  `this.closest('.svg_editor')`, available since each is a light-DOM custom
-  element). With two panes open, every one of these syncs its dark/light
-  theme to whichever pane's `.svg_editor` happens to come first in the DOM,
-  not its own: `seFontSelect.js`, `seFontLibrary.js`, `seShapeLibrary.js`,
-  `colorPicker/ColorDialog.js`, `seTraceDialog.js`, `imageImportDialog.js`,
-  `seTextPromptDialog.js` (all under `src/editor/components`/`src/editor/dialogs`
-  in the fork).
-- `contextmenu.js`'s `contextMenuExtensions` registry is module-level
-  singleton state shared by every instance rather than per-canvas.
-- `commandSearch.js`/`EditorStartup.js` resolve command targets via bare
-  `document.getElementById`, which has the same first-instance-wins problem.
-
-Not done now: each of these needs its own instance-scoped fix (mostly
-`this.closest('.svg_editor')` swaps, same shape as the id/ref fixes), but
-they're a different bug family (DOM/module state, not SVG id/ref
-resolution) so bundling them into the same pass would've conflated two
-audits. Low-medium effort per site; worth a design pass on whether to unify
-around one "get my editor instance" helper before fixing all of them
-piecemeal.
+Not done now: no bundled extension currently calls `contextmenu.add()` — this
+only bites a hypothetical third-party extension registering a custom
+context-menu item, not anything reachable in today's app. Low effort to fix
+(scope the registry per editor instance and route the DOM injection through
+`editor.$id`), just deprioritized since nothing currently exercises it.
 
 ## `installViewStatePatch` monkey-patches a private Obsidian API
 
