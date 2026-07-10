@@ -50,26 +50,6 @@ order:
   fields (`saving`, `dirty`, `data`, etc.) that shadow Obsidian's
   `TextFileView` base class; this class of bug has bitten this repo before.
 
-## `contextmenu.js`'s custom-menu registry is a module-level singleton
-
-Multiple svgedit instances (one per open pane) mount into the same top-level
-`document`; most fixed-id chrome lookups now resolve through
-`editor.$id`/`closestRoot()` (see git history — `../svgedit` commits
-`205ac0a1`, `70c4cd31`, `84834f2f` and this repo's synced bundles) rather
-than a global `document.getElementById`/`querySelector`. One spot missed by
-that pass: `contextMenuExtensions` in `src/editor/contextmenu.js` (the fork)
-is module-level state (`let contextMenuExtensions = {}`), not per-canvas. A
-third-party extension calling `contextmenu.add()` from two open editor
-instances would throw ("Cannot add extension … already exists") on the
-second instance's init, and `injectExtendedContextMenuItemIntoDom` reads
-`document.getElementById('cmenu_canvas')` (also global) to inject items.
-
-Not done now: no bundled extension currently calls `contextmenu.add()` — this
-only bites a hypothetical third-party extension registering a custom
-context-menu item, not anything reachable in today's app. Low effort to fix
-(scope the registry per editor instance and route the DOM injection through
-`editor.$id`), just deprioritized since nothing currently exercises it.
-
 ## `installViewStatePatch` monkey-patches a private Obsidian API
 
 `src/postprocessor/setViewStatePatch.ts` patches
