@@ -15637,15 +15637,15 @@ const Ji = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       * @returns {void}
       */
     clear() {
-      const h = e.getDrawnPath();
+      const h = e.getDrawnPath(), p = e.getCurrentMode(), m = !!t?.dragging;
       if (this.#r = null, this.#e = null, this.#i = null, this.#s = !1, this.#n = !1, this.#t = !1, h) {
         e.getElement(e.getId())?.remove(), e.getElement("path_stretch_line")?.remove();
-        const p = e.getElement("pathpointgrip_container")?.querySelectorAll("*") ?? [];
-        for (const m of p)
-          m.setAttribute("display", "none");
+        const v = e.getElement("pathpointgrip_container")?.querySelectorAll("*") ?? [];
+        for (const _ of v)
+          _.setAttribute("display", "none");
         e.setDrawnPath(null);
-      } else e.getCurrentMode() === "pathedit" && this.toSelectMode();
-      t && (t.dragging = !1, t.dragctrl = !1, t.init().show(!1)), e.setStarted(!1);
+      } else p === "pathedit" && this.toSelectMode();
+      t && (t.dragging = !1, t.dragctrl = !1, t.init().show(!1)), (h || p === "path" || p === "pathedit" || m) && e.setStarted(!1);
     }
     /**
       * @param {?(Element|SVGPathElement)} pth
