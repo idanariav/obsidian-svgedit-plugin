@@ -352,7 +352,9 @@ export class SvgView extends TextFileView {
       this.isLoading = true;
       try {
         await this.svgEditor.loadFromString(svg);
-        if (bg) this.applyCanvasBg(bg);
+        // See the applyCanvasBg call in setViewData for why this must run
+        // unconditionally (falling back to white) rather than only `if (bg)`.
+        this.applyCanvasBg(bg ?? "#ffffff");
         this.hasLoadedContent = true;
       } finally { this.isLoading = false; }
       // A backup restored before init must be written back to the empty file.
@@ -573,8 +575,16 @@ export class SvgView extends TextFileView {
       try {
         await this.svgEditor.loadFromString(svg);
         // Restore after load; svgedit's loadFromString doesn't touch the
-        // background, but a fresh editor instance starts from the white default.
-        if (bg) this.applyCanvasBg(bg);
+        // background. Always apply explicitly (falling back to white), even
+        // when this drawing has no stamped bg: svgedit persists `bkgd_color`
+        // to the shared window.localStorage (see EditorStartup.js), so a
+        // fresh editor instance does NOT reliably start from white — it can
+        // inherit whatever color a different drawing left behind in an
+        // earlier session/pane. Skipping the call here left that leaked
+        // color as this drawing's baseline, so undoing this session's first
+        // background edit "restored" the other drawing's color instead of
+        // this one's true original (white).
+        this.applyCanvasBg(bg ?? "#ffffff");
         this.hasLoadedContent = true;
       } finally {
         // Only release the loading guard if a newer call hasn't already taken over.
