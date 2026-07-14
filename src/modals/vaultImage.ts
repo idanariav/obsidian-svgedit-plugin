@@ -6,7 +6,7 @@ import { extractSvg } from "../data/SvgData";
 /** Host bridge svgedit feature-detects on `window` to offer "import/link from vault". */
 export interface SvgEditHost {
   pickVaultImage(): Promise<
-    | { dataUrl: string; link: string; locked?: boolean }
+    | { dataUrl: string; link: string; locked?: boolean; external?: boolean }
     // An unlocked whole-drawing import carries the source's full SVG so svgedit
     // inserts it as editable elements rather than a flattened <image>. `dataUrl`
     // is still provided for the import dialog's preview thumbnail.
@@ -67,6 +67,14 @@ export async function fileToDataUri(app: App, file: TFile): Promise<string> {
 }
 
 /**
+ * Resolve a vault file to Obsidian's `app://` resource URL, for "linked" image
+ * imports that reference the file live instead of embedding its bytes.
+ */
+export function fileToResourceUrl(app: App, file: TFile): string {
+  return app.vault.getResourcePath(file);
+}
+
+/**
  * Encode an SVG string as an `image/svg+xml` data URL. Uses UTF-8-safe base64
  * (`btoa` alone throws on non-Latin1 characters, which frame text may contain).
  */
@@ -114,18 +122,27 @@ export function pickFrame(app: App, frames: string[]): Promise<string | null> {
 
 /**
  * Open a fuzzy picker to choose how an imported object should behave:
- * "unlocked" (an independent copy that never syncs) or "locked" (its content is
- * re-baked from the source whenever the embedding drawing is opened). For an
- * unlocked whole-drawing import the copy is editable SVG elements; otherwise
- * (frame crops, raster images) it is a frozen <image> snapshot. Resolves with
- * the chosen mode, or null if dismissed.
+ * "unlocked" (an independent copy that never syncs), "locked" (its content is
+ * re-baked from the source whenever the embedding drawing is opened), or
+ * "linked" (never embedded at all — the href points at the live source file,
+ * re-resolved on every open; breaks if the file moves outside the vault or is
+ * deleted). For an unlocked whole-drawing import the copy is editable SVG
+ * elements; otherwise (frame crops, raster images) it is a frozen <image>
+ * snapshot. Resolves with the chosen mode, or null if dismissed.
+ *
+ * `allowLinked` hides the "linked" option when there's no real vault file to
+ * point at (e.g. a rendered/cropped drawing frame has no backing image file).
  */
-export function pickImportMode(app: App): Promise<"locked" | "unlocked" | null> {
+export function pickImportMode(
+  app: App,
+  allowLinked = true,
+): Promise<"locked" | "unlocked" | "linked" | null> {
   const UNLOCKED = "Unlocked — an independent copy (won't sync)";
   const LOCKED = "Locked — auto-syncs from the source on open";
-  const items = [UNLOCKED, LOCKED];
+  const LINKED = "Linked — not embedded, stays a reference to the file (breaks if it moves/is deleted)";
+  const items = allowLinked ? [UNLOCKED, LOCKED, LINKED] : [UNLOCKED, LOCKED];
   return new Promise((resolve) => {
-    let chosen: "locked" | "unlocked" | null = null;
+    let chosen: "locked" | "unlocked" | "linked" | null = null;
     const modal = new (class extends FuzzySuggestModal<string> {
       getItems(): string[] {
         return items;
@@ -134,7 +151,7 @@ export function pickImportMode(app: App): Promise<"locked" | "unlocked" | null> 
         return item;
       }
       onChooseItem(item: string): void {
-        chosen = item === LOCKED ? "locked" : "unlocked";
+        chosen = item === LOCKED ? "locked" : item === LINKED ? "linked" : "unlocked";
         resolve(chosen);
       }
       onClose(): void {
@@ -142,7 +159,7 @@ export function pickImportMode(app: App): Promise<"locked" | "unlocked" | null> 
         window.setTimeout(() => resolve(chosen), 0);
       }
     })(app);
-    modal.setPlaceholder("Import as locked or unlocked?");
+    modal.setPlaceholder("Import as locked, unlocked, or linked?");
     modal.open();
   });
 }

@@ -37721,7 +37721,7 @@ class xf extends HTMLElement {
     * @function constructor
     */
   constructor() {
-    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(v1.content.cloneNode(!0)), this.$dialog = this._shadowRoot.querySelector("#image_import_box"), this.$title = this._shadowRoot.querySelector("#image_import_title"), this.$closeBtn = this._shadowRoot.querySelector("#image_import_close"), this.$dropzone = this._shadowRoot.querySelector("#image_dropzone"), this.$dropzoneText = this._shadowRoot.querySelector("#image_dropzone_text"), this.$browseBtn = this._shadowRoot.querySelector("#image_browse_btn"), this.$fileInput = this._shadowRoot.querySelector("#image_file_input"), this.$orText = this._shadowRoot.querySelector("#image_import_or_text"), this.$urlLabel = this._shadowRoot.querySelector("#image_url_label"), this.$urlInput = this._shadowRoot.querySelector("#image_url_input"), this.$previewRow = this._shadowRoot.querySelector("#image_preview_row"), this.$preview = this._shadowRoot.querySelector("#image_preview"), this.$previewName = this._shadowRoot.querySelector("#image_preview_name"), this.$error = this._shadowRoot.querySelector("#image_import_error"), this.$cancelBtn = this._shadowRoot.querySelector("#image_import_cancel"), this.$okBtn = this._shadowRoot.querySelector("#image_import_ok"), this.$vaultOr = this._shadowRoot.querySelector("#image_vault_or"), this.$vaultBtn = this._shadowRoot.querySelector("#image_vault_btn"), this.$pathsRow = this._shadowRoot.querySelector("#image_paths_row"), this.$pathsToggle = this._shadowRoot.querySelector("#image_paths_toggle"), this.href = "", this.vaultLink = "", this.locked = !1, this.editableSvg = "", this.asPaths = !1;
+    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(v1.content.cloneNode(!0)), this.$dialog = this._shadowRoot.querySelector("#image_import_box"), this.$title = this._shadowRoot.querySelector("#image_import_title"), this.$closeBtn = this._shadowRoot.querySelector("#image_import_close"), this.$dropzone = this._shadowRoot.querySelector("#image_dropzone"), this.$dropzoneText = this._shadowRoot.querySelector("#image_dropzone_text"), this.$browseBtn = this._shadowRoot.querySelector("#image_browse_btn"), this.$fileInput = this._shadowRoot.querySelector("#image_file_input"), this.$orText = this._shadowRoot.querySelector("#image_import_or_text"), this.$urlLabel = this._shadowRoot.querySelector("#image_url_label"), this.$urlInput = this._shadowRoot.querySelector("#image_url_input"), this.$previewRow = this._shadowRoot.querySelector("#image_preview_row"), this.$preview = this._shadowRoot.querySelector("#image_preview"), this.$previewName = this._shadowRoot.querySelector("#image_preview_name"), this.$error = this._shadowRoot.querySelector("#image_import_error"), this.$cancelBtn = this._shadowRoot.querySelector("#image_import_cancel"), this.$okBtn = this._shadowRoot.querySelector("#image_import_ok"), this.$vaultOr = this._shadowRoot.querySelector("#image_vault_or"), this.$vaultBtn = this._shadowRoot.querySelector("#image_vault_btn"), this.$pathsRow = this._shadowRoot.querySelector("#image_paths_row"), this.$pathsToggle = this._shadowRoot.querySelector("#image_paths_toggle"), this.href = "", this.vaultLink = "", this.locked = !1, this.external = !1, this.editableSvg = "", this.asPaths = !1, this._suppressClose = !1;
   }
   /**
    * @function init
@@ -37800,7 +37800,7 @@ class xf extends HTMLElement {
    * @returns {void}
    */
   reset() {
-    this.href = "", this.vaultLink = "", this.locked = !1, this.editableSvg = "", this.asPaths = !1, this.$pathsToggle.checked = !1, this.$pathsRow.classList.remove("show"), this.$fileInput.value = "", this.$urlInput.value = "", this.$previewRow.classList.remove("show"), this.$preview.removeAttribute("src"), this.$previewName.textContent = "", this.$error.classList.remove("show"), this.$dropzone.classList.remove("dragover"), this.$okBtn.disabled = !0;
+    this.href = "", this.vaultLink = "", this.locked = !1, this.external = !1, this.editableSvg = "", this.asPaths = !1, this.$pathsToggle.checked = !1, this.$pathsRow.classList.remove("show"), this.$fileInput.value = "", this.$urlInput.value = "", this.$previewRow.classList.remove("show"), this.$preview.removeAttribute("src"), this.$previewName.textContent = "", this.$error.classList.remove("show"), this.$dropzone.classList.remove("dragover"), this.$okBtn.disabled = !0;
   }
   /**
    * Show a preview thumbnail and enable the Insert button.
@@ -37822,7 +37822,7 @@ class xf extends HTMLElement {
    */
   handleFile(t) {
     if (!t || !t.type.includes("image")) return;
-    this.vaultLink = "", this.locked = !1, this.editableSvg = "";
+    this.vaultLink = "", this.locked = !1, this.external = !1, this.editableSvg = "";
     const r = t.type === "image/svg+xml" || /\.svg$/i.test(t.name);
     this.$pathsRow.classList.toggle("show", r);
     const n = new FileReader();
@@ -37864,7 +37864,7 @@ class xf extends HTMLElement {
         this.reset();
         return;
       }
-      this.vaultLink = "", this.locked = !1, this.editableSvg = "", this.$pathsRow.classList.remove("show");
+      this.vaultLink = "", this.locked = !1, this.external = !1, this.editableSvg = "", this.$pathsRow.classList.remove("show");
       const a = new Image();
       a.onload = () => this.showPreview(o), a.onerror = () => {
         this.href = "", this.$previewRow.classList.remove("show"), this.$error.classList.add("show"), this.$okBtn.disabled = !0;
@@ -37873,13 +37873,16 @@ class xf extends HTMLElement {
     this.$urlInput.addEventListener("change", n), this.$urlInput.addEventListener("keydown", (o) => {
       o.key === "Enter" && (o.preventDefault(), n());
     }), svgEditor.$click(this.$vaultBtn, async () => {
+      this._suppressClose = !0, this.$dialog.close();
       const o = await window.svgEditHost?.pickVaultImage?.();
-      o && (this.vaultLink = o.link || "", this.editableSvg = o.editableSvg || "", this.locked = this.editableSvg ? !1 : !!o.locked, this.$pathsRow.classList.toggle("show", !!this.editableSvg), this.showPreview(o.dataUrl));
+      this.$dialog.showModal(), this._suppressClose = !1, o && (this.vaultLink = o.link || "", this.editableSvg = o.editableSvg || "", this.locked = this.editableSvg ? !1 : !!o.locked, this.external = this.editableSvg ? !1 : !!o.external, this.$pathsRow.classList.toggle("show", !!this.editableSvg), this.showPreview(o.dataUrl));
     }), this.$pathsToggle.addEventListener("change", () => {
       this.asPaths = this.$pathsToggle.checked;
-    }), svgEditor.$click(this.$cancelBtn, t), svgEditor.$click(this.$closeBtn, t), this.$dialog.addEventListener("close", () => this.reset()), svgEditor.$click(this.$okBtn, () => {
+    }), svgEditor.$click(this.$cancelBtn, t), svgEditor.$click(this.$closeBtn, t), this.$dialog.addEventListener("close", () => {
+      this._suppressClose || this.reset();
+    }), svgEditor.$click(this.$okBtn, () => {
       this.href && (this.dispatchEvent(new CustomEvent("change", {
-        detail: { trigger: "ok", href: this.href, vaultLink: this.vaultLink || void 0, locked: this.locked || void 0, editableSvg: this.editableSvg || void 0, asPaths: this.asPaths || void 0 }
+        detail: { trigger: "ok", href: this.href, vaultLink: this.vaultLink || void 0, locked: this.locked || void 0, external: this.external || void 0, editableSvg: this.editableSvg || void 0, asPaths: this.asPaths || void 0 }
       })), t());
     });
   }
@@ -52141,7 +52144,7 @@ const jl = ["rect", "circle", "ellipse", "line", "polyline", "polygon"], l9 = ["
         style: "pointer-events:inherit"
       }
     });
-    r.setHref(u, c), t.vaultLink && u.setAttribute("data-vault-link", t.vaultLink), t.locked && u.setAttribute("data-vault-locked", "1"), r.selectOnly([u]), r.alignSelectedElements("m", "page"), r.alignSelectedElements("c", "page"), svgEditor.topPanel.updateContextPanel();
+    r.setHref(u, c), t.vaultLink && u.setAttribute("data-vault-link", t.vaultLink), t.locked && u.setAttribute("data-vault-locked", "1"), t.external && u.setAttribute("data-vault-external", "1"), r.selectOnly([u]), r.alignSelectedElements("m", "page"), r.alignSelectedElements("c", "page"), svgEditor.topPanel.updateContextPanel();
   }, o = new Image();
   o.style.opacity = 0, o.addEventListener("load", () => {
     const a = o.offsetWidth || o.naturalWidth || o.width || 100, d = o.offsetHeight || o.naturalHeight || o.height || 100;
@@ -55524,7 +55527,7 @@ class Y7 {
         lc(t.detail.editableSvg, { vaultLink: t.detail.vaultLink, asPaths: t.detail.asPaths });
         return;
       }
-      ac(t.detail.href, { vaultLink: t.detail.vaultLink, locked: t.detail.locked });
+      ac(t.detail.href, { vaultLink: t.detail.vaultLink, locked: t.detail.locked, external: t.detail.external });
     }
   }
   /**

@@ -2,6 +2,7 @@ import { App, TFile, normalizePath } from "obsidian";
 import { svgToPngArrayBuffer } from "./raster";
 import { prepareSvgForExport } from "./frames";
 import { decodeGradientBg, bakeGradientIntoSvg } from "../data/SvgData";
+import { bakeExternalEmbedsForExport } from "../data/lockedEmbeds";
 import type { SvgPluginSettings, EffectiveDrawingSettings } from "../settings/defaults";
 
 /**
@@ -58,7 +59,8 @@ export async function exportSvg(
   pathSuffix = "",
 ): Promise<void> {
   const path = getCompanionPath(sourceFile.path, "svg", settings, pathSuffix);
-  await app.vault.adapter.write(path, prepareSvgForExport(svgString, frameName));
+  const baked = await bakeExternalEmbedsForExport(app, svgString, sourceFile.path);
+  await app.vault.adapter.write(path, prepareSvgForExport(baked, frameName));
 }
 
 export async function exportPng(
@@ -73,7 +75,8 @@ export async function exportPng(
   bgColor = "#ffffff",
 ): Promise<void> {
   const path = getCompanionPath(sourceFile.path, "png", settings, pathSuffix);
-  let svg = prepareSvgForExport(svgString, frameName);
+  const baked = await bakeExternalEmbedsForExport(app, svgString, sourceFile.path);
+  let svg = prepareSvgForExport(baked, frameName);
   let solidBg = bgColor;
   // A gradient background can't be a ctx.fillStyle, so bake it into the SVG as
   // a full-canvas rect and rasterize transparently (the gradient is now drawn

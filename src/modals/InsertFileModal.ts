@@ -6,7 +6,7 @@ import {
 } from "obsidian";
 import { SvgView } from "../view/SvgView";
 import { IMAGE_EXTENSIONS } from "../constants";
-import { fileToDataUri, pickImportMode, resolveVaultLink } from "./vaultImage";
+import { fileToDataUri, fileToResourceUrl, pickImportMode, resolveVaultLink } from "./vaultImage";
 
 export class InsertFileModal extends FuzzySuggestModal<TFile> {
   private view: SvgView;
@@ -40,14 +40,16 @@ export class InsertFileModal extends FuzzySuggestModal<TFile> {
 
   private async insertImage(file: TFile): Promise<void> {
     // Locked imports re-bake from their source on every open; unlocked ones stay
-    // a frozen snapshot. Both record a vault link so the drawing keeps a backlink.
+    // a frozen snapshot; linked ones are never embedded at all. All three record
+    // a vault link so the drawing keeps a backlink.
     const mode = await pickImportMode(this.app);
     if (mode === null) return; // dismissed the mode picker
-    const dataUri = await fileToDataUri(this.app, file);
     const link = resolveVaultLink(this.app, file, this.view.file?.path ?? "");
-    const lockedAttr = mode === "locked" ? ` data-vault-locked="1"` : "";
+    const href = mode === "linked" ? fileToResourceUrl(this.app, file) : await fileToDataUri(this.app, file);
+    const modeAttr =
+      mode === "locked" ? ` data-vault-locked="1"` : mode === "linked" ? ` data-vault-external="1"` : "";
     const fragment =
-      `<image href="${dataUri}" data-vault-link="${escapeAttr(link)}"${lockedAttr}` +
+      `<image href="${href}" data-vault-link="${escapeAttr(link)}"${modeAttr}` +
       ` x="50" y="50" width="200" height="200"/>`;
     await this.view.insertSvgFragment(fragment);
   }

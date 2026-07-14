@@ -54,6 +54,12 @@ export const VAULT_LINK_ATTR = "data-vault-link";
 // source on every load (see refreshLockedEmbeds) rather than kept as a frozen
 // snapshot. Also stamped by the svgedit fork at import time.
 export const VAULT_LOCKED_ATTR = "data-vault-locked";
+// Marks an imported element as "linked": it was never embedded — its href
+// points at a live vault resource path, re-resolved from data-vault-link on
+// every load (see refreshLockedEmbeds) so it keeps working if the source file
+// moves. Breaks if the source file is deleted or the drawing is used outside
+// this vault. Also stamped by the svgedit fork at import time.
+export const VAULT_EXTERNAL_ATTR = "data-vault-external";
 // Stamped by this plugin onto the saved drawing's root <svg> to persist the
 // per-drawing canvas background color. svgedit keeps the background as editor
 // chrome (a global `bkgd_color` pref), not in the document, so it would reset to

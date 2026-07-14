@@ -11,6 +11,7 @@ import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
 import {
   fileToDataUri,
+  fileToResourceUrl,
   pickVaultFile,
   resolveVaultLink,
   drawingSourceFor,
@@ -186,7 +187,9 @@ export default class SvgPlugin extends Plugin {
             const frames = listFrames(svg);
             const frameName = frames.length ? await pickFrame(this.app, frames.map((f) => f.name)) : "";
             if (frameName === null) return null; // dismissed the frame picker
-            const mode = await pickImportMode(this.app);
+            // A rendered/cropped drawing frame has no backing file to link to,
+            // so "linked" isn't offered here.
+            const mode = await pickImportMode(this.app, false);
             if (mode === null) return null; // dismissed the mode picker
             const prepared = prepareSvgForExport(svg, frameName);
             const dataUrl = svgToDataUri(prepared);
@@ -205,8 +208,11 @@ export default class SvgPlugin extends Plugin {
 
         const mode = await pickImportMode(this.app);
         if (mode === null) return null; // dismissed the mode picker
-        const dataUrl = await fileToDataUri(this.app, file);
         const link = resolveVaultLink(this.app, file, this.activeDrawingPath());
+        if (mode === "linked") {
+          return { dataUrl: fileToResourceUrl(this.app, file), link, external: true };
+        }
+        const dataUrl = await fileToDataUri(this.app, file);
         return { dataUrl, link, locked: mode === "locked" };
       },
       listVaultFiles: () => {

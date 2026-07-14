@@ -1,9 +1,10 @@
 import { App, TFile } from "obsidian";
-import { VAULT_LINK_ATTR, VAULT_LOCKED_ATTR } from "../constants";
+import { VAULT_LINK_ATTR, VAULT_LOCKED_ATTR, VAULT_EXTERNAL_ATTR } from "../constants";
 import {
   drawingSourceFor,
   readDrawingSvg,
   fileToDataUri,
+  fileToResourceUrl,
   svgToDataUri,
 } from "../modals/vaultImage";
 import { prepareSvgForExport } from "../export/frames";
@@ -12,8 +13,10 @@ const XLINK_NS = "http://www.w3.org/1999/xlink";
 
 /**
  * Re-bake every "locked" import (`[data-vault-locked]`) from its current source,
- * so a drawing always shows the latest version of what it embeds. Unlocked
- * imports (which carry only `data-vault-link`) are left as frozen snapshots.
+ * and re-resolve every "linked" import (`[data-vault-external]`) to a fresh
+ * vault resource path, so a drawing always shows the latest version of what it
+ * embeds/references. Unlocked imports (which carry only `data-vault-link`) are
+ * left as frozen snapshots.
  *
  * The source is resolved from the element's `data-vault-link` wikilink text
  * (e.g. `note` or `note#frame`). Drawing sources are re-rendered as SVG (cropped
@@ -26,11 +29,13 @@ export async function refreshLockedEmbeds(
   drawingPath: string,
 ): Promise<string> {
   const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
-  const locked = Array.from(doc.querySelectorAll(`image[${VAULT_LOCKED_ATTR}]`));
-  if (locked.length === 0) return svg;
+  const tracked = Array.from(
+    doc.querySelectorAll(`image[${VAULT_LOCKED_ATTR}], image[${VAULT_EXTERNAL_ATTR}]`),
+  );
+  if (tracked.length === 0) return svg;
 
   let changed = false;
-  for (const el of locked) {
+  for (const el of tracked) {
     const link = el.getAttribute(VAULT_LINK_ATTR)?.trim();
     if (!link) continue;
 
@@ -41,10 +46,44 @@ export async function refreshLockedEmbeds(
     const file = app.metadataCache.getFirstLinkpathDest(base, drawingPath);
     if (!(file instanceof TFile)) continue;
 
-    const href = await bakeHref(app, file, frame);
+    const href = el.hasAttribute(VAULT_EXTERNAL_ATTR)
+      ? fileToResourceUrl(app, file)
+      : await bakeHref(app, file, frame);
     if (!href) continue;
 
     setImageHref(el, href);
+    changed = true;
+  }
+
+  return changed ? new XMLSerializer().serializeToString(doc) : svg;
+}
+
+/**
+ * Resolve every "linked" import (`[data-vault-external]`) to a fresh embedded
+ * data URI, for a one-off export snapshot. Linked images stay external
+ * (an `app://` resource URL) in the live drawing so it stays lightweight — but
+ * that URL only resolves inside this vault's running Obsidian instance, so
+ * PNG/SVG export must embed the bytes instead or the exported file (rasterized
+ * or opened outside Obsidian) shows a broken image.
+ */
+export async function bakeExternalEmbedsForExport(
+  app: App,
+  svg: string,
+  drawingPath: string,
+): Promise<string> {
+  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  const external = Array.from(doc.querySelectorAll(`image[${VAULT_EXTERNAL_ATTR}]`));
+  if (external.length === 0) return svg;
+
+  let changed = false;
+  for (const el of external) {
+    const link = el.getAttribute(VAULT_LINK_ATTR)?.trim();
+    if (!link) continue;
+    const base = link.split("#")[0];
+    const file = app.metadataCache.getFirstLinkpathDest(base, drawingPath);
+    if (!(file instanceof TFile)) continue;
+
+    setImageHref(el, await fileToDataUri(app, file));
     changed = true;
   }
 
