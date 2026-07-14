@@ -10179,7 +10179,10 @@ function To(c, t = 100, r = null) {
       const at = bs(st);
       u.h = at.h, u.s = at.s, u.v = at.v;
     }
-  ), Object.defineProperty(v, "hex", {
+  ), H.hex?.addEventListener("paste", (st) => {
+    const J = (st.clipboardData?.getData("text") ?? "").replace(/#/g, "").slice(0, 6);
+    J && (st.preventDefault(), H.hex.value = J, H.hex.dispatchEvent(new Event("input")));
+  }), Object.defineProperty(v, "hex", {
     get: () => xs(u.h, u.s, u.v)
   }), Object.defineProperty(v, "alpha", {
     get: () => u.a
