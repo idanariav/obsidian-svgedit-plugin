@@ -2094,26 +2094,26 @@ class Yr extends rs {
     };
   }
 }
-const ii = Yr.createInstance();
-ii.createInstance;
-ii.dir;
-ii.init;
-ii.loadResources;
-ii.reloadResources;
-ii.use;
-ii.changeLanguage;
-ii.getFixedT;
-ii.t;
-ii.exists;
-ii.setDefaultNamespace;
-ii.hasLoadedNamespace;
-ii.loadNamespaces;
-ii.loadLanguages;
+const ri = Yr.createInstance();
+ri.createInstance;
+ri.dir;
+ri.init;
+ri.loadResources;
+ri.reloadResources;
+ri.use;
+ri.changeLanguage;
+ri.getFixedT;
+ri.t;
+ri.exists;
+ri.setDefaultNamespace;
+ri.hasLoadedNamespace;
+ri.loadNamespaces;
+ri.loadLanguages;
 let Ci;
 const zc = async function(c, t) {
   c ? Ci = c : navigator.userLanguage ? Ci = navigator.userLanguage : navigator.language && (Ci = navigator.language), !t.includes(Ci) && Ci !== "test" && (Ci = "en");
   const r = /* @__PURE__ */ Object.assign({ "./locale/lang.en.js": fc, "./locale/lang.test.js": yc }), n = r[`./locale/lang.${Ci}.js`] || r["./locale/lang.en.js"];
-  return ii.init({
+  return ri.init({
     lng: Ci,
     debug: !1,
     resources: {
@@ -2121,9 +2121,9 @@ const zc = async function(c, t) {
         translation: n.default
       }
     }
-  }), { langParam: Ci, i18next: ii };
+  }), { langParam: Ci, i18next: ri };
 }, fe = function(c) {
-  return ii.t(c);
+  return ri.t(c);
 }, Bc = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 124" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
   <linearGradient id="svg_4" x1="0.33594" y1="0.28125" x2="1" y2="1">
@@ -3582,7 +3582,7 @@ const su = 300, ou = { droplet: "M150 45 C150 45 85 150 85 195 A65 65 0 0 0 215 
 }, Uu = /* @__PURE__ */ JSON.parse('{"cloud":"m182.05086,34.31005c-0.64743,0.02048 -1.27309,0.07504 -1.92319,0.13979c-10.40161,1.03605 -19.58215,7.63722 -24.24597,17.4734l-2.47269,7.44367c0.53346,-2.57959 1.35258,-5.08134 2.47269,-7.44367c-8.31731,-8.61741 -19.99149,-12.59487 -31.52664,-10.72866c-11.53516,1.8662 -21.55294,9.3505 -27.02773,20.19925c-15.45544,-9.51897 -34.72095,-8.94245 -49.62526,1.50272c-14.90431,10.44516 -22.84828,28.93916 -20.43393,47.59753l1.57977,7.58346c-0.71388,-2.48442 -1.24701,-5.01186 -1.57977,-7.58346l-0.2404,0.69894c-12.95573,1.4119 -23.58103,11.46413 -26.34088,24.91708c-2.75985,13.45294 2.9789,27.25658 14.21789,34.21291l17.54914,4.26352c-6.1277,0.50439 -12.24542,-0.9808 -17.54914,-4.26352c-8.66903,9.71078 -10.6639,24.08736 -4.94535,35.96027c5.71854,11.87289 17.93128,18.70935 30.53069,17.15887l7.65843,-2.02692c-2.46413,1.0314 -5.02329,1.70264 -7.65843,2.02692c7.15259,13.16728 19.01251,22.77237 32.93468,26.5945c13.92217,3.82214 28.70987,1.56322 41.03957,-6.25546c10.05858,15.86252 27.91113,24.19412 45.81322,21.38742c17.90208,-2.8067 32.66954,-16.26563 37.91438,-34.52742l1.82016,-10.20447c-0.27254,3.46677 -0.86394,6.87508 -1.82016,10.20447c12.31329,8.07489 27.80199,8.52994 40.52443,1.18819c12.72244,-7.34175 20.6609,-21.34155 20.77736,-36.58929l-4.56108,-22.7823l-17.96776,-15.41455c13.89359,8.70317 22.6528,21.96329 22.52884,38.19685c16.5202,0.17313 30.55292,-13.98268 36.84976,-30.22897c6.29684,-16.24631 3.91486,-34.76801 -6.2504,-48.68089c4.21637,-10.35873 3.96622,-22.14172 -0.68683,-32.29084c-4.65308,-10.14912 -13.23602,-17.69244 -23.55914,-20.65356c-2.31018,-13.45141 -11.83276,-24.27162 -24.41768,-27.81765c-12.58492,-3.54603 -25.98557,0.82654 -34.41142,11.25287l-5.11707,8.63186c1.30753,-3.12148 3.01521,-6.03101 5.11707,-8.63186c-5.93959,-8.19432 -15.2556,-12.8181 -24.96718,-12.51096z","raph_temp":"M19.361,17.744V3.438c0-1.85-1.504-3.348-3.352-3.348c-1.852,0-3.35,1.498-3.35,3.348v14.193c-2.106,1.154-3.536,3.391-3.536,5.961c0,3.752,3.042,6.793,6.793,6.793c3.753,0,6.793-3.041,6.793-6.793C22.71,21.099,21.363,18.924,19.361,17.744zM15.917,29.27c-3.129,0-5.676-2.548-5.676-5.68c0-2.072,1.132-3.98,2.954-4.979l0.581-0.316V3.437c0-1.231,1.003-2.231,2.236-2.231c1.231,0,2.232,1,2.232,2.231v14.942l0.548,0.324c1.756,1.036,2.806,2.861,2.806,4.887C21.596,26.722,19.048,29.27,15.917,29.27zM18.225,19.666l-1.099-0.647V9.26h-2.233v9.695l-1.161,0.635c-1.464,0.805-2.375,2.334-2.375,4c0,2.514,2.047,4.561,4.56,4.561c2.515,0,4.56-2.047,4.56-4.561C20.479,21.988,19.616,20.485,18.225,19.666z","raph_thunder":"M25.371,7.306c-0.092-3.924-3.301-7.077-7.248-7.079c-2.638,0.001-4.942,1.412-6.208,3.517c-0.595-0.327-1.28-0.517-2.01-0.517C7.626,3.229,5.772,5.033,5.689,7.293c-2.393,0.786-4.125,3.025-4.127,5.686c0,3.312,2.687,6,6,6v-0.002h5.271l-2.166,3.398l1.977-0.411L10,30.875l9.138-10.102L17,21l2.167-2.023h4.269c3.312,0,6-2.688,6-6C29.434,10.34,27.732,8.11,25.371,7.306zM23.436,16.979H7.561c-2.209-0.006-3.997-1.792-4.001-4.001c-0.002-1.982,1.45-3.618,3.35-3.931c0.265-0.043,0.502-0.191,0.657-0.414C7.722,8.41,7.779,8.136,7.73,7.87C7.702,7.722,7.685,7.582,7.685,7.446C7.689,6.221,8.68,5.23,9.905,5.228c0.647,0,1.217,0.278,1.633,0.731c0.233,0.257,0.587,0.375,0.927,0.309c0.342-0.066,0.626-0.307,0.748-0.63c0.749-1.992,2.662-3.412,4.911-3.41c2.899,0.004,5.244,2.35,5.251,5.249c0,0.161-0.009,0.326-0.027,0.497c-0.049,0.517,0.305,0.984,0.815,1.079c1.86,0.344,3.274,1.966,3.271,3.923C27.43,15.186,25.645,16.973,23.436,16.979z","raph_snow":"M25.372,6.912c-0.093-3.925-3.302-7.078-7.248-7.08c-2.638,0.002-4.942,1.412-6.208,3.518c-0.595-0.327-1.28-0.518-2.01-0.518C7.627,2.834,5.773,4.639,5.69,6.898c-2.393,0.786-4.125,3.025-4.127,5.686c0,3.312,2.687,6,6,6v-0.002h15.875c3.312,0,6-2.688,6-6C29.434,9.944,27.732,7.715,25.372,6.912zM23.436,16.584H7.562c-2.209-0.006-3.997-1.793-4.001-4c-0.002-1.983,1.45-3.619,3.35-3.933c0.265-0.043,0.502-0.19,0.657-0.414C7.723,8.015,7.78,7.74,7.731,7.475C7.703,7.326,7.686,7.187,7.686,7.051c0.004-1.225,0.995-2.217,2.22-2.219c0.647,0,1.217,0.278,1.633,0.731c0.233,0.257,0.587,0.375,0.927,0.31c0.342-0.066,0.626-0.308,0.748-0.631c0.749-1.992,2.662-3.412,4.911-3.41c2.898,0.004,5.244,2.351,5.251,5.25c0,0.16-0.009,0.325-0.026,0.496c-0.05,0.518,0.305,0.984,0.814,1.079c1.859,0.345,3.273,1.966,3.271,3.923C27.43,14.791,25.645,16.578,23.436,16.584zM16.667,24.09l1.119-1.119c0.389-0.391,0.389-1.025,0-1.416c-0.392-0.391-1.025-0.391-1.415,0l-1.119,1.119l-1.119-1.119c-0.391-0.391-1.025-0.391-1.415,0c-0.391,0.391-0.391,1.025,0,1.416l1.118,1.117l-1.12,1.121c-0.389,0.393-0.389,1.021,0,1.414c0.195,0.188,0.451,0.293,0.707,0.293c0.256,0,0.512-0.104,0.708-0.293l1.12-1.119l1.12,1.119c0.195,0.188,0.451,0.293,0.708,0.293c0.256,0,0.512-0.104,0.707-0.293c0.391-0.396,0.391-1.021,0-1.414L16.667,24.09zM25.119,21.817c-0.393-0.392-1.025-0.392-1.415,0l-1.12,1.121l-1.12-1.121c-0.391-0.392-1.022-0.392-1.414,0c-0.39,0.392-0.39,1.022,0,1.416l1.119,1.119l-1.119,1.119c-0.39,0.391-0.39,1.022,0,1.413c0.195,0.195,0.451,0.294,0.707,0.294c0.257,0,0.513-0.099,0.707-0.294l1.12-1.118l1.12,1.118c0.194,0.195,0.45,0.294,0.707,0.294c0.256,0,0.513-0.099,0.708-0.294c0.389-0.391,0.389-1.022,0-1.413l-1.12-1.119l1.12-1.119C25.507,22.842,25.507,22.209,25.119,21.817zM9.334,23.953l1.119-1.119c0.389-0.394,0.389-1.021,0-1.414c-0.391-0.394-1.025-0.394-1.415,0l-1.119,1.119l-1.12-1.121c-0.391-0.39-1.023-0.39-1.415,0c-0.391,0.396-0.391,1.024,0,1.418l1.119,1.117l-1.12,1.118c-0.391,0.394-0.391,1.025,0,1.414c0.196,0.195,0.452,0.293,0.708,0.293c0.256,0,0.511-0.098,0.707-0.293l1.12-1.119l1.121,1.121c0.195,0.195,0.451,0.293,0.707,0.293s0.513-0.098,0.708-0.293c0.389-0.391,0.389-1.022,0-1.416L9.334,23.953z","raph_hail":"M25.372,6.912c-0.093-3.925-3.302-7.078-7.248-7.08c-2.638,0.002-4.942,1.412-6.208,3.518c-0.595-0.327-1.28-0.518-2.01-0.518C7.627,2.834,5.773,4.639,5.69,6.898c-2.393,0.786-4.125,3.025-4.127,5.686c0,3.312,2.687,6,6,6v-0.002h15.875c3.312,0,6-2.688,6-6C29.434,9.944,27.732,7.715,25.372,6.912zM23.436,16.584H7.562c-2.209-0.006-3.997-1.793-4.001-4c-0.002-1.983,1.45-3.619,3.35-3.933c0.265-0.043,0.502-0.19,0.657-0.414C7.723,8.015,7.78,7.74,7.731,7.475C7.703,7.326,7.686,7.187,7.686,7.051c0.004-1.225,0.995-2.217,2.22-2.219c0.647,0,1.217,0.278,1.633,0.731c0.233,0.257,0.587,0.375,0.927,0.31c0.342-0.066,0.626-0.308,0.748-0.631c0.749-1.992,2.662-3.412,4.911-3.41c2.898,0.004,5.244,2.351,5.251,5.25c0,0.16-0.009,0.325-0.026,0.496c-0.05,0.518,0.305,0.984,0.814,1.079c1.859,0.345,3.273,1.966,3.271,3.923C27.43,14.791,25.645,16.578,23.436,16.584zM11.503,23.709c-0.784-0.002-1.418-0.636-1.418-1.416c0-0.785,0.634-1.416,1.418-1.418c0.78,0.002,1.413,0.633,1.416,1.418C12.917,23.073,12.284,23.707,11.503,23.709zM19.002,23.709c-0.783-0.002-1.418-0.636-1.418-1.416c0-0.785,0.635-1.416,1.418-1.418c0.779,0.002,1.414,0.633,1.414,1.418C20.417,23.073,19.784,23.707,19.002,23.709zM7.503,28.771c-0.783-0.002-1.417-0.637-1.417-1.418s0.634-1.414,1.417-1.416c0.78,0.002,1.415,0.635,1.415,1.416C8.917,28.135,8.284,28.77,7.503,28.771zM15.001,28.771c-0.782-0.002-1.417-0.637-1.417-1.418s0.634-1.414,1.417-1.416c0.78,0.002,1.413,0.635,1.415,1.416C16.415,28.135,15.784,28.77,15.001,28.771zM22.5,28.771c-0.782-0.002-1.416-0.634-1.416-1.416c0-0.785,0.634-1.418,1.416-1.42c0.781,0.002,1.414,0.635,1.418,1.42C23.915,28.138,23.282,28.77,22.5,28.771z","raph_rain":"M25.371,7.306c-0.092-3.924-3.301-7.077-7.248-7.079c-2.638,0.001-4.942,1.412-6.208,3.517c-0.595-0.327-1.28-0.517-2.01-0.517C7.626,3.229,5.772,5.033,5.689,7.293c-2.393,0.786-4.125,3.025-4.127,5.686c0,3.312,2.687,6,6,6v-0.002h15.874c3.312,0,6-2.688,6-6C29.434,10.34,27.732,8.11,25.371,7.306zM23.436,16.979H7.561c-2.209-0.006-3.997-1.792-4.001-4.001c-0.002-1.982,1.45-3.618,3.35-3.931c0.265-0.043,0.502-0.191,0.657-0.414C7.722,8.41,7.779,8.136,7.73,7.87C7.702,7.722,7.685,7.582,7.685,7.446C7.689,6.221,8.68,5.23,9.905,5.228c0.647,0,1.217,0.278,1.633,0.731c0.233,0.257,0.587,0.375,0.927,0.309c0.342-0.066,0.626-0.307,0.748-0.63c0.749-1.992,2.662-3.412,4.911-3.41c2.899,0.004,5.244,2.35,5.251,5.249c0,0.161-0.009,0.326-0.027,0.497c-0.049,0.517,0.305,0.984,0.815,1.079c1.86,0.344,3.274,1.966,3.271,3.923C27.43,15.186,25.645,16.973,23.436,16.979zM9.029,26.682c0-1.115,0.021-5.425,0.021-5.432c0.002-0.409-0.247-0.779-0.628-0.932c-0.38-0.152-0.815-0.059-1.099,0.24c-0.006,0.008-1.037,1.098-2.081,2.342c-0.523,0.627-1.048,1.287-1.463,1.896c-0.399,0.648-0.753,1.066-0.811,1.885C2.971,28.355,4.324,29.711,6,29.714C7.672,29.71,9.029,28.354,9.029,26.682zM4.971,26.727c0.091-0.349,1.081-1.719,1.993-2.764c0.025-0.029,0.051-0.061,0.076-0.089c-0.005,1.124-0.01,2.294-0.01,2.808c0,0.567-0.461,1.028-1.029,1.03C5.447,27.71,4.997,27.273,4.971,26.727zM16.425,26.682c0-1.115,0.021-5.424,0.021-5.43c0.002-0.41-0.247-0.779-0.628-0.934c-0.381-0.152-0.814-0.058-1.1,0.242c-0.006,0.008-1.035,1.094-2.08,2.342c-0.522,0.623-1.047,1.285-1.463,1.894c-0.399,0.649-0.753,1.068-0.809,1.888c0,1.672,1.354,3.028,3.029,3.028C15.068,29.711,16.425,28.354,16.425,26.682zM12.365,26.729c0.092-0.349,1.081-1.72,1.993-2.765c0.025-0.03,0.05-0.06,0.075-0.089c-0.005,1.123-0.011,2.294-0.011,2.807c-0.002,0.568-0.461,1.027-1.028,1.029C12.84,27.709,12.392,27.273,12.365,26.729zM23.271,20.317c-0.38-0.153-0.816-0.06-1.099,0.24c-0.009,0.008-1.037,1.097-2.08,2.342c-0.523,0.625-1.049,1.285-1.462,1.896c-0.402,0.649-0.754,1.067-0.812,1.886c0,1.672,1.354,3.029,3.03,3.029c1.673,0,3.027-1.357,3.027-3.029c0-1.115,0.022-5.425,0.022-5.431C23.9,20.84,23.651,20.47,23.271,20.317zM21.879,26.681c-0.004,0.568-0.463,1.027-1.031,1.029c-0.553-0.002-1.002-0.438-1.028-0.982c0.092-0.349,1.081-1.72,1.993-2.765c0.025-0.028,0.05-0.059,0.074-0.088C21.883,24.998,21.879,26.167,21.879,26.681z","raph_sun":"M15.502,7.504c-4.35,0-7.873,3.523-7.873,7.873c0,4.347,3.523,7.872,7.873,7.872c4.346,0,7.871-3.525,7.871-7.872C23.374,11.027,19.85,7.504,15.502,7.504zM15.502,21.25c-3.244-0.008-5.866-2.63-5.874-5.872c0.007-3.243,2.63-5.866,5.874-5.874c3.242,0.008,5.864,2.631,5.871,5.874C21.366,18.62,18.744,21.242,15.502,21.25zM15.502,6.977c0.553,0,1-0.448,1-1.001V1.125c-0.002-0.553-0.448-1-1-1c-0.553,0-1.001,0.449-1,1.002v4.85C14.502,6.528,14.949,6.977,15.502,6.977zM18.715,7.615c0.125,0.053,0.255,0.076,0.382,0.077c0.394,0,0.765-0.233,0.925-0.618l1.856-4.483c0.21-0.511-0.031-1.095-0.541-1.306c-0.511-0.211-1.096,0.031-1.308,0.541L18.174,6.31C17.963,6.82,18.205,7.405,18.715,7.615zM21.44,9.436c0.195,0.194,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293l3.43-3.433c0.391-0.39,0.39-1.023,0-1.415c-0.392-0.39-1.025-0.39-1.415,0.002L21.44,8.021C21.049,8.412,21.049,9.045,21.44,9.436zM23.263,12.16c0.158,0.385,0.531,0.617,0.923,0.617c0.127,0,0.257-0.025,0.383-0.078l4.48-1.857c0.511-0.211,0.753-0.797,0.541-1.307s-0.796-0.752-1.307-0.54l-4.481,1.857C23.292,11.064,23.051,11.65,23.263,12.16zM29.752,14.371l-4.851,0.001c-0.552,0-1,0.448-0.998,1.001c0,0.553,0.447,0.999,0.998,0.999l4.852-0.002c0.553,0,0.999-0.449,0.999-1C30.752,14.817,30.304,14.369,29.752,14.371zM29.054,19.899l-4.482-1.854c-0.512-0.212-1.097,0.03-1.307,0.541c-0.211,0.511,0.031,1.096,0.541,1.308l4.482,1.854c0.126,0.051,0.256,0.075,0.383,0.075c0.393,0,0.765-0.232,0.925-0.617C29.806,20.695,29.563,20.109,29.054,19.899zM22.86,21.312c-0.391-0.391-1.023-0.391-1.414,0.001c-0.391,0.39-0.39,1.022,0,1.413l3.434,3.429c0.195,0.195,0.45,0.293,0.706,0.293s0.513-0.098,0.708-0.293c0.391-0.392,0.389-1.025,0-1.415L22.86,21.312zM20.029,23.675c-0.211-0.511-0.796-0.752-1.307-0.541c-0.51,0.212-0.752,0.797-0.54,1.308l1.86,4.48c0.159,0.385,0.531,0.617,0.925,0.617c0.128,0,0.258-0.024,0.383-0.076c0.511-0.211,0.752-0.797,0.54-1.309L20.029,23.675zM15.512,23.778c-0.553,0-1,0.448-1,1l0.004,4.851c0,0.553,0.449,0.999,1,0.999c0.553,0,1-0.448,0.998-1l-0.003-4.852C16.511,24.226,16.062,23.777,15.512,23.778zM12.296,23.142c-0.51-0.21-1.094,0.031-1.306,0.543l-1.852,4.483c-0.21,0.511,0.033,1.096,0.543,1.307c0.125,0.052,0.254,0.076,0.382,0.076c0.392,0,0.765-0.234,0.924-0.619l1.853-4.485C13.051,23.937,12.807,23.353,12.296,23.142zM9.57,21.325c-0.392-0.391-1.025-0.389-1.415,0.002L4.729,24.76c-0.391,0.392-0.389,1.023,0.002,1.415c0.195,0.194,0.45,0.292,0.706,0.292c0.257,0,0.513-0.098,0.708-0.293l3.427-3.434C9.961,22.349,9.961,21.716,9.57,21.325zM7.746,18.604c-0.213-0.509-0.797-0.751-1.307-0.54L1.96,19.925c-0.511,0.212-0.752,0.798-0.54,1.308c0.16,0.385,0.531,0.616,0.924,0.616c0.127,0,0.258-0.024,0.383-0.076l4.479-1.861C7.715,19.698,7.957,19.113,7.746,18.604zM7.1,15.392c0-0.553-0.447-0.999-1-0.999l-4.851,0.006c-0.553,0-1.001,0.448-0.999,1.001c0.001,0.551,0.449,1,1,0.998l4.852-0.006C6.654,16.392,7.102,15.942,7.1,15.392zM1.944,10.869l4.485,1.85c0.125,0.053,0.254,0.076,0.381,0.076c0.393,0,0.766-0.232,0.925-0.618c0.212-0.511-0.032-1.097-0.544-1.306L2.708,9.021c-0.511-0.21-1.095,0.032-1.306,0.542C1.19,10.074,1.435,10.657,1.944,10.869zM8.137,9.451c0.195,0.193,0.449,0.291,0.705,0.291s0.513-0.098,0.709-0.295c0.391-0.389,0.389-1.023-0.004-1.414L6.113,4.609C5.723,4.219,5.088,4.221,4.699,4.612c-0.391,0.39-0.389,1.024,0.002,1.414L8.137,9.451zM10.964,7.084c0.16,0.384,0.532,0.615,0.923,0.615c0.128,0,0.258-0.025,0.384-0.077c0.51-0.212,0.753-0.798,0.54-1.307l-1.864-4.479c-0.212-0.51-0.798-0.751-1.308-0.539C9.129,1.51,8.888,2.096,9.1,2.605L10.964,7.084z","raph_cloud":"M24.345,13.904c0.019-0.195,0.03-0.392,0.03-0.591c0-3.452-2.798-6.25-6.25-6.25c-2.679,0-4.958,1.689-5.847,4.059c-0.589-0.646-1.429-1.059-2.372-1.059c-1.778,0-3.219,1.441-3.219,3.219c0,0.21,0.023,0.415,0.062,0.613c-2.372,0.391-4.187,2.436-4.187,4.918c0,2.762,2.239,5,5,5h15.875c2.762,0,5-2.238,5-5C28.438,16.362,26.672,14.332,24.345,13.904z","raph_cloud2":"M7.562,24.812c-3.313,0-6-2.687-6-6l0,0c0.002-2.659,1.734-4.899,4.127-5.684l0,0c0.083-2.26,1.937-4.064,4.216-4.066l0,0c0.73,0,1.415,0.19,2.01,0.517l0,0c1.266-2.105,3.57-3.516,6.208-3.517l0,0c3.947,0.002,7.157,3.155,7.248,7.079l0,0c2.362,0.804,4.062,3.034,4.064,5.671l0,0c0,3.313-2.687,6-6,6l0,0H7.562L7.562,24.812zM24.163,14.887c-0.511-0.095-0.864-0.562-0.815-1.079l0,0c0.017-0.171,0.027-0.336,0.027-0.497l0,0c-0.007-2.899-2.352-5.245-5.251-5.249l0,0c-2.249-0.002-4.162,1.418-4.911,3.41l0,0c-0.122,0.323-0.406,0.564-0.748,0.63l0,0c-0.34,0.066-0.694-0.052-0.927-0.309l0,0c-0.416-0.453-0.986-0.731-1.633-0.731l0,0c-1.225,0.002-2.216,0.993-2.22,2.218l0,0c0,0.136,0.017,0.276,0.045,0.424l0,0c0.049,0.266-0.008,0.54-0.163,0.762l0,0c-0.155,0.223-0.392,0.371-0.657,0.414l0,0c-1.9,0.313-3.352,1.949-3.35,3.931l0,0c0.004,2.209,1.792,3.995,4.001,4.001l0,0h15.874c2.209-0.006,3.994-1.792,3.999-4.001l0,0C27.438,16.854,26.024,15.231,24.163,14.887L24.163,14.887","raph_cloudDown":"M24.345,13.904c0.019-0.195,0.03-0.392,0.03-0.591c0-3.452-2.798-6.25-6.25-6.25c-2.679,0-4.958,1.689-5.847,4.059c-0.589-0.646-1.429-1.059-2.372-1.059c-1.778,0-3.219,1.441-3.219,3.219c0,0.21,0.023,0.415,0.062,0.613c-2.372,0.391-4.187,2.436-4.187,4.918c0,2.762,2.239,5,5,5h3.404l-0.707-0.707c-0.377-0.377-0.585-0.879-0.585-1.413c0-0.533,0.208-1.035,0.585-1.412l0.556-0.557c0.4-0.399,0.937-0.628,1.471-0.628c0.027,0,0.054,0,0.08,0.002v-0.472c0-1.104,0.898-2.002,2-2.002h3.266c1.103,0,2,0.898,2,2.002v0.472c0.027-0.002,0.054-0.002,0.081-0.002c0.533,0,1.07,0.229,1.47,0.63l0.557,0.552c0.78,0.781,0.78,2.05,0,2.828l-0.706,0.707h2.403c2.762,0,5-2.238,5-5C28.438,16.362,26.672,14.332,24.345,13.904z M21.033,20.986l-0.556-0.555c-0.39-0.389-0.964-0.45-1.276-0.137c-0.312,0.312-0.568,0.118-0.568-0.432v-1.238c0-0.55-0.451-1-1-1h-3.265c-0.55,0-1,0.45-1,1v1.238c0,0.55-0.256,0.744-0.569,0.432c-0.312-0.313-0.887-0.252-1.276,0.137l-0.556,0.555c-0.39,0.389-0.39,1.024-0.001,1.413l4.328,4.331c0.194,0.194,0.451,0.291,0.707,0.291s0.512-0.097,0.707-0.291l4.327-4.331C21.424,22.011,21.423,21.375,21.033,20.986z","raph_cloudUp":"M24.345,13.904c0.019-0.195,0.03-0.392,0.03-0.591c0-3.452-2.798-6.25-6.25-6.25c-2.679,0-4.958,1.689-5.847,4.059c-0.589-0.646-1.429-1.059-2.372-1.059c-1.778,0-3.219,1.441-3.219,3.219c0,0.21,0.023,0.415,0.062,0.613c-2.372,0.391-4.187,2.436-4.187,4.918c0,2.762,2.239,5,5,5h2.312c-0.126-0.266-0.2-0.556-0.2-0.859c0-0.535,0.208-1.04,0.587-1.415l4.325-4.329c0.375-0.377,0.877-0.585,1.413-0.585c0.54,0,1.042,0.21,1.417,0.587l4.323,4.329c0.377,0.373,0.585,0.878,0.585,1.413c0,0.304-0.073,0.594-0.2,0.859h1.312c2.762,0,5-2.238,5-5C28.438,16.362,26.672,14.332,24.345,13.904z M16.706,17.916c-0.193-0.195-0.45-0.291-0.706-0.291s-0.512,0.096-0.707,0.291l-4.327,4.33c-0.39,0.389-0.389,1.025,0.001,1.414l0.556,0.555c0.39,0.389,0.964,0.449,1.276,0.137s0.568-0.119,0.568,0.432v1.238c0,0.549,0.451,1,1,1h3.265c0.551,0,1-0.451,1-1v-1.238c0-0.551,0.256-0.744,0.569-0.432c0.312,0.312,0.887,0.252,1.276-0.137l0.556-0.555c0.39-0.389,0.39-1.025,0.001-1.414L16.706,17.916z","lightning_bolt":"m117.48906,0.99793l60.3351,83.60071l-24.88768,9.85823l75.99797,71.63888l-24.88768,11.96198l93.95412,119.94316l-159.33742,-91.91997l30.38835,-12.76016l-99.00077,-58.87717l35.47526,-18.19279l-104.52837,-61.76487l116.49113,-53.48799z","moon":"m227,299.94119l0,0c-85.05185,0 -154,-66.92029 -154,-149.4706c0,-82.55034 68.94815,-149.4706 154,-149.4706l0,0c-48.47263,35.28521 -77,90.6619 -77,149.4706c0,58.80869 28.52737,114.18535 77,149.4706z","plant_tree_1":"m122.82124,295.43991c-9.60714,-8.11343 -1.74962,-22.4458 -1.18428,-32.9653c4.14859,-11.24323 3.96359,-85.81235 -10.94936,-86.09872c-15.83897,-4.80884 -33.8653,1.83771 -48.3958,-7.59918c-9.84084,-5.82912 -12.90007,-17.71764 -12.64209,-28.40579c0.19444,-11.07701 -10.96857,-15.73981 -14.56149,-25.02111c-4.85892,-11.57952 -0.66407,-24.81283 7.67092,-33.63805c7.87535,-8.99152 0.96225,-20.76784 4.99341,-30.60822c5.74977,-13.3805 22.92119,-7.46461 32.14548,-16.67288c9.90182,-6.99356 18.35265,-19.09785 32.07681,-17.29906c13.25371,0.83774 28.05221,3.21463 39.26759,-5.80136c10.45538,-8.74133 25.08881,-13.41753 38.21471,-8.04486c12.4521,3.84588 26.61226,11.87612 26.66945,26.64145c-3.79947,15.14795 10.55962,14.96229 20.88582,17.05112c12.22475,5.50745 24.82689,14.06517 29.88231,26.94686c1.34924,14.72554 -15.32854,26.93484 -7.76337,41.96729c2.96521,14.64848 -9.76962,22.78136 -18.92447,30.72028c-3.76666,14.33221 -18.04883,25.98621 -33.39958,22.57785c-12.36432,-2.02824 -19.98886,11.49191 -32.59709,10.30693c-8.35739,8.60075 -2.66228,82.40933 -1.11533,92.59302c6.29385,12.59021 -2.48013,26.51376 -16.65036,26.0885c-11.10333,1.33105 -23.19679,1.95465 -33.62328,-2.73877z"}'), Wu = { raph_temp: { size: 32, fill: !0 }, raph_thunder: { size: 32, fill: !0 }, raph_snow: { size: 32, fill: !0 }, raph_hail: { size: 32, fill: !0 }, raph_rain: { size: 32, fill: !0 }, raph_sun: { size: 32, fill: !0 }, raph_cloud: { size: 32, fill: !0 }, raph_cloud2: { size: 32, fill: !0 }, raph_cloudDown: { size: 32, fill: !0 }, raph_cloudUp: { size: 32, fill: !0 } }, Zu = {
   data: Uu,
   overrides: Wu
-}, si = (c) => c?.closest?.("[data-svgedit-root]") ?? document;
+}, ii = (c) => c?.closest?.("[data-svgedit-root]") ?? document;
 let Qs = null;
 const Jl = (c) => {
   Qs = c;
@@ -4205,11 +4205,11 @@ class y3 extends HTMLElement {
   }
   // ── Theme sync ─────────────────────────────────────────────────────────────
   _syncTheme() {
-    const r = si(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
+    const r = ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
     this.classList.toggle("theme-dark", !!r), this.classList.toggle("theme-light", !r);
   }
   _observeTheme() {
-    const t = si(this).querySelector(".svg_editor");
+    const t = ii(this).querySelector(".svg_editor");
     t && (this._themeObserver = new MutationObserver(() => this._syncTheme()), this._themeObserver.observe(t, { attributes: !0, attributeFilter: ["class"] }));
   }
   // ── Data loading ───────────────────────────────────────────────────────────
@@ -5255,7 +5255,7 @@ class _3 extends HTMLElement {
     * @function constructor
     */
   constructor() {
-    super(), this.imgPath = svgEditor.configObj.curConfig.imgPath, this.template = this.createTemplate(this.imgPath), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(this.template.content.cloneNode(!0)), this.$button = this._shadowRoot.querySelector(".menu-button"), this.$overall = this._shadowRoot.querySelector(".overall"), this.$img = this._shadowRoot.querySelector(".menu-button img"), this.$menu = this._shadowRoot.querySelector(".menu"), this.$handle = this._shadowRoot.querySelector(".handle"), this.$lib = this._shadowRoot.querySelector(".image-lib"), this.files = [], this.request = new XMLHttpRequest(), this.imgPath = svgEditor.configObj.curConfig.imgPath, si(this).querySelector('[id="workarea"]').addEventListener("click", (r) => {
+    super(), this.imgPath = svgEditor.configObj.curConfig.imgPath, this.template = this.createTemplate(this.imgPath), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(this.template.content.cloneNode(!0)), this.$button = this._shadowRoot.querySelector(".menu-button"), this.$overall = this._shadowRoot.querySelector(".overall"), this.$img = this._shadowRoot.querySelector(".menu-button img"), this.$menu = this._shadowRoot.querySelector(".menu"), this.$handle = this._shadowRoot.querySelector(".handle"), this.$lib = this._shadowRoot.querySelector(".image-lib"), this.files = [], this.request = new XMLHttpRequest(), this.imgPath = svgEditor.configObj.curConfig.imgPath, ii(this).querySelector('[id="workarea"]').addEventListener("click", (r) => {
       this.$menu.classList.remove("open"), this.$lib.classList.remove("open-lib");
     });
   }
@@ -8170,7 +8170,7 @@ class U3 extends HTMLElement {
     this._editMode && (t.preventDefault(), this._revert(r));
   }
   _openEditDialog(t) {
-    const r = si(this);
+    const r = ii(this);
     r.querySelector("se-color-dialog")?.remove();
     const n = document.createElement("se-color-dialog");
     n.paint = ua(this.getColor(t)), n.type = "fill", n.i18next = svgEditor.i18next, (r.body ?? r).appendChild(n), n.addEventListener("change", (o) => {
@@ -10815,11 +10815,11 @@ class _5 extends HTMLElement {
   }
   // ── Theme sync ─────────────────────────────────────────────────────────────
   _syncTheme() {
-    const r = si(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
+    const r = ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
     this.classList.toggle("theme-dark", !!r), this.classList.toggle("theme-light", !r);
   }
   _observeTheme() {
-    const t = si(this).querySelector(".svg_editor");
+    const t = ii(this).querySelector(".svg_editor");
     t && (this._themeObserver = new MutationObserver(() => this._syncTheme()), this._themeObserver.observe(t, { attributes: !0, attributeFilter: ["class"] }));
   }
   // ── Tab inference ──────────────────────────────────────────────────────────
@@ -11128,7 +11128,7 @@ class b5 extends HTMLElement {
    * Open the <se-color-dialog> modal for this swatch.
    */
   openColorDialog() {
-    const t = si(this);
+    const t = ii(this);
     t.querySelector("se-color-dialog")?.remove();
     const r = document.createElement("se-color-dialog");
     r.paint = this.paintBox.paint, r.type = this.type, r.i18next = this.i18next, (t.body ?? t).appendChild(r), r.addEventListener("change", (n) => {
@@ -11603,7 +11603,7 @@ class E5 extends HTMLElement {
     this._open = !1, this._trigger.classList.remove("is-open"), this._trigger.setAttribute("aria-expanded", "false"), this._popover.style.display = "none", this._removeListeners();
   }
   _syncTheme() {
-    const t = si(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
+    const t = ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
     this.classList.toggle("theme-dark", !!t), this.classList.toggle("theme-light", !t);
   }
   _position() {
@@ -11928,7 +11928,7 @@ class j5 extends HTMLElement {
     return F5();
   }
   _syncTheme() {
-    const r = si(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
+    const r = ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark");
     this.classList.toggle("theme-dark", !!r), this.classList.toggle("theme-light", !r);
   }
   async _loadCatalog() {
@@ -13733,7 +13733,7 @@ const di = () => {
   }
   return 0;
 };
-let ri = (c, t) => {
+let ni = (c, t) => {
   const r = c || ar.getSelectedElements()[0], n = ve(r);
   return I0(n, t);
 };
@@ -14262,7 +14262,7 @@ const Ia = (c) => {
 ]);
 function Oa(c, t) {
   if (!t.some((a) => Bo.has(a))) return;
-  const r = ri(c);
+  const r = ni(c);
   if (!r) return;
   const n = ve(c);
   let o = n.numberOfItems;
@@ -15614,7 +15614,7 @@ const Zi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       */
     reorient() {
       const f = t.getSelectedElements()[0];
-      if (!f || f.nodeName !== "path" || ri(f) === 0)
+      if (!f || f.nodeName !== "path" || ni(f) === 0)
         return;
       const v = new hn("Reorient path"), C = {
         d: f.getAttribute("d"),
@@ -15875,7 +15875,7 @@ const Zi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     };
   }, z = () => {
     const j = f?.elem;
-    if (!j || ($ = ri(j, !0), !$))
+    if (!j || ($ = ni(j, !0), !$))
       return;
     const V = f.oldbbox;
     if (!V)
@@ -16001,7 +16001,7 @@ const Zi = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     throw new Error(`Error parsing XML string: ${n.message}`);
   }
 };
-class ni {
+class si {
   /**
   * @param {string} name - Layer name
   * @param {SVGGElement|null} group - An existing SVG group element or null.
@@ -16153,14 +16153,14 @@ class ni {
    * @returns {boolean} True if the element is a layer
    */
   static isLayer(t) {
-    return t && t.tagName === "g" && ni.CLASS_REGEX.test(t.getAttribute("class"));
+    return t && t.tagName === "g" && si.CLASS_REGEX.test(t.getAttribute("class"));
   }
 }
-ni.CLASS_NAME = "layer";
-ni.CLASS_REGEX = new RegExp(`(\\s|^)${ni.CLASS_NAME}(\\s|$)`);
+si.CLASS_NAME = "layer";
+si.CLASS_REGEX = new RegExp(`(\\s|^)${si.CLASS_NAME}(\\s|$)`);
 const Fg = (c) => {
   const t = c.getAttribute("class");
-  !t || !t.length ? c.setAttribute("class", ni.CLASS_NAME) : ni.CLASS_REGEX.test(t) || c.setAttribute("class", `${t} ${ni.CLASS_NAME}`);
+  !t || !t.length ? c.setAttribute("class", si.CLASS_NAME) : si.CLASS_REGEX.test(t) || c.setAttribute("class", `${t} ${si.CLASS_NAME}`);
 };
 class co {
   /**
@@ -16689,14 +16689,14 @@ class ho {
         if (u.tagName === "g")
           if (a = !0, Bg(u)) {
             const f = zg(u);
-            n.push(f), o = new ni(f, u), this.all_layers.push(o), this.layer_map[f] = o;
+            n.push(f), o = new si(f, u), this.all_layers.push(o), this.layer_map[f] = o;
           } else
             r.push(u);
         else $g.includes(u.nodeName) && r.push(u);
     }
     if (r.length > 0 || !a) {
       const d = Ls(n);
-      o = new ni(d, null, this.svgElem_), o.appendChildren(r), this.all_layers.push(o), this.layer_map[d] = o;
+      o = new si(d, null, this.svgElem_), o.appendChildren(r), this.all_layers.push(o), this.layer_map[d] = o;
     }
     this.current_layer = o, this.refreshLayerPointerEvents();
   }
@@ -16710,7 +16710,7 @@ class ho {
    */
   createLayer(t, r) {
     (t == null || t === "" || this.layer_map[t]) && (t = Ls(Object.keys(this.layer_map)));
-    const n = new ni(t, null, this.svgElem_);
+    const n = new si(t, null, this.svgElem_);
     return r && (r.startBatchCommand("Create Layer"), r.insertElement(n.getGroup()), r.endBatchCommand()), this.all_layers.push(n), this.layer_map[t] = n, this.current_layer = n, this.refreshLayerPointerEvents(), n.getGroup();
   }
   /**
@@ -16724,7 +16724,7 @@ class ho {
     if (!this.current_layer)
       return null;
     (t == null || t === "" || this.layer_map[t]) && (t = Ls(Object.keys(this.layer_map)));
-    const n = this.current_layer.getGroup(), o = new ni(t, n, this.svgElem_), a = o.getGroup();
+    const n = this.current_layer.getGroup(), o = new si(t, n, this.svgElem_), a = o.getGroup();
     [...n.childNodes].forEach((u) => {
       if (u.nodeType !== 1) {
         a.append(u.cloneNode(!0));
@@ -17279,7 +17279,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
         d === "#text" ? (t.setMultilineText(_, u), /rotate/.test(_.getAttribute("transform")) && (_ = n(_))) : d === "#href" ? ui(_, u) : u ? _.setAttribute(d, isNaN(parseFloat(u)) ? u : parseFloat(u)) : typeof u == "number" ? _.setAttribute(d, u) : _.removeAttribute(d), t.getCurrentMode() === "textedit" && d !== "#text" && _.textContent.length && t.textActions.toSelectMode(_), nr() && _.nodeName === "text" && /rotate/.test(_.getAttribute("transform")) && (String(u).startsWith("url") || ["font-size", "font-family", "x", "y"].includes(d) && _.textContent) && (_ = n(_)), v.includes(_) && setTimeout(function() {
           _.parentNode && t.selectorManager.requestSelector(_).resize();
         }, 0);
-        const A = ri(_);
+        const A = ni(_);
         if (A !== 0 && d !== "transform" && Bo.has(d)) {
           const $ = ve(_);
           let I = $.numberOfItems;
@@ -17347,11 +17347,11 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
           return t.getSvgRoot();
     }
     const $ = t.getCurrentDrawing().getCurrentLayer(), I = t.getCurrentGroup(), z = t.getSvgRoot(), O = t.getDOMContainer(), q = t.getSvgContent(), j = t.getAllLayersMode() && !I;
-    if ([z, O, q, $].includes(A) || j && ni.isLayer(A))
+    if ([z, O, q, $].includes(A) || j && si.isLayer(A))
       return t.getSvgRoot();
     if (cn(A.parentNode, "#selectorParentGroup"))
       return t.selectorManager.selectorParentGroup;
-    for (; !A?.parentNode?.isSameNode(I || $) && !(j && ni.isLayer(A?.parentNode)); )
+    for (; !A?.parentNode?.isSameNode(I || $) && !(j && si.isLayer(A?.parentNode)); )
       if (A = A.parentNode, !A) return t.getSvgRoot();
     return A;
   }, u = (F, A, $) => {
@@ -18205,7 +18205,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
     for (const [F, A] of Object.entries(t.getInitBbox()))
       k[F] = A / d;
     t.setInitBbox(k);
-    const _ = ri(v) ? 1 : 0;
+    const _ = ni(v) ? 1 : 0;
     or(C) ? (C.insertItemBefore(f.createSVGTransform(), _), C.insertItemBefore(f.createSVGTransform(), _), C.insertItemBefore(f.createSVGTransform(), _)) : (C.appendItem(f.createSVGTransform()), C.appendItem(f.createSVGTransform()), C.appendItem(f.createSVGTransform()));
   }, move: (r, n) => {
     const { selected: o, x: a, y: d, svgRoot: u, selectedElements: f } = n;
@@ -18219,7 +18219,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
     const C = or(v), S = C ? t.getInitBbox() : Ge(o);
     let k = S.x, _ = S.y, { width: F, height: A } = S, $ = a - t.getStartX(), I = d - t.getStartY();
     t.getCurConfig().gridSnapping && ($ = Ue($), I = Ue(I), A = Ue(A), F = Ue(F));
-    const z = ri(o);
+    const z = ni(o);
     if (z) {
       const st = Math.sqrt($ * $ + I * I), et = Math.atan2(I, $) - z * Math.PI / 180;
       $ = st * Math.cos(et), I = st * Math.sin(et);
@@ -18505,7 +18505,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
             q.setMatrix(O), A.appendItem(q), k.addSubCommand(new Ya(F, { transform: $ }));
             return;
           }
-          if (u !== "resize" && A.numberOfItems > 1 && I && !ri(F)) {
+          if (u !== "resize" && A.numberOfItems > 1 && I && !ni(F)) {
             const O = me(A).matrix;
             for (; A.numberOfItems > 0; )
               A.removeItem(0);
@@ -18730,7 +18730,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
         const at = et / st * 2 * Math.PI, Z = O.clientX + Math.cos(at) * Q, it = O.clientY + Math.sin(at) * Q, ut = document.elementsFromPoint(Z, it);
         for (const nt of ut) {
           const dt = t.getMouseTargetFromNode(nt);
-          if (dt && (dt.parentNode === V || W && ni.isLayer(dt.parentNode)) && F(dt))
+          if (dt && (dt.parentNode === V || W && si.isLayer(dt.parentNode)) && F(dt))
             return dt;
         }
       }
@@ -19794,7 +19794,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
     }
     Z.isEmpty() || t.addCommandToHistory(Z), t.selectOnly([it], !0);
   }, O = (J, Q) => {
-    const st = J.childNodes, et = st.length, at = J.getAttribute("transform"), Z = ve(J), it = me(Z).matrix, ut = new Si("Push group properties"), nt = ri(J), dt = {
+    const st = J.childNodes, et = st.length, at = J.getAttribute("transform"), Z = ve(J), it = me(Z).matrix, ut = new Si("Push group properties"), nt = ni(J), dt = {
       filter: J.getAttribute("filter"),
       opacity: J.getAttribute("opacity")
     };
@@ -19832,7 +19832,7 @@ const Ro = new Vg(), Z0 = () => Ro.isWebkit, nr = () => Ro.isGecko, Yg = () => R
         if (nt && Z.numberOfItems === 1) {
           const Tt = Et.getAttribute("transform") || "", At = Z.getItem(0).matrix;
           let Nt = t.getSvgRoot().createSVGMatrix();
-          const Lt = ri(Et);
+          const Lt = ni(Et);
           Lt && (Nt = zt.getItem(0).matrix);
           const Ft = Ge(Et), Ot = me(zt).matrix, Dt = Ee(
             Ft.x + Ft.width / 2,
@@ -31032,7 +31032,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
           }
         } else (I.type === SVGTransform.SVG_TRANSFORM_ROTATE && I.angle === 0 || I.type === SVGTransform.SVG_TRANSFORM_TRANSLATE && I.matrix.e === 0 && I.matrix.f === 0) && u.removeItem(A);
       }
-      if (u.numberOfItems === 1 && ri(o))
+      if (u.numberOfItems === 1 && ni(o))
         return null;
     }
     if (!u || u.numberOfItems === 0)
@@ -31081,7 +31081,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
         A.y + A.height / 2,
         me(u).matrix
       );
-      const $ = ri(o);
+      const $ = ni(o);
       if ($) {
         const W = $ * Math.PI / 180, J = Math.abs(W) > 1e-10 ? Math.sin(W) / (1 - Math.cos(W)) : 2 / W;
         for (let Q = 0; Q < u.numberOfItems; ++Q) {
@@ -31106,7 +31106,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
           if (at.nodeType !== 1) continue;
           const Z = ve(at);
           if (!Z) continue;
-          const it = me(Z).matrix, ut = ri(at);
+          const it = me(Z).matrix, ut = ni(at);
           if (V = t.getStartTransform(), t.setStartTransform(at.getAttribute("transform")), ut || or(Z)) {
             const dt = a.createSVGTransform();
             dt.setMatrix(Re(W, J, Q, it)), Z.clear(), Z.appendItem(dt);
@@ -31237,7 +31237,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
       if (!A && o.tagName !== "path") return null;
       let $, I = 0, z = 0;
       ["use", "image", "text", "tspan"].includes(o.tagName) && (I = je("x", o.getAttribute("x") || "0"), z = je("y", o.getAttribute("y") || "0"));
-      const O = ri(o);
+      const O = ni(o);
       if (O) {
         if (o.localName === "image") {
           const j = je("x", o.getAttribute("x") || "0"), V = je("y", o.getAttribute("y") || "0"), W = je("width", o.getAttribute("width") || "0"), J = je("height", o.getAttribute("height") || "0"), Q = j + W / 2, st = V + J / 2;
@@ -31382,7 +31382,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
       const u = d ? "inline" : "none";
       o.selectorGripsGroup.setAttribute("display", u);
       const f = this.selectedElement;
-      this.hasGrips = d, f && d && (this.selectorGroup.append(o.selectorGripsGroup), r.updateGripCursors(ri(f)));
+      this.hasGrips = d, f && d && (this.selectorGroup.append(o.selectorGripsGroup), r.updateGripCursors(ni(f)));
     }
     /**
     * Updates the selector to match the element's size.
@@ -31409,7 +31409,7 @@ const Ui = (c, t) => (vn || (vn = document.createElementNS("http://www.w3.org/20
         _ *= k;
         const Q = ss(j * k, V * k, W * k, J * k, q), { aabox: st } = Q;
         let et = st.x - _, at = st.y - _, Z = st.width + _ * 2, it = st.height + _ * 2;
-        const ut = et + Z / 2, nt = at + it / 2, dt = ri(S);
+        const ut = et + Z / 2, nt = at + it / 2, dt = ni(S);
         if (dt) {
           const kt = t.getSvgRoot().createSVGTransform();
           kt.setRotate(-dt, ut, nt);
@@ -35860,7 +35860,7 @@ class Ne extends EventTarget {
     this.copySelectedElements(), this.deleteSelectedElements();
   }
   initializeSvgCanvasMethods() {
-    this.getStrokedBBox = ei, this.getVisibleElements = en, this.stringToHTML = O0, this.insertChildAtIndex = yg, this.getClosest = cn, this.getParents = dn, this.isLayer = ni.isLayer, this.matrixMultiply = Re, this.hasMatrixTransform = or, this.transformListToTransform = me, this.convertToNum = je, this.convertUnit = Wn, this.findDefs = di, this.getReferencedDefElements = F0, this.remapElementIdsAndRefs = mg, this.getUrlFromAttr = lr, this.getHref = pi, this.setHref = ui, this.getBBox = Ge, this.getRotationAngle = ri, this.getElement = (t) => this.svgroot?.querySelector(`#${CSS.escape(t)}`), this.activateUtilities = () => {
+    this.getStrokedBBox = ei, this.getVisibleElements = en, this.stringToHTML = O0, this.insertChildAtIndex = yg, this.getClosest = cn, this.getParents = dn, this.isLayer = si.isLayer, this.matrixMultiply = Re, this.hasMatrixTransform = or, this.transformListToTransform = me, this.convertToNum = je, this.convertUnit = Wn, this.findDefs = di, this.getReferencedDefElements = F0, this.remapElementIdsAndRefs = mg, this.getUrlFromAttr = lr, this.getHref = pi, this.setHref = ui, this.getBBox = Ge, this.getRotationAngle = ni, this.getElement = (t) => this.svgroot?.querySelector(`#${CSS.escape(t)}`), this.activateUtilities = () => {
       La(this), Ia(this);
     }, this.getRefElem = Xi, this.assignAttributes = Le, this.cleanupElement = os, this.sanitizeSvg = uo, this.getTypeMap = Oo, this.history = Zi, this.NS = Zt, this.$id = $0, this.$qq = z0, this.$qa = B0, this.$click = Kn, this.encode64 = X0, this.decode64 = U0, this.mergeDeep = ln;
   }
@@ -37101,7 +37101,7 @@ class af extends HTMLElement {
    */
   connectedCallback() {
     const t = this;
-    this._workarea = si(this).querySelector('[id="workarea"]');
+    this._workarea = ii(this).querySelector('[id="workarea"]');
     const r = (o) => {
       o.preventDefault(), t._build(), r1(t.$dialog, o.clientX, o.clientY);
     }, n = (o) => {
@@ -37213,7 +37213,7 @@ class cf extends HTMLElement {
     if (r !== n)
       switch (t) {
         case "value":
-          this.source = n, this.isConnected && n !== "" && n !== void 0 && (this._workarea = si(this).querySelector(`[id="${CSS.escape(this.source)}"]`));
+          this.source = n, this.isConnected && n !== "" && n !== void 0 && (this._workarea = ii(this).querySelector(`[id="${CSS.escape(this.source)}"]`));
           break;
         case "layers-dupe":
           this.$duplicateLink.textContent = n;
@@ -37263,7 +37263,7 @@ class cf extends HTMLElement {
    */
   connectedCallback() {
     const t = this;
-    this.source && (this._workarea = si(this).querySelector(`[id="${CSS.escape(this.source)}"]`)), this.$sidePanels = si(this).querySelector('[id="sidepanels"]');
+    this.source && (this._workarea = ii(this).querySelector(`[id="${CSS.escape(this.source)}"]`)), this.$sidePanels = ii(this).querySelector('[id="sidepanels"]');
     const r = (a) => {
       a.preventDefault(), r1(t.$dialog, a.clientX, a.clientY, -126);
     }, n = (a) => {
@@ -37514,7 +37514,7 @@ class pf extends HTMLElement {
    */
   prompt(t, r = "", n = {}) {
     return this._settle(null), new Promise((o) => {
-      this._resolve = o, this.$title.textContent = n.title ?? t, this.$message.textContent = t, this.$okBtn.textContent = n.okText ?? this._okText, this.$cancelBtn.textContent = n.cancelText ?? this._cancelText, this.$input.value = r, this.classList.toggle("theme-dark", !!si(this).querySelector(".svg_editor")?.classList.contains("theme-dark")), this.$dialog.showModal(), setTimeout(() => {
+      this._resolve = o, this.$title.textContent = n.title ?? t, this.$message.textContent = t, this.$okBtn.textContent = n.okText ?? this._okText, this.$cancelBtn.textContent = n.cancelText ?? this._cancelText, this.$input.value = r, this.classList.toggle("theme-dark", !!ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark")), this.$dialog.showModal(), setTimeout(() => {
         this.$input.focus(), this.$input.select();
       }, 0);
     });
@@ -37547,9 +37547,9 @@ class pf extends HTMLElement {
   }
 }
 customElements.define("se-text-prompt-dialog", pf);
-const ff = (c, t = "", r = {}) => {
-  const n = document.querySelector("se-text-prompt-dialog");
-  return n ? n.prompt(c, t, r) : Promise.resolve(null);
+const ff = (c, t = "", r = {}, n) => {
+  const o = ii(n).querySelector("se-text-prompt-dialog") ?? document.querySelector("se-text-prompt-dialog");
+  return o ? o.prompt(c, t, r) : Promise.resolve(null);
 };
 window.sePrompt = ff;
 const mf = (c) => {
@@ -37791,7 +37791,7 @@ class bf extends HTMLElement {
     switch (t) {
       case "dialog":
         if (n === "open") {
-          this.reset(), this.classList.toggle("theme-dark", !!si(this).querySelector(".svg_editor")?.classList.contains("theme-dark"));
+          this.reset(), this.classList.toggle("theme-dark", !!ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark"));
           const o = typeof window.svgEditHost?.pickVaultImage == "function";
           this.$vaultBtn.style.display = o ? "" : "none", this.$vaultOr.style.display = o ? "" : "none", this.$dialog.showModal();
         } else
@@ -37993,7 +37993,7 @@ class wf extends HTMLElement {
   attributeChangedCallback(t, r, n) {
     switch (t) {
       case "dialog":
-        n === "open" ? (this.reset(), this.classList.toggle("theme-dark", !!si(this).querySelector(".svg_editor")?.classList.contains("theme-dark")), this.$dialog.showModal()) : this.$dialog.close();
+        n === "open" ? (this.reset(), this.classList.toggle("theme-dark", !!ii(this).querySelector(".svg_editor")?.classList.contains("theme-dark")), this.$dialog.showModal()) : this.$dialog.close();
         break;
       case "title":
         this.$title.textContent = n;
@@ -39299,7 +39299,7 @@ class Wf extends Ri {
   async _renameSlot(t) {
     const r = xn(t);
     if (!r) return;
-    const n = await sePrompt(`Name for brush ${t + 1}`, r.name ?? "");
+    const n = await sePrompt(`Name for brush ${t + 1}`, r.name ?? "", {}, this);
     n !== null && (Yf(t, n.trim()), this._refreshSlots());
   }
   open() {
@@ -54630,7 +54630,9 @@ class $7 {
     while (this.editor.svgCanvas.getCurrentDrawing().hasLayer(t));
     const n = await sePrompt(
       this.editor.i18next.t("notification.enterUniqueLayerName"),
-      t
+      t,
+      {},
+      this.editor.$svgEditor
     );
     return n ? this.editor.svgCanvas.getCurrentDrawing().hasLayer(n) ? (seAlert(this.editor.i18next.t("notification.dupeLayerName")), null) : n : null;
   }
@@ -54675,7 +54677,9 @@ class $7 {
   async cloneLayer() {
     const t = this.editor.svgCanvas.getCurrentDrawing().getCurrentLayerName() + " copy", r = await sePrompt(
       this.editor.i18next.t("notification.enterUniqueLayerName"),
-      t
+      t,
+      {},
+      this.editor.$svgEditor
     );
     if (r) {
       if (this.editor.svgCanvas.getCurrentDrawing().hasLayer(r)) {
@@ -54707,7 +54711,7 @@ class $7 {
    * @returns {void}
    */
   async layerRename() {
-    const t = this.editor.$qq("#layerlist tr.layersel td.layername"), r = t ? t.textContent : "", n = await sePrompt(this.editor.i18next.t("notification.enterNewLayerName"), r);
+    const t = this.editor.$qq("#layerlist tr.layersel td.layername"), r = t ? t.textContent : "", n = await sePrompt(this.editor.i18next.t("notification.enterNewLayerName"), r, {}, this.editor.$svgEditor);
     if (n) {
       if (r === n || this.editor.svgCanvas.getCurrentDrawing().hasLayer(n)) {
         seAlert(this.editor.i18next.t("notification.layerHasThatName"));
