@@ -15088,7 +15088,7 @@ const hn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     show(T) {
       return this.eachSeg(function() {
         this.show(T);
-      }), T && this.selectPt(this.first_seg.index), this;
+      }), T && this.first_seg && this.selectPt(this.first_seg.index), this;
     }
     /**
     * Move selected points.
@@ -35550,7 +35550,17 @@ class zt extends EventTarget {
    * @returns {void}
    */
   setMode(e) {
-    this.pathActions.clear(!0), this.textActions.clear(), this.curProperties = this.selectedElements[0]?.nodeName === "text" ? this.curText : this.curShape, this.currentMode = e, this.modeEvent && document.dispatchEvent(this.modeEvent);
+    try {
+      this.pathActions.clear(!0);
+    } catch (i) {
+      console.warn("svgedit: pathActions.clear() failed during setMode; continuing", i);
+    }
+    try {
+      this.textActions.clear();
+    } catch (i) {
+      console.warn("svgedit: textActions.clear() failed during setMode; continuing", i);
+    }
+    this.curProperties = this.selectedElements[0]?.nodeName === "text" ? this.curText : this.curShape, this.currentMode = e, this.modeEvent && document.dispatchEvent(this.modeEvent);
   }
   /**
    * Clears the current document. This is not an undoable action.
