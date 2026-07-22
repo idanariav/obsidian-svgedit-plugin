@@ -18800,7 +18800,7 @@ const pl = new Rf(), a2 = () => pl.isWebkit, bn = () => pl.isGecko, Df = () => p
       const _e = Ai(e.getStartX(), e.getStartY());
       e.setStartX(_e.x), e.setStartY(_e.y);
     }
-    if (de === e.selectorManager.selectorParentGroup && R[0]) {
+    if (e.getCurrentMode() === "select" && de === e.selectorManager.selectorParentGroup && R[0]) {
       const _e = z.target, Ee = D.get(_e, "type");
       Ee === "rotate" ? e.setCurrentMode("rotate") : Ee === "resize" && (e.setCurrentMode("resize"), e.setCurrentResizeMode(D.get(_e, "dir"))), de = R[0];
     }
