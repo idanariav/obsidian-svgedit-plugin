@@ -160,6 +160,13 @@ export interface SvgPluginSettings {
    *  Backs the svgedit userDataAdapter's font methods; as normal vault files
    *  they sync across devices independently of plugin-settings sync. */
   fontsFolder: string;
+  /** Suffix appended to the note's name to build the new drawing's filename in
+   *  the "New drawing for this file" command (e.g. "claim x" → "claim x (drawing)").
+   *  Empty uses the note's name as-is. */
+  newDrawingSuffix: string;
+  /** Frontmatter field added to a drawing created via "New drawing for this
+   *  file", set to a link back to the note. Empty = don't add a link. */
+  newDrawingLinkField: string;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -192,4 +199,6 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   canvasPresets: [],
   canvasLayouts: [],
   fontsFolder: "svgedit-fonts",
+  newDrawingSuffix: " (drawing)",
+  newDrawingLinkField: "",
 };

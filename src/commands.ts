@@ -1,11 +1,12 @@
-import { App, Notice, TFile } from "obsidian";
+import { App, Notice, normalizePath, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { exportSvg, exportPng } from "./export/exporter";
 import { ExportModal } from "./modals/ExportModal";
-import { extractSvg, replaceSvg } from "./data/SvgData";
+import { extractSvg, replaceSvg, createDrawingTemplate } from "./data/SvgData";
+import { uniqueVaultPath } from "./data/uniqueName";
 import {
   parseExcalidrawScene,
   excalidrawToSvg,
@@ -88,6 +89,20 @@ export function registerCommands(plugin: SvgPlugin): void {
           }
         },
       ).open();
+    },
+  });
+
+  // New drawing for the active note — creates a drawing (from the configured
+  // template/folder/suffix) and links it back to the note via the configured
+  // frontmatter field.
+  plugin.addCommand({
+    id: "new-drawing-for-note",
+    name: "New drawing for this file",
+    checkCallback: (checking) => {
+      const file = plugin.app.workspace.getActiveFile();
+      if (!file || file.extension !== "md") return false;
+      if (!checking) void createDrawingForNote(plugin, file);
+      return true;
     },
   });
 
@@ -282,6 +297,45 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     await leaf.openFile(file, { active: true });
   } catch (e: unknown) {
     new Notice(`Convert failed: ${(e as Error).message}`);
+  }
+}
+
+/**
+ * Create a new drawing (from the configured template/folder/filename suffix)
+ * and, if a link-back field is configured, stamp a link to `noteFile` onto its
+ * frontmatter — then open it.
+ */
+async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise<void> {
+  try {
+    const templateSvg = await resolveTemplateSvg(plugin);
+    const baseName = `${noteFile.basename}${plugin.settings.newDrawingSuffix}`;
+    const path = normalizePath(
+      uniqueVaultPath(
+        (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
+        plugin.settings.drawingsFolder,
+        baseName,
+        "md",
+      ),
+    );
+    const content = createDrawingTemplate(plugin.settings.compressDrawingData, templateSvg);
+    const file = await plugin.app.vault.create(path, content);
+
+    const fieldName = plugin.settings.newDrawingLinkField.trim();
+    if (fieldName) {
+      const link = plugin.app.fileManager.generateMarkdownLink(noteFile, file.path);
+      await plugin.app.fileManager.processFrontMatter(file, (fm) => {
+        if (!Array.isArray(fm[fieldName])) {
+          fm[fieldName] = fm[fieldName] != null ? [fm[fieldName], link] : [link];
+        } else if (!(fm[fieldName] as string[]).includes(link)) {
+          (fm[fieldName] as string[]).push(link);
+        }
+      });
+    }
+
+    const leaf = plugin.app.workspace.getLeaf(false);
+    await leaf.openFile(file, { active: true });
+  } catch (e: unknown) {
+    new Notice(`Could not create drawing: ${(e as Error).message}`);
   }
 }
 

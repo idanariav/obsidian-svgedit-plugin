@@ -378,6 +378,39 @@ export class SvgSettingsTab extends PluginSettingTab {
           });
       });
 
+    new Setting(containerEl)
+      .setName("New drawing filename suffix")
+      .setDesc(
+        "Appended to the note's name by \"New drawing for this file\" (e.g. \"claim x\" "
+        + "→ \"claim x (drawing)\"). Filename clashes get a numeric suffix. Leave blank "
+        + "to use the note's name as-is.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder(" (drawing)")
+          .setValue(this.plugin.settings.newDrawingSuffix)
+          .onChange(async (v) => {
+            this.plugin.settings.newDrawingSuffix = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Link back field")
+      .setDesc(
+        "Frontmatter field added by \"New drawing for this file\", containing a link "
+        + "back to the note the drawing was created for. Leave blank to skip linking.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder("Resources")
+          .setValue(this.plugin.settings.newDrawingLinkField)
+          .onChange(async (v) => {
+            this.plugin.settings.newDrawingLinkField = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Folder overrides ─────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Folder overrides");
 
