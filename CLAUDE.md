@@ -42,6 +42,20 @@ so that migrations can run once against older drawings; if a sync that needs a
 migration ships without a version bump, drawings already stamped with that
 (unbumped) version will never be seen as "older" and the migration won't fire.
 
+`sync-svgedit` also writes `svgedit-dist/SOURCE.json`, recording the exact
+svgedit commit (`commit`) the bundle was built from, whether that source tree
+had uncommitted changes (`dirty`), and when the sync ran (`syncedAt`) — or, for
+the npm-fallback path, the installed `npmVersion` instead of a commit. It
+refuses to sync (and tells you to `npm run build` in `../svgedit` first) if the
+local build is older than that repo's last commit, so it can't record a commit
+hash the bundle doesn't actually reflect.
+
+**To check whether plugin version X contains svgedit fix Y:** find the commit
+that bumped `manifest.json` to version X (`git log -p -- manifest.json`), read
+`svgedit-dist/SOURCE.json` as of that same commit
+(`git show <rev>:svgedit-dist/SOURCE.json`), then check ancestry in the fork:
+`git -C ../svgedit merge-base --is-ancestor <fix-commit> <recorded-commit>`.
+
 This plugin imports that bundle at **build time** (esbuild `alias` →
 `svgedit-editor`, see `esbuild.config.mjs`), so the whole editor is inlined into
 `main.js`. **Nothing from `svgedit-dist/` is shipped to the vault** — the plugin
@@ -65,6 +79,7 @@ the bundle is read-only and no patching should occur.
 | `styles.css` | Obsidian-scoped CSS overrides for the editor container |
 | `scripts/fetch-svgedit-dist.mjs` | Sync script (do not change without updating the fork's build) |
 | `svgedit-dist/Editor.js` | **Build artifact — svgedit's ESM bundle, inlined into `main.js`; never edit manually** |
+| `svgedit-dist/SOURCE.json` | **Build artifact — provenance (svgedit commit/npm version) for `Editor.js`, written by `sync-svgedit`; never edit manually** |
 
 ---
 
