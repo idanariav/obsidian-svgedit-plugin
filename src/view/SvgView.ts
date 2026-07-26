@@ -300,7 +300,6 @@ export class SvgView extends TextFileView {
         "ext-corner-radius",
         "ext-repeat",
         "ext-mirror",
-        "ext-guides",
         "ext-motion-lines",
         "ext-taper",
         "ext-text-path",
@@ -312,12 +311,14 @@ export class SvgView extends TextFileView {
         "ext-polystar",
         "ext-cutter",
         "ext-curvature",
+        "ext-puppet-warp",
         "ext-layer_view",
         "ext-theme-toggle",
         "ext-shadow",
         "ext-outline",
         "ext-color-shift",
         "ext-fonts",
+        "ext-eyedropper",
       ],
     });
 
