@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractSvg, replaceSvg } from "../../src/data/SvgData";
+import { extractSvg, replaceSvg, getDrawingVersion, setDrawingVersion } from "../../src/data/SvgData";
 
 const SVG = "<svg><rect width=\"1\" height=\"1\"/></svg>";
 
@@ -35,5 +35,27 @@ describe("extractSvg/replaceSvg round-trip", () => {
     const result = replaceSvg(file, updated, false);
     expect(extractSvg(result)).toBe(updated);
     expect(result.match(/## Drawing/g)).toHaveLength(1);
+  });
+});
+
+describe("getDrawingVersion/setDrawingVersion", () => {
+  it("returns null when no version is stamped", () => {
+    expect(getDrawingVersion(SVG)).toBeNull();
+  });
+
+  it("round-trips a stamped version", () => {
+    const stamped = setDrawingVersion(SVG, "1.2.3");
+    expect(getDrawingVersion(stamped)).toBe("1.2.3");
+  });
+
+  it("replaces rather than duplicates an existing stamp", () => {
+    const stamped = setDrawingVersion(setDrawingVersion(SVG, "1.0.0"), "1.2.3");
+    expect(getDrawingVersion(stamped)).toBe("1.2.3");
+    expect(stamped.match(/data-svgedit-plugin-version/g)).toHaveLength(1);
+  });
+
+  it("strips the stamp when set to null", () => {
+    const stamped = setDrawingVersion(SVG, "1.2.3");
+    expect(getDrawingVersion(setDrawingVersion(stamped, null))).toBeNull();
   });
 });

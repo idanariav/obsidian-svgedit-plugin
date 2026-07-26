@@ -68,6 +68,14 @@ export const VAULT_EXTERNAL_ATTR = "data-vault-external";
 // editor, so exports stay clean. White (the default) is omitted, so absence
 // means white. See SvgData.ts (getCanvasBg/setCanvasBg) and SvgView.ts.
 export const CANVAS_BG_ATTR = "data-svgedit-canvas-bg";
+// Stamped onto the saved drawing's root <svg> with the plugin version (from
+// manifest.json) that last saved it. Read on open to decide which migrations
+// (see src/data/migrations.ts) still need to run against this drawing, then
+// stripped before handing the SVG to the live editor — like CANVAS_BG_ATTR,
+// it's plugin bookkeeping, not part of the document, so it must not leak into
+// exports or the editor's own SVG-source view. Re-stamped with the current
+// version on every save.
+export const PLUGIN_VERSION_ATTR = "data-svgedit-plugin-version";
 export const SWITCH_NOTICE =
   "==⚠  Switch to SVG VIEW in the ribbon or right-click menu  ⚠==";
 

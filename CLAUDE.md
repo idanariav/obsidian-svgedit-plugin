@@ -33,6 +33,15 @@ cd ../svgedit && npm run build
 cd ../obsidian-svgedit-plugin && npm run sync-svgedit
 ```
 
+**Every sync is a version bump** — bump `version` in `manifest.json` (and
+`package.json` to match) and add the corresponding entry to `versions.json`,
+even for a "just pull the latest bundle" sync with no code change here.
+Drawings are stamped with the plugin version that last saved them
+(`PLUGIN_VERSION_ATTR`, see `src/data/SvgData.ts` / `src/data/migrations.ts`)
+so that migrations can run once against older drawings; if a sync that needs a
+migration ships without a version bump, drawings already stamped with that
+(unbumped) version will never be seen as "older" and the migration won't fire.
+
 This plugin imports that bundle at **build time** (esbuild `alias` →
 `svgedit-editor`, see `esbuild.config.mjs`), so the whole editor is inlined into
 `main.js`. **Nothing from `svgedit-dist/` is shipped to the vault** — the plugin
@@ -65,7 +74,9 @@ the bundle is read-only and no patching should occur.
 2. `cd ../svgedit && npm run build`
 3. `cd ../obsidian-svgedit-plugin && npm run sync-svgedit` (refreshes `svgedit-dist/Editor.js`)
 4. `npm run build` to re-inline the bundle into `main.js`
-5. Commit the updated `svgedit-dist/Editor.js` here with a message referencing the fork commit
+5. Bump `version` in `manifest.json` and `package.json`, and add the new
+   version to `versions.json` (see the version-bump note above)
+6. Commit the updated `svgedit-dist/Editor.js` here with a message referencing the fork commit
 
 ---
 

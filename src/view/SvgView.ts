@@ -8,7 +8,8 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, getDrawingVersion, setDrawingVersion, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds } from "../data/SvgData";
+import { runMigrations } from "../data/migrations";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { putBackup, getBackup, deleteBackup } from "../data/drawingBackup";
 import { RestoreBackupModal } from "../modals/RestoreBackupModal";
@@ -557,11 +558,15 @@ export class SvgView extends TextFileView {
       }
     }
 
-    // The per-drawing canvas background is stashed on the saved root <svg>.
-    // Pull it out and strip it before handing the SVG to the editor, so the
-    // live canvas (and its exports) never carry our bookkeeping attribute.
+    // The per-drawing canvas background and plugin version are stashed on the
+    // saved root <svg>. Pull the background out, run any migrations this
+    // drawing hasn't seen yet (based on the version it was last saved with),
+    // then strip both before handing the SVG to the editor, so the live
+    // canvas (and its exports) never carry our bookkeeping attributes.
     const bg = getCanvasBg(stored);
-    const raw = setCanvasBg(stored, null);
+    const storedVersion = getDrawingVersion(stored);
+    const migrated = runMigrations(setCanvasBg(stored, null), storedVersion);
+    const raw = setDrawingVersion(migrated, null);
     // Locked imports are re-baked from their source on every open so a drawing
     // always reflects the latest version of what it embeds.
     const embedded = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
@@ -610,11 +615,14 @@ export class SvgView extends TextFileView {
     return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
   }
 
-  /** Stamp the editor's current canvas background onto the SVG root so it
-   *  persists per-drawing. White (the default) is omitted, so unedited drawings
+  /** Stamp the editor's current canvas background and the running plugin
+   *  version onto the SVG root before it's persisted (file save, IndexedDB
+   *  backup, or the onunload snapshot) — so every write of this drawing
+   *  records the plugin version that produced it, for migrations on a later
+   *  open. White background (the default) is omitted, so unedited drawings
    *  don't gain the attribute and absence simply means white. */
   private stampCanvasBg(svg: string): string {
-    return setCanvasBg(svg, this.canvasBgToken());
+    return setDrawingVersion(setCanvasBg(svg, this.canvasBgToken()), this.plugin.manifest.version);
   }
 
   /** The current canvas background as a single persist/export token: a CSS

@@ -13,6 +13,7 @@ import {
   LINKED_FILES_HEADING,
   VAULT_LINK_ATTR,
   CANVAS_BG_ATTR,
+  PLUGIN_VERSION_ATTR,
 } from "../constants";
 
 // Matches the fenced raw-SVG block between the ## Drawing heading and the %%
@@ -144,6 +145,33 @@ export function setCanvasBg(svg: string, color: string | null): string {
   );
   if (!color) return stripped;
   return stripped.replace(/<svg\b/, `<svg ${CANVAS_BG_ATTR}="${color}"`);
+}
+
+// ── Per-drawing plugin version (migrations) ────────────────────────────────────
+// Stamped on save so a drawing carries the plugin version that last wrote it.
+// Read on open to decide which one-time migrations (src/data/migrations.ts)
+// still need to run, then stripped before the SVG reaches the live editor —
+// bookkeeping only, not part of the document.
+
+/** Read the plugin version stamped on a saved SVG's root, or null (predates
+ *  version-stamping, or never saved by this plugin). */
+export function getDrawingVersion(svg: string): string | null {
+  const m = new RegExp(`<svg\\b[^>]*\\s${PLUGIN_VERSION_ATTR}="([^"]*)"`).exec(svg);
+  return m ? m[1] : null;
+}
+
+/**
+ * Return `svg` with the plugin-version attribute set to `version` on the root
+ * <svg>, or removed when `version` is null. Any existing attribute is replaced
+ * first, so this is idempotent.
+ */
+export function setDrawingVersion(svg: string, version: string | null): string {
+  const stripped = svg.replace(
+    new RegExp(`\\s${PLUGIN_VERSION_ATTR}="[^"]*"`),
+    "",
+  );
+  if (!version) return stripped;
+  return stripped.replace(/<svg\b/, `<svg ${PLUGIN_VERSION_ATTR}="${version}"`);
 }
 
 // A gradient canvas background can't be expressed as a CSS color, so the

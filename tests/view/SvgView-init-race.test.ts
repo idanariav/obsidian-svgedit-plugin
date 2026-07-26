@@ -16,7 +16,7 @@
  */
 
 import { describe, it, expect, vi } from "vitest";
-import { extractSvg } from "../../src/data/SvgData";
+import { extractSvg, setDrawingVersion } from "../../src/data/SvgData";
 
 const hoisted = vi.hoisted(() => {
   const instances: FakeSvgEditor[] = [];
@@ -70,6 +70,7 @@ function flushMicrotasks(): Promise<void> {
 
 function makeFakePlugin() {
   return {
+    manifest: { version: "1.0.0" },
     settings: {
       editorTheme: "light",
       uiModeMobile: "standard",
@@ -140,6 +141,10 @@ describe("SvgView init race", () => {
     expect((view as any).editorReady).toBe(true);
     expect(fakeEditor.loadedSvgCalls).toEqual([DRAWING_SVG]);
     expect((view as any).hasLoadedContent).toBe(true);
-    expect(extractSvg(view.getViewData())).toBe(DRAWING_SVG);
+    // getViewData() now stamps the saving plugin's version onto the root <svg>
+    // (see PLUGIN_VERSION_ATTR); strip it before comparing against the
+    // pristine fixture, since that stamp isn't what this test is about.
+    const saved = extractSvg(view.getViewData());
+    expect(setDrawingVersion(saved ?? "", null)).toBe(DRAWING_SVG);
   });
 });
