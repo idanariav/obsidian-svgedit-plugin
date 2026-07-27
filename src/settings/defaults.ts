@@ -87,6 +87,9 @@ export interface SvgPluginSettings {
    *  drawings. Only its drawing content is used — the template's frontmatter and
    *  other markdown are ignored. Empty = start from a blank canvas. */
   defaultTemplate: string;
+  /** Restricts the "Default template" file suggester to this folder (and its
+   *  subfolders). Empty = search the whole vault. */
+  templatesFolder: string;
   /** Global default: open drawings in Markdown view (false = SVG view). */
   openAsMarkdown: boolean;
   /** Global default: export PNGs with transparent background (false = white fill). */
@@ -177,6 +180,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   defaultCanvasHeight: 600,
   drawingsFolder: "",
   defaultTemplate: "",
+  templatesFolder: "",
   openAsMarkdown: false,
   transparentBackground: false,
   exportFrame: "",

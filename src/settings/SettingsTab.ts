@@ -359,16 +359,41 @@ export class SvgSettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
+      .setName("Templates folder")
+      .setDesc(
+        "Limits the \"Default template\" suggestions below to this folder "
+        + "(including its subfolders). Leave blank to search the whole vault.",
+      )
+      .addText((t) => {
+        new FolderSuggest(this.app, t.inputEl, async (v) => {
+          this.plugin.settings.templatesFolder = v.trim();
+          await this.plugin.saveSettings();
+        });
+        t
+          .setPlaceholder("Templates")
+          .setValue(this.plugin.settings.templatesFolder)
+          .onChange(async (v) => {
+            this.plugin.settings.templatesFolder = v.trim();
+            await this.plugin.saveSettings();
+          });
+      });
+
+    new Setting(containerEl)
       .setName("Default template")
       .setDesc(
         "New and converted drawings start from this drawing's content (its "
         + "frontmatter and other text are ignored). Leave blank for a blank canvas.",
       )
       .addText((t) => {
-        new FileSuggest(this.app, t.inputEl, async (v) => {
-          this.plugin.settings.defaultTemplate = v.trim();
-          await this.plugin.saveSettings();
-        });
+        new FileSuggest(
+          this.app,
+          t.inputEl,
+          async (v) => {
+            this.plugin.settings.defaultTemplate = v.trim();
+            await this.plugin.saveSettings();
+          },
+          () => this.plugin.settings.templatesFolder,
+        );
         t
           .setPlaceholder("Templates/Drawing.md")
           .setValue(this.plugin.settings.defaultTemplate)
