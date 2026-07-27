@@ -440,6 +440,23 @@ export class SvgSettingsTab extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName("Note drawings field")
+      .setDesc(
+        "Frontmatter field added to the note by \"New drawing for this file\", "
+        + "containing a list of links to its drawings (a note can have more than one). "
+        + "Leave blank to skip linking.",
+      )
+      .addText((t) =>
+        t
+          .setPlaceholder("Drawings")
+          .setValue(this.plugin.settings.noteDrawingsField)
+          .onChange(async (v) => {
+            this.plugin.settings.noteDrawingsField = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
     // ── Folder overrides ─────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Folder overrides");
 

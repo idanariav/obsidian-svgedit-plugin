@@ -361,9 +361,31 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
 }
 
 /**
+ * Append a link to `linkedFile` onto `targetFile`'s `fieldName` frontmatter
+ * list, creating the list if needed and skipping duplicates.
+ */
+async function addFrontmatterLink(
+  plugin: SvgPlugin,
+  targetFile: TFile,
+  fieldName: string,
+  linkedFile: TFile,
+): Promise<void> {
+  const link = plugin.app.fileManager.generateMarkdownLink(linkedFile, targetFile.path);
+  await plugin.app.fileManager.processFrontMatter(targetFile, (fm) => {
+    if (!Array.isArray(fm[fieldName])) {
+      fm[fieldName] = fm[fieldName] != null ? [fm[fieldName], link] : [link];
+    } else if (!(fm[fieldName] as string[]).includes(link)) {
+      (fm[fieldName] as string[]).push(link);
+    }
+  });
+}
+
+/**
  * Create a new drawing (from the configured template/folder/filename suffix)
- * and, if a link-back field is configured, stamp a link to `noteFile` onto its
- * frontmatter — then open it.
+ * and, if configured, link it back to `noteFile` two-way: a link to the note
+ * on the drawing's frontmatter, and a link to the drawing on the note's
+ * frontmatter (as a list, since a note can have more than one drawing) —
+ * then open the drawing.
  */
 async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise<void> {
   try {
@@ -381,16 +403,14 @@ async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise
       file = await createDrawingAt(plugin, path);
     }
 
-    const fieldName = plugin.settings.newDrawingLinkField.trim();
-    if (fieldName) {
-      const link = plugin.app.fileManager.generateMarkdownLink(noteFile, file.path);
-      await plugin.app.fileManager.processFrontMatter(file, (fm) => {
-        if (!Array.isArray(fm[fieldName])) {
-          fm[fieldName] = fm[fieldName] != null ? [fm[fieldName], link] : [link];
-        } else if (!(fm[fieldName] as string[]).includes(link)) {
-          (fm[fieldName] as string[]).push(link);
-        }
-      });
+    const drawingFieldName = plugin.settings.newDrawingLinkField.trim();
+    if (drawingFieldName) {
+      await addFrontmatterLink(plugin, file, drawingFieldName, noteFile);
+    }
+
+    const noteFieldName = plugin.settings.noteDrawingsField.trim();
+    if (noteFieldName) {
+      await addFrontmatterLink(plugin, noteFile, noteFieldName, file);
     }
 
     const leaf = plugin.app.workspace.getLeaf(false);

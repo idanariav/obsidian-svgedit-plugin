@@ -173,6 +173,10 @@ export interface SvgPluginSettings {
   /** Frontmatter field added to a drawing created via "New drawing for this
    *  file", set to a link back to the note. Empty = don't add a link. */
   newDrawingLinkField: string;
+  /** Frontmatter field added to the note by "New drawing for this file",
+   *  containing a list of links to its drawings (a note can have more than
+   *  one). Empty = don't add a link. */
+  noteDrawingsField: string;
 }
 
 export const DEFAULT_SETTINGS: SvgPluginSettings = {
@@ -208,4 +212,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   fontsFolder: "svgedit-fonts",
   newDrawingSuffix: " (drawing)",
   newDrawingLinkField: "",
+  noteDrawingsField: "",
 };
