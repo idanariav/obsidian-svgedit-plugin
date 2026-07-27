@@ -381,8 +381,12 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Default template")
       .setDesc(
-        "New and converted drawings start from this drawing's content (its "
-        + "frontmatter and other text are ignored). Leave blank for a blank canvas.",
+        "New and converted drawings start from this drawing's content. If "
+        + "Templater is installed, new drawings (not conversions) are created by "
+        + "running this file through Templater itself, so its script/frontmatter "
+        + "render normally; otherwise they inherit its static frontmatter fields "
+        + "without overwriting fields the note already has. Leave blank for a "
+        + "blank canvas.",
       )
       .addText((t) => {
         new FileSuggest(

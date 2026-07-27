@@ -84,8 +84,11 @@ export interface SvgPluginSettings {
   defaultCanvasHeight: number;
   drawingsFolder: string;
   /** Vault path of a drawing whose Sketch Editor Data seeds new/converted
-   *  drawings. Only its drawing content is used — the template's frontmatter and
-   *  other markdown are ignored. Empty = start from a blank canvas. */
+   *  drawings. New (not converted) drawings prefer creating via Templater
+   *  itself when installed (see integrations/templater.ts), so the template's
+   *  own script/frontmatter render normally; otherwise they inherit its static
+   *  frontmatter fields (see resolveTemplateFrontmatter in commands.ts) without
+   *  overwriting fields the note already has. Empty = start from a blank canvas. */
   defaultTemplate: string;
   /** Restricts the "Default template" file suggester to this folder (and its
    *  subfolders). Empty = search the whole vault. */

@@ -1,24 +1,17 @@
 import { App, Modal, Setting, normalizePath, TFolder } from "obsidian";
-import { createDrawingTemplate } from "../data/SvgData";
 
 export class NewDrawingModal extends Modal {
   private name = "Untitled";
   private folder: string;
-  private compress: boolean;
-  private templateSvg: string;
-  private onSubmit: (file: { path: string; content: string }) => void;
+  private onSubmit: (result: { path: string; folder: string; name: string }) => void;
 
   constructor(
     app: App,
     defaultFolder: string,
-    compress: boolean,
-    templateSvg: string,
-    onSubmit: (file: { path: string; content: string }) => void,
+    onSubmit: (result: { path: string; folder: string; name: string }) => void,
   ) {
     super(app);
     this.folder = defaultFolder;
-    this.compress = compress;
-    this.templateSvg = templateSvg;
     this.onSubmit = onSubmit;
   }
 
@@ -51,7 +44,7 @@ export class NewDrawingModal extends Modal {
           if (!this.name) return;
           const dir = this.folder ? this.folder.replace(/\/$/, "") + "/" : "";
           const path = normalizePath(`${dir}${this.name}.md`);
-          this.onSubmit({ path, content: createDrawingTemplate(this.compress, this.templateSvg) });
+          this.onSubmit({ path, folder: this.folder, name: this.name });
           this.close();
         }),
     );

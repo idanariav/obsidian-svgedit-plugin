@@ -24,7 +24,7 @@ import {
 import { listFrames, prepareSvgForExport } from "./export/frames";
 import { IMAGE_EXTENSIONS } from "./constants";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
-import { registerCommands, resolveTemplateSvg } from "./commands";
+import { registerCommands, tryCreateDrawingViaTemplater, createDrawingAt } from "./commands";
 import { registerFileSyncHandlers } from "./fileSync";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { VIEW_TYPE_SVG } from "./constants";
@@ -56,15 +56,14 @@ export default class SvgPlugin extends Plugin {
     );
 
     // Ribbon icon — open new drawing
-    this.addRibbonIcon(RIBBON_ICON, "New SVG drawing", async () => {
-      const templateSvg = await resolveTemplateSvg(this);
+    this.addRibbonIcon(RIBBON_ICON, "New SVG drawing", () => {
       new NewDrawingModal(
         this.app,
         this.settings.drawingsFolder,
-        this.settings.compressDrawingData,
-        templateSvg,
-        async ({ path, content }) => {
-          const file = await this.app.vault.create(path, content);
+        async ({ path, folder, name }) => {
+          const file =
+            (await tryCreateDrawingViaTemplater(this, folder, name)) ??
+            (await createDrawingAt(this, path));
           const leaf = this.app.workspace.getLeaf(false);
           await leaf.openFile(file, { active: true });
         },

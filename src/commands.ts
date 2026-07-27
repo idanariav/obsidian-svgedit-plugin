@@ -1,4 +1,4 @@
-import { App, Notice, normalizePath, TFile } from "obsidian";
+import { App, Notice, normalizePath, parseYaml, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
@@ -7,6 +7,8 @@ import { exportSvg, exportPng } from "./export/exporter";
 import { ExportModal } from "./modals/ExportModal";
 import { extractSvg, replaceSvg, createDrawingTemplate } from "./data/SvgData";
 import { uniqueVaultPath } from "./data/uniqueName";
+import { stripTemplaterSyntax, applyTemplateFrontmatter } from "./data/templateFrontmatter";
+import { createNoteViaTemplater } from "./integrations/templater";
 import {
   parseExcalidrawScene,
   excalidrawToSvg,
@@ -62,26 +64,84 @@ export async function resolveTemplateSvg(plugin: SvgPlugin): Promise<string> {
   return svg;
 }
 
+/**
+ * Static (non-Templater) frontmatter fields declared on the configured
+ * template drawing, to pre-fill new/converted drawings with the same schema
+ * (e.g. "Description:", "ContentStatus: Ideas"). A raw Templater template's
+ * frontmatter isn't valid YAML on its own — see stripTemplaterSyntax for what
+ * gets dropped before parsing. Returns {} when there's no template, it can't
+ * be read, or nothing static survives.
+ */
+export async function resolveTemplateFrontmatter(plugin: SvgPlugin): Promise<Record<string, unknown>> {
+  const path = plugin.settings.defaultTemplate.trim();
+  if (!path) return {};
+  const file = plugin.app.vault.getAbstractFileByPath(path);
+  if (!(file instanceof TFile)) return {};
+  const content = await plugin.app.vault.read(file);
+  const match = /^---\n([\s\S]*?)\n---/.exec(content);
+  if (!match) return {};
+  try {
+    const parsed = parseYaml(stripTemplaterSyntax(match[1]));
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Try to create the new drawing note by running the configured template
+ * through Templater itself (see integrations/templater.ts) rather than this
+ * plugin's own static Drawing-block-and-frontmatter copy. Returns null when
+ * there's no template configured, it isn't a real file, or Templater isn't
+ * installed/enabled — callers fall back to createDrawingAt() in that case.
+ */
+export async function tryCreateDrawingViaTemplater(
+  plugin: SvgPlugin,
+  folder: string,
+  filename: string,
+): Promise<TFile | null> {
+  const templatePath = plugin.settings.defaultTemplate.trim();
+  if (!templatePath) return null;
+  const templateFile = plugin.app.vault.getAbstractFileByPath(templatePath);
+  if (!(templateFile instanceof TFile)) return null;
+  return createNoteViaTemplater(plugin.app, templateFile, folder, filename);
+}
+
+/** Build a new drawing note directly at `path`, from the configured
+ *  template's Drawing block and static frontmatter fields (the non-Templater
+ *  path — see tryCreateDrawingViaTemplater for the preferred one). */
+export async function createDrawingAt(plugin: SvgPlugin, path: string): Promise<TFile> {
+  const templateSvg = await resolveTemplateSvg(plugin);
+  const templateFrontmatter = await resolveTemplateFrontmatter(plugin);
+  const content = createDrawingTemplate(plugin.settings.compressDrawingData, templateSvg);
+  const file = await plugin.app.vault.create(path, content);
+  if (Object.keys(templateFrontmatter).length) {
+    await plugin.app.fileManager.processFrontMatter(file, (fm) =>
+      applyTemplateFrontmatter(fm, templateFrontmatter),
+    );
+  }
+  return file;
+}
+
 export function registerCommands(plugin: SvgPlugin): void {
   // New drawing
   plugin.addCommand({
     id: "new-svg-drawing",
     name: "New SVG drawing",
     callback: async () => {
-      const templateSvg = await resolveTemplateSvg(plugin);
       new NewDrawingModal(
         plugin.app,
         plugin.settings.drawingsFolder,
-        plugin.settings.compressDrawingData,
-        templateSvg,
-        async ({ path, content }) => {
+        async ({ path, folder, name }) => {
           try {
             const existing = plugin.app.vault.getAbstractFileByPath(path);
             if (existing) {
               new Notice(`File already exists: ${path}`);
               return;
             }
-            const file = await plugin.app.vault.create(path, content);
+            const file =
+              (await tryCreateDrawingViaTemplater(plugin, folder, name)) ??
+              (await createDrawingAt(plugin, path));
             const leaf = plugin.app.workspace.getLeaf(false);
             await leaf.openFile(file, { active: true });
           } catch (e: unknown) {
@@ -307,18 +367,19 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
  */
 async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise<void> {
   try {
-    const templateSvg = await resolveTemplateSvg(plugin);
     const baseName = `${noteFile.basename}${plugin.settings.newDrawingSuffix}`;
-    const path = normalizePath(
-      uniqueVaultPath(
-        (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
-        plugin.settings.drawingsFolder,
-        baseName,
-        "md",
-      ),
-    );
-    const content = createDrawingTemplate(plugin.settings.compressDrawingData, templateSvg);
-    const file = await plugin.app.vault.create(path, content);
+    let file = await tryCreateDrawingViaTemplater(plugin, plugin.settings.drawingsFolder, baseName);
+    if (!file) {
+      const path = normalizePath(
+        uniqueVaultPath(
+          (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
+          plugin.settings.drawingsFolder,
+          baseName,
+          "md",
+        ),
+      );
+      file = await createDrawingAt(plugin, path);
+    }
 
     const fieldName = plugin.settings.newDrawingLinkField.trim();
     if (fieldName) {
