@@ -361,8 +361,9 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Templates folder")
       .setDesc(
-        "Limits the \"Default template\" suggestions below to this folder "
-        + "(including its subfolders). Leave blank to search the whole vault.",
+        "Limits the \"Default template\" and \"Default drawing template\" "
+        + "suggestions below to this folder (including its subfolders). Leave "
+        + "blank to search the whole vault.",
       )
       .addText((t) => {
         new FolderSuggest(this.app, t.inputEl, async (v) => {
@@ -381,12 +382,14 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Default template")
       .setDesc(
-        "New and converted drawings start from this drawing's content. If "
-        + "Templater is installed, new drawings (not conversions) are created by "
-        + "running this file through Templater itself, so its script/frontmatter "
-        + "render normally; otherwise they inherit its static frontmatter fields "
-        + "without overwriting fields the note already has. Leave blank for a "
-        + "blank canvas.",
+        "New drawings (\"New SVG drawing\", \"New drawing for this file\") start "
+        + "from this file. If Templater is installed, they're created by running "
+        + "this file through Templater itself, so its script/frontmatter render "
+        + "normally — e.g. a script that dynamically embeds a separate drawing "
+        + "file works here. Otherwise they inherit its static frontmatter fields "
+        + "without overwriting fields the note already has. Not used by \"Convert "
+        + "note to SVG drawing\" — see \"Default drawing template\" below. Leave "
+        + "blank for a blank canvas.",
       )
       .addText((t) => {
         new FileSuggest(
@@ -403,6 +406,35 @@ export class SvgSettingsTab extends PluginSettingTab {
           .setValue(this.plugin.settings.defaultTemplate)
           .onChange(async (v) => {
             this.plugin.settings.defaultTemplate = v.trim();
+            await this.plugin.saveSettings();
+          });
+      });
+
+    new Setting(containerEl)
+      .setName("Default drawing template")
+      .setDesc(
+        "\"Convert note to SVG drawing\" starts from this drawing's content. "
+        + "Read directly, without running Templater, so point this at a drawing "
+        + "with literal Sketch Editor Data rather than at a Templater script — "
+        + "if \"Default template\" above uses Templater to dynamically embed a "
+        + "drawing, use that embedded drawing file here instead. Leave blank for "
+        + "a blank canvas.",
+      )
+      .addText((t) => {
+        new FileSuggest(
+          this.app,
+          t.inputEl,
+          async (v) => {
+            this.plugin.settings.defaultDrawingTemplate = v.trim();
+            await this.plugin.saveSettings();
+          },
+          () => this.plugin.settings.templatesFolder,
+        );
+        t
+          .setPlaceholder("Templates/Drawing.md")
+          .setValue(this.plugin.settings.defaultDrawingTemplate)
+          .onChange(async (v) => {
+            this.plugin.settings.defaultDrawingTemplate = v.trim();
             await this.plugin.saveSettings();
           });
       });

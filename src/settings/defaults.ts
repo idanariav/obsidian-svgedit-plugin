@@ -90,8 +90,15 @@ export interface SvgPluginSettings {
    *  frontmatter fields (see resolveTemplateFrontmatter in commands.ts) without
    *  overwriting fields the note already has. Empty = start from a blank canvas. */
   defaultTemplate: string;
-  /** Restricts the "Default template" file suggester to this folder (and its
-   *  subfolders). Empty = search the whole vault. */
+  /** Vault path of a drawing whose Sketch Editor Data seeds "Convert note to
+   *  SVG drawing". Read directly (via extractSvg) — no Templater execution —
+   *  so if defaultTemplate relies on Templater to dynamically embed a drawing,
+   *  point this at that literal drawing file instead of at defaultTemplate.
+   *  Empty = start from a blank canvas. */
+  defaultDrawingTemplate: string;
+  /** Restricts the "Default template" and "Default drawing template" file
+   *  suggesters to this folder (and its subfolders). Empty = search the whole
+   *  vault. */
   templatesFolder: string;
   /** Global default: open drawings in Markdown view (false = SVG view). */
   openAsMarkdown: boolean;
@@ -187,6 +194,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   defaultCanvasHeight: 600,
   drawingsFolder: "",
   defaultTemplate: "",
+  defaultDrawingTemplate: "",
   templatesFolder: "",
   openAsMarkdown: false,
   transparentBackground: false,

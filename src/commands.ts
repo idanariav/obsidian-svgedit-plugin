@@ -45,23 +45,43 @@ function applyDrawingTag(fm: Record<string, unknown>, plugin: SvgPlugin): void {
 }
 
 /**
- * Resolve the configured template drawing's SVG (its Sketch Editor Data only),
- * or EMPTY_SVG when no template is set / it can't be read.
+ * Read a template file's Sketch Editor Data directly (no Templater
+ * execution), or EMPTY_SVG when no path is set / it can't be read. Shared by
+ * resolveTemplateSvg and resolveDrawingTemplateSvg.
  */
-export async function resolveTemplateSvg(plugin: SvgPlugin): Promise<string> {
-  const path = plugin.settings.defaultTemplate.trim();
+async function readTemplateSvg(plugin: SvgPlugin, path: string, label: string): Promise<string> {
   if (!path) return EMPTY_SVG;
   const file = plugin.app.vault.getAbstractFileByPath(path);
   if (!(file instanceof TFile)) {
-    new Notice(`Template not found, using blank canvas: ${path}`);
+    new Notice(`${label} not found, using blank canvas: ${path}`);
     return EMPTY_SVG;
   }
   const svg = extractSvg(await plugin.app.vault.read(file));
   if (!svg) {
-    new Notice(`Template has no drawing data, using blank canvas: ${path}`);
+    new Notice(`${label} has no drawing data, using blank canvas: ${path}`);
     return EMPTY_SVG;
   }
   return svg;
+}
+
+/**
+ * Resolve the configured template drawing's SVG (its Sketch Editor Data only),
+ * or EMPTY_SVG when no template is set / it can't be read.
+ */
+export async function resolveTemplateSvg(plugin: SvgPlugin): Promise<string> {
+  return readTemplateSvg(plugin, plugin.settings.defaultTemplate.trim(), "Template");
+}
+
+/**
+ * Resolve the configured "Convert note to SVG drawing" drawing template's
+ * SVG, or EMPTY_SVG when none is set / it can't be read. Kept separate from
+ * resolveTemplateSvg because conversion reads the file's raw content directly
+ * (extractSvg) rather than running it through Templater, so a defaultTemplate
+ * that relies on Templater to dynamically embed a drawing would otherwise
+ * yield unrendered Templater syntax here instead of real SVG data.
+ */
+export async function resolveDrawingTemplateSvg(plugin: SvgPlugin): Promise<string> {
+  return readTemplateSvg(plugin, plugin.settings.defaultDrawingTemplate.trim(), "Drawing template");
 }
 
 /**
@@ -348,7 +368,7 @@ async function convertNoteToDrawing(plugin: SvgPlugin, file: TFile): Promise<voi
     // 2. Append the drawing block if it isn't there yet
     const content = await plugin.app.vault.read(file);
     if (!extractSvg(content)) {
-      const templateSvg = await resolveTemplateSvg(plugin);
+      const templateSvg = await resolveDrawingTemplateSvg(plugin);
       await plugin.app.vault.modify(file, replaceSvg(content, templateSvg, plugin.settings.compressDrawingData));
     }
 
