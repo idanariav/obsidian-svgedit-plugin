@@ -83,6 +83,16 @@ export class SvgView extends TextFileView {
    *  persist an un-loaded canvas" guard and letting the next save overwrite
    *  the file with svgedit's blank default canvas. */
   private editorReady = false;
+
+  /** Timestamped action log for diagnosing hard-to-reproduce editor bugs (see
+   *  src/debug/debugLog.ts); a no-op unless "Debug logging" is on in settings.
+   *  Every line is tagged with this view's file path so events interleave
+   *  correctly when multiple drawings are open. `plugin.debugLog` is optional
+   *  here only to tolerate the lightweight fake plugin used by unit tests. */
+  private log(event: string, detail?: Record<string, unknown>): void {
+    this.plugin.debugLog?.log(event, { file: this.file?.path, ...detail });
+  }
+
   private currentData = "";
   private pendingSvg: string | null = null;
   /** Canvas background color awaiting an editor that isn't initialized yet;
@@ -200,11 +210,13 @@ export class SvgView extends TextFileView {
       await this.initEditor();
     } catch (e) {
       console.error("[Sketch Editor] Failed to init editor:", e);
+      this.log("editor-init-fail", { error: String(e) });
       this.editorContainer.setText(`SVG editor failed to load: ${(e as Error).message}`);
     }
   }
 
   private async initEditor(): Promise<void> {
+    this.log("editor-init-start");
     // svgedit ships as a single self-contained ESM bundle that esbuild inlines
     // into this plugin's main.js (see esbuild.config.mjs `alias`). It carries its
     // own CSS, icons and extensions, so there's nothing to fetch from disk — we
@@ -325,6 +337,7 @@ export class SvgView extends TextFileView {
 
     await this.svgEditor.init();
     this.editorReady = true;
+    this.log("editor-init-done");
     this.scopeInjectedCss();
     // If this view is already the active leaf when init finishes (e.g. it was
     // just opened), mark its editor active — matches the active-leaf-change
@@ -342,7 +355,10 @@ export class SvgView extends TextFileView {
       // flushes on switch-away / toggle / close / file-switch) own the actual
       // save+export. We deliberately don't save on every change — that would
       // re-run the PNG export constantly. setDirty arms the autosave timer.
-      if (!this.isLoading) this.setDirty(true);
+      if (!this.isLoading) {
+        this.log("svg-changed", { bytes: this.svgEditor?.svgCanvas.getSvgString().length });
+        this.setDirty(true);
+      }
     });
 
     // Deliver SVG that arrived before the editor was ready
@@ -390,12 +406,15 @@ export class SvgView extends TextFileView {
     // Already armed: don't reset on every edit, or continuous drawing would
     // starve the save indefinitely. The first edit since the last flush wins.
     if (this.autosaveTimer !== null) return;
+    this.log("autosave-scheduled", { seconds });
     this.autosaveTimer = window.setTimeout(() => {
       this.autosaveTimer = null;
       if (this.svgDirty && this.hasLoadedContent && this.svgEditor && this.file && !this.svgSaving) {
+        this.log("autosave-fired");
         void this.autosaveFlush();
       } else if (this.svgDirty) {
         // Blocked (a save is in flight) but still dirty — retry shortly.
+        this.log("autosave-blocked-retry");
         this.autosaveTimer = window.setTimeout(() => {
           this.autosaveTimer = null;
           this.scheduleAutosave();
@@ -533,6 +552,7 @@ export class SvgView extends TextFileView {
   // ── TextFileView interface ─────────────────────────────────────────────────
 
   async setViewData(data: string, _clear: boolean): Promise<void> {
+    this.log("view-load", { bytes: data.length });
     this.currentData = data;
     const gen = ++this.loadGen; // uniquely identifies this load
     let stored = extractSvg(data) ?? EMPTY_SVG;
@@ -701,6 +721,8 @@ export class SvgView extends TextFileView {
     this.svgSaving = true;
     this.dirtyDuringSave = false;
     const hadDirty = this.svgDirty;
+    const start = Date.now();
+    this.log("save-start", { export: opts.export, clear: !!opts.clear });
     try {
       await super.save(opts.clear);
       // Only clear dirty if no edit landed during the write (setDirty routed it
@@ -715,6 +737,7 @@ export class SvgView extends TextFileView {
         if (!isEmptyDrawing(backupSvg)) void putBackup(this.file.path, backupSvg);
       }
       if (opts.export) await this.exportCompanions();
+      this.log("save-success", { ms: Date.now() - start });
     } catch (e) {
       // Don't swallow the edit: restore dirty so the next autosave retries.
       if (hadDirty) {
@@ -722,6 +745,7 @@ export class SvgView extends TextFileView {
         this.saveBtn?.toggleClass("svg-plugin-dirty", true);
       }
       console.error("[Sketch Editor] save failed:", e);
+      this.log("save-fail", { error: String(e) });
     } finally {
       this.svgSaving = false;
       // An edit arrived during the save — re-arm the autosave to flush it.
@@ -749,6 +773,7 @@ export class SvgView extends TextFileView {
       this.companionStale = false;
     } catch (e) {
       console.error("[Sketch Editor] auto-export failed:", e);
+      this.log("export-fail", { error: String(e) });
     }
   }
 
@@ -775,6 +800,7 @@ export class SvgView extends TextFileView {
    *  view. With per-edit saving gone, this is what persists unsaved work on
    *  navigation — the periodic timer only covers staying on the same file. */
   async onUnloadFile(file: TFile): Promise<void> {
+    this.log("file-switch");
     this.clearAutosaveTimer();
     // Let any in-flight autosave finish before we flush, so we don't race it.
     await this.waitForSave();
@@ -785,6 +811,7 @@ export class SvgView extends TextFileView {
   }
 
   async onunload(): Promise<void> {
+    this.log("view-unload");
     this.clearAutosaveTimer();
     // Wait for any in-flight save before snapshotting/destroying the canvas, so
     // a running export can't read a torn-down editor.

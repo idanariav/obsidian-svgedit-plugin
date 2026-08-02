@@ -180,6 +180,12 @@ export interface SvgPluginSettings {
   /** Frontmatter field added to a drawing created via "New drawing for this
    *  file", set to a link back to the note. Empty = don't add a link. */
   newDrawingLinkField: string;
+  /** When true, the plugin appends timestamped editor lifecycle/edit/save events
+   *  to a local log file (see src/debug/debugLog.ts) — meant for capturing the
+   *  sequence of actions leading up to a hard-to-reproduce bug. Off by default;
+   *  the log lives outside the vault (plugin config dir), never syncs, and isn't
+   *  read by anything else in the plugin. */
+  debugLogging: boolean;
   /** Frontmatter field added to the note by "New drawing for this file",
    *  containing a list of links to its drawings (a note can have more than
    *  one). Empty = don't add a link. */
@@ -221,4 +227,5 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   newDrawingSuffix: " (drawing)",
   newDrawingLinkField: "",
   noteDrawingsField: "",
+  debugLogging: false,
 };

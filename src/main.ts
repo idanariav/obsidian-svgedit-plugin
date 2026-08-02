@@ -28,12 +28,16 @@ import { registerCommands, tryCreateDrawingViaTemplater, createDrawingAt } from 
 import { registerFileSyncHandlers } from "./fileSync";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { VIEW_TYPE_SVG } from "./constants";
+import { DebugLog } from "./debug/debugLog";
 
 const RIBBON_ICON = "pencil";
 
 export default class SvgPlugin extends Plugin {
   settings!: SvgPluginSettings;
   _loaded = false;
+  /** Action log used to diagnose hard-to-reproduce editor bugs; a no-op until
+   *  "Debug logging" is turned on in settings (see SvgView's log() calls). */
+  debugLog!: DebugLog;
   /** Leaves in this set bypass the SVG-redirect in setViewStatePatch for one call. */
   bypassLeaves = new Set<WorkspaceLeaf>();
   /** leafId → path of a drawing the user explicitly chose to view as markdown.
@@ -48,6 +52,12 @@ export default class SvgPlugin extends Plugin {
 
   async onload(): Promise<void> {
     await this.loadSettings();
+
+    this.debugLog = new DebugLog(
+      this.app,
+      `${this.manifest.dir}/debug.log`,
+      () => this.settings.debugLogging,
+    );
 
     // Register custom view
     this.registerView(
@@ -148,6 +158,7 @@ export default class SvgPlugin extends Plugin {
     this._loaded = false;
     this.uninstallPatch?.();
     delete window.svgEditHost;
+    await this.debugLog.flush();
   }
 
   /** The vault path the active drawing's links should resolve against. */

@@ -154,3 +154,17 @@ Click **+ Add mapping** and set:
 
 If a drawing matches more than one mapping, the **longest matching source path
 wins**. Drawings that match no mapping export next to themselves as usual.
+
+---
+
+## Debug
+
+### Debug logging
+
+- **Values:** On / Off (default **Off**)
+- When **On**, the plugin appends timestamped editor events (load, edit, save,
+  export) to a log file, to help reconstruct what led up to a hard-to-reproduce
+  bug. The log lives outside the vault, in this plugin's own folder — it isn't
+  synced and never shows up in search.
+- Turn it on, reproduce the issue, then use **Copy to clipboard** below to grab the
+  log for a bug report. **Clear** empties it so a fresh session starts clean.

@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
 import type { ExportFolderMapping } from "./defaults";
 import { FolderSuggest } from "./FolderSuggest";
@@ -541,6 +541,50 @@ export class SvgSettingsTab extends PluginSettingTab {
     for (let i = 0; i < this.plugin.settings.exportFolderMappings.length; i++) {
       this.renderMappingRow(containerEl, i);
     }
+
+    // ── Debug ────────────────────────────────────────────────────────────────
+    new Setting(containerEl).setHeading().setName("Debug");
+
+    new Setting(containerEl)
+      .setName("Debug logging")
+      .setDesc(
+        "Log editor actions (load, edit, save, export) with timestamps to a local "
+        + "file, to help capture what led up to a hard-to-reproduce bug. Off by "
+        + "default; the log lives outside the vault, in this plugin's own folder, "
+        + "and is never synced.",
+      )
+      .addToggle((t) =>
+        t
+          .setValue(this.plugin.settings.debugLogging)
+          .onChange(async (v) => {
+            this.plugin.settings.debugLogging = v;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Debug log")
+      .setDesc(
+        "Copy the collected log so it can be attached to a bug report, or clear "
+        + "it to start fresh before reproducing an issue.",
+      )
+      .addButton((btn) =>
+        btn
+          .setButtonText("Copy to clipboard")
+          .onClick(async () => {
+            const contents = await this.plugin.debugLog.read();
+            await navigator.clipboard.writeText(contents || "(empty)");
+            new Notice(contents ? "Debug log copied to clipboard." : "Debug log is empty.");
+          }),
+      )
+      .addButton((btn) =>
+        btn
+          .setButtonText("Clear")
+          .onClick(async () => {
+            await this.plugin.debugLog.clear();
+            new Notice("Debug log cleared.");
+          }),
+      );
   }
 
   private renderMappingRow(containerEl: HTMLElement, index: number): void {
