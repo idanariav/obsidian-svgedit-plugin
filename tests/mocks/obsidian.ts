@@ -71,6 +71,7 @@ export class WorkspaceLeaf {
   view: unknown;
   detach(): void {}
   async setViewState(_state: unknown, _eState?: unknown): Promise<void> {}
+  recordHistory(_entry: unknown): void {}
 }
 
 export class Scope {

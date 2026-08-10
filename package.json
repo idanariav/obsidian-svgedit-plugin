@@ -1,6 +1,6 @@
 {
   "name": "obsidian-svg-plugin",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Embed and edit SVG drawings inside Obsidian markdown notes",
   "main": "main.js",
   "scripts": {

@@ -49,6 +49,7 @@ describe("installViewStatePatch", () => {
   let settings: typeof DEFAULT_SETTINGS;
   let nextSetViewState: ReturnType<typeof vi.fn>;
   let nextDetach: ReturnType<typeof vi.fn>;
+  let nextRecordHistory: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     markdownModeLeaves = new Map();
@@ -59,8 +60,10 @@ describe("installViewStatePatch", () => {
 
     nextSetViewState = vi.fn(async () => {});
     nextDetach = vi.fn();
+    nextRecordHistory = vi.fn();
     WorkspaceLeaf.prototype.setViewState = nextSetViewState as any;
     WorkspaceLeaf.prototype.detach = nextDetach as any;
+    WorkspaceLeaf.prototype.recordHistory = nextRecordHistory as any;
 
     uninstall = installViewStatePatch(
       app as any,
@@ -162,5 +165,57 @@ describe("installViewStatePatch", () => {
 
     expect(markdownModeLeaves.has("leaf-1")).toBe(false);
     expect(nextDetach).toHaveBeenCalledTimes(1);
+  });
+
+  describe("recordHistory (drawing/markdown toggle history suppression)", () => {
+    // Obsidian calls leaf.recordHistory(entry) with `entry` describing the
+    // state being navigated *away from*; `leaf.view` has already been swapped
+    // to the new view by the time it's called.
+
+    it("suppresses the entry when toggling markdown -> SVG for the SAME file", () => {
+      const leaf = new WorkspaceLeaf();
+      const file = new TFile();
+      file.path = DRAWING_PATH;
+      leaf.view = { getViewType: () => VIEW_TYPE_SVG, file };
+
+      leaf.recordHistory({ state: { type: "markdown", state: { file: DRAWING_PATH } } });
+
+      expect(nextRecordHistory).not.toHaveBeenCalled();
+    });
+
+    it("suppresses the entry when toggling SVG -> markdown for the SAME file", () => {
+      const leaf = new WorkspaceLeaf();
+      const file = new TFile();
+      file.path = DRAWING_PATH;
+      leaf.view = { getViewType: () => "markdown", file };
+
+      leaf.recordHistory({ state: { type: VIEW_TYPE_SVG, state: { file: DRAWING_PATH } } });
+
+      expect(nextRecordHistory).not.toHaveBeenCalled();
+    });
+
+    it("still records history when navigating to a DIFFERENT file, even if the view type also changes", () => {
+      const leaf = new WorkspaceLeaf();
+      const file = new TFile();
+      file.path = DRAWING_PATH;
+      leaf.view = { getViewType: () => VIEW_TYPE_SVG, file };
+      const entry = { state: { type: "markdown", state: { file: PLAIN_PATH } } };
+
+      leaf.recordHistory(entry);
+
+      expect(nextRecordHistory).toHaveBeenCalledWith(entry);
+    });
+
+    it("still records history for a normal markdown-to-markdown file navigation", () => {
+      const leaf = new WorkspaceLeaf();
+      const file = new TFile();
+      file.path = PLAIN_PATH;
+      leaf.view = { getViewType: () => "markdown", file };
+      const entry = { state: { type: "markdown", state: { file: DRAWING_PATH } } };
+
+      leaf.recordHistory(entry);
+
+      expect(nextRecordHistory).toHaveBeenCalledWith(entry);
+    });
   });
 });

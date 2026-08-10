@@ -23,7 +23,7 @@ export function installViewStatePatch(
   getSettings: () => SvgPluginSettings,
   markdownModeLeaves: Map<string, string>,
 ): () => void {
-  return around(WorkspaceLeaf.prototype, {
+  const uninstallSetViewState = around(WorkspaceLeaf.prototype, {
     // Drop a closed leaf's intentional-markdown marker so its id can't leak or
     // wrongly apply if Obsidian reuses it.
     detach(next) {
@@ -78,4 +78,41 @@ export function installViewStatePatch(
       };
     },
   });
+
+  // Obsidian's WorkspaceLeaf.setViewState pushes the *previous* state onto the
+  // leaf's navigation history whenever the view type changes, even if the file
+  // is unchanged. That means every drawing/markdown toggle (the command, the
+  // file-menu item, or the auto-redirects above) adds a spurious history entry,
+  // so a single "back" from a drawing note lands back on the same note's other
+  // view mode instead of the file that was actually open before it. Suppress
+  // just those same-file mode-toggle entries so back/forward navigate between
+  // files, not view modes. recordHistory isn't part of the public API, so this
+  // is cast loosely and left to no-op harmlessly if Obsidian's internals ever
+  // stop matching this shape.
+  const uninstallRecordHistory = around(
+    WorkspaceLeaf.prototype as unknown as Record<string, (entry: { state?: ViewState }) => void>,
+    {
+      recordHistory(next) {
+        return function (this: WorkspaceLeaf, entry: { state?: ViewState }) {
+          if (typeof next !== "function") return;
+          const oldType = entry?.state?.type;
+          const oldFile = (entry?.state?.state as { file?: string } | undefined)?.file;
+          const newType = this.view?.getViewType();
+          const newFile = (this.view as unknown as { file?: TFile })?.file?.path;
+          const isDrawingModeToggle =
+            !!oldFile &&
+            oldFile === newFile &&
+            ((oldType === "markdown" && newType === VIEW_TYPE_SVG) ||
+              (oldType === VIEW_TYPE_SVG && newType === "markdown"));
+          if (isDrawingModeToggle) return;
+          return next.call(this, entry);
+        };
+      },
+    },
+  );
+
+  return () => {
+    uninstallSetViewState();
+    uninstallRecordHistory();
+  };
 }
