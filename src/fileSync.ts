@@ -1,11 +1,13 @@
 import { TAbstractFile, TFile, normalizePath } from "obsidian";
 import type SvgPlugin from "./main";
+import type { SvgView } from "./view/SvgView";
 import { getCompanionPath } from "./export/exporter";
 import { isSvgDrawingFile } from "./data/frontmatter";
 import {
   FRONTMATTER_KEY_PLUGIN,
   LEGACY_FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
+  VIEW_TYPE_SVG,
 } from "./constants";
 
 /**
@@ -38,9 +40,32 @@ export function registerFileSyncHandlers(plugin: SvgPlugin): void {
   plugin.registerEvent(
     plugin.app.vault.on("delete", (file: TAbstractFile) => {
       if (!(file instanceof TFile)) return;
+      // Unconditional — this is basic view-lifecycle hygiene (a tab can't stay
+      // open showing a file that no longer exists), not a "keep companions in
+      // sync" preference, so it must not be gated by settings.keepInSync below.
+      closeLeavesForDeletedFile(plugin, file);
       void handleDelete(plugin, file);
     }),
   );
+}
+
+/**
+ * Close any open drawing tab(s) showing `file`, now that it's gone from the
+ * vault. Obsidian doesn't reliably detach a custom TextFileView's leaf on its
+ * own here — notably when the delete is triggered from the tab's own
+ * right-click "Delete file" menu item — which otherwise leaves the drawing
+ * open with a dead file reference: unresponsive, with no way to close it
+ * short of reloading Obsidian. markFileDeleted() runs first so the view's
+ * unload path doesn't then try to flush a save to (or export companions for)
+ * the file we just watched disappear.
+ */
+function closeLeavesForDeletedFile(plugin: SvgPlugin, file: TFile): void {
+  for (const leaf of plugin.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
+    const view = leaf.view as SvgView;
+    if (view.file?.path !== file.path) continue;
+    view.markFileDeleted();
+    leaf.detach();
+  }
 }
 
 /**

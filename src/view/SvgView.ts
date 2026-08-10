@@ -139,6 +139,10 @@ export class SvgView extends TextFileView {
    *  distinguish real theme changes from other class changes (e.g. `.open`) and
    *  ignore our own programmatic "auto"-follow updates. */
   private lastTheme: "light" | "dark" = "light";
+  /** Set by fileSync.ts's vault "delete" handler right before it detaches this
+   *  leaf, so the unload-time save flush below doesn't try to write (or export
+   *  companions for) a file that's already gone — see markFileDeleted(). */
+  private fileDeleted = false;
 
   constructor(leaf: WorkspaceLeaf, plugin: SvgPlugin) {
     super(leaf);
@@ -820,10 +824,20 @@ export class SvgView extends TextFileView {
     this.clearAutosaveTimer();
     // Let any in-flight autosave finish before we flush, so we don't race it.
     await this.waitForSave();
-    if ((this.svgDirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
+    if (!this.fileDeleted && (this.svgDirty || this.companionStale) && this.hasLoadedContent && this.svgEditor && this.file) {
       try { await this.runSave({ export: true }); } catch { /* best-effort */ }
     }
     await super.onUnloadFile(file);
+  }
+
+  /** Called by fileSync.ts's vault "delete" handler just before it detaches
+   *  this leaf (see registerFileSyncHandlers), so onUnloadFile/onunload below
+   *  don't try to flush a save to — or re-export companions for — a file that
+   *  Obsidian no longer has. Without this, right-clicking the tab and choosing
+   *  "Delete file" left the drawing open and unresponsive: the unload path
+   *  awaited a write to a file the vault had just removed. */
+  markFileDeleted(): void {
+    this.fileDeleted = true;
   }
 
   async onunload(): Promise<void> {
@@ -836,7 +850,7 @@ export class SvgView extends TextFileView {
     // This ensures getViewData() still returns the latest drawing if Obsidian
     // calls save() after onunload (e.g. when the user closes the tab quickly).
     // Skip when the real drawing never loaded — the canvas is the empty seed.
-    if (this.svgEditor && this.file && this.hasLoadedContent) {
+    if (!this.fileDeleted && this.svgEditor && this.file && this.hasLoadedContent) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
       const compress = this.plugin.settings.compressDrawingData;
       this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
