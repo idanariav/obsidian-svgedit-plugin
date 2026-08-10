@@ -184,7 +184,9 @@ export interface SvgPluginSettings {
    *  to a local log file (see src/debug/debugLog.ts) — meant for capturing the
    *  sequence of actions leading up to a hard-to-reproduce bug. Off by default;
    *  the log lives outside the vault (plugin config dir), never syncs, and isn't
-   *  read by anything else in the plugin. */
+   *  read by anything else in the plugin. Also drives svgedit's dev-mode
+   *  visibility inspector (see SvgView's setDebugOverlay calls) — one toggle
+   *  for both, rather than a second setting. */
   debugLogging: boolean;
   /** Frontmatter field added to the note by "New drawing for this file",
    *  containing a list of links to its drawings (a note can have more than

@@ -168,3 +168,8 @@ wins**. Drawings that match no mapping export next to themselves as usual.
   synced and never shows up in search.
 - Turn it on, reproduce the issue, then use **Copy to clipboard** below to grab the
   log for a bug report. **Clear** empties it so a fresh session starts clean.
+- Also shows the editor's visibility inspector, an overlay that flags selection
+  boxes, path-node grips, or group-context dimming still rendered but no
+  longer backed by the model — useful for the same kind of hard-to-reproduce
+  visual bug. Toggling this setting updates any already-open drawing
+  immediately, no reopen needed.

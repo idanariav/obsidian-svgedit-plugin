@@ -271,6 +271,16 @@ export default class SvgPlugin extends Plugin {
     }
   }
 
+  /** Re-apply the "Debug logging" setting's visibility-inspector state to
+   *  every open SVG view (used when the setting is toggled from the settings
+   *  tab). */
+  refreshOpenEditorDebugOverlay(): void {
+    for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
+      const view = leaf.view;
+      if (view instanceof SvgView) view.refreshDebugOverlayFromSettings();
+    }
+  }
+
   /** After any view writes the shared palette/shape library, tell every open
    *  SVG view to re-read it so live editors stay in sync. All views are
    *  refreshed (not "all but the source"): with multiple editors the svgedit
