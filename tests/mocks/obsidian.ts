@@ -85,6 +85,10 @@ export function normalizePath(path: string): string {
   return path;
 }
 
+export function parseYaml(_data: string): unknown {
+  return {};
+}
+
 export class Modal {
   app: unknown;
   contentEl: HTMLElement = document.createElement("div");
@@ -101,6 +105,10 @@ export class Setting {
     cb({ setButtonText: () => ({ setCta: () => ({ onClick: () => {} }), onClick: () => {} }) });
     return this;
   }
+}
+
+export class Notice {
+  constructor(_message: string) {}
 }
 
 export class TextFileView {
@@ -126,3 +134,5 @@ export class TextFileView {
 
   async onUnloadFile(_file: TFile): Promise<void> {}
 }
+
+export class MarkdownView extends TextFileView {}

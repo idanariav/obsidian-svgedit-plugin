@@ -1,4 +1,4 @@
-import { App, Notice, normalizePath, parseYaml, TFile } from "obsidian";
+import { App, MarkdownView, Notice, normalizePath, parseYaml, TFile } from "obsidian";
 import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
@@ -407,30 +407,61 @@ async function addFrontmatterLink(
  * frontmatter (as a list, since a note can have more than one drawing) —
  * then open the drawing.
  */
-async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise<void> {
+export async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): Promise<void> {
   try {
+    // noteFile is always the active file here (checkCallback requires it), so
+    // it may have an open editor with unsaved changes. If we mutate its
+    // frontmatter now but the editor's stale in-memory buffer autosaves
+    // afterwards, that save clobbers our change back out. Flush it first so
+    // the buffer is clean and Obsidian's own file-changed reload picks up the
+    // frontmatter write instead of overwriting it.
+    const activeView = plugin.app.workspace.getActiveViewOfType(MarkdownView);
+    if (activeView?.file === noteFile) {
+      await activeView.save();
+    }
+
     const baseName = `${noteFile.basename}${plugin.settings.newDrawingSuffix}`;
-    let file = await tryCreateDrawingViaTemplater(plugin, plugin.settings.drawingsFolder, baseName);
+    // Resolve a name that's free in drawingsFolder before handing it to
+    // Templater, rather than only checking uniqueness in the fallback branch
+    // below — otherwise a colliding name reliably breaks templates that
+    // rename/move the note using it (e.g. via tp.file.move).
+    const path = normalizePath(
+      uniqueVaultPath(
+        (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
+        plugin.settings.drawingsFolder,
+        baseName,
+        "md",
+      ),
+    );
+    const uniqueName = path.split("/").pop()!.replace(/\.md$/, "");
+
+    let file = await tryCreateDrawingViaTemplater(plugin, plugin.settings.drawingsFolder, uniqueName);
     if (!file) {
-      const path = normalizePath(
-        uniqueVaultPath(
-          (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
-          plugin.settings.drawingsFolder,
-          baseName,
-          "md",
-        ),
-      );
+      if (plugin.settings.defaultTemplate.trim()) {
+        new Notice("Drawing template failed, created a blank drawing instead");
+      }
       file = await createDrawingAt(plugin, path);
     }
 
+    // Each direction is independent — a failure linking one side (e.g. the
+    // drawing's "Source" field) must not prevent the other (the note's
+    // "Drawings" field) from being attempted.
     const drawingFieldName = plugin.settings.newDrawingLinkField.trim();
     if (drawingFieldName) {
-      await addFrontmatterLink(plugin, file, drawingFieldName, noteFile);
+      try {
+        await addFrontmatterLink(plugin, file, drawingFieldName, noteFile);
+      } catch (e: unknown) {
+        new Notice(`Could not link drawing back to note: ${(e as Error).message}`);
+      }
     }
 
     const noteFieldName = plugin.settings.noteDrawingsField.trim();
     if (noteFieldName) {
-      await addFrontmatterLink(plugin, noteFile, noteFieldName, file);
+      try {
+        await addFrontmatterLink(plugin, noteFile, noteFieldName, file);
+      } catch (e: unknown) {
+        new Notice(`Could not link note to drawing: ${(e as Error).message}`);
+      }
     }
 
     const leaf = plugin.app.workspace.getLeaf(false);
