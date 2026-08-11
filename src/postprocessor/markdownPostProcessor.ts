@@ -5,7 +5,7 @@ import {
   normalizePath,
 } from "obsidian";
 import { isSvgDrawingFile } from "../data/frontmatter";
-import { extractSvg } from "../data/SvgData";
+import { extractSvg, getCanvasBg, decodeGradientBg, bakeGradientIntoSvg } from "../data/SvgData";
 import { listFrames, prepareSvgForExport } from "../export/frames";
 
 /**
@@ -121,9 +121,29 @@ async function renderDrawingHoverPreview(
     return;
   }
 
-  const svgEl = new DOMParser()
-    .parseFromString(prepareSvgForExport(svg), "image/svg+xml")
-    .documentElement;
+  // The canvas background is editor chrome, not part of the document (see
+  // SvgData.ts's CANVAS_BG_ATTR comment) — restore it the same way export does:
+  // a gradient is baked into the SVG as a backing rect, a solid color is
+  // painted behind it via CSS.
+  const bgToken = getCanvasBg(svg);
+  const gradientXml = bgToken ? decodeGradientBg(bgToken) : null;
+  let prepared = prepareSvgForExport(svg);
+  if (gradientXml) prepared = bakeGradientIntoSvg(prepared, gradientXml);
+
+  const svgEl = new DOMParser().parseFromString(prepared, "image/svg+xml").documentElement;
+
+  // svgedit doesn't always keep viewBox in sync with width/height (e.g. after a
+  // canvas resize), so a saved drawing can lack one. Without it, the CSS sizing
+  // below can't scale the content down — it just clips to the shrunk box.
+  if (!svgEl.hasAttribute("viewBox")) {
+    const w = svgEl.getAttribute("width");
+    const h = svgEl.getAttribute("height");
+    if (w && h) svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  }
+
+  if (bgToken && !gradientXml) {
+    svgEl.setAttribute("style", `${svgEl.getAttribute("style") ?? ""};background-color:${bgToken}`);
+  }
 
   // Hide the native markdown content and inject the drawing alongside it.
   const nativeContent = containerEl.closest<HTMLElement>(".markdown-embed");
