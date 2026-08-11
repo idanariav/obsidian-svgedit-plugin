@@ -5,6 +5,7 @@ import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { exportSvg, exportPng } from "./export/exporter";
 import { ExportModal } from "./modals/ExportModal";
+import { VersionsModal } from "./modals/VersionsModal";
 import { extractSvg, replaceSvg, createDrawingTemplate } from "./data/SvgData";
 import { uniqueVaultPath } from "./data/uniqueName";
 import { stripTemplaterSyntax, applyTemplateFrontmatter } from "./data/templateFrontmatter";
@@ -19,6 +20,7 @@ import {
   FRONTMATTER_KEY_PLUGIN,
   FRONTMATTER_PLUGIN_VALUE,
   EMPTY_SVG,
+  MAX_DRAWING_SNAPSHOTS,
 } from "./constants";
 
 const EXCALIDRAW_FM_KEY = "excalidraw-plugin";
@@ -300,6 +302,42 @@ export function registerCommands(plugin: SvgPlugin): void {
         exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, transparentBackground, plugin.settings, exportFrame, "", view.getCanvasBgColor())
           .then(() => new Notice("Exported PNG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
+      }
+      return true;
+    },
+  });
+
+  // Drawing versioning — manage saved versions (list/restore/rename/replace/
+  // delete/export), and a quick keyboard-driven save of a new version.
+  plugin.addCommand({
+    id: "manage-drawing-versions",
+    name: "Manage drawing versions…",
+    checkCallback: (checking) => {
+      const view = getActiveSvgView(plugin);
+      if (!view) return false;
+      if (!checking) new VersionsModal(plugin, view).open();
+      return true;
+    },
+  });
+
+  plugin.addCommand({
+    id: "save-drawing-version",
+    name: "Save drawing version",
+    checkCallback: (checking) => {
+      const view = getActiveSvgView(plugin);
+      if (!view) return false;
+      if (!checking) {
+        const count = view.listSnapshots().length;
+        if (count >= MAX_DRAWING_SNAPSHOTS) {
+          // At capacity — open the manager so the user can pick a slot to
+          // replace instead of silently failing.
+          new VersionsModal(plugin, view).open();
+        } else {
+          view
+            .saveSnapshot(`Version ${count + 1}`)
+            .then(() => new Notice("Saved new version"))
+            .catch((e: unknown) => new Notice(`Could not save version: ${(e as Error).message}`));
+        }
       }
       return true;
     },

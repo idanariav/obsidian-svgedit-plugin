@@ -5,6 +5,15 @@ import { exportSvg, exportPng, frameFileSuffix } from "../export/exporter";
 import { listFrames } from "../export/frames";
 import { resolveEffectiveSettings } from "../data/frontmatter";
 
+/** Export a specific saved drawing version instead of the live canvas — see
+ *  the `source` constructor param. */
+export interface ExportModalSource {
+  svg: string;
+  /** Shown in the modal title and folded into the output filename so a
+   *  snapshot export never collides with the normal companion export. */
+  label: string;
+}
+
 /**
  * Interactive export dialog: pick format (PNG/SVG), transparency, and the export
  * region (whole canvas or a named frame from the current drawing). Defaults are
@@ -14,15 +23,21 @@ import { resolveEffectiveSettings } from "../data/frontmatter";
 export class ExportModal extends Modal {
   private readonly plugin: SvgPlugin;
   private readonly view: SvgView;
+  private readonly source?: ExportModalSource;
 
   private format: "png" | "svg" = "png";
   private transparent: boolean;
   private frameName: string;
 
-  constructor(plugin: SvgPlugin, view: SvgView) {
+  /** `source`: export a saved version's stored SVG instead of the live
+   *  canvas, without restoring it into the editor first. Note the stored SVG
+   *  lacks the live canvas's font/image embedding (see getExportSvgString),
+   *  so a version export may not embed custom fonts. */
+  constructor(plugin: SvgPlugin, view: SvgView, source?: ExportModalSource) {
     super(plugin.app);
     this.plugin = plugin;
     this.view = view;
+    this.source = source;
     const effective = resolveEffectiveSettings(plugin.app, view.file!, plugin.settings);
     this.transparent = effective.transparentBackground;
     this.frameName = effective.exportFrame;
@@ -30,9 +45,9 @@ export class ExportModal extends Modal {
 
   onOpen(): void {
     const { contentEl } = this;
-    contentEl.createEl("h3", { text: "Export drawing" });
+    contentEl.createEl("h3", { text: this.source ? `Export "${this.source.label}"` : "Export drawing" });
 
-    const svgString = this.view.getExportSvgString() ?? "";
+    const svgString = this.source?.svg ?? this.view.getExportSvgString() ?? "";
     const frames = listFrames(svgString);
 
     // Drop a stale default (e.g. a frame name that no longer exists) so the
@@ -90,8 +105,11 @@ export class ExportModal extends Modal {
     if (!file) return;
     // A one-off frame export goes to a distinct, frame-suffixed file so it is
     // never overwritten by the whole-canvas companion that auto-export-on-save
-    // (re)writes. Whole-canvas exports use the normal companion path.
-    const suffix = frameFileSuffix(this.frameName);
+    // (re)writes. Whole-canvas exports use the normal companion path. A
+    // version export is likewise suffixed with its label so it can't collide
+    // with the normal companion file or another version's export.
+    const suffix =
+      (this.source ? frameFileSuffix(this.source.label) : "") + frameFileSuffix(this.frameName);
     try {
       if (this.format === "svg") {
         await exportSvg(this.app, file, svgString, this.plugin.settings, this.frameName, suffix);

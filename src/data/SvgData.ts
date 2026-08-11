@@ -14,6 +14,10 @@ import {
   VAULT_LINK_ATTR,
   CANVAS_BG_ATTR,
   PLUGIN_VERSION_ATTR,
+  SNAPSHOTS_SECTION_HEADING,
+  SNAPSHOTS_FENCE_OPEN,
+  SNAPSHOTS_FENCE_COMPRESSED_OPEN,
+  SNAPSHOTS_FENCE_CLOSE,
 } from "../constants";
 
 // Matches the fenced raw-SVG block between the ## Drawing heading and the %%
@@ -48,7 +52,7 @@ const WRAPPER_OPEN = "(?:%%\\n+#+ (?:Sketch Editor|SVGEdit) Data\\n+)";
 // replace the whole region; reconcileLinkedFiles re-adds Linked Files immediately
 // after, under that one surviving wrapper.
 const BLOCK_REPLACE_REGEX = new RegExp(
-  WRAPPER_OPEN + "*(?:## Linked Files\\n(?:.*\\n)*?)?## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%",
+  WRAPPER_OPEN + "*(?:## Linked Files\\n(?:.*\\n)*?)?(?:## Versions\\n(?:.*\\n)*?)?## Drawing\\n```(?:svg|compressed-svg)\\n[\\s\\S]*?\\n```\\s*\\n%%",
 );
 
 // Width to wrap the base64 payload at, so a compressed drawing is many modest
@@ -413,6 +417,98 @@ export function reconcileLinkedFiles(content: string, svg: string): string {
     );
   }
   return stripped + "\n\n" + section + "\n";
+}
+
+// ── Drawing versioning (saved snapshots) ───────────────────────────────────────
+// Up to MAX_DRAWING_SNAPSHOTS user-saved snapshots of the drawing, so a user
+// debating how to style/organize a drawing can save a few candidates, switch
+// the live canvas between them, and export any one for feedback. Stored as a
+// single JSON array (optionally LZString-compressed, mirroring the
+// "## Drawing" block's own svg/compressed-svg choice) under "## Versions",
+// positioned just above "## Drawing" — same treatment as "## Linked Files".
+// See SvgView.ts for the CRUD operations that maintain this list.
+
+export interface DrawingSnapshot {
+  id: string;
+  name: string;
+  /** ISO timestamp. */
+  createdAt: string;
+  svg: string;
+}
+
+const RAW_SNAPSHOTS_BLOCK_REGEX =
+  /## Versions\n```versions-json\n([\s\S]*?)\n```/;
+const COMPRESSED_SNAPSHOTS_BLOCK_REGEX =
+  /## Versions\n```compressed-versions-json\n([\s\S]*?)\n```/;
+
+// Matches the whole "## Versions" section, up to (but not including) the
+// "## Drawing" heading it always sits directly above — mirrors
+// LINKED_FILES_BLOCK_REGEX's "match to the next anchor" approach.
+const VERSIONS_BLOCK_REGEX = new RegExp(
+  `^${escapeRegExp(SNAPSHOTS_SECTION_HEADING)}\\n(?:.*\\n)*?(?=^${escapeRegExp(DRAWING_SECTION_HEADING)})`,
+  "m",
+);
+
+function isDrawingSnapshot(v: unknown): v is DrawingSnapshot {
+  if (!v || typeof v !== "object") return false;
+  const s = v as Record<string, unknown>;
+  return (
+    typeof s.id === "string" &&
+    typeof s.name === "string" &&
+    typeof s.createdAt === "string" &&
+    typeof s.svg === "string"
+  );
+}
+
+/** Extract the saved snapshot list from a markdown drawing file. Returns an
+ *  empty array if the section is absent, unparseable, or malformed. */
+export function extractSnapshots(content: string): DrawingSnapshot[] {
+  const normalized = normalizeEol(content);
+  const c = COMPRESSED_SNAPSHOTS_BLOCK_REGEX.exec(normalized);
+  const raw = c
+    ? LZString.decompressFromBase64(c[1].replace(/\s+/g, ""))
+    : RAW_SNAPSHOTS_BLOCK_REGEX.exec(normalized)?.[1];
+  if (!raw) return [];
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(isDrawingSnapshot) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Replace the "## Versions" section in a markdown drawing file with
+ * `snapshots` (omitting the section entirely when the list is empty). Must be
+ * called after replaceSvg, which rebuilds the whole wrapper region and
+ * swallows (drops) any existing Versions section along the way — this
+ * restores it, exactly mirroring how reconcileLinkedFiles restores
+ * "## Linked Files" after the same replaceSvg call.
+ */
+export function replaceSnapshots(
+  content: string,
+  snapshots: DrawingSnapshot[],
+  compress: boolean,
+): string {
+  const normalized = normalizeEol(content);
+  const stripped = normalized.replace(VERSIONS_BLOCK_REGEX, "");
+  if (snapshots.length === 0) return stripped;
+  if (!stripped.includes(DRAWING_SECTION_HEADING)) return stripped;
+
+  const fenceOpen = compress ? SNAPSHOTS_FENCE_COMPRESSED_OPEN : SNAPSHOTS_FENCE_OPEN;
+  const json = JSON.stringify(snapshots);
+  const payload = compress ? chunk(LZString.compressToBase64(json), BASE64_LINE_WIDTH) : json;
+  const section = `${SNAPSHOTS_SECTION_HEADING}\n${fenceOpen}\n${payload}\n${SNAPSHOTS_FENCE_CLOSE}`;
+
+  // Function replacer so "$" sequences in snapshot content aren't treated as
+  // regex replacement patterns (same reasoning as reconcileLinkedFiles).
+  return stripped.replace(DRAWING_SECTION_HEADING, () => `${section}\n\n${DRAWING_SECTION_HEADING}`);
+}
+
+/** A compact, sufficiently-unique id for a new snapshot (list identity across
+ *  renames — not a cryptographic identifier). */
+export function genSnapshotId(): string {
+  return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 }
 
 /** Generate the initial markdown content for a brand-new drawing file. */

@@ -8,12 +8,13 @@ import {
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
 import type SvgPlugin from "../main";
-import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, getDrawingVersion, setDrawingVersion, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds } from "../data/SvgData";
+import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, getDrawingVersion, setDrawingVersion, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds, extractSnapshots, replaceSnapshots, genSnapshotId, type DrawingSnapshot } from "../data/SvgData";
 import { runMigrations } from "../data/migrations";
 import { refreshLockedEmbeds } from "../data/lockedEmbeds";
 import { putBackup, getBackup, deleteBackup } from "../data/drawingBackup";
 import { RestoreBackupModal } from "../modals/RestoreBackupModal";
-import { VIEW_TYPE_SVG, EMPTY_SVG } from "../constants";
+import { VersionsModal } from "../modals/VersionsModal";
+import { VIEW_TYPE_SVG, EMPTY_SVG, MAX_DRAWING_SNAPSHOTS } from "../constants";
 import { autoExport } from "../export/exporter";
 import { resolveEffectiveSettings } from "../data/frontmatter";
 import type {
@@ -100,6 +101,11 @@ export class SvgView extends TextFileView {
   }
 
   private currentData = "";
+  /** Saved drawing-versioning snapshots (see docs on DrawingSnapshot). Kept
+   *  in memory as the authoritative copy — mutated by the snapshot CRUD
+   *  methods below, then persisted through the normal save pipeline like the
+   *  live canvas itself, rather than a separate direct-write path. */
+  private snapshots: DrawingSnapshot[] = [];
   private pendingSvg: string | null = null;
   /** Canvas background color awaiting an editor that isn't initialized yet;
    *  paired with pendingSvg and applied once init delivers the drawing. */
@@ -174,6 +180,13 @@ export class SvgView extends TextFileView {
     });
     setIcon(this.saveBtn, "save");
     this.saveBtn.addEventListener("click", () => void this.save());
+
+    const versionsBtn = toolbar.createEl("button", {
+      cls: "svg-plugin-topbar-btn",
+      attr: { "aria-label": "Drawing versions" },
+    });
+    setIcon(versionsBtn, "history");
+    versionsBtn.addEventListener("click", () => new VersionsModal(this.plugin, this).open());
 
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
 
@@ -574,6 +587,7 @@ export class SvgView extends TextFileView {
   async setViewData(data: string, _clear: boolean): Promise<void> {
     this.log("view-load", { bytes: data.length });
     this.currentData = data;
+    this.snapshots = extractSnapshots(data);
     const gen = ++this.loadGen; // uniquely identifies this load
     let stored = extractSvg(data) ?? EMPTY_SVG;
 
@@ -603,10 +617,7 @@ export class SvgView extends TextFileView {
     // drawing hasn't seen yet (based on the version it was last saved with),
     // then strip both before handing the SVG to the editor, so the live
     // canvas (and its exports) never carry our bookkeeping attributes.
-    const bg = getCanvasBg(stored);
-    const storedVersion = getDrawingVersion(stored);
-    const migrated = runMigrations(setCanvasBg(stored, null), storedVersion);
-    const raw = setDrawingVersion(migrated, null);
+    const { svg: raw, bg } = this.stripBookkeeping(stored);
     // Locked imports are re-baked from their source on every open so a drawing
     // always reflects the latest version of what it embeds.
     const embedded = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
@@ -651,8 +662,19 @@ export class SvgView extends TextFileView {
     // window is a no-op rather than overwriting the file with blank.
     if (!this.svgEditor || !this.hasLoadedContent) return this.currentData;
     const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+    return this.buildSavedContent(svg);
+  }
+
+  /** Compose the full markdown to persist for the drawing block plus its
+   *  auto-managed sibling sections: replaceSvg rebuilds the whole wrapper
+   *  region and drops both "## Linked Files" and "## Versions" along the way,
+   *  so both must be restored afterward. Shared by getViewData() and the
+   *  onunload() snapshot so neither path can (re)diverge and silently lose
+   *  saved drawing versions on an ordinary save. */
+  private buildSavedContent(svg: string): string {
     const compress = this.plugin.settings.compressDrawingData;
-    return reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
+    const withLinkedFiles = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
+    return replaceSnapshots(withLinkedFiles, this.snapshots, compress);
   }
 
   /** Stamp the editor's current canvas background and the running plugin
@@ -663,6 +685,20 @@ export class SvgView extends TextFileView {
    *  don't gain the attribute and absence simply means white. */
   private stampCanvasBg(svg: string): string {
     return setDrawingVersion(setCanvasBg(svg, this.canvasBgToken()), this.plugin.manifest.version);
+  }
+
+  /** Inverse of stampCanvasBg: pull the persisted canvas background off a
+   *  stored SVG, run any migrations its stamped plugin version hasn't seen
+   *  yet, and strip both bookkeeping attributes so the SVG is ready to load
+   *  into the editor. Shared by setViewData (loading the drawing on open)
+   *  and restoreSnapshot (loading a saved version's SVG) — locked-embed
+   *  re-baking and id namespacing are separate async/sync steps callers run
+   *  afterward, since setViewData needs a load-generation check in between. */
+  private stripBookkeeping(stored: string): { svg: string; bg: string | null } {
+    const bg = getCanvasBg(stored);
+    const storedVersion = getDrawingVersion(stored);
+    const migrated = runMigrations(setCanvasBg(stored, null), storedVersion);
+    return { svg: setDrawingVersion(migrated, null), bg };
   }
 
   /** The current canvas background as a single persist/export token: a CSS
@@ -852,8 +888,7 @@ export class SvgView extends TextFileView {
     // Skip when the real drawing never loaded — the canvas is the empty seed.
     if (!this.fileDeleted && this.svgEditor && this.file && this.hasLoadedContent) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
-      const compress = this.plugin.settings.compressDrawingData;
-      this.currentData = reconcileLinkedFiles(replaceSvg(this.currentData, svg, compress), svg);
+      this.currentData = this.buildSavedContent(svg);
       try { await this.runSave({ export: true }); } catch { /* best-effort */ }
     }
     // Remove the editor's document-level listeners so a closed drawing can't
@@ -918,5 +953,82 @@ export class SvgView extends TextFileView {
     // periodic timer, so the embedded file can't be lost to a crash.
     this.setDirty(true);
     await this.save();
+  }
+
+  // ── Drawing versioning (saved snapshots) ───────────────────────────────────
+  // Up to MAX_DRAWING_SNAPSHOTS saved snapshots the user can switch the live
+  // canvas between and export individually. `this.snapshots` is the
+  // authoritative in-memory list; every mutator below updates it then flushes
+  // through the normal save() pipeline, so a snapshot edit can't be lost to a
+  // crash any more than a canvas edit can.
+
+  listSnapshots(): DrawingSnapshot[] {
+    return this.snapshots;
+  }
+
+  /** Save the live canvas as a new snapshot. Callers (VersionsModal) are
+   *  responsible for only offering this action under MAX_DRAWING_SNAPSHOTS —
+   *  at capacity, replaceSnapshot() is the way to save new content. */
+  async saveSnapshot(name: string): Promise<void> {
+    if (!this.svgEditor || this.snapshots.length >= MAX_DRAWING_SNAPSHOTS) return;
+    const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+    this.snapshots = [
+      ...this.snapshots,
+      { id: genSnapshotId(), name, createdAt: new Date().toISOString(), svg },
+    ];
+    this.setDirty(true);
+    await this.save();
+  }
+
+  /** Overwrite an existing snapshot's content with the live canvas, keeping
+   *  its id and name. The "at capacity" path for saving new content. */
+  async replaceSnapshot(id: string): Promise<void> {
+    if (!this.svgEditor) return;
+    const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+    const idx = this.snapshots.findIndex((s) => s.id === id);
+    if (idx === -1) return;
+    this.snapshots = this.snapshots.map((s, i) =>
+      i === idx ? { ...s, svg, createdAt: new Date().toISOString() } : s,
+    );
+    this.setDirty(true);
+    await this.save();
+  }
+
+  async renameSnapshot(id: string, name: string): Promise<void> {
+    const idx = this.snapshots.findIndex((s) => s.id === id);
+    if (idx === -1) return;
+    this.snapshots = this.snapshots.map((s, i) => (i === idx ? { ...s, name } : s));
+    this.setDirty(true);
+    await this.save();
+  }
+
+  async deleteSnapshot(id: string): Promise<void> {
+    if (!this.snapshots.some((s) => s.id === id)) return;
+    this.snapshots = this.snapshots.filter((s) => s.id !== id);
+    this.setDirty(true);
+    await this.save();
+  }
+
+  /** Load a saved snapshot's SVG into the live canvas, replacing the current
+   *  drawing content — non-destructive: the snapshot list is untouched, so
+   *  the user can switch back and forth freely. Flushes any in-progress edits
+   *  to disk first (same "persist before switching away" pattern
+   *  switchToMarkdown() uses) so restoring can't silently discard work that
+   *  was never itself saved as a snapshot. */
+  async restoreSnapshot(id: string): Promise<void> {
+    const target = this.snapshots.find((s) => s.id === id);
+    if (!target || !this.svgEditor) return;
+    await this.save();
+    const { svg: raw, bg } = this.stripBookkeeping(target.svg);
+    const embedded = await refreshLockedEmbeds(this.app, raw, this.file?.path ?? "");
+    const svg = namespaceSvgIds(embedded, this.file?.path ?? "");
+    this.isLoading = true;
+    try {
+      await this.svgEditor.loadFromString(svg);
+      this.applyCanvasBg(bg ?? "#ffffff");
+    } finally {
+      this.isLoading = false;
+    }
+    this.setDirty(true);
   }
 }

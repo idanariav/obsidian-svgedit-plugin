@@ -10,6 +10,9 @@ import {
   isEmptyDrawing,
   encodeGradientBg,
   decodeGradientBg,
+  extractSnapshots,
+  replaceSnapshots,
+  type DrawingSnapshot,
 } from "../../src/data/SvgData";
 
 const SVG = "<svg><rect width=\"1\" height=\"1\"/></svg>";
@@ -166,6 +169,80 @@ describe("isEmptyDrawing", () => {
 
   it("treats a drawing with a real drawable element as non-empty", () => {
     expect(isEmptyDrawing(SVG)).toBe(false);
+  });
+});
+
+describe("extractSnapshots/replaceSnapshots round-trip", () => {
+  const snapshot = (n: number): DrawingSnapshot => ({
+    id: `id-${n}`,
+    name: `Version ${n}`,
+    createdAt: "2026-01-01T00:00:00.000Z",
+    svg: `<svg><rect width="${n}" height="${n}"/></svg>`,
+  });
+
+  it("returns an empty list when no Versions section exists", () => {
+    expect(extractSnapshots(drawingFile(SVG))).toEqual([]);
+  });
+
+  it("extracts what replaceSnapshots wrote (raw)", () => {
+    const file = replaceSnapshots(drawingFile(SVG), [snapshot(1), snapshot(2)], false);
+    expect(extractSnapshots(file)).toEqual([snapshot(1), snapshot(2)]);
+  });
+
+  it("extracts what replaceSnapshots wrote (compressed)", () => {
+    const file = replaceSnapshots(drawingFile(SVG), [snapshot(1)], true);
+    expect(file).toContain("compressed-versions-json");
+    expect(extractSnapshots(file)).toEqual([snapshot(1)]);
+  });
+
+  it("removes the section entirely when the list is empty", () => {
+    const withVersions = replaceSnapshots(drawingFile(SVG), [snapshot(1)], false);
+    const cleared = replaceSnapshots(withVersions, [], false);
+    expect(cleared).not.toContain("## Versions");
+    expect(extractSnapshots(cleared)).toEqual([]);
+  });
+
+  it("replaces rather than duplicates an existing Versions section", () => {
+    const first = replaceSnapshots(drawingFile(SVG), [snapshot(1)], false);
+    const second = replaceSnapshots(first, [snapshot(1), snapshot(2)], false);
+    expect(second.match(/## Versions/g)).toHaveLength(1);
+    expect(extractSnapshots(second)).toEqual([snapshot(1), snapshot(2)]);
+  });
+
+  // replaceSvg's BLOCK_REPLACE_REGEX rebuild swallows (and would otherwise
+  // drop) any existing "## Versions" section along with "## Drawing" — this
+  // simulates SvgView's actual save sequence (replaceSvg, then
+  // replaceSnapshots to restore it) to prove versions survive an ordinary
+  // drawing save.
+  it("survives a normal drawing save (replaceSvg) when reconciled afterward", () => {
+    const withVersions = replaceSnapshots(drawingFile(SVG), [snapshot(1)], false);
+    const updatedSvg = '<svg><circle r="5"/></svg>';
+    const afterSave = replaceSnapshots(
+      replaceSvg(withVersions, updatedSvg, false),
+      [snapshot(1)],
+      false,
+    );
+    expect(extractSvg(afterSave)).toBe(updatedSvg);
+    expect(extractSnapshots(afterSave)).toEqual([snapshot(1)]);
+    expect(afterSave.match(/## Versions/g)).toHaveLength(1);
+    expect(afterSave.match(/## Drawing/g)).toHaveLength(1);
+  });
+
+  it("drops the Versions section on a bare replaceSvg call (why the reconcile step is required)", () => {
+    const withVersions = replaceSnapshots(drawingFile(SVG), [snapshot(1)], false);
+    const afterSaveOnly = replaceSvg(withVersions, '<svg><circle r="5"/></svg>', false);
+    expect(extractSnapshots(afterSaveOnly)).toEqual([]);
+  });
+
+  it("coexists with an existing Linked Files section", () => {
+    const withLinks = drawingFile(SVG).replace(
+      "## Drawing",
+      "## Linked Files\n- [[img]]\n\n## Drawing",
+    );
+    const file = replaceSnapshots(withLinks, [snapshot(1)], false);
+    expect(file).toContain("## Linked Files");
+    expect(extractSnapshots(file)).toEqual([snapshot(1)]);
+    expect(extractSvg(file)).toBe(SVG);
   });
 });
 

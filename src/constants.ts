@@ -79,6 +79,22 @@ export const PLUGIN_VERSION_ATTR = "data-svgedit-plugin-version";
 export const SWITCH_NOTICE =
   "==⚠  Switch to SVG VIEW in the ribbon or right-click menu  ⚠==";
 
+// Auto-managed section holding up to MAX_DRAWING_SNAPSHOTS saved snapshots of
+// the drawing ("drawing versioning"). Lives under the "# Sketch Editor Data"
+// heading, just above "## Drawing", inside the %% comment — same treatment as
+// "## Linked Files". Stored as a single JSON array (optionally LZString
+// compressed, mirroring the "## Drawing" block's own svg/compressed-svg
+// choice) rather than one fenced block per snapshot, so there's one parse
+// point regardless of how many snapshots exist. See SvgData.ts
+// (extractSnapshots/replaceSnapshots) and SvgView.ts.
+export const SNAPSHOTS_SECTION_HEADING = "## Versions";
+export const SNAPSHOTS_FENCE_OPEN = "```versions-json";
+export const SNAPSHOTS_FENCE_COMPRESSED_OPEN = "```compressed-versions-json";
+export const SNAPSHOTS_FENCE_CLOSE = "```";
+// Hardcoded per the "for simplicity" framing of the feature — not a user
+// setting.
+export const MAX_DRAWING_SNAPSHOTS = 5;
+
 export const EMPTY_SVG =
   `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">` +
   `<title>SVG Drawing</title>` +

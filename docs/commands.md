@@ -103,6 +103,30 @@ instead.
 
 ---
 
+## Manage drawing versions… / Save drawing version
+
+Drawing versioning lets you save up to **5 snapshots** of a drawing, freely switch the
+live canvas between them, and export any one of them — handy when you're debating how
+to style or organize a drawing and want to compare a few candidates before settling on
+a "final" version. Also reachable via the history-icon button in the drawing's topbar.
+
+- **Manage drawing versions…** opens a list of the drawing's saved versions. Each one
+  has **Restore** (loads it into the canvas, replacing the current content — your
+  in-progress edits are saved first so nothing is lost), **Rename**, **Replace with
+  current** (overwrite that slot with what's on the canvas now), **Export** (export
+  that version directly, without restoring it first), and **Delete**. There's also a
+  button to save the current canvas as a brand-new version.
+- **Save drawing version** is a quick, one-click way to save a new version without
+  opening the dialog — it auto-names it ("Version 1", "Version 2", …). If all 5 slots
+  are already full, it opens the manager instead so you can pick a version to replace.
+
+Restoring a version doesn't delete anything — you can switch back and forth between
+saved versions as many times as you like.
+
+Only available when a drawing is open.
+
+---
+
 ## A note on automatic export
 
 You usually don't need the export commands at all. By default the plugin writes
