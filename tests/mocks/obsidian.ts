@@ -33,8 +33,12 @@ function createEl(
   return el;
 }
 
-function createDiv(this: HTMLElement, cls?: string): HTMLElement {
-  return createEl.call(this, "div", cls ? { cls } : undefined);
+function createDiv(
+  this: HTMLElement,
+  o?: string | { cls?: string | string[]; attr?: Record<string, string>; text?: string },
+): HTMLElement {
+  const opts = typeof o === "string" ? { cls: o } : o;
+  return createEl.call(this, "div", opts);
 }
 
 function addClass(this: HTMLElement, cls: string): void {

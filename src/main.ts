@@ -82,7 +82,7 @@ export default class SvgPlugin extends Plugin {
 
     // Markdown post-processor — intercepts ![[drawing.png]] clicks
     this.registerMarkdownPostProcessor((el, ctx) =>
-      markdownPostProcessor(el, ctx, this.app),
+      markdownPostProcessor(el, ctx, this.app, this.settings),
     );
 
     // Monkey-patch setViewState to force SvgView for drawing files
