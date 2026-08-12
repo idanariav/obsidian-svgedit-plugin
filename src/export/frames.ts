@@ -7,6 +7,10 @@
  * to a single frame's bounds.
  */
 
+// svgedit's namespace for its own attributes (`se:locked`, `se:comment`, …) —
+// see SvgData.ts's SE_NS for the sibling usage this mirrors.
+const SVGEDIT_NS = "http://svg-edit.googlecode.com";
+
 export interface FrameInfo {
   /** Frame element id (unique within the document). */
   id: string;
@@ -26,11 +30,15 @@ export function listFrames(svgString: string): FrameInfo[] {
 /**
  * Produce the SVG string to export.
  *
- * Frame rects are always stripped so they never appear in the output. When
- * `frameName` names a frame present in the drawing, the viewBox is narrowed to
- * that frame's bounds and an explicit intrinsic width/height is set (the raster
- * path reads these to size the canvas) so only that region is exported. If the
- * name is empty or matches no frame, the whole canvas is exported.
+ * Frame rects are always stripped so they never appear in the output, as are
+ * svgedit "comment" layers (`se:comment="true"` on a `<g class="layer">`) —
+ * editor-only notes/annotations that must never appear in exported or
+ * rendered output, regardless of whether the layer was left visible when the
+ * drawing was saved. When `frameName` names a frame present in the drawing,
+ * the viewBox is narrowed to that frame's bounds and an explicit intrinsic
+ * width/height is set (the raster path reads these to size the canvas) so
+ * only that region is exported. If the name is empty or matches no frame, the
+ * whole canvas is exported.
  */
 export function prepareSvgForExport(svgString: string, frameName = ""): string {
   const doc = new DOMParser().parseFromString(svgString, "image/svg+xml");
@@ -41,6 +49,10 @@ export function prepareSvgForExport(svgString: string, frameName = ""): string {
 
   // Frames mark export regions and must never appear in an exported image.
   root.querySelectorAll("[data-frame]").forEach((f) => f.remove());
+
+  root.querySelectorAll(".layer").forEach((layer) => {
+    if (layer.getAttributeNS(SVGEDIT_NS, "comment") === "true") layer.remove();
+  });
 
   if (crop) {
     root.setAttribute("viewBox", `${crop.x} ${crop.y} ${crop.w} ${crop.h}`);

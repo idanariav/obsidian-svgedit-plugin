@@ -21,10 +21,23 @@ describe("listFrames", () => {
   });
 });
 
+const SVG_WITH_COMMENT_LAYER =
+  '<svg xmlns="http://www.w3.org/2000/svg" xmlns:se="http://svg-edit.googlecode.com" viewBox="0 0 200 100">' +
+  '<g class="layer" id="layer1"><title>Layer 1</title><circle cx="10" cy="10" r="5"/></g>' +
+  '<g class="layer" id="layer2" se:comment="true"><title>Comments</title><text x="20" y="20">note to self</text></g>' +
+  "</svg>";
+
 describe("prepareSvgForExport", () => {
   it("strips frame rects but keeps other content when no frame is named", () => {
     const result = prepareSvgForExport(SVG_WITH_FRAMES);
     expect(result).not.toContain("data-frame");
+    expect(result).toContain("<circle");
+  });
+
+  it("strips comment layers regardless of their visibility", () => {
+    const result = prepareSvgForExport(SVG_WITH_COMMENT_LAYER);
+    expect(result).not.toContain("note to self");
+    expect(result).not.toContain('id="layer2"');
     expect(result).toContain("<circle");
   });
 
