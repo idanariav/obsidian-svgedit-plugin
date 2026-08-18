@@ -69,6 +69,17 @@ interface SvgEditorInstance {
       event: string,
       cb: (win: Window, elems: unknown) => void,
     ): ((win: Window, elems: unknown) => void) | undefined;
+    /** Current editor mode string (e.g. "select", "path", "pathedit"). */
+    getMode(): string;
+    /** Whether the active drawing tool stays armed after each object instead
+     *  of reverting to select (double-click a tool to toggle). */
+    getToolLocked(): boolean;
+    /** The single CustomEvent instance this svgCanvas reuses for every
+     *  setMode() call, dispatched on `document`. Reused (not recreated) per
+     *  dispatch, and per-instance (not shared across editors), so comparing
+     *  a received event against this by identity reliably tells whether it
+     *  came from *this* editor when several are open at once. */
+    modeEvent: Event;
   };
 }
 
@@ -149,6 +160,10 @@ export class SvgView extends TextFileView {
    *  leaf, so the unload-time save flush below doesn't try to write (or export
    *  companions for) a file that's already gone — see markFileDeleted(). */
   private fileDeleted = false;
+  /** Last mode logged via the modeChange listener below, so a redundant
+   *  dispatch (setMode() fires unconditionally even when the mode doesn't
+   *  actually change) doesn't produce a duplicate log line. */
+  private lastLoggedMode: string | null = null;
 
   constructor(leaf: WorkspaceLeaf, plugin: SvgPlugin) {
     super(leaf);
@@ -386,6 +401,29 @@ export class SvgView extends TextFileView {
         this.log("svg-changed", { bytes: this.svgEditor?.svgCanvas.getSvgString().length });
         this.setDirty(true);
       }
+    });
+
+    // Discrete tool/mode transitions (e.g. "select" -> "pathedit", or a
+    // locked pen tool re-arming itself after committing a path). Unlike
+    // svg-changed above (fires once per edit, already high-volume), this is
+    // cheap and low-frequency, and it's exactly the signal that was missing
+    // when diagnosing a bug caused by a specific tool/mode sequence — with
+    // only "svg-changed" + byte counts, that has to be reconstructed from
+    // source instead of read straight off the log.
+    //
+    // modeChange is a single CustomEvent svgedit reuses (not recreates) for
+    // every setMode() call on a given instance, dispatched on `document` —
+    // so with several editors open at once, every instance's listener would
+    // otherwise fire for every other instance's mode changes too. Comparing
+    // by identity against this instance's own svgCanvas.modeEvent keeps this
+    // view's log scoped to its own file.
+    const { svgCanvas } = this.svgEditor;
+    this.registerDomEvent(document, "modeChange" as keyof DocumentEventMap, (evt: Event) => {
+      if (evt !== svgCanvas.modeEvent) return;
+      const mode = svgCanvas.getMode();
+      if (mode === this.lastLoggedMode) return;
+      this.log("mode-change", { from: this.lastLoggedMode, to: mode, locked: svgCanvas.getToolLocked() });
+      this.lastLoggedMode = mode;
     });
 
     // Deliver SVG that arrived before the editor was ready

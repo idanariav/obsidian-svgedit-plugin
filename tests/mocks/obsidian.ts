@@ -132,6 +132,15 @@ export class TextFileView {
 
   register(_cb: () => void): void {}
   registerEvent(_ref: unknown): void {}
+  // Real Obsidian also detaches this on unload; not needed for the tests
+  // that exercise it so far — expand if one starts to depend on cleanup.
+  registerDomEvent(
+    el: EventTarget,
+    type: string,
+    callback: (evt: Event) => void,
+  ): void {
+    el.addEventListener(type, callback);
+  }
 
   async save(_clear?: boolean): Promise<void> {
     this.data = (this as unknown as { getViewData(): string }).getViewData();
