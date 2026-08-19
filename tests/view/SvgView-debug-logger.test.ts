@@ -1,18 +1,23 @@
 /**
- * The fork's visibility inspector (`Editor.setDebugOverlay`, see
+ * The fork's debug-snapshot logger (`Editor.setDebugLogger`, see
  * ../svgedit's src/editor/Editor.js) is driven from this plugin's existing
  * "Debug logging" setting instead of a second toggle — one flag controls
- * both the timestamped log file and the overlay. Covers:
+ * both the timestamped log file and whether svgedit's desync snapshots are
+ * forwarded into it (as "debug-snapshot" lines, via SvgView's `log()`
+ * helper). Covers:
  *  - the initial state applied once svgEditor.init() resolves (SvgView.ts's
- *    `this.svgEditor.setDebugOverlay?.(...)` call right after init), and
- *  - refreshDebugOverlayFromSettings(), which SettingsTab's toggle calls to
- *    push a live change to every open view without reopening it.
+ *    `this.svgEditor.setDebugLogger?.(...)` call right after init),
+ *  - refreshDebugLoggerFromSettings(), which SettingsTab's toggle calls to
+ *    push a live change to every open view without reopening it, and
+ *  - that a snapshot handed to the sink actually reaches plugin.debugLog.
  *
  * Uses the same fake `svgedit-editor` + tests/mocks/obsidian.ts pattern as
  * SvgView-init-race.test.ts (obsidian is types-only, no runtime JS).
  */
 
 import { describe, it, expect, vi } from "vitest";
+
+type DebugSink = ((event: string, detail?: Record<string, unknown>) => void) | null;
 
 const hoisted = vi.hoisted(() => {
   const instances: FakeSvgEditor[] = [];
@@ -26,7 +31,7 @@ const hoisted = vi.hoisted(() => {
       setSvgOption: () => {},
       bind: () => undefined,
     };
-    debugOverlayCalls: boolean[] = [];
+    debugLoggerSinks: DebugSink[] = [];
 
     constructor(_container: HTMLElement) {
       instances.push(this);
@@ -36,8 +41,8 @@ const hoisted = vi.hoisted(() => {
     reloadUserData(): void {}
     async loadFromString(): Promise<void> {}
     setBackground(): void {}
-    setDebugOverlay(enabled: boolean): void {
-      this.debugOverlayCalls.push(enabled);
+    setDebugLogger(sink: DebugSink): void {
+      this.debugLoggerSinks.push(sink);
     }
   }
 
@@ -67,6 +72,7 @@ function makeFakePlugin(debugLogging: boolean) {
       fontsFolder: "",
       debugLogging,
     },
+    debugLog: { log: vi.fn() },
     saveSettings: vi.fn(async () => {}),
     reloadUserDataInAllViews: vi.fn(),
   };
@@ -84,8 +90,8 @@ function makeFakeApp() {
   };
 }
 
-describe("SvgView debug overlay", () => {
-  it("applies the 'Debug logging' setting to the overlay once init resolves", async () => {
+describe("SvgView debug logger", () => {
+  it("passes a sink to setDebugLogger once init resolves when 'Debug logging' is on", async () => {
     hoisted.instances.length = 0;
     const app = makeFakeApp();
     const plugin = makeFakePlugin(true);
@@ -95,10 +101,10 @@ describe("SvgView debug overlay", () => {
     await view.onload();
 
     expect(hoisted.instances).toHaveLength(1);
-    expect(hoisted.instances[0].debugOverlayCalls).toEqual([true]);
+    expect(hoisted.instances[0].debugLoggerSinks).toEqual([expect.any(Function)]);
   });
 
-  it("leaves the overlay off when 'Debug logging' is off", async () => {
+  it("passes null when 'Debug logging' is off", async () => {
     hoisted.instances.length = 0;
     const app = makeFakeApp();
     const plugin = makeFakePlugin(false);
@@ -107,10 +113,10 @@ describe("SvgView debug overlay", () => {
     const view = new SvgView(leaf as any, plugin as any);
     await view.onload();
 
-    expect(hoisted.instances[0].debugOverlayCalls).toEqual([false]);
+    expect(hoisted.instances[0].debugLoggerSinks).toEqual([null]);
   });
 
-  it("refreshDebugOverlayFromSettings() pushes a live change without reopening the view", async () => {
+  it("refreshDebugLoggerFromSettings() pushes a live change without reopening the view", async () => {
     hoisted.instances.length = 0;
     const app = makeFakeApp();
     const plugin = makeFakePlugin(false);
@@ -118,11 +124,30 @@ describe("SvgView debug overlay", () => {
 
     const view = new SvgView(leaf as any, plugin as any);
     await view.onload();
-    expect(hoisted.instances[0].debugOverlayCalls).toEqual([false]);
+    expect(hoisted.instances[0].debugLoggerSinks).toEqual([null]);
 
     plugin.settings.debugLogging = true;
-    view.refreshDebugOverlayFromSettings();
+    view.refreshDebugLoggerFromSettings();
 
-    expect(hoisted.instances[0].debugOverlayCalls).toEqual([false, true]);
+    expect(hoisted.instances[0].debugLoggerSinks).toEqual([null, expect.any(Function)]);
+  });
+
+  it("forwards a snapshot handed to the sink into plugin.debugLog", async () => {
+    hoisted.instances.length = 0;
+    const app = makeFakeApp();
+    const plugin = makeFakePlugin(true);
+    const leaf = { app, path: "drawings/foo.svg" };
+
+    const view = new SvgView(leaf as any, plugin as any);
+    await view.onload();
+
+    const sink = hoisted.instances[0].debugLoggerSinks[0];
+    const snapshot = { selection: { selectedIds: ["rect1"], selectors: [] } };
+    sink?.("debug-snapshot", snapshot);
+
+    expect(plugin.debugLog.log).toHaveBeenCalledWith(
+      "debug-snapshot",
+      expect.objectContaining(snapshot),
+    );
   });
 });

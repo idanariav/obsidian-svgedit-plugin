@@ -185,8 +185,10 @@ export interface SvgPluginSettings {
    *  sequence of actions leading up to a hard-to-reproduce bug. Off by default;
    *  the log lives outside the vault (plugin config dir), never syncs, and isn't
    *  read by anything else in the plugin. Also drives svgedit's dev-mode
-   *  visibility inspector (see SvgView's setDebugOverlay calls) — one toggle
-   *  for both, rather than a second setting. */
+   *  snapshot logger (see SvgView's setDebugLogger calls) — one toggle for
+   *  both, rather than a second setting. Desynced selection/path-grip/group
+   *  state that used to render in a separate on-canvas overlay now lands as
+   *  "debug-snapshot" lines in this same log. */
   debugLogging: boolean;
   /** Frontmatter field added to the note by "New drawing for this file",
    *  containing a list of links to its drawings (a note can have more than

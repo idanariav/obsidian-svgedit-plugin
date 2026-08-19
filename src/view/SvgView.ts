@@ -46,12 +46,14 @@ interface SvgEditorInstance {
    *  container, but switching Obsidian panes doesn't necessarily click inside
    *  the target drawing's canvas — so call this when this leaf becomes active. */
   activate?(): void;
-  /** Show/hide svgedit's dev-mode "visibility" inspector (selection boxes,
+  /** Route svgedit's dev-mode "visibility" snapshot (selection boxes,
    *  path-node grips, group-context dimming that are still rendered but no
-   *  longer backed by the model). We drive it from the existing "Debug
-   *  logging" setting rather than adding a second toggle. Optional: only
-   *  present once the fork's bundle carries it. */
-  setDebugOverlay?(enabled: boolean): void;
+   *  longer backed by the model) to a sink instead of an on-canvas overlay.
+   *  The sink is called as `(event, detail)` whenever the snapshot changes;
+   *  pass `null` to stop. We drive it from the existing "Debug logging"
+   *  setting rather than adding a second toggle. Optional: only present once
+   *  the fork's bundle carries it. */
+  setDebugLogger?(sink: ((event: string, detail?: Record<string, unknown>) => void) | null): void;
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
@@ -383,10 +385,14 @@ export class SvgView extends TextFileView {
     if (this.app.workspace.getActiveViewOfType(SvgView) === this) this.svgEditor.activate?.();
 
     this.setupThemeSync();
-    // Drive svgedit's visibility inspector off the existing "Debug logging"
-    // setting rather than adding a second toggle (see setDebugOverlay's doc
-    // in the fork's Editor.js). Optional-chained: absent on older bundles.
-    this.svgEditor.setDebugOverlay?.(this.plugin.settings.debugLogging);
+    // Drive svgedit's visibility-snapshot logger off the existing "Debug
+    // logging" setting rather than adding a second toggle (see
+    // setDebugLogger's doc in the fork's Editor.js). The sink forwards each
+    // changed snapshot into this same debug log. Optional-chained: absent on
+    // older bundles.
+    this.svgEditor.setDebugLogger?.(
+      this.plugin.settings.debugLogging ? (event, detail) => this.log(event, detail) : null,
+    );
 
     // svgCanvas.bind() is backed by a native EventTarget: every bound handler
     // fires, so this coexists with svgedit's own `changed` binding (which
@@ -527,10 +533,12 @@ export class SvgView extends TextFileView {
     this.applyTheme(this.resolveInitialTheme());
   }
 
-  /** Re-apply the "Debug logging" setting's visibility-inspector state to a
-   *  live editor (called when the setting is toggled from the settings tab). */
-  refreshDebugOverlayFromSettings(): void {
-    this.svgEditor?.setDebugOverlay?.(this.plugin.settings.debugLogging);
+  /** Re-apply the "Debug logging" setting's snapshot-logger state to a live
+   *  editor (called when the setting is toggled from the settings tab). */
+  refreshDebugLoggerFromSettings(): void {
+    this.svgEditor?.setDebugLogger?.(
+      this.plugin.settings.debugLogging ? (event, detail) => this.log(event, detail) : null,
+    );
   }
 
   /** The theme to apply when the editor opens: the user's explicit persisted

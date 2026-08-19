@@ -7,7 +7,7 @@
  * changes to a different one's log.
  *
  * Uses the same fake `svgedit-editor` + tests/mocks/obsidian.ts pattern as
- * SvgView-debug-overlay.test.ts.
+ * SvgView-debug-logger.test.ts.
  */
 
 import { describe, it, expect, vi } from "vitest";

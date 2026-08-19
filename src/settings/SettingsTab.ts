@@ -549,10 +549,10 @@ export class SvgSettingsTab extends PluginSettingTab {
       .setName("Debug logging")
       .setDesc(
         "Log editor actions (load, edit, save, export) with timestamps to a local "
-        + "file, to help capture what led up to a hard-to-reproduce bug. Also shows "
-        + "the editor's visibility inspector, an overlay that flags selection boxes, "
-        + "path-node grips, or group dimming still rendered but no longer backed by "
-        + "the model. Off by default; the log lives outside the vault, in this "
+        + "file, to help capture what led up to a hard-to-reproduce bug. Also logs "
+        + "editor state that's flagged as desynced — a selection box, path-node "
+        + "grip, or group dimming still rendered but no longer backed by the "
+        + "model. Off by default; the log lives outside the vault, in this "
         + "plugin's own folder, and is never synced.",
       )
       .addToggle((t) =>
@@ -561,7 +561,7 @@ export class SvgSettingsTab extends PluginSettingTab {
           .onChange(async (v) => {
             this.plugin.settings.debugLogging = v;
             await this.plugin.saveSettings();
-            this.plugin.refreshOpenEditorDebugOverlay();
+            this.plugin.refreshOpenEditorDebugLogger();
           }),
       );
 

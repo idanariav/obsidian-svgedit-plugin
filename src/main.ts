@@ -271,13 +271,13 @@ export default class SvgPlugin extends Plugin {
     }
   }
 
-  /** Re-apply the "Debug logging" setting's visibility-inspector state to
-   *  every open SVG view (used when the setting is toggled from the settings
+  /** Re-apply the "Debug logging" setting's snapshot-logger state to every
+   *  open SVG view (used when the setting is toggled from the settings
    *  tab). */
-  refreshOpenEditorDebugOverlay(): void {
+  refreshOpenEditorDebugLogger(): void {
     for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SVG)) {
       const view = leaf.view;
-      if (view instanceof SvgView) view.refreshDebugOverlayFromSettings();
+      if (view instanceof SvgView) view.refreshDebugLoggerFromSettings();
     }
   }
 
