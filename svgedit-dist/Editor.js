@@ -5963,8 +5963,10 @@ class pn extends HTMLElement {
   constructor(e) {
     super(), this._skipToggleSync = !1, this.handleToggle = this.handleToggle.bind(this), this._shadowRoot = this.attachShadow({ mode: "open" });
     const i = document.createElement("template");
-    i.innerHTML = e, this._shadowRoot.append(i.content.cloneNode(!0)), this.imgPath = svgEditor.configObj.curConfig.imgPath, this.$icon = this._shadowRoot.querySelector("#icon"), this.$trigger = this._shadowRoot.querySelector(".trigger"), this.$popup = this._shadowRoot.querySelector("#options-container"), this.$popup.setAttribute("popover", "auto"), this.$popup.style.margin = "0", this.$popup.style.inset = "auto", this.$popup.addEventListener("toggle", this.handleToggle), this.$trigger.addEventListener("click", (n) => {
-      n.stopPropagation(), this.toggle();
+    i.innerHTML = e, this._shadowRoot.append(i.content.cloneNode(!0)), this.imgPath = svgEditor.configObj.curConfig.imgPath, this.$icon = this._shadowRoot.querySelector("#icon"), this.$trigger = this._shadowRoot.querySelector(".trigger"), this.$popup = this._shadowRoot.querySelector("#options-container"), this.$popup.setAttribute("popover", "auto"), this.$popup.style.margin = "0", this.$popup.style.inset = "auto", this.$popup.addEventListener("toggle", this.handleToggle), this.$trigger.addEventListener("pointerdown", () => {
+      this._wasOpenOnPointerDown = this.isOpen;
+    }), this.$trigger.addEventListener("click", (n) => {
+      n.stopPropagation(), this._wasOpenOnPointerDown ? this.close() : this.open();
     });
   }
   /**
