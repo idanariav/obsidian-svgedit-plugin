@@ -922,15 +922,19 @@ export class SvgView extends TextFileView {
     this.fileDeleted = true;
   }
 
-  async onunload(): Promise<void> {
-    this.log("view-unload");
+  /** Shared by onClose() and onunload() — see both call sites for why this
+   *  needs to run from each independently rather than relying on just one.
+   *  Idempotent: the `this.svgEditor` null-out at the end makes every guard
+   *  above it a safe no-op on a second call, so it's harmless if Obsidian
+   *  ends up invoking both for the same teardown. */
+  private async teardownEditor(): Promise<void> {
     this.clearAutosaveTimer();
     // Wait for any in-flight save before snapshotting/destroying the canvas, so
     // a running export can't read a torn-down editor.
     await this.waitForSave();
     // Snapshot the live SVG into currentData *before* nulling the editor.
     // This ensures getViewData() still returns the latest drawing if Obsidian
-    // calls save() after onunload (e.g. when the user closes the tab quickly).
+    // calls save() after teardown (e.g. when the user closes the tab quickly).
     // Skip when the real drawing never loaded — the canvas is the empty seed.
     if (!this.fileDeleted && this.svgEditor && this.file && this.hasLoadedContent) {
       const svg = this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
@@ -943,6 +947,26 @@ export class SvgView extends TextFileView {
     this.svgEditor = null;
     this.editorReady = false;
     this.editorContainer?.empty();
+  }
+
+  /** Fires when *this leaf* is closed (tab closed, pane merged, drawing
+   *  navigated away from in a way that detaches the leaf) while Obsidian and
+   *  the plugin otherwise stay loaded — the common case, and distinct from
+   *  onunload() below, which Component's own teardown path calls but which
+   *  per-leaf-close reliability isn't guaranteed for across Obsidian
+   *  versions/scenarios. Without this override, a closed-but-not-fully-
+   *  unloaded drawing could keep squatting document-level keyboard-shortcut/
+   *  paste ownership (see svgedit's domScope.js `isActiveEditor`) — every
+   *  *other* open drawing would then silently ignore Ctrl+C/Ctrl+V until the
+   *  user clicked inside it, which is exactly what this was named for. */
+  async onClose(): Promise<void> {
+    this.log("view-close");
+    await this.teardownEditor();
+  }
+
+  async onunload(): Promise<void> {
+    this.log("view-unload");
+    await this.teardownEditor();
   }
 
   // ── Public helpers ─────────────────────────────────────────────────────────

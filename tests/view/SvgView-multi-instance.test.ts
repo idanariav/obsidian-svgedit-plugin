@@ -30,6 +30,7 @@ const hoisted = vi.hoisted(() => {
       setSvgOption: () => {},
       bind: () => undefined,
     };
+    destroyCalls = 0;
     constructor(_container: HTMLElement) {}
     setConfig(): void {}
     async init(): Promise<void> {}
@@ -40,6 +41,9 @@ const hoisted = vi.hoisted(() => {
     }
     setBackground(color: string): void {
       this.backgroundCalls.push(color);
+    }
+    destroy(): void {
+      this.destroyCalls++;
     }
   }
 
@@ -165,5 +169,40 @@ describe("SvgView multi-instance id namespacing", () => {
     const { editor } = await openDrawing("Drawings/A.md", drawingFile(svg));
 
     expect(editor.backgroundCalls).toContain("#ffffff");
+  });
+});
+
+// Regression test for the "keyboard copy/paste silently does nothing until I
+// click something" report: svgedit's domScope.js routes document-level
+// shortcuts/paste only to whichever mounted instance last claimed
+// "active" (see isActiveEditor there). That claim used to only get released
+// from onunload() -- which Obsidian's per-leaf close path (tab closed, pane
+// merged) isn't guaranteed to invoke, only full plugin/component teardown
+// reliably is. A drawing closed via a plain tab-close could keep squatting
+// the claim, silently blocking Ctrl+C/Ctrl+V on every *other* open drawing
+// until the user clicked inside the stale one again (which nobody would
+// think to do, since they'd already closed it). onClose() now releases the
+// same teardown onunload() does, so a normal tab-close reliably calls
+// svgEditor.destroy() (which clears the active-editor claim on the svgedit
+// side) without needing to wait for -- or depend on -- onunload() at all.
+describe("SvgView leaf-close teardown", () => {
+  const oneRectSvg = '<svg xmlns="http://www.w3.org/2000/svg"><rect id="svg_1" width="10" height="10"/></svg>';
+
+  it("onClose() destroys the editor (releasing svgedit's active-editor claim), same as onunload() already does", async () => {
+    const { view, editor } = await openDrawing("Drawings/A.md", drawingFile(oneRectSvg));
+
+    await view.onClose();
+
+    expect(editor.destroyCalls).toBe(1);
+    expect((view as any).svgEditor).toBeNull();
+  });
+
+  it("destroys exactly once even if both onClose() and onunload() end up firing for the same teardown", async () => {
+    const { view, editor } = await openDrawing("Drawings/A.md", drawingFile(oneRectSvg));
+
+    await view.onClose();
+    await view.onunload();
+
+    expect(editor.destroyCalls).toBe(1);
   });
 });
