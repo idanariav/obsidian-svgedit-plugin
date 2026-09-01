@@ -21986,11 +21986,14 @@ const f8 = (o) => {
     releaseSelector(c) {
       if (!c)
         return;
-      const u = this.selectors.length, g = this.selectorMap[c.id];
-      g?.locked || mt("WARNING! selector was released but was already unlocked", null, "select");
+      const u = this.selectors.length;
+      let g = this.selectorMap[c.id];
+      g?.selectedElement !== c && (g = this.selectors.find((m) => m?.selectedElement === c) ?? g), g?.locked || mt("WARNING! selector was released but was already unlocked", null, "select");
       for (let m = 0; m < u; ++m)
         if (this.selectors[m] && this.selectors[m] === g) {
-          delete this.selectorMap[c.id], g.locked = !1, g.selectedElement = null, g.showGrips(!1);
+          for (const b of Object.keys(this.selectorMap))
+            this.selectorMap[b] === g && delete this.selectorMap[b];
+          g.locked = !1, g.selectedElement = null, g.showGrips(!1);
           try {
             g.selectorGroup.setAttribute("display", "none");
           } catch {
