@@ -11,23 +11,6 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-## No CI
-
-`npm test` runs vitest (`vitest.config.mts`, `tests/**/*.test.ts`), covering:
-the `SvgView` extensions-list sync check, an `extractSvg`/`replaceSvg`
-round-trip (incl. the CRLF regression case), `src/export/frames.ts`,
-`src/export/raster.ts` (real Chromium rasterization via Playwright —
-`tests/export/raster.test.ts`), a static guard that `SvgView` doesn't declare
-a field name reserved by Obsidian's `TextFileView`
-(`tests/view/SvgView-reserved-fields.test.ts`), and the `SvgView` init race
-around `editorReady` (`tests/view/SvgView-init-race.test.ts`, built against
-`tests/mocks/obsidian.ts` — a minimal runtime stand-in for the types-only
-`obsidian` package, aliased in for tests via `vitest.config.mts`; expand it
-if a future test needs to drive more of `SvgView`, e.g. a real
-save()/backup-restore flow needs `Vault`/IndexedDB wired up too).
-
-Not done now: no `.github/workflows` runs `npm test` on push/PR yet.
-
 ## Toggling the plugin off/on doesn't reload svgedit's custom elements
 
 `src/compat/customElementsGuard.ts` makes `customElements.define()` a no-op
