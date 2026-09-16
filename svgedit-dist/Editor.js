@@ -1165,28 +1165,28 @@ class Es extends qs {
       const te = (s.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && U ? void 0 : M, le = X && oe !== M && this.options.updateMissing;
       if (U || J || le) {
         if (this.logger.log(le ? "updateKey" : "missingKey", C, m, u, le ? oe : M), c) {
-          const be = this.resolve(u, {
+          const xe = this.resolve(u, {
             ...s,
             keySeparator: !1
           });
-          be && be.res && this.logger.warn("Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.");
+          xe && xe.res && this.logger.warn("Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.");
         }
         let me = [];
         const ye = this.languageUtils.getFallbackCodes(this.options.fallbackLng, s.lng || this.language);
         if (this.options.saveMissingTo === "fallback" && ye && ye[0])
-          for (let be = 0; be < ye.length; be++)
-            me.push(ye[be]);
+          for (let xe = 0; xe < ye.length; xe++)
+            me.push(ye[xe]);
         else this.options.saveMissingTo === "all" ? me = this.languageUtils.toResolveHierarchy(s.lng || this.language) : me.push(s.lng || this.language);
-        const we = (be, Se, Ae) => {
+        const Ce = (xe, Se, Ae) => {
           const Fe = X && Ae !== M ? Ae : te;
-          this.options.missingKeyHandler ? this.options.missingKeyHandler(be, m, Se, Fe, le, s) : this.backendConnector?.saveMissing && this.backendConnector.saveMissing(be, m, Se, Fe, le, s), this.emit("missingKey", be, m, Se, M);
+          this.options.missingKeyHandler ? this.options.missingKeyHandler(xe, m, Se, Fe, le, s) : this.backendConnector?.saveMissing && this.backendConnector.saveMissing(xe, m, Se, Fe, le, s), this.emit("missingKey", xe, m, Se, M);
         };
-        this.options.saveMissing && (this.options.saveMissingPlurals && G ? me.forEach((be) => {
-          const Se = this.pluralResolver.getSuffixes(be, s);
+        this.options.saveMissing && (this.options.saveMissingPlurals && G ? me.forEach((xe) => {
+          const Se = this.pluralResolver.getSuffixes(xe, s);
           ie && s[`defaultValue${this.options.pluralSeparator}zero`] && Se.indexOf(`${this.options.pluralSeparator}zero`) < 0 && Se.push(`${this.options.pluralSeparator}zero`), Se.forEach((Ae) => {
-            we([be], u + Ae, s[`defaultValue${Ae}`] || oe);
+            Ce([xe], u + Ae, s[`defaultValue${Ae}`] || oe);
           });
-        }) : we(me, u, oe));
+        }) : Ce(me, u, oe));
       }
       M = this.extendTranslation(M, e, s, _, n), U && M === u && this.options.appendNamespaceToMissingKey && (M = `${m}${w}${u}`), (U || J) && this.options.parseMissingKeyHandler && (M = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${m}${w}${u}` : u, J ? M : void 0, s));
     }
@@ -10119,8 +10119,8 @@ function al(o, e = 100, i = null) {
     }), G.appendChild(J);
   });
   function Y() {
-    const { h: ee, s: J, v: U, a: de, hex: te } = u, { r: le, g: me, b: ye } = vr(te), we = `rgba(${le},${me},${ye},${de / 100})`, be = `rgb(${le},${me},${ye})`;
-    C.style.background = `hsl(${ee},100%,50%)`, k.style.left = `${J}%`, k.style.top = `${(1 - U / 100) * 100}%`, M.style.top = `${ee / 360 * 100}%`, z.style.background = `linear-gradient(to right, transparent, ${be})`, I.style.left = `${de}%`, O.style.background = `#${g}`, R.style.background = we, X.h && document.activeElement !== X.h && (X.h.value = ee), X.s && document.activeElement !== X.s && (X.s.value = J), X.v && document.activeElement !== X.v && (X.v.value = U), X.r && document.activeElement !== X.r && (X.r.value = le), X.g && document.activeElement !== X.g && (X.g.value = me), X.b && document.activeElement !== X.b && (X.b.value = ye), X.a && document.activeElement !== X.a && (X.a.value = de), X.hex && document.activeElement !== X.hex && (X.hex.value = te), G.querySelectorAll(".cp-preset-swatch").forEach((Se) => {
+    const { h: ee, s: J, v: U, a: de, hex: te } = u, { r: le, g: me, b: ye } = vr(te), Ce = `rgba(${le},${me},${ye},${de / 100})`, xe = `rgb(${le},${me},${ye})`;
+    C.style.background = `hsl(${ee},100%,50%)`, k.style.left = `${J}%`, k.style.top = `${(1 - U / 100) * 100}%`, M.style.top = `${ee / 360 * 100}%`, z.style.background = `linear-gradient(to right, transparent, ${xe})`, I.style.left = `${de}%`, O.style.background = `#${g}`, R.style.background = Ce, X.h && document.activeElement !== X.h && (X.h.value = ee), X.s && document.activeElement !== X.s && (X.s.value = J), X.v && document.activeElement !== X.v && (X.v.value = U), X.r && document.activeElement !== X.r && (X.r.value = le), X.g && document.activeElement !== X.g && (X.g.value = me), X.b && document.activeElement !== X.b && (X.b.value = ye), X.a && document.activeElement !== X.a && (X.a.value = de), X.hex && document.activeElement !== X.hex && (X.hex.value = te), G.querySelectorAll(".cp-preset-swatch").forEach((Se) => {
       Se.classList.toggle("is-selected", Se.title.toLowerCase() === "#" + te.toLowerCase());
     });
   }
@@ -10641,7 +10641,7 @@ function hf(o, e) {
   ];
   g.forEach((Se) => {
     const Ae = document.createElement("button");
-    Ae.type = "button", Ae.className = "cp-mode-btn" + (s.mode === Se.key ? " is-active" : ""), Ae.textContent = Se.label, Ae.addEventListener("click", () => we(Se.key)), u.appendChild(Ae);
+    Ae.type = "button", Ae.className = "cp-mode-btn" + (s.mode === Se.key ? " is-active" : ""), Ae.textContent = Se.label, Ae.addEventListener("click", () => Ce(Se.key)), u.appendChild(Ae);
   }), c.appendChild(u);
   const m = document.createElement("div");
   m.className = "cp-preview-big", m.style.userSelect = "none", m.innerHTML = `
@@ -10663,14 +10663,14 @@ function hf(o, e) {
     const Fe = Se.querySelector(".cp-radial-pt");
     Fe.addEventListener("pointerdown", (Me) => {
       Me.preventDefault(), Fe.setPointerCapture(Me.pointerId);
-      const Ce = (Le) => {
-        const Pe = m.getBoundingClientRect(), Ie = Math.min(1, Math.max(0, (Le.clientX - Pe.left) / Pe.width)), Oe = Math.min(1, Math.max(0, (Le.clientY - Pe.top) / Pe.height));
+      const be = (Pe) => {
+        const Le = m.getBoundingClientRect(), Ie = Math.min(1, Math.max(0, (Pe.clientX - Le.left) / Le.width)), Oe = Math.min(1, Math.max(0, (Pe.clientY - Le.top) / Le.height));
         Ae(Ie, Oe), ye();
       };
-      Fe.addEventListener("pointermove", Ce), Fe.addEventListener("pointerup", () => {
-        Fe.removeEventListener("pointermove", Ce);
+      Fe.addEventListener("pointermove", be), Fe.addEventListener("pointerup", () => {
+        Fe.removeEventListener("pointermove", be);
       }, { once: !0 }), Fe.addEventListener("pointercancel", () => {
-        Fe.removeEventListener("pointermove", Ce);
+        Fe.removeEventListener("pointermove", be);
       }, { once: !0 });
     });
   }
@@ -10759,13 +10759,13 @@ function hf(o, e) {
     let Se = s.stops;
     if (s.mode === "mono") {
       const Me = Se[0] || { color: "000000", alpha: 100 };
-      let Ce, Le = 100;
-      s.monoMode === "white" ? Ce = "#ffffff" : s.monoMode === "black" ? Ce = "#000000" : (Ce = "#" + Me.color, Le = 0), Se = [{ color: Me.color, position: 0, alpha: Me.alpha }, { color: Ce.replace("#", ""), position: 100, alpha: Le }];
+      let be, Pe = 100;
+      s.monoMode === "white" ? be = "#ffffff" : s.monoMode === "black" ? be = "#000000" : (be = "#" + Me.color, Pe = 0), Se = [{ color: Me.color, position: 0, alpha: Me.alpha }, { color: be.replace("#", ""), position: 100, alpha: Pe }];
     }
-    const Fe = [...Se].sort((Me, Ce) => Me.position - Ce.position).map((Me) => `rgba(${le("#" + Me.color)},${Me.alpha / 100}) ${Me.position}%`).join(", ");
+    const Fe = [...Se].sort((Me, be) => Me.position - be.position).map((Me) => `rgba(${le("#" + Me.color)},${Me.alpha / 100}) ${Me.position}%`).join(", ");
     w.style.background = `radial-gradient(ellipse at ${s.cx * 100}% ${s.cy * 100}%, ${Fe})`, me();
   }
-  function we(Se) {
+  function Ce(Se) {
     s.mode = Se, u.querySelectorAll(".cp-mode-btn").forEach((Ae) => {
       Ae.classList.toggle("is-active", Ae.textContent === g.find((Fe) => Fe.key === Se)?.label);
     }), E.setMode(Se), de.style.display = Se === "mono" ? "" : "none", ye();
@@ -10773,14 +10773,14 @@ function hf(o, e) {
   E.addEventListener("stops-change", (Se) => {
     s.stops = Se.detail.stops, ye();
   });
-  function be(Se) {
+  function xe(Se) {
     const Ae = s.stops[Se];
     Ae && (I.innerHTML = "", O = al(Ae.color, Ae.alpha), I.appendChild(O), O.addEventListener("color-change", (Fe) => {
       const Me = E.getSelectedIndex();
       Me >= 0 && Me < s.stops.length && (s.stops[Me].color = Fe.detail.hex, s.stops[Me].alpha = Fe.detail.a, E.setSelectedStop(Me, Fe.detail.hex, Fe.detail.a), ye());
     }));
   }
-  return E.addEventListener("stop-select", (Se) => be(Se.detail.index)), be(E.getSelectedIndex()), ye(), a.setFromHex = (Se) => {
+  return E.addEventListener("stop-select", (Se) => xe(Se.detail.index)), xe(E.getSelectedIndex()), ye(), a.setFromHex = (Se) => {
     const Ae = Se.replace("#", "");
     let Fe = E.getSelectedIndex();
     (Fe < 0 || Fe >= s.stops.length) && (Fe = 0);
@@ -10817,7 +10817,7 @@ function hf(o, e) {
       alpha: Ae.alpha ?? 100,
       matchCenter: Ae.matchCenter ?? !0,
       monoMode: Ae.monoMode || "white"
-    }, E.setStops(s.stops), E.setMode(s.mode), X.setValue(s.r), Y.setValue(s.ellip), B.setValue(s.angle), U.setValue(s.alpha), J.value = s.spreadMethod, ee.querySelector(".cp-select-val").textContent = s.spreadMethod, se.checked = s.matchCenter, de.style.display = s.mode === "mono" ? "" : "none", we(s.mode), ye());
+    }, E.setStops(s.stops), E.setMode(s.mode), X.setValue(s.r), Y.setValue(s.ellip), B.setValue(s.angle), U.setValue(s.alpha), J.value = s.spreadMethod, ee.querySelector(".cp-select-val").textContent = s.spreadMethod, se.checked = s.matchCenter, de.style.display = s.mode === "mono" ? "" : "none", Ce(s.mode), ye());
   }, a;
 }
 const uf = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="18" height="18"><path d="M6 6l12 12M18 6L6 18"/></svg>';
@@ -13893,7 +13893,7 @@ const p2 = [
         return n;
   }
   return null;
-}, It = (o, e, i, n) => {
+}, Ft = (o, e, i, n) => {
   for (const [s, a] of Object.entries(e)) {
     const c = s.startsWith("xml:") ? Ze.XML : s.startsWith("xlink:") ? Ze.XLINK : null;
     if (a === void 0) {
@@ -14543,29 +14543,40 @@ let ir = class {
     super(), this.text = o || "Batch Command", this.stack = [];
   }
   /**
-  * Runs "apply" on all subcommands.
+  * Runs "apply" on all subcommands. A BatchCommand is just a container: its
+  * own `type()` ('BatchCommand') never matches any of the type-specific
+  * branches in undo.js's `handleHistoryEvent` (ChangeElementCommand,
+  * MoveElementCommand, InsertElementCommand, RemoveElementCommand), so
+  * routing it through `Command.apply`'s handler notification (like a real
+  * leaf command) fires `handleHistoryEvent` an extra, redundant time for
+  * every batch on top of the once-per-subcommand notifications the leaf
+  * commands already fire. That extra firing does nothing useful — it only
+  * re-clears the selection, re-dispatches `changed`, and re-evaluates
+  * undo.js's pathedit refresh/clear check against whatever mode the
+  * subcommands just left the canvas in, which can spuriously kick the user
+  * out of path-edit mode a second time after the subcommands already
+  * settled it correctly. So subcommands are still applied *with* the real
+  * handler (each needs its own notification for its own side effects) —
+  * only the wrapping batch's own notification is skipped.
   * @param {module:history.HistoryEventHandler} handler
   * @fires module:history~Command#event:history
   * @returns {void}
   */
   apply(o) {
-    super.apply(o, () => {
-      this.stack.forEach((e) => {
-        console.assert(e, "stack item should not be null"), e && e.apply(o);
-      });
+    this.stack.forEach((e) => {
+      console.assert(e, "stack item should not be null"), e && e.apply(o);
     });
   }
   /**
-  * Runs "unapply" on all subcommands.
+  * Runs "unapply" on all subcommands. See `apply()` above for why this
+  * does not also notify the handler for the batch itself.
   * @param {module:history.HistoryEventHandler} handler
   * @fires module:history~Command#event:history
   * @returns {void}
   */
   unapply(o) {
-    super.unapply(o, () => {
-      [...this.stack].reverse().forEach((e) => {
-        console.assert(e, "stack item should not be null"), e && e.unapply(o);
-      });
+    [...this.stack].reverse().forEach((e) => {
+      console.assert(e, "stack item should not be null"), e && e.unapply(o);
     });
   }
   /**
@@ -14754,12 +14765,12 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
         cursor: "move",
         style: "pointer-events:all"
       }, Y = e.getUIStrings();
-      "pathNodeTooltip" in Y && (X["xlink:title"] = Y.pathNodeTooltip), It(G, X), R.append(G), G.addEventListener("dblclick", () => {
+      "pathNodeTooltip" in Y && (X["xlink:title"] = Y.pathNodeTooltip), Ft(G, X), R.append(G), G.addEventListener("dblclick", () => {
         const B = e.getPathObj();
         B && B.setSegType();
       });
     }
-    return I !== void 0 && O !== void 0 && It(G, {
+    return I !== void 0 && O !== void 0 && Ft(G, {
       x: I - c / 2,
       y: O - c / 2,
       display: "inline"
@@ -14779,10 +14790,10 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       cursor: "move",
       style: "pointer-events:all"
     }, R = e.getUIStrings();
-    return "pathCtrlPtTooltip" in R && (O["xlink:title"] = R.pathCtrlPtTooltip), It(I, O), a().append(I), I;
+    return "pathCtrlPtTooltip" in R && (O["xlink:title"] = R.pathCtrlPtTooltip), Ft(I, O), a().append(I), I;
   }, m = (z) => {
     let I = e.getElement("ctrlLine_" + z);
-    return I || (I = document.createElementNS(Ze.SVG, "line"), It(I, {
+    return I || (I = document.createElementNS(Ze.SVG, "line"), Ft(I, {
       id: "ctrlLine_" + z,
       display: "none",
       stroke: "#555",
@@ -14793,7 +14804,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     const { index: O } = z, R = u(O);
     {
       const G = n(z);
-      It(R, {
+      Ft(R, {
         x: G.x - c / 2,
         y: G.y - c / 2,
         display: "inline"
@@ -14809,14 +14820,14 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     const G = [e.getPathObj().segs[O - 1].item, I];
     for (let X = 1; X < 3; X++) {
       const Y = O + "c" + X, B = R[`c${X}_line`] = m(Y), ie = n(z, { x: I["x" + X], y: I["y" + X] }), oe = n(z, { x: G[X - 1].x, y: G[X - 1].y });
-      It(B, {
+      Ft(B, {
         x1: ie.x,
         y1: ie.y,
         x2: oe.x,
         y2: oe.y
       }), R[`c${X}_line`] = B;
       const se = R[`c${X}`] = g(Y);
-      It(se, {
+      Ft(se, {
         cx: ie.x,
         cy: ie.y
       }), R["c" + X] = se;
@@ -14843,7 +14854,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     let R = e.getElement(`segline_${O}`);
     if (!R) {
       const G = a();
-      R = document.createElementNS(Ze.SVG, "path"), It(R, {
+      R = document.createElementNS(Ze.SVG, "path"), Ft(R, {
         id: `segline_${O}`,
         display: "none",
         fill: "none",
@@ -14931,7 +14942,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     update(I) {
       if (this.ptgrip) {
         const O = n(this);
-        if (It(this.ptgrip, {
+        if (Ft(this.ptgrip, {
           x: O.x - c / 2,
           y: O.y - c / 2
         }), _(this), this.ctrlpts) {
@@ -15494,7 +15505,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
           const B = e.snapPointToGrid(I, O);
           I = B.x, O = B.y, M = I * z, E = O * z;
         }
-        R || (R = document.createElementNS(Ze.SVG, "path"), It(R, {
+        R || (R = document.createElementNS(Ze.SVG, "path"), Ft(R, {
           id: "path_stretch_line",
           stroke: "#22C",
           "stroke-width": "0.5",
@@ -15603,7 +15614,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
           e.selectorManager.getRubberBandBox()
         ));
         const E = e.getZoom();
-        It(M, {
+        Ft(M, {
           x: w * E,
           y: C * E,
           width: 0,
@@ -15631,7 +15642,7 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
           const z = this.#e[0], I = this.#e[1], O = g / w, R = m / w, G = z + (z - O), X = I + (I - R);
           E.setAttribute("cx", G * w), E.setAttribute("cy", X * w), E.setAttribute("display", "inline");
           const Y = e.getCtrlLine(1);
-          if (It(Y, {
+          if (Ft(Y, {
             x1: g,
             y1: m,
             x2: G * w,
@@ -16073,8 +16084,8 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       let te = Math.atan2(oe, ie), le = Math.atan2(Q, se);
       te < 0 && (te += 2 * Math.PI), le < 0 && (le += 2 * Math.PI);
       const me = Math.abs(te - le), ye = Math.abs(Math.PI - me) / 2;
-      let we, be;
-      return te - le > 0 ? (we = me < Math.PI ? te + ye : te - ye, be = me < Math.PI ? le - ye : le + ye) : (we = me < Math.PI ? te - ye : te + ye, be = me < Math.PI ? le + ye : le - ye), U.x = ee * Math.cos(we) + B.x, U.y = ee * Math.sin(we) + B.y, de.x = J * Math.cos(be) + B.x, de.y = J * Math.sin(be) + B.y, [U, de];
+      let Ce, xe;
+      return te - le > 0 ? (Ce = me < Math.PI ? te + ye : te - ye, xe = me < Math.PI ? le - ye : le + ye) : (Ce = me < Math.PI ? te - ye : te + ye, xe = me < Math.PI ? le + ye : le - ye), U.x = ee * Math.cos(Ce) + B.x, U.y = ee * Math.sin(Ce) + B.y, de.x = J * Math.cos(xe) + B.x, de.y = J * Math.sin(xe) + B.y, [U, de];
     }
   }, w = (X) => {
     let Y = c[X.id];
@@ -16117,19 +16128,19 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
         continue;
       const ye = {};
       if (te.x !== null && te.x !== void 0 && te.y !== null && te.y !== void 0) {
-        const be = I(te.x, te.y);
-        ye.x = be.x, ye.y = be.y;
+        const xe = I(te.x, te.y);
+        ye.x = xe.x, ye.y = xe.y;
       }
       if (te.x1 !== null && te.x1 !== void 0 && te.y1 !== null && te.y1 !== void 0) {
-        const be = I(te.x1, te.y1);
-        ye.x1 = be.x, ye.y1 = be.y;
+        const xe = I(te.x1, te.y1);
+        ye.x1 = xe.x, ye.y1 = xe.y;
       }
       if (te.x2 !== null && te.x2 !== void 0 && te.y2 !== null && te.y2 !== void 0) {
-        const be = I(te.x2, te.y2);
-        ye.x2 = be.x, ye.y2 = be.y;
+        const xe = I(te.x2, te.y2);
+        ye.x2 = xe.x, ye.y2 = xe.y;
       }
-      const we = me.map((be) => Object.prototype.hasOwnProperty.call(ye, be) ? ye[be] : te[be] ?? 0);
-      e.replacePathSeg(le, J, we);
+      const Ce = me.map((xe) => Object.prototype.hasOwnProperty.call(ye, xe) ? ye[xe] : te[xe] ?? 0);
+      e.replacePathSeg(le, J, Ce);
     }
     Kt(X);
     const U = e.getSvgRoot().createSVGTransform(), de = Ct(X);
@@ -16151,8 +16162,8 @@ const fn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
             x2: (le.x - B.x) / B.width,
             y2: (le.y - B.y) / B.height
           }, ye = Q.cloneNode(!0);
-          for (const [we, be] of Object.entries(me))
-            ye.setAttribute(we, be);
+          for (const [Ce, xe] of Object.entries(me))
+            ye.setAttribute(Ce, xe);
           ye.id = e.getNextId(), e.findDefs().append(ye), X.setAttribute(oe, `url(#${ye.id})`);
         }
       }
@@ -17809,7 +17820,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
           s = this.#e.selectionEnd;
         }
       const c = this.#r[s] ?? this.#r[this.#r.length - 1];
-      a || this.#e.setSelectionRange(s, s), this.#i = e.getElement("text_cursor"), this.#i || (this.#i = document.createElementNS(Ze.SVG, "line"), It(this.#i, {
+      a || this.#e.setSelectionRange(s, s), this.#i = e.getElement("text_cursor"), this.#i || (this.#i = document.createElementNS(Ze.SVG, "line"), Ft(this.#i, {
         id: "text_cursor",
         stroke: "#333",
         "stroke-width": 1
@@ -17818,7 +17829,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         this.#i.setAttribute("display", m ? "inline" : "none");
       }, 600));
       const u = this.#l(c.x, c.y), g = this.#l(c.x, c.y + c.height);
-      It(this.#i, {
+      Ft(this.#i, {
         x1: u.x,
         y1: u.y,
         x2: g.x,
@@ -17840,7 +17851,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         this.#c(a);
         return;
       }
-      c || this.#e.setSelectionRange(s, a), this.#n = e.getElement("text_selectblock"), this.#n || (this.#n = document.createElementNS(Ze.SVG, "path"), It(this.#n, {
+      c || this.#e.setSelectionRange(s, a), this.#n = e.getElement("text_selectblock"), this.#n || (this.#n = document.createElementNS(Ze.SVG, "path"), Ft(this.#n, {
         id: "text_selectblock",
         fill: "green",
         opacity: 0.5,
@@ -17856,7 +17867,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
           const k = C === a ? a : C - 1;
           m += g(u[w], u[k]), w = C;
         }
-      It(this.#n, {
+      Ft(this.#n, {
         d: m,
         display: "inline"
       });
@@ -18100,7 +18111,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
   const e = o;
   return { down: (i, n) => {
     const { realX: s, realY: a, zoom: c } = n;
-    e.setStarted(!0), e.getRubberBox() || e.setRubberBox(e.selectorManager.getRubberBandBox()), It(e.getRubberBox(), {
+    e.setStarted(!0), e.getRubberBox() || e.setRubberBox(e.selectorManager.getRubberBandBox()), Ft(e.getRubberBox(), {
       x: s * c,
       y: a * c,
       width: 0,
@@ -18110,7 +18121,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
   }, move: (i, n) => {
     const { zoom: s } = n;
     let { realX: a, realY: c } = n;
-    a *= s, c *= s, It(e.getRubberBox(), {
+    a *= s, c *= s, Ft(e.getRubberBox(), {
       x: Math.min(e.getRStartX() * s, a),
       y: Math.min(e.getRStartY() * s, c),
       width: Math.abs(a - e.getRStartX() * s),
@@ -18158,7 +18169,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       let w, C;
       m ? (w = m.dragging ? m.dragging[0] : e.getStartX(), C = m.dragging ? m.dragging[1] : e.getStartY()) : (w = e.getStartX(), C = e.getStartY()), { x: a, y: c } = ul(w, C, a, c);
     }
-    e.getRubberBox()?.getAttribute("display") !== "none" && (u *= s, g *= s, It(e.getRubberBox(), {
+    e.getRubberBox()?.getAttribute("display") !== "none" && (u *= s, g *= s, Ft(e.getRubberBox(), {
       x: Math.min(e.getRStartX() * s, u),
       y: Math.min(e.getRStartY() * s, g),
       width: Math.abs(u - e.getRStartX() * s),
@@ -18335,7 +18346,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     let { x: u, y: g, realX: m, realY: w } = a, C, k, _;
     switch (e.getCurrentMode()) {
       case "text": {
-        It(c, {
+        Ft(c, {
           x: u,
           y: g
         });
@@ -18359,7 +18370,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       case "image": {
         const M = e.getCurrentMode() === "square" || e.getCurrentMode() === "image" && !s.shiftKey || e.getCurrentMode() !== "image" && s.shiftKey;
         let E = Math.abs(u - e.getStartX()), z = Math.abs(g - e.getStartY()), I, O;
-        M ? (E = z = Math.max(E, z), I = e.getStartX() < u ? e.getStartX() : e.getStartX() - E, O = e.getStartY() < g ? e.getStartY() : e.getStartY() - z) : (I = Math.min(e.getStartX(), u), O = Math.min(e.getStartY(), g)), e.getCurConfig().gridSnapping && (E = e.snapToGrid(E), z = e.snapToGrid(z), I = e.snapToGrid(I), O = e.snapToGrid(O)), It(c, {
+        M ? (E = z = Math.max(E, z), I = e.getStartX() < u ? e.getStartX() : e.getStartX() - E, O = e.getStartY() < g ? e.getStartY() : e.getStartY() - z) : (I = Math.min(e.getStartX(), u), O = Math.min(e.getStartY(), g)), e.getCurConfig().gridSnapping && (E = e.snapToGrid(E), z = e.snapToGrid(z), I = e.snapToGrid(I), O = e.snapToGrid(O)), Ft(c, {
           width: E,
           height: z,
           x: I,
@@ -18697,7 +18708,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     if (e.setStarted(!0), e.setCurrentResizeMode("none"), c && e.setStarted(!1), s !== a) {
       const m = c && u.filter(Boolean).length > 0;
       !u.includes(s) && !m && (i.shiftKey || e.clearSelection(!0), e.addToSelection([s]), e.setJustSelected(s), e.pathActions.clear());
-    } else c || (e.clearSelection(), e.pathActions.clear(), e.setCurrentMode("multiselect"), e.getRubberBox() || e.setRubberBox(e.selectorManager.getRubberBandBox()), e.setRStartX(e.getRStartX() * g), e.setRStartY(e.getRStartY() * g), It(e.getRubberBox(), {
+    } else c || (e.clearSelection(), e.pathActions.clear(), e.setCurrentMode("multiselect"), e.getRubberBox() || e.setRubberBox(e.selectorManager.getRubberBandBox()), e.setRStartX(e.getRStartX() * g), e.setRStartY(e.getRStartY() * g), Ft(e.getRubberBox(), {
       x: e.getRStartX(),
       y: e.getRStartY(),
       width: 0,
@@ -18761,7 +18772,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
   }, multiselectMove: (i, n) => {
     const { selectedElements: s, zoom: a } = n;
     let { realX: c, realY: u } = n;
-    c *= a, u *= a, It(e.getRubberBox(), {
+    c *= a, u *= a, Ft(e.getRubberBox(), {
       x: Math.min(e.getRStartX(), c),
       y: Math.min(e.getRStartY(), u),
       width: Math.abs(c - e.getRStartX()),
@@ -18935,19 +18946,19 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     e.setJustSelected(null);
     const ee = Mt(B.clientX, B.clientY, e.getrootSctm()), J = ee.x * se, U = ee.y * se, de = J / se, te = U / se;
     let le = e.getElement(e.getId()), me = !1;
-    const ye = de, we = te;
+    const ye = de, Ce = te;
     e.setStarted(!1), e.altCloneArmed = !1;
-    let be;
+    let xe;
     const Se = e.getCurrentMode();
     switch (e.getCurrentMode()) {
       // intentionally fall-through to select here (handled inside eventSelect.up)
       case "resize":
       case "multiselect":
       case "select":
-        g.up(B, { realX: ye, realY: we, selectedElements: oe, operationMode: Se, pendingMove: ie, tempJustSelected: Q });
+        g.up(B, { realX: ye, realY: Ce, selectedElements: oe, operationMode: Se, pendingMove: ie, tempJustSelected: Q });
         return;
       case "zoom": {
-        i.up(B, { realX: ye, realY: we });
+        i.up(B, { realX: ye, realY: Ce });
         return;
       }
       case "fhpath":
@@ -18991,19 +19002,19 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     }, !0).forEach((Ae) => {
       Ae && (me = Ae.keep || me, { element: le } = Ae, e.setStarted(Ae.started || e.getStarted()));
     }), !me && le) {
-      for (e.getCurrentDrawing().releaseId(e.getId()), le.remove(), le = null, be = B.target; be?.parentNode?.parentNode?.tagName === "g"; )
-        be = be.parentNode;
-      (e.getCurrentMode() !== "path" || !e.getDrawnPath()) && be && be.parentNode?.id !== "selectorParentGroup" && be.id !== "svgcanvas" && be.id !== "svgroot" && (e.setMode("select"), e.selectOnly([be], !0));
+      for (e.getCurrentDrawing().releaseId(e.getId()), le.remove(), le = null, xe = B.target; xe?.parentNode?.parentNode?.tagName === "g"; )
+        xe = xe.parentNode;
+      (e.getCurrentMode() !== "path" || !e.getDrawnPath()) && xe && xe.parentNode?.id !== "selectorParentGroup" && xe.id !== "svgcanvas" && xe.id !== "svgroot" && (e.setMode("select"), e.selectOnly([xe], !0));
     } else if (le) {
       e.addedNew = !0, e.pendingNewElement = le, e.getCurrentMode() === "path" && (e.getToolLocked() ? e.setMode("path") : (e.getPath_(le).show(!1), e.setMode("select"), e.selectOnly([le], !0)));
       let Ae = 0.2, Fe;
-      const Me = e.getStyle(), Ce = e.getOpacAni();
-      if (Ce.beginElement && Number.parseFloat(le.getAttribute("opacity")) !== Me.opacity) {
-        Fe = Ce.cloneNode(!0), Fe.setAttribute("to", Me.opacity), Fe.setAttribute("dur", Ae), le.appendChild(Fe);
+      const Me = e.getStyle(), be = e.getOpacAni();
+      if (be.beginElement && Number.parseFloat(le.getAttribute("opacity")) !== Me.opacity) {
+        Fe = be.cloneNode(!0), Fe.setAttribute("to", Me.opacity), Fe.setAttribute("dur", Ae), le.appendChild(Fe);
         try {
           Fe.beginElement();
-        } catch (Le) {
-          console.warn("svgedit: opacity animation beginElement() failed (known FF/foreignObject quirk)", Le);
+        } catch (Pe) {
+          console.warn("svgedit: opacity animation beginElement() failed (known FF/foreignObject quirk)", Pe);
         }
       } else
         Ae = 0;
@@ -19045,10 +19056,10 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     for (const [J, U] of ee)
       for (let de = 0; de < U; de++) {
         const te = de / U * 2 * Math.PI, le = B.clientX + Math.cos(te) * J, me = B.clientY + Math.sin(te) * J, ye = document.elementsFromPoint(le, me);
-        for (const we of ye) {
-          const be = e.getMouseTargetFromNode(we);
-          if (be && (be.parentNode === se || Q && ci.isLayer(be.parentNode)) && E(be))
-            return be;
+        for (const Ce of ye) {
+          const xe = e.getMouseTargetFromNode(Ce);
+          if (xe && (xe.parentNode === se || Q && ci.isLayer(xe.parentNode)) && E(xe))
+            return xe;
         }
       }
     return null;
@@ -19074,69 +19085,69 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         return;
       e.setCurrentMode("select"), e.setLastClickPoint(te);
     }
-    let ye = le / se, we = me / se;
-    O0(e) && ({ x: ye, y: we } = z0(e, ye, we));
-    let be = e.getMouseTarget(B);
-    if (be.tagName === "a" && be.childNodes.length === 1 && (be = be.firstChild), e.getCurrentMode() === "select" && (B.metaKey || B.ctrlKey) && !U && !B.shiftKey && (be.tagName === "g" || be.tagName === "a") && be !== e.getCurrentGroup()) {
-      e.getCurrentGroup() && e.leaveContext(), e.setContext(be);
-      const Ce = e.getMouseTarget(B);
-      Ce && Ce.parentNode === e.getCurrentGroup() && (e.selectOnly([Ce], !0), be = Ce);
+    let ye = le / se, Ce = me / se;
+    O0(e) && ({ x: ye, y: Ce } = z0(e, ye, Ce));
+    let xe = e.getMouseTarget(B);
+    if (xe.tagName === "a" && xe.childNodes.length === 1 && (xe = xe.firstChild), e.getCurrentMode() === "select" && (B.metaKey || B.ctrlKey) && !U && !B.shiftKey && (xe.tagName === "g" || xe.tagName === "a") && xe !== e.getCurrentGroup()) {
+      e.getCurrentGroup() && e.leaveContext(), e.setContext(xe);
+      const be = e.getMouseTarget(B);
+      be && be.parentNode === e.getCurrentGroup() && (e.selectOnly([be], !0), xe = be);
     }
     const Se = e.getCurrentGroup();
-    if (Se && e.getCurrentMode() === "select" && !B.metaKey && !B.ctrlKey && be !== e.selectorManager.selectorParentGroup && be !== Se && !Se.contains(be) && (e.leaveContext(), be = e.getMouseTarget(B)), e.getCurrentMode() === "select" && !B.shiftKey && !U && be !== e.selectorManager.selectorParentGroup) {
-      const Ce = oe.filter(Boolean);
-      if (Ce.length && !Ce.includes(be)) {
-        const Le = document.elementsFromPoint(B.clientX, B.clientY);
-        for (const Pe of Le) {
-          const Ie = Ce.find((Oe) => Oe === Pe || Oe.contains(Pe));
+    if (Se && e.getCurrentMode() === "select" && !B.metaKey && !B.ctrlKey && xe !== e.selectorManager.selectorParentGroup && xe !== Se && !Se.contains(xe) && (e.leaveContext(), xe = e.getMouseTarget(B)), e.getCurrentMode() === "select" && !B.shiftKey && !U && xe !== e.selectorManager.selectorParentGroup) {
+      const be = oe.filter(Boolean);
+      if (be.length && !be.includes(xe)) {
+        const Pe = document.elementsFromPoint(B.clientX, B.clientY);
+        for (const Le of Pe) {
+          const Ie = be.find((Oe) => Oe === Le || Oe.contains(Le));
           if (Ie) {
-            be = Ie;
+            xe = Ie;
             break;
           }
         }
       }
     }
-    if (e.getCurrentMode() === "select" && !U && be !== e.selectorManager.selectorParentGroup) {
-      const Ce = O(B, be);
-      Ce && (be = Ce);
+    if (e.getCurrentMode() === "select" && !U && xe !== e.selectorManager.selectorParentGroup) {
+      const be = O(B, xe);
+      be && (xe = be);
     }
-    if (e.getCurrentMode() === "select" && !U && !B.shiftKey && be === ee) {
-      const Ce = oe.filter(Boolean);
-      if (Ce.length && !(Ce.length === 1 && I(Ce[0]))) {
-        const Le = e.getStrokedBBoxDefaultVisible(Ce);
-        Le && ye >= Le.x && ye <= Le.x + Le.width && we >= Le.y && we <= Le.y + Le.height && (be = Ce[0]);
+    if (e.getCurrentMode() === "select" && !U && !B.shiftKey && xe === ee) {
+      const be = oe.filter(Boolean);
+      if (be.length && !(be.length === 1 && I(be[0]))) {
+        const Pe = e.getStrokedBBoxDefaultVisible(be);
+        Pe && ye >= Pe.x && ye <= Pe.x + Pe.width && Ce >= Pe.y && Ce <= Pe.y + Pe.height && (xe = be[0]);
       }
     }
     const Ae = ye;
     e.setStartX(ye), e.setRStartX(ye);
-    const Fe = we;
-    if (e.setStartY(we), e.setRStartY(we), e.getCurConfig().gridSnapping) {
-      ({ x: ye, y: we } = e.snapPointToGrid(ye, we));
-      const Ce = e.snapPointToGrid(e.getStartX(), e.getStartY());
-      e.setStartX(Ce.x), e.setStartY(Ce.y);
+    const Fe = Ce;
+    if (e.setStartY(Ce), e.setRStartY(Ce), e.getCurConfig().gridSnapping) {
+      ({ x: ye, y: Ce } = e.snapPointToGrid(ye, Ce));
+      const be = e.snapPointToGrid(e.getStartX(), e.getStartY());
+      e.setStartX(be.x), e.setStartY(be.y);
     }
-    if (e.getCurrentMode() === "select" && be === e.selectorManager.selectorParentGroup && oe[0]) {
-      const Ce = B.target, Le = ie.get(Ce, "type");
-      Le === "rotate" ? e.setCurrentMode("rotate") : Le === "resize" && (e.setCurrentMode("resize"), e.setCurrentResizeMode(ie.get(Ce, "dir"))), be = oe[0];
+    if (e.getCurrentMode() === "select" && xe === e.selectorManager.selectorParentGroup && oe[0]) {
+      const be = B.target, Pe = ie.get(be, "type");
+      Pe === "rotate" ? e.setCurrentMode("rotate") : Pe === "resize" && (e.setCurrentMode("resize"), e.setCurrentResizeMode(ie.get(be, "dir"))), xe = oe[0];
     }
-    e.setStartTransform(be.getAttribute("transform"));
-    const Me = Ct(be);
-    if (Me?.numberOfItems > 1 && be.tagName !== "g" && be.tagName !== "a") {
-      const Ce = wt(Me).matrix;
+    e.setStartTransform(xe.getAttribute("transform"));
+    const Me = Ct(xe);
+    if (Me?.numberOfItems > 1 && xe.tagName !== "g" && xe.tagName !== "a") {
+      const be = wt(Me).matrix;
       for (; Me.numberOfItems > 0; )
         Me.removeItem(0);
-      const Le = e.getSvgRoot().createSVGTransform();
-      Le.setMatrix(Ce), Me.appendItem(Le);
+      const Pe = e.getSvgRoot().createSVGTransform();
+      Pe.setMatrix(be), Me.appendItem(Pe);
     }
     switch (e.getCurrentMode()) {
       case "select":
-        g.down(B, { mouseTarget: be, svgRoot: ee, rightClick: U, selectedElements: oe, zoom: se });
+        g.down(B, { mouseTarget: xe, svgRoot: ee, rightClick: U, selectedElements: oe, zoom: se });
         break;
       case "zoom":
         i.down(B, { realX: Ae, realY: Fe, zoom: se });
         break;
       case "resize": {
-        c.down(B, { x: ye, y: we, zoom: se, selectedElements: oe, svgRoot: ee, mouseTarget: be });
+        c.down(B, { x: ye, y: Ce, zoom: se, selectedElements: oe, svgRoot: ee, mouseTarget: xe });
         break;
       }
       case "fhellipse":
@@ -19150,15 +19161,15 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       case "circle":
       case "ellipse":
       case "text":
-        a.down(B, { x: ye, y: we, realX: Ae, realY: Fe, curShape: Q });
+        a.down(B, { x: ye, y: Ce, realX: Ae, realY: Fe, curShape: Q });
         break;
       case "path":
       // Fall through
       case "pathedit":
-        s.down(B, { mouseTarget: be, zoom: se });
+        s.down(B, { mouseTarget: xe, zoom: se });
         break;
       case "textedit":
-        n.down(B, { mouseTarget: be, zoom: se });
+        n.down(B, { mouseTarget: xe, zoom: se });
         break;
       case "rotate": {
         u.down(B, { selectedElements: oe });
@@ -19170,8 +19181,8 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       start_x: e.getStartX(),
       start_y: e.getStartY(),
       selectedElements: oe
-    }, !0).forEach((Ce) => {
-      Ce?.started && e.setStarted(!0);
+    }, !0).forEach((be) => {
+      be?.started && e.setStarted(!0);
     });
   }, X = (B) => {
     const ie = e.getZoom(), { $id: oe } = e;
@@ -19186,15 +19197,15 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     if (!me)
       return;
     const ye = Math.max(3 / 4, Math.min(4 / 3, me));
-    let we, be;
-    ye > 1 ? (we = Math.ceil(U / te * ye * 100) / 100, be = Math.ceil(de / le * ye * 100) / 100) : (we = Math.floor(U / te * ye * 100) / 100, be = Math.floor(de / le * ye * 100) / 100);
-    const Se = Math.min(we, be);
+    let Ce, xe;
+    ye > 1 ? (Ce = Math.ceil(U / te * ye * 100) / 100, xe = Math.ceil(de / le * ye * 100) / 100) : (Ce = Math.floor(U / te * ye * 100) / 100, xe = Math.floor(de / le * ye * 100) / 100);
+    const Se = Math.min(Ce, xe);
     Se !== ie && Y(Se, B.clientX, B.clientY);
   }, Y = (B, ie, oe) => {
     const se = e.getZoom(), { $id: Q } = e, ee = Q("svgcontent")?.querySelector("g")?.getScreenCTM?.();
     if (!ee || (e.setRootSctm(ee.inverse()), B = Math.min(10, Math.max(0.01, B)), B === se))
       return;
-    const J = B / se, U = e.$id("workarea"), de = e.getCurConfig().showRulers ? 16 : 0, te = parseFloat(getComputedStyle(U, null).width.replace("px", "")), le = parseFloat(getComputedStyle(U, null).height.replace("px", "")), me = Mt(ie, oe, e.getrootSctm()), ye = p6(U), we = ye.left + de, be = ye.top + de, Se = Mt(we, be, e.getrootSctm()), Ae = {
+    const J = B / se, U = e.$id("workarea"), de = e.getCurConfig().showRulers ? 16 : 0, te = parseFloat(getComputedStyle(U, null).width.replace("px", "")), le = parseFloat(getComputedStyle(U, null).height.replace("px", "")), me = Mt(ie, oe, e.getrootSctm()), ye = p6(U), Ce = ye.left + de, xe = ye.top + de, Se = Mt(Ce, xe, e.getrootSctm()), Ae = {
       x: me.x - (me.x - Se.x) / J,
       y: me.y - (me.y - Se.y) / J
     }, Fe = {
@@ -19255,7 +19266,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     const w = e.getCurShape?.() || {};
     if (a.curStyles) {
       const C = Number(w.opacity), k = Number.isFinite(C) ? C / 2 : 0.5;
-      It(g, {
+      Ft(g, {
         fill: w.fill,
         stroke: w.stroke,
         "stroke-width": w.stroke_width,
@@ -19271,7 +19282,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         style: "pointer-events:inherit"
       });
     }
-    if (It(g, c), Ys(g), a.children) {
+    if (Ft(g, c), Ys(g), a.children) {
       for (; g.firstChild; )
         g.firstChild.remove();
       a.children.forEach((C) => {
@@ -19600,13 +19611,13 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       const q = le(N, D, Z);
       y.setAttribute("style", me(F, q, K, j)), v.addSubCommand(new d(y, { [b]: L, style: F }));
     }), v.isEmpty() || e.addCommandToHistory(v);
-  }, we = (r) => ye("x", r), be = (r) => ye("y", r), Se = (r) => Number(r?.getAttribute("data-perspective-x") || 0), Ae = (r) => Number(r?.getAttribute("data-perspective-y") || 0), Fe = () => e.getCurText("font_family"), Me = (r) => {
+  }, Ce = (r) => ye("x", r), xe = (r) => ye("y", r), Se = (r) => Number(r?.getAttribute("data-perspective-x") || 0), Ae = (r) => Number(r?.getAttribute("data-perspective-y") || 0), Fe = () => e.getCurText("font_family"), Me = (r) => {
     const l = O(), d = R(l, "font-family", r);
     e.setCurText("font_family", r), d.length > 0 && e.changeSelectedAttribute("font-family", r, d), l.some((h) => h.textContent) || e.textActions.setCursor(), G(d);
-  }, Ce = (r) => {
+  }, be = (r) => {
     const l = O(), d = R(l, "fill", r);
     e.setCurText("fill", r), d.length > 0 && e.changeSelectedAttribute("fill", r, d), G(d);
-  }, Le = () => e.getCurText("fill"), Pe = () => e.getCurText("font_size"), Ie = (r) => {
+  }, Pe = () => e.getCurText("fill"), Le = () => e.getCurText("font_size"), Ie = (r) => {
     const l = O(), d = R(l, "font-size", r);
     e.setCurText("font_size", r), d.length > 0 && e.changeSelectedAttribute("font-size", r, d), d.forEach((h) => {
       Array.from(h.children).some((f) => f.tagName === "tspan") && De(h, Oe(h));
@@ -19666,7 +19677,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     yi(h, r), v.addSubCommand(new l(h, {
       "#href": f
     })), e.addCommandToHistory(v);
-  }, ut = (r) => {
+  }, pt = (r) => {
     const { ChangeElementCommand: l } = e.history, d = e.getSelectedElements()[0];
     if (d?.tagName !== "rect")
       return;
@@ -19679,9 +19690,9 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     e.groupSelectedElements("a", r);
   }, xt = () => {
     e.ungroupSelectedElement();
-  }, Gt = (r) => {
+  }, qt = (r) => {
     e.pathActions.setSegType(r);
-  }, dt = (r, l, d) => {
+  }, ct = (r, l, d) => {
     const h = e.getElement("canvasBackground");
     if (!h)
       return;
@@ -19720,7 +19731,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       preserveAspectRatio: "xMinYMin",
       style: "pointer-events:none"
     })), yi(v, l), h.append(v)) : v && v.remove();
-  }, Pt = [
+  }, Rt = [
     "fill",
     "fill-opacity",
     "stroke",
@@ -19758,7 +19769,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     if (!Number.isFinite(f)) return;
     const { cx: v, cy: y, rx: b, ry: S } = si(l), L = h ? Number(l.getAttribute("data-arc")) : 360;
     if (f === L) return;
-    const { BatchCommand: F, RemoveElementCommand: P, InsertElementCommand: N, ChangeElementCommand: D } = e.history, Z = (j) => Pt.reduce((q, T) => {
+    const { BatchCommand: F, RemoveElementCommand: P, InsertElementCommand: N, ChangeElementCommand: D } = e.history, Z = (j) => Rt.reduce((q, T) => {
       const $ = j.getAttribute(T);
       return $ !== null && (q[T] = $), q;
     }, {}), K = (j, q) => {
@@ -19796,7 +19807,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       new L(d, { ...y, d: h }, r)
     ), e.call("changed", [d]);
   };
-  e.getBold = X, e.setBold = Y, e.getItalic = se, e.setItalic = Q, e.hasTextDecoration = B, e.addTextDecoration = ie, e.removeTextDecoration = oe, e.setTextAnchor = ee, e.setLetterSpacing = J, e.setWordSpacing = U, e.setTextLength = de, e.setLengthAdjust = te, e.setTextPerspectiveX = we, e.setTextPerspectiveY = be, e.getTextPerspectiveX = Se, e.getTextPerspectiveY = Ae, e.getFontFamily = Fe, e.setFontFamily = Me, e.setFontColor = Ce, e.getFontColor = Le, e.getFontSize = Pe, e.setFontSize = Ie, e.getText = st, e.getTextWithNewlines = Oe, e.setMultilineText = De, e.setTextContent = Ke, e.setImageURL = tt, e.setLinkURL = lt, e.setRectRadius = ut, e.makeHyperlink = ht, e.removeHyperlink = xt, e.setSegType = Gt, e.setStrokeWidth = z, e.getResolution = n, e.getTitle = s, e.setGroupTitle = a, e.setStrokeAttr = I, e.setBackground = dt, e.setDocumentTitle = c, e.getEditorNS = g, e.setResolution = u, e.setBBoxZoom = m, e.setCurrentZoom = w, e.setColor = C, e.setGradient = k, e.setPaint = E, e.setCircleArc = Je, e.setCircleArcAttr = t;
+  e.getBold = X, e.setBold = Y, e.getItalic = se, e.setItalic = Q, e.hasTextDecoration = B, e.addTextDecoration = ie, e.removeTextDecoration = oe, e.setTextAnchor = ee, e.setLetterSpacing = J, e.setWordSpacing = U, e.setTextLength = de, e.setLengthAdjust = te, e.setTextPerspectiveX = Ce, e.setTextPerspectiveY = xe, e.getTextPerspectiveX = Se, e.getTextPerspectiveY = Ae, e.getFontFamily = Fe, e.setFontFamily = Me, e.setFontColor = be, e.getFontColor = Pe, e.getFontSize = Le, e.setFontSize = Ie, e.getText = st, e.getTextWithNewlines = Oe, e.setMultilineText = De, e.setTextContent = Ke, e.setImageURL = tt, e.setLinkURL = lt, e.setRectRadius = pt, e.makeHyperlink = ht, e.removeHyperlink = xt, e.setSegType = qt, e.setStrokeWidth = z, e.getResolution = n, e.getTitle = s, e.setGroupTitle = a, e.setStrokeAttr = I, e.setBackground = ct, e.setDocumentTitle = c, e.getEditorNS = g, e.setResolution = u, e.setBBoxZoom = m, e.setCurrentZoom = w, e.setColor = C, e.setGradient = k, e.setPaint = E, e.setCircleArc = Je, e.setCircleArcAttr = t;
 }, {
   Command: Fo,
   MoveElementCommand: yn,
@@ -19837,9 +19848,9 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         return;
       let le = te;
       [...U].reverse().forEach((me) => {
-        const ye = me.parentNode, we = me.nextSibling;
-        de.insertBefore(me, le), le = me, we !== me.nextSibling && (ee.addSubCommand(
-          new yn(me, we, ye, "bottom")
+        const ye = me.parentNode, Ce = me.nextSibling;
+        de.insertBefore(me, le), le = me, Ce !== me.nextSibling && (ee.addSubCommand(
+          new yn(me, Ce, ye, "bottom")
         ), J.push(me));
       });
     }), ee.isEmpty() || (e.addCommandToHistory(ee), e.call("changed", J));
@@ -19884,18 +19895,18 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     const te = new fi("position");
     if (U.forEach((le, me) => {
       if (le) {
-        const ye = le.getAttribute("transform") || "", we = e.getSvgRoot().createSVGTransform(), be = Ct(le);
-        Array.isArray(Q) ? we.setTranslate(Q[me], ee[me]) : we.setTranslate(Q, ee), be.numberOfItems ? be.insertItemBefore(we, 0) : be.appendItem(we);
+        const ye = le.getAttribute("transform") || "", Ce = e.getSvgRoot().createSVGTransform(), xe = Ct(le);
+        Array.isArray(Q) ? Ce.setTranslate(Q[me], ee[me]) : Ce.setTranslate(Q, ee), xe.numberOfItems ? xe.insertItemBefore(Ce, 0) : xe.appendItem(Ce);
         const Se = e.recalculateDimensions(le);
         if (Se)
           te.addSubCommand(Se);
         else {
-          if (be.numberOfItems > 1) {
-            const Ae = wt(be).matrix;
-            for (; be.numberOfItems > 0; )
-              be.removeItem(0);
+          if (xe.numberOfItems > 1) {
+            const Ae = wt(xe).matrix;
+            for (; xe.numberOfItems > 0; )
+              xe.removeItem(0);
             const Fe = e.getSvgRoot().createSVGTransform();
-            Fe.setMatrix(Ae), be.appendItem(Fe);
+            Fe.setMatrix(Ae), xe.appendItem(Fe);
           }
           (le.getAttribute("transform") || "") !== ye && te.addSubCommand(
             new vn(le, { transform: ye })
@@ -19910,47 +19921,47 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     let U, de;
     const te = new fi("Clone Elements"), le = J.length, me = (Me) => {
       if (!Me) return -1;
-      let Ce = 0, Le = Me;
+      let be = 0, Pe = Me;
       do
-        Ce++, Le = Le.previousElementSibling;
-      while (Le);
-      return Ce;
-    }, ye = (Me, Ce) => me(Ce) - me(Me);
+        be++, Pe = Pe.previousElementSibling;
+      while (Pe);
+      return be;
+    }, ye = (Me, be) => me(be) - me(Me);
     for (J.sort(ye), U = 0; U < le && (de = J[U], !!de); ++U)
       ;
-    const we = J.slice(0, U);
+    const Ce = J.slice(0, U);
     e.clearSelection(!0);
-    const be = e.getDrawing(), Se = e.getReferencedDefElements(we);
+    const xe = e.getDrawing(), Se = e.getReferencedDefElements(Ce);
     let Ae = {};
     if (Se.length) {
-      const Me = Se.map((Le) => Le.cloneNode(!0));
+      const Me = Se.map((Pe) => Pe.cloneNode(!0));
       Ae = e.remapElementIdsAndRefs(Me, () => e.getNextId());
-      const Ce = e.findDefs();
-      Me.forEach((Le) => {
-        Ce.append(Le), te.addSubCommand(new Wr(Le));
+      const be = e.findDefs();
+      Me.forEach((Pe) => {
+        be.append(Pe), te.addSubCommand(new Wr(Pe));
       });
     }
     const Fe = (Me) => {
-      Array.from(Me.attributes).forEach((Ce) => {
-        if ((Ce.name === "href" || Ce.name === "xlink:href") && Ce.value.startsWith("#")) {
-          const Pe = Ce.value.slice(1);
-          Pe in Ae && Me.setAttribute(Ce.name, `#${Ae[Pe]}`);
+      Array.from(Me.attributes).forEach((be) => {
+        if ((be.name === "href" || be.name === "xlink:href") && be.value.startsWith("#")) {
+          const Le = be.value.slice(1);
+          Le in Ae && Me.setAttribute(be.name, `#${Ae[Le]}`);
           return;
         }
-        const Le = hn(Ce.value);
-        if (Le) {
-          const Pe = Le[0] === "#" ? Le.slice(1) : Le;
-          Pe in Ae && Me.setAttribute(Ce.name, Ce.value.replace(Le, `#${Ae[Pe]}`));
+        const Pe = hn(be.value);
+        if (Pe) {
+          const Le = Pe[0] === "#" ? Pe.slice(1) : Pe;
+          Le in Ae && Me.setAttribute(be.name, be.value.replace(Pe, `#${Ae[Le]}`));
         }
       }), Array.from(Me.children).forEach(Fe);
     };
-    for (U = we.length; U--; ) {
-      const Me = we[U];
-      de = we[U] = be.copyElem(Me), Object.keys(Ae).length && Fe(de);
-      const { targetParent: Ce, matrix: Le } = P2(Me.parentNode);
-      Ce !== Me.parentNode ? (L2(de, Le), Ce.append(de)) : Me.parentNode.append(de), te.addSubCommand(new Wr(de));
+    for (U = Ce.length; U--; ) {
+      const Me = Ce[U];
+      de = Ce[U] = xe.copyElem(Me), Object.keys(Ae).length && Fe(de);
+      const { targetParent: be, matrix: Pe } = P2(Me.parentNode);
+      be !== Me.parentNode ? (L2(de, Pe), be.append(de)) : Me.parentNode.append(de), te.addSubCommand(new Wr(de));
     }
-    te.isEmpty() || (e.addToSelection(we.reverse(), !0), m(Q, ee, !1), e.addCommandToHistory(te));
+    te.isEmpty() || (e.addToSelection(Ce.reverse(), !0), m(Q, ee, !1), e.addCommandToHistory(te));
   }, C = () => {
     if (!e.getSelectedElements().filter(Boolean).length) return;
     const Q = e.lastMoveDelta || { dx: 10, dy: 10 }, ee = e.getZoom();
@@ -19958,9 +19969,9 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
   }, k = (Q) => {
     const [ee] = e.getSelectedElements().filter(Boolean);
     if (!ee) return;
-    const J = (me, ye, we) => {
-      const be = me.getAttribute(ye);
-      return be === null || be === "" ? we : be.toLowerCase();
+    const J = (me, ye, Ce) => {
+      const xe = me.getAttribute(ye);
+      return xe === null || xe === "" ? Ce : xe.toLowerCase();
     }, U = (me) => {
       switch (Q) {
         case "fill":
@@ -19993,9 +20004,9 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       }
     };
     if (Q.forEach(U), !J.length) return;
-    const de = J[0].getAttribute("stroke-width") || "1", te = new fi("Match strokes"), le = (me, ye, we) => {
-      const be = me.getAttribute(ye);
-      be !== we && (me.setAttribute(ye, we), te.addSubCommand(new vn(me, { [ye]: be })));
+    const de = J[0].getAttribute("stroke-width") || "1", te = new fi("Match strokes"), le = (me, ye, Ce) => {
+      const xe = me.getAttribute(ye);
+      xe !== Ce && (me.setAttribute(ye, Ce), te.addSubCommand(new vn(me, { [ye]: xe })));
     };
     for (const me of J)
       le(me, "stroke-width", de), le(me, "stroke-linejoin", "round"), le(me, "stroke-linecap", "round");
@@ -20005,21 +20016,21 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     if (!de)
       return;
     let te = Number.MAX_VALUE, le = Number.MIN_VALUE, me = Number.MAX_VALUE, ye = Number.MIN_VALUE;
-    const we = (Fe) => ["l", "c", "r", "left", "center", "right"].includes(Fe), be = (Fe) => ["t", "m", "b", "top", "middle", "bottom"].includes(Fe);
+    const Ce = (Fe) => ["l", "c", "r", "left", "center", "right"].includes(Fe), xe = (Fe) => ["t", "m", "b", "top", "middle", "bottom"].includes(Fe);
     for (let Fe = 0; Fe < de && J[Fe]; ++Fe) {
       const Me = J[Fe];
       U[Fe] = e.getStrokedBBoxDefaultVisible([Me]);
     }
     switch (["smallest", "largest"].includes(ee) && ["dh", "distrib_horiz", "dv", "distrib_verti"].includes(Q) && (ee = "selected"), ee) {
       case "smallest":
-        if (we(Q) || be(Q)) {
-          const Fe = U.slice().sort((Me, Ce) => Me.width - Ce.width)[0];
+        if (Ce(Q) || xe(Q)) {
+          const Fe = U.slice().sort((Me, be) => Me.width - be.width)[0];
           te = Fe.x, me = Fe.y, le = Fe.x + Fe.width, ye = Fe.y + Fe.height;
         }
         break;
       case "largest":
-        if (we(Q) || be(Q)) {
-          const Fe = U.slice().sort((Me, Ce) => Me.width - Ce.width)[U.length - 1];
+        if (Ce(Q) || xe(Q)) {
+          const Fe = U.slice().sort((Me, be) => Me.width - be.width)[U.length - 1];
           te = Fe.x, me = Fe.y, le = Fe.x + Fe.width, ye = Fe.y + Fe.height;
         }
         break;
@@ -20036,80 +20047,80 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
     const me = [], ye = [];
     for (let Me = 0; Me < ee.length; Me++)
       ye[Me] = 0;
-    const we = J.slice().sort((Me, Ce) => {
-      const Le = Me.x + Me.width, Pe = Ce.x + Ce.width;
-      return Le === Pe ? 0 : Le > Pe ? 1 : -1;
+    const Ce = J.slice().sort((Me, be) => {
+      const Pe = Me.x + Me.width, Le = be.x + be.width;
+      return Pe === Le ? 0 : Pe > Le ? 1 : -1;
     });
-    Q === "page" && (we.unshift({ x: 0, y: 0, width: 0, height: le }), we.push({ x: de, y: 0, width: 0, height: le }));
-    const be = de - U, Se = we.map((Me) => Me.width).reduce((Me, Ce) => Me + Ce, 0), Ae = (be - Se) / (we.length - 1), Fe = [];
-    for (let Me = 0; Me < we.length; ++Me) {
+    Q === "page" && (Ce.unshift({ x: 0, y: 0, width: 0, height: le }), Ce.push({ x: de, y: 0, width: 0, height: le }));
+    const xe = de - U, Se = Ce.map((Me) => Me.width).reduce((Me, be) => Me + be, 0), Ae = (xe - Se) / (Ce.length - 1), Fe = [];
+    for (let Me = 0; Me < Ce.length; ++Me) {
       if (Fe[Me] = 0, Me === 0)
         continue;
-      const Ce = we[Me].x;
-      we[Me].x = we[Me - 1].x + we[Me - 1].width + Ae, Fe[Me] = we[Me].x - Ce;
+      const be = Ce[Me].x;
+      Ce[Me].x = Ce[Me - 1].x + Ce[Me - 1].width + Ae, Fe[Me] = Ce[Me].x - be;
     }
-    return we.forEach((Me, Ce) => {
-      const Le = J.findIndex((Pe) => Pe === Me);
-      Le !== -1 && (me[Le] = Fe[Ce]);
+    return Ce.forEach((Me, be) => {
+      const Pe = J.findIndex((Le) => Le === Me);
+      Pe !== -1 && (me[Pe] = Fe[be]);
     }), [me, ye];
   }, z = (Q, ee, J, U, de, te, le) => {
     const me = [], ye = [];
     for (let Me = 0; Me < ee.length; Me++)
       me[Me] = 0;
-    const we = J.slice().sort((Me, Ce) => {
-      const Le = Me.y + Me.height, Pe = Ce.y + Ce.height;
-      return Le === Pe ? 0 : Le > Pe ? 1 : -1;
+    const Ce = J.slice().sort((Me, be) => {
+      const Pe = Me.y + Me.height, Le = be.y + be.height;
+      return Pe === Le ? 0 : Pe > Le ? 1 : -1;
     });
-    Q === "page" && (we.unshift({ x: 0, y: 0, width: de, height: 0 }), we.push({ x: 0, y: le, width: de, height: 0 }));
-    const be = le - te, Se = we.map((Me) => Me.height).reduce((Me, Ce) => Me + Ce, 0), Ae = (be - Se) / (we.length - 1), Fe = [];
-    for (let Me = 0; Me < we.length; ++Me) {
+    Q === "page" && (Ce.unshift({ x: 0, y: 0, width: de, height: 0 }), Ce.push({ x: 0, y: le, width: de, height: 0 }));
+    const xe = le - te, Se = Ce.map((Me) => Me.height).reduce((Me, be) => Me + be, 0), Ae = (xe - Se) / (Ce.length - 1), Fe = [];
+    for (let Me = 0; Me < Ce.length; ++Me) {
       if (Fe[Me] = 0, Me === 0)
         continue;
-      const Ce = we[Me].y;
-      we[Me].y = we[Me - 1].y + we[Me - 1].height + Ae, Fe[Me] = we[Me].y - Ce;
+      const be = Ce[Me].y;
+      Ce[Me].y = Ce[Me - 1].y + Ce[Me - 1].height + Ae, Fe[Me] = Ce[Me].y - be;
     }
-    return we.forEach((Me, Ce) => {
-      const Le = J.findIndex((Pe) => Pe === Me);
-      Le !== -1 && (ye[Le] = Fe[Ce]);
+    return Ce.forEach((Me, be) => {
+      const Pe = J.findIndex((Le) => Le === Me);
+      Pe !== -1 && (ye[Pe] = Fe[be]);
     }), [me, ye];
   }, I = (Q, ee, J, U, de, te, le) => {
-    const me = ee.length, ye = new Array(me), we = new Array(me);
-    for (let be = 0; be < me && ee[be]; ++be) {
-      const Se = J[be];
-      switch (ye[be] = 0, we[be] = 0, Q) {
+    const me = ee.length, ye = new Array(me), Ce = new Array(me);
+    for (let xe = 0; xe < me && ee[xe]; ++xe) {
+      const Se = J[xe];
+      switch (ye[xe] = 0, Ce[xe] = 0, Q) {
         case "l":
         // left (horizontal)
         case "left":
-          ye[be] = U - Se.x;
+          ye[xe] = U - Se.x;
           break;
         case "c":
         // center (horizontal)
         case "center":
-          ye[be] = (U + de) / 2 - (Se.x + Se.width / 2);
+          ye[xe] = (U + de) / 2 - (Se.x + Se.width / 2);
           break;
         case "r":
         // right (horizontal)
         case "right":
-          ye[be] = de - (Se.x + Se.width);
+          ye[xe] = de - (Se.x + Se.width);
           break;
         case "t":
         // top (vertical)
         case "top":
-          we[be] = te - Se.y;
+          Ce[xe] = te - Se.y;
           break;
         case "m":
         // middle (vertical)
         case "middle":
-          we[be] = (te + le) / 2 - (Se.y + Se.height / 2);
+          Ce[xe] = (te + le) / 2 - (Se.y + Se.height / 2);
           break;
         case "b":
         // bottom (vertical)
         case "bottom":
-          we[be] = le - (Se.y + Se.height);
+          Ce[xe] = le - (Se.y + Se.height);
           break;
       }
     }
-    return [ye, we];
+    return [ye, Ce];
   }, O = () => {
     const Q = e.getSelectedElements(), ee = new fi("Delete Elements"), J = [];
     Q.forEach((U) => {
@@ -20128,16 +20139,16 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       if (!te) return;
       const le = te.getBBox();
       if (!le) return;
-      const me = te.getAttribute("transform") || "", ye = Ct(te), we = wt(ye).matrix, be = [
+      const me = te.getAttribute("transform") || "", ye = Ct(te), Ce = wt(ye).matrix, xe = [
         [le.x, le.y],
         [le.x + le.width, le.y],
         [le.x, le.y + le.height],
         [le.x + le.width, le.y + le.height]
       ].map(([Ie, Oe]) => {
         const De = de.createSVGPoint();
-        return De.x = Ie, De.y = Oe, De.matrixTransform(we);
-      }), Se = be.map((Ie) => Ie.x), Ae = be.map((Ie) => Ie.y), Fe = (Math.min(...Se) + Math.max(...Se)) / 2, Me = (Math.min(...Ae) + Math.max(...Ae)) / 2, Ce = de.createSVGMatrix().translate(Fe, Me).scaleNonUniform(Q, ee).translate(-Fe, -Me), Le = Wt(Ce, we), Pe = de.createSVGTransform();
-      Pe.setMatrix(Le), ye.clear(), ye.appendItem(Pe), (te.getAttribute("transform") || "") !== me && U.addSubCommand(
+        return De.x = Ie, De.y = Oe, De.matrixTransform(Ce);
+      }), Se = xe.map((Ie) => Ie.x), Ae = xe.map((Ie) => Ie.y), Fe = (Math.min(...Se) + Math.max(...Se)) / 2, Me = (Math.min(...Ae) + Math.max(...Ae)) / 2, be = de.createSVGMatrix().translate(Fe, Me).scaleNonUniform(Q, ee).translate(-Fe, -Me), Pe = Wt(be, Ce), Le = de.createSVGTransform();
+      Le.setMatrix(Pe), ye.clear(), ye.appendItem(Le), (te.getAttribute("transform") || "") !== me && U.addSubCommand(
         new vn(te, { transform: me })
       ), e.gettingSelectorManager().requestSelector(te).resize();
     }), U.isEmpty() || (e.addCommandToHistory(U), e.call("changed", J.filter(Boolean)));
@@ -20171,73 +20182,73 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       if (!ye)
         continue;
       ye.parentNode.tagName === "a" && ye.parentNode.childNodes.length === 1 && (ye = ye.parentNode);
-      const we = ye.nextSibling, be = ye.parentNode;
+      const Ce = ye.nextSibling, xe = ye.parentNode;
       le.append(ye), te.addSubCommand(
-        new yn(ye, we, be)
+        new yn(ye, Ce, xe)
       );
     }
     te.isEmpty() || e.addCommandToHistory(te), e.selectOnly([le], !0);
   }, Y = (Q, ee) => {
-    const J = Q.childNodes, U = J.length, de = Q.getAttribute("transform"), te = Ct(Q), le = wt(te).matrix, me = new fi("Push group properties"), ye = vi(Q), we = {
+    const J = Q.childNodes, U = J.length, de = Q.getAttribute("transform"), te = Ct(Q), le = wt(te).matrix, me = new fi("Push group properties"), ye = vi(Q), Ce = {
       filter: Q.getAttribute("filter"),
       opacity: Q.getAttribute("opacity")
     };
-    let be, Se, Ae;
+    let xe, Se, Ae;
     const Fe = e.getDrawing();
     for (let Me = 0; Me < U; Me++) {
-      const Ce = J[Me];
-      if (Ce.nodeType !== 1)
+      const be = J[Me];
+      if (be.nodeType !== 1)
         continue;
-      if (we.opacity !== null && we.opacity !== 1) {
-        const Pe = Math.round((Ce.getAttribute("opacity") || 1) * we.opacity * 100) / 100;
-        e.changeSelectedAttribute("opacity", Pe, [Ce]);
+      if (Ce.opacity !== null && Ce.opacity !== 1) {
+        const Le = Math.round((be.getAttribute("opacity") || 1) * Ce.opacity * 100) / 100;
+        e.changeSelectedAttribute("opacity", Le, [be]);
       }
-      if (we.filter) {
-        let Pe = e.getBlur(Ce);
-        const Ie = Pe;
-        if (Se || (Se = e.getBlur(Q)), Pe ? Pe = Number(Se) + Number(Pe) : Pe === 0 && (Pe = Se), Ie)
-          be = e.getRefElem(Ce.getAttribute("filter"));
-        else if (!be)
-          be = e.getRefElem(we.filter);
+      if (Ce.filter) {
+        let Le = e.getBlur(be);
+        const Ie = Le;
+        if (Se || (Se = e.getBlur(Q)), Le ? Le = Number(Se) + Number(Le) : Le === 0 && (Le = Se), Ie)
+          xe = e.getRefElem(be.getAttribute("filter"));
+        else if (!xe)
+          xe = e.getRefElem(Ce.filter);
         else {
-          if (be = Fe.copyElem(be), !be) continue;
-          e.findDefs().append(be);
-          const De = La(be)?.tagName === "feGaussianBlur" ? "blur" : "filter";
-          be.id = `${Ce.id}_${De}`, e.changeSelectedAttribute(
+          if (xe = Fe.copyElem(xe), !xe) continue;
+          e.findDefs().append(xe);
+          const De = La(xe)?.tagName === "feGaussianBlur" ? "blur" : "filter";
+          xe.id = `${be.id}_${De}`, e.changeSelectedAttribute(
             "filter",
-            `url(#${be.id})`,
-            [Ce]
+            `url(#${xe.id})`,
+            [be]
           );
         }
-        const Oe = La(be);
-        Pe && (e.changeSelectedAttribute("stdDeviation", Pe, [Oe]), e.setBlurOffsets(be, Pe));
+        const Oe = La(xe);
+        Le && (e.changeSelectedAttribute("stdDeviation", Le, [Oe]), e.setBlurOffsets(xe, Le));
       }
-      let Le = Ct(Ce);
-      if (Ce.tagName.includes("Gradient") && (Le = null), !!Le && Ce.tagName !== "defs" && te.numberOfItems)
+      let Pe = Ct(be);
+      if (be.tagName.includes("Gradient") && (Pe = null), !!Pe && be.tagName !== "defs" && te.numberOfItems)
         if (ye && te.numberOfItems === 1) {
-          const Pe = Ce.getAttribute("transform") || "", Ie = te.getItem(0).matrix;
+          const Le = be.getAttribute("transform") || "", Ie = te.getItem(0).matrix;
           let Oe = e.getSvgRoot().createSVGMatrix();
-          const De = vi(Ce);
-          De && (Oe = Le.getItem(0).matrix);
-          const st = Kt(Ce), Ke = wt(Le).matrix, tt = Mt(
+          const De = vi(be);
+          De && (Oe = Pe.getItem(0).matrix);
+          const st = Kt(be), Ke = wt(Pe).matrix, tt = Mt(
             st.x + st.width / 2,
             st.y + st.height / 2,
             Ke
-          ), lt = ye + De, ut = e.getSvgRoot().createSVGTransform();
-          ut.setRotate(lt, tt.x, tt.y);
-          const ht = Wt(Ie, Oe, ut.matrix.inverse());
-          if (De && Le.removeItem(0), lt && (Le.numberOfItems ? Le.insertItemBefore(ut, 0) : Le.appendItem(ut)), ht.e || ht.f) {
+          ), lt = ye + De, pt = e.getSvgRoot().createSVGTransform();
+          pt.setRotate(lt, tt.x, tt.y);
+          const ht = Wt(Ie, Oe, pt.matrix.inverse());
+          if (De && Pe.removeItem(0), lt && (Pe.numberOfItems ? Pe.insertItemBefore(pt, 0) : Pe.appendItem(pt)), ht.e || ht.f) {
             const xt = e.getSvgRoot().createSVGTransform();
-            xt.setTranslate(ht.e, ht.f), Le.numberOfItems ? Le.insertItemBefore(xt, 0) : Le.appendItem(xt);
+            xt.setTranslate(ht.e, ht.f), Pe.numberOfItems ? Pe.insertItemBefore(xt, 0) : Pe.appendItem(xt);
           }
           ee && me.addSubCommand(
-            new vn(Ce, { transform: Pe })
+            new vn(be, { transform: Le })
           );
         } else {
-          const Pe = Ce.getAttribute("transform");
-          Ae = {}, Ae.transform = Pe || "";
+          const Le = be.getAttribute("transform");
+          Ae = {}, Ae.transform = Le || "";
           const Ie = e.getSvgRoot().createSVGTransform();
-          Ie.setMatrix(le), Le.numberOfItems ? Le.insertItemBefore(Ie, 0) : Le.appendItem(Ie), ee && me.addSubCommand(new vn(Ce, Ae));
+          Ie.setMatrix(le), Pe.numberOfItems ? Pe.insertItemBefore(Ie, 0) : Pe.appendItem(Ie), ee && me.addSubCommand(new vn(be, Ae));
         }
     }
     if (de && (Ae = {}, Ae.transform = de, Q.setAttribute("transform", ""), Q.removeAttribute("transform"), me.addSubCommand(new vn(Q, Ae))), ee && !me.isEmpty())
@@ -20254,26 +20265,26 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         y: Number(le.getAttribute("y"))
       }, ye = Q.firstChild.firstChild;
       if (ye) {
-        const Ae = le, Fe = Array.from(Ae.childNodes).map((Pe) => Pe.cloneNode(!0));
+        const Ae = le, Fe = Array.from(Ae.childNodes).map((Le) => Le.cloneNode(!0));
         ye.outerHTML = ye.innerHTML;
-        const Me = Array.from(Ae.childNodes).map((Pe) => Pe.cloneNode(!0)), Ce = (Pe) => {
+        const Me = Array.from(Ae.childNodes).map((Le) => Le.cloneNode(!0)), be = (Le) => {
           for (; Ae.firstChild; )
             Ae.removeChild(Ae.firstChild);
-          Pe.forEach((Ie) => Ae.appendChild(Ie.cloneNode(!0)));
-        }, Le = new Fo();
-        Le.text = "Unwrap SVG", Le.elements = () => [Q], Le.apply = (Pe) => {
-          Fo.prototype.apply.call(Le, Pe, () => {
-            Ce(Me);
+          Le.forEach((Ie) => Ae.appendChild(Ie.cloneNode(!0)));
+        }, Pe = new Fo();
+        Pe.text = "Unwrap SVG", Pe.elements = () => [Q], Pe.apply = (Le) => {
+          Fo.prototype.apply.call(Pe, Le, () => {
+            be(Me);
           });
-        }, Le.unapply = (Pe) => {
-          Fo.prototype.unapply.call(Le, Pe, () => {
-            Ce(Fe);
+        }, Pe.unapply = (Le) => {
+          Fo.prototype.unapply.call(Pe, Le, () => {
+            be(Fe);
           });
-        }, U.addSubCommand(Le);
+        }, U.addSubCommand(Pe);
       }
       te.remove(Q, "gsvg");
-      const we = Q.getAttribute("transform") || "", be = Ct(Q), Se = e.getSvgRoot().createSVGTransform();
-      Se.setTranslate(me.x, me.y), be.appendItem(Se), (Q.getAttribute("transform") || "") !== we && U.addSubCommand(new vn(Q, { transform: we })), e.recalculateDimensions(Q), e.call("selected", [Q]), U.isEmpty() || e.addCommandToHistory(U);
+      const Ce = Q.getAttribute("transform") || "", xe = Ct(Q), Se = e.getSvgRoot().createSVGTransform();
+      Se.setTranslate(me.x, me.y), xe.appendItem(Se), (Q.getAttribute("transform") || "") !== Ce && U.addSubCommand(new vn(Q, { transform: Ce })), e.recalculateDimensions(Q), e.call("selected", [Q]), U.isEmpty() || e.addCommandToHistory(U);
     } else if (te.has(J, "symbol")) {
       if (Q = te.get(J, "symbol"), !Q) {
         mt("Unable to convert <use>: missing symbol reference", null, "selected-elem");
@@ -20285,60 +20296,60 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
         y: Number(J.getAttribute("y"))
       }, me = Q.getAttribute("viewBox");
       if (me) {
-        const Pe = me.split(/[ ,]+/);
-        le.x -= Number(Pe[0]), le.y -= Number(Pe[1]);
+        const Le = me.split(/[ ,]+/);
+        le.x -= Number(Le[0]), le.y -= Number(Le[1]);
       }
       de += " translate(" + (le.x || 0) + "," + (le.y || 0) + ")";
-      const ye = J.parentNode, we = J.nextSibling;
+      const ye = J.parentNode, Ce = J.nextSibling;
       U.addSubCommand(
         new hr(
           J,
-          we,
+          Ce,
           ye
         )
       ), J.remove();
-      const be = e.getSvgContent().querySelectorAll("use").length, Se = e.getDOMDocument().createElementNS(Ze.SVG, "g"), Ae = Q.childNodes;
+      const xe = e.getSvgContent().querySelectorAll("use").length, Se = e.getDOMDocument().createElementNS(Ze.SVG, "g"), Ae = Q.childNodes;
       let Fe;
       for (Fe = 0; Fe < Ae.length; Fe++)
         Se.append(Ae[Fe].cloneNode(!0));
       if (Ln()) {
-        const Pe = e.findDefs().querySelectorAll(
+        const Le = e.findDefs().querySelectorAll(
           "linearGradient,radialGradient,pattern"
         );
-        for (let Ie = 0, Oe = Pe.length; Oe > Ie; Ie++)
-          Se.appendChild(Pe[Ie].cloneNode(!0));
+        for (let Ie = 0, Oe = Le.length; Oe > Ie; Ie++)
+          Se.appendChild(Le[Ie].cloneNode(!0));
       }
       de && Se.setAttribute("transform", de);
       const Me = Q.parentNode;
       if (e.uniquifyElems(Se), Ln()) {
-        const Pe = e.findDefs(), Ie = Se.querySelectorAll(
+        const Le = e.findDefs(), Ie = Se.querySelectorAll(
           "linearGradient,radialGradient,pattern"
         );
         for (let Oe = 0, De = Ie.length; De > Oe; Oe++)
-          Pe.appendChild(Ie[Oe]);
+          Le.appendChild(Ie[Oe]);
       }
-      if (Se.id = e.getNextId(), ye && ye.insertBefore(Se, we), Me) {
-        if (!be) {
-          const { nextSibling: Pe } = Q;
+      if (Se.id = e.getNextId(), ye && ye.insertBefore(Se, Ce), Me) {
+        if (!xe) {
+          const { nextSibling: Le } = Q;
           Q.remove(), U.addSubCommand(
-            new hr(Q, Pe, Me)
+            new hr(Q, Le, Me)
           );
         }
         U.addSubCommand(new Wr(Se));
       }
-      e.setUseData(Se), Ln() ? e.convertGradients(e.findDefs()) : e.convertGradients(Se), d6(Se, (Pe) => {
+      e.setUseData(Se), Ln() ? e.convertGradients(e.findDefs()) : e.convertGradients(Se), d6(Se, (Le) => {
         try {
-          e.recalculateDimensions(Pe);
+          e.recalculateDimensions(Le);
         } catch (Ie) {
           Pn("Error recalculating dimensions", Ie, "selected-elem");
         }
       });
-      const Ce = Se.querySelectorAll(e.getVisElems());
-      Array.prototype.forEach.call(Ce, (Pe) => {
-        Pe.id || (Pe.id = e.getNextId());
+      const be = Se.querySelectorAll(e.getVisElems());
+      Array.prototype.forEach.call(be, (Le) => {
+        Le.id || (Le.id = e.getNextId());
       }), e.selectOnly([Se]);
-      const Le = Y(Se, !0);
-      Le && U.addSubCommand(Le), e.addCommandToHistory(U);
+      const Pe = Y(Se, !0);
+      Pe && U.addSubCommand(Pe), e.addCommandToHistory(U);
     } else
       mt("Unexpected element to ungroup:", Q, "selected-elem");
   }, ie = () => {
@@ -20369,7 +20380,7 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
       const de = new fi("Ungroup Elements"), te = Y(J, !0);
       te && de.addSubCommand(te);
       const le = J.parentNode, me = J.nextSibling, ye = new Array(J.childNodes.length);
-      let we = 0;
+      let Ce = 0;
       for (; J.firstChild; ) {
         const Se = J.firstChild, Ae = Se.nextSibling, Fe = Se.parentNode;
         if (Se.tagName === "title") {
@@ -20379,31 +20390,31 @@ const yl = new q6(), T2 = () => yl.isWebkit, Ln = () => yl.isGecko, V6 = () => y
           ), Se.remove();
           continue;
         }
-        ye[we++] = le.insertBefore(Se, me), de.addSubCommand(
+        ye[Ce++] = le.insertBefore(Se, me), de.addSubCommand(
           new yn(Se, Ae, Fe)
         );
       }
       e.clearSelection();
-      const be = J.nextSibling;
-      J.remove(), de.addSubCommand(new hr(J, be, le)), de.isEmpty() || e.addCommandToHistory(de), e.addToSelection(ye);
+      const xe = J.nextSibling;
+      J.remove(), de.addSubCommand(new hr(J, xe, le)), de.isEmpty() || e.addCommandToHistory(de), e.addToSelection(ye);
     }
   }, oe = (Q, ee) => {
     e.getSvgRoot().setAttribute("width", Q), e.getSvgRoot().setAttribute("height", ee);
     const J = e.getZoom(), U = e.$id("canvasBackground"), de = Number(e.getSvgContent().getAttribute("x")), te = Number(e.getSvgContent().getAttribute("y")), le = (Q - e.contentW * J) / 2, me = (ee - e.contentH * J) / 2;
-    It(e.getSvgContent(), {
+    Ft(e.getSvgContent(), {
       width: e.contentW * J,
       height: e.contentH * J,
       x: le,
       y: me,
       viewBox: `0 0 ${e.contentW} ${e.contentH}`
-    }), It(U, {
+    }), Ft(U, {
       width: e.getSvgContent().getAttribute("width"),
       height: e.getSvgContent().getAttribute("height"),
       x: le,
       y: me
     });
     const ye = e.getElement("background_image");
-    return ye && It(ye, {
+    return ye && Ft(ye, {
       width: "100%",
       height: "100%"
     }), e.selectorManager.selectorParentGroup.setAttribute(
@@ -20858,9 +20869,9 @@ const C8 = (o) => {
         de.push(O), Array.prototype.forEach.call(de, (me) => {
           const ye = me.namespaceURI;
           if (ye && !J[ye] && X[ye] && X[ye] !== "xmlns" && X[ye] !== "xml" && (J[ye] = !0, Y.push(` xmlns:${X[ye]}="${ye}"`)), me.attributes.length > 0)
-            for (const [, we] of Object.entries(me.attributes)) {
-              const be = we.namespaceURI;
-              be && !J[be] && X[be] !== "xmlns" && X[be] !== "xml" && (J[be] = !0, Y.push(` xmlns:${X[be]}="${be}"`));
+            for (const [, Ce] of Object.entries(me.attributes)) {
+              const xe = Ce.namespaceURI;
+              xe && !J[xe] && X[xe] !== "xmlns" && X[xe] !== "xml" && (J[xe] = !0, Y.push(` xmlns:${X[xe]}="${xe}"`));
             }
         });
         let te = oe.length;
@@ -20974,10 +20985,10 @@ const C8 = (o) => {
           if (Fe.startsWith("data:")) {
             const Me = Fe.match(/svgedit_url=(.*?);/);
             if (Me) {
-              const Ce = decodeURIComponent(Me[1]), Le = new Image();
-              Le.addEventListener("load", () => {
+              const be = decodeURIComponent(Me[1]), Pe = new Image();
+              Pe.addEventListener("load", () => {
                 yi(Ae, Fe);
-              }), Le.src = Ce;
+              }), Pe.src = be;
             }
           }
           e.embedImage(Fe);
@@ -20991,8 +21002,8 @@ const C8 = (o) => {
       Object.entries(U).forEach(([Ae, Fe]) => {
         if (Fe > 1) {
           const Me = se.querySelectorAll(`[id="${Ae}"]`);
-          for (let Ce = 1; Ce < Me.length; Ce++)
-            Me[Ce].setAttribute("id", e.getNextId());
+          for (let be = 1; be < Me.length; be++)
+            Me[be].setAttribute("id", e.getNextId());
         }
       });
       const te = se.querySelectorAll("svg");
@@ -21040,7 +21051,7 @@ const C8 = (o) => {
       for (const [Ae, Fe] of Object.entries(le))
         se.setAttribute(Ae, Fe);
       e.contentW = le.width, e.contentH = le.height, B.addSubCommand(new Io(e.getSvgContent()));
-      const we = se.getAttribute("width"), be = se.getAttribute("height"), Se = { width: we, height: be };
+      const Ce = se.getAttribute("width"), xe = se.getAttribute("height"), Se = { width: Ce, height: xe };
       B.addSubCommand(
         new k8(e.getSvgRoot(), Se)
       ), e.setZoom(1), e.clearSelection(), e.clearData(), e.getSvgRoot().append(e.selectorManager.selectorParentGroup), R || e.addCommandToHistory(B), e.call("sourcechanged", [e.getSvgContent()]);
@@ -21067,24 +21078,24 @@ const C8 = (o) => {
         const U = Ht("width", J.getAttribute("width")), de = Ht("height", J.getAttribute("height")), te = J.getAttribute("viewBox"), le = te ? te.split(/[ ,]+/) : [0, 0, U, de];
         for (X = 0; X < 4; ++X)
           le[X] = Number(le[X]);
-        const me = Number(e.getSvgContent().getAttribute("height")), ye = Number.isFinite(me) && me > 0 ? me : Number(e.getCurConfig().dimensions?.[1]) || 100, we = le[2], be = le[3], Se = Number.isFinite(we) && we > 0 ? we : U > 0 ? U : 100, Ae = Number.isFinite(be) && be > 0 ? be : de > 0 ? de : 100, Fe = Number.isFinite(Se) && Se > 0 ? Se : 100, Me = Number.isFinite(Ae) && Ae > 0 ? Ae : 100;
+        const me = Number(e.getSvgContent().getAttribute("height")), ye = Number.isFinite(me) && me > 0 ? me : Number(e.getCurConfig().dimensions?.[1]) || 100, Ce = le[2], xe = le[3], Se = Number.isFinite(Ce) && Ce > 0 ? Ce : U > 0 ? U : 100, Ae = Number.isFinite(xe) && xe > 0 ? xe : de > 0 ? de : 100, Fe = Number.isFinite(Se) && Se > 0 ? Se : 100, Me = Number.isFinite(Ae) && Ae > 0 ? Ae : 100;
         Y = Me > Fe ? "scale(" + ye / 3 / Me + ")" : "scale(" + ye / 3 / Fe + ")", Y = `translate(0) ${Y} translate(0)`, Q = e.getDOMDocument().createElementNS(Ze.SVG, "symbol");
-        const Ce = e.findDefs();
+        const be = e.findDefs();
         if (Ln()) {
-          const Pe = J.querySelectorAll(
+          const Le = J.querySelectorAll(
             "linearGradient, radialGradient, pattern"
           );
-          Array.prototype.forEach.call(Pe, (Ie) => {
-            Ce.appendChild(Ie);
+          Array.prototype.forEach.call(Le, (Ie) => {
+            be.appendChild(Ie);
           });
         }
         for (; J.firstChild; ) {
-          const Pe = J.firstChild;
-          Q.append(Pe);
+          const Le = J.firstChild;
+          Q.append(Le);
         }
-        const Le = J.attributes;
-        for (const Pe of Le)
-          Q.setAttribute(Pe.nodeName, Pe.value);
+        const Pe = J.attributes;
+        for (const Le of Pe)
+          Q.setAttribute(Le.nodeName, Le.value);
         Q.id = e.getNextId(), e.setImportIds(ie, {
           symbol: Q,
           xform: Y
@@ -21171,14 +21182,14 @@ const C8 = (o) => {
         return;
       }
       me.width = J, me.height = U;
-      const we = new Image();
-      we.onload = () => {
-        X.includeBg && X.bgcolor && X.bgcolor !== "chessboard" && X.bgcolor !== "gradient" && (ye.fillStyle = X.bgcolor, ye.fillRect(0, 0, J, U)), ye.drawImage(we, 0, 0, J, U), URL.revokeObjectURL(le);
-        const be = me.toDataURL(ie, R);
+      const Ce = new Image();
+      Ce.onload = () => {
+        X.includeBg && X.bgcolor && X.bgcolor !== "chessboard" && X.bgcolor !== "gradient" && (ye.fillStyle = X.bgcolor, ye.fillRect(0, 0, J, U)), ye.drawImage(Ce, 0, 0, J, U), URL.revokeObjectURL(le);
+        const xe = me.toDataURL(ie, R);
         let Se;
         const Ae = (Fe) => {
           const Me = {
-            datauri: be,
+            datauri: xe,
             bloburl: Fe,
             svg: de,
             issues: oe,
@@ -21197,9 +21208,9 @@ const C8 = (o) => {
           ie,
           R
         );
-      }, we.onerror = (be) => {
-        console.error("Failed to load SVG into image element:", be), B(be);
-      }, we.src = le;
+      }, Ce.onerror = (xe) => {
+        console.error("Failed to load SVG into image element:", xe), B(xe);
+      }, Ce.src = le;
     }).catch(B);
   }), _ = (O) => {
     const R = {}, G = [
@@ -21421,7 +21432,7 @@ const C8 = (o) => {
         for (const [E, z] of Object.entries(a))
           !M.has(E) && typeof z == "number" && (a[E] = e.snapToGrid(z));
       }
-      It(s, a, 1e3, !0);
+      Ft(s, a, 1e3, !0);
     }, k = Kt(s);
     ["fill", "stroke"].forEach((M) => {
       const E = s.getAttribute(M);
@@ -21496,7 +21507,7 @@ const C8 = (o) => {
               let B = R.getAttribute("font-size");
               B || (B = window.getComputedStyle(R).fontSize);
               const ie = parseFloat(B);
-              isNaN(ie) || (G["font-size"] = ie * Math.abs(c.a)), (X || Y || G["font-size"]) && It(R, G, 1e3, !0);
+              isNaN(ie) || (G["font-size"] = ie * Math.abs(c.a)), (X || Y || G["font-size"]) && Ft(R, G, 1e3, !0);
             }
           }
           break;
@@ -21512,7 +21523,7 @@ const C8 = (o) => {
         }
         case "g": {
           const M = e.getDataStorage().get(s, "gsvg");
-          M && It(M, a, 1e3, !0);
+          M && Ft(M, a, 1e3, !0);
           break;
         }
         case "polyline":
@@ -21981,14 +21992,14 @@ const C8 = (o) => {
         let Q = se.x - _, ee = se.y - _, J = se.width + _ * 2, U = se.height + _ * 2;
         const de = Q + J / 2, te = ee + U / 2, le = vi(C);
         if (le) {
-          const we = e.getSvgRoot().createSVGTransform();
-          we.setRotate(-le, de, te);
-          const be = we.matrix;
-          oe.tl = Mt(oe.tl.x, oe.tl.y, be), oe.tr = Mt(oe.tr.x, oe.tr.y, be), oe.bl = Mt(oe.bl.x, oe.bl.y, be), oe.br = Mt(oe.br.x, oe.br.y, be);
+          const Ce = e.getSvgRoot().createSVGTransform();
+          Ce.setRotate(-le, de, te);
+          const xe = Ce.matrix;
+          oe.tl = Mt(oe.tl.x, oe.tl.y, xe), oe.tr = Mt(oe.tr.x, oe.tr.y, xe), oe.bl = Mt(oe.bl.x, oe.bl.y, xe), oe.br = Mt(oe.br.x, oe.br.y, xe);
           const { tl: Se } = oe;
-          let Ae = Se.x, Fe = Se.y, Me = Se.x, Ce = Se.y;
-          const { min: Le, max: Pe } = Math;
-          Ae = Le(Ae, Le(oe.tr.x, Le(oe.bl.x, oe.br.x))) - _, Fe = Le(Fe, Le(oe.tr.y, Le(oe.bl.y, oe.br.y))) - _, Me = Pe(Me, Pe(oe.tr.x, Pe(oe.bl.x, oe.br.x))) + _, Ce = Pe(Ce, Pe(oe.tr.y, Pe(oe.bl.y, oe.br.y))) + _, Q = Ae, ee = Fe, J = Me - Ae, U = Ce - Fe;
+          let Ae = Se.x, Fe = Se.y, Me = Se.x, be = Se.y;
+          const { min: Pe, max: Le } = Math;
+          Ae = Pe(Ae, Pe(oe.tr.x, Pe(oe.bl.x, oe.br.x))) - _, Fe = Pe(Fe, Pe(oe.tr.y, Pe(oe.bl.y, oe.br.y))) - _, Me = Le(Me, Le(oe.tr.x, Le(oe.bl.x, oe.br.x))) + _, be = Le(be, Le(oe.tr.y, Le(oe.bl.y, oe.br.y))) + _, Q = Ae, ee = Fe, J = Me - Ae, U = be - Fe;
         }
         const me = `M${Q},${ee} L${Q + J},${ee} ${Q + J},${ee + U} ${Q},${ee + U}z`, ye = le ? "rotate(" + [le, de, te].join(",") + ")" : "";
         this.gripCoords = {
@@ -22000,8 +22011,8 @@ const C8 = (o) => {
           w: [Q, ee + U / 2],
           e: [Q + J, ee + U / 2],
           s: [Q + J / 2, ee + U]
-        }, g.setAttribute("d", me), this.selectorGroup.setAttribute("transform", ye), Object.entries(this.gripCoords).forEach(([we, be]) => {
-          w[we].setAttribute("cx", be[0]), w[we].setAttribute("cy", be[1]);
+        }, g.setAttribute("d", me), this.selectorGroup.setAttribute("transform", ye), Object.entries(this.gripCoords).forEach(([Ce, xe]) => {
+          w[Ce].setAttribute("cx", xe[0]), w[Ce].setAttribute("cy", xe[1]);
         }), m.rotateGripConnector.setAttribute("x1", Q + J / 2), m.rotateGripConnector.setAttribute("y1", ee), m.rotateGripConnector.setAttribute("x2", Q + J / 2), m.rotateGripConnector.setAttribute("y2", ee - Rn * 5), m.rotateGrip.setAttribute("cx", Q + J / 2), m.rotateGrip.setAttribute("cy", ee - Rn * 5);
       }
     }
@@ -22707,11 +22718,11 @@ function z8() {
           }), this.project = null, this.projects = [], this.tools = [], this._id = t._id++, t._scopes[this._id] = this;
           var r = t.prototype;
           if (!this.support) {
-            var l = dt.getContext(1, 1) || {};
+            var l = ct.getContext(1, 1) || {};
             r.support = {
               nativeDash: "setLineDash" in l || "mozDash" in l,
-              nativeBlendModes: Pt.nativeModes
-            }, dt.release(l);
+              nativeBlendModes: Rt.nativeModes
+            }, ct.release(l);
           }
           if (!this.agent) {
             var d = e.navigator.userAgent.toLowerCase(), h = (/(darwin|win|mac|linux|freebsd|sunos)/.exec(d) || [])[0], f = h === "darwin" ? "mac" : h, v = r.agent = r.browser = { platform: f };
@@ -22753,7 +22764,7 @@ function z8() {
           return Je = this, this.project = new X(t), this;
         },
         createCanvas: function(t, r) {
-          return dt.getCanvas(t, r);
+          return ct.getCanvas(t, r);
         },
         activate: function() {
           Je = this;
@@ -22877,8 +22888,8 @@ function z8() {
                 }
               } else
                 for (var fe = T[N], ue = T[P], ce = 0; ce < K.length; ce++) {
-                  var he = K[ce], ge = v[he], ve = he < y, xe = f || he >= y;
-                  (h || (H && xe || W && ve) && fe >= ge[P] - l && ue <= ge[N] + l) && (H && xe && re.push(
+                  var he = K[ce], ge = v[he], ve = he < y, we = f || he >= y;
+                  (h || (H && we || W && ve) && fe >= ge[P] - l && ue <= ge[N] + l) && (H && we && re.push(
                     f ? he : he - y
                   ), W && ve && j[he].push($));
                 }
@@ -23049,8 +23060,8 @@ function z8() {
                 l(F) * T * T > l(D / T) && (H = -D / T, $ = (H - N) / T);
               }
             }
-            var xe = C.solveQuadratic(F, $, H, Z, K, j), ke = K == null;
-            return isFinite(T) && (xe === 0 || xe > 0 && T !== Z[0] && T !== Z[1]) && (ke || T > K - v && T < j + v) && (Z[xe++] = ke ? T : b(T, K, j)), xe;
+            var we = C.solveQuadratic(F, $, H, Z, K, j), ke = K == null;
+            return isFinite(T) && (we === 0 || we > 0 && T !== Z[0] && T !== Z[1]) && (ke || T > K - v && T < j + v) && (Z[we++] = ke ? T : b(T, K, j)), we;
           }
         };
       }(), k = {
@@ -23987,9 +23998,9 @@ function z8() {
         _reference: "project",
         _compactSerialize: !0,
         initialize: function(t) {
-          g.call(this, !0), this._children = [], this._namedChildren = {}, this._activeLayer = null, this._currentStyle = new Pe(null, null, this), this._view = De.create(
+          g.call(this, !0), this._children = [], this._namedChildren = {}, this._activeLayer = null, this._currentStyle = new Le(null, null, this), this._view = De.create(
             this,
-            t || dt.getCanvas(1, 1)
+            t || ct.getCanvas(1, 1)
           ), this._selectionItems = {}, this._selectionCount = 0, this._updateVersion = 0;
         },
         _serialize: function(t, r) {
@@ -24227,7 +24238,7 @@ function z8() {
           },
           _initialize: function(t, r) {
             var l = t && a.isPlainObject(t), d = l && t.internal === !0, h = this._matrix = new R(), f = l && t.project || Je.project, v = Je.settings;
-            return this._id = d ? null : k.get(), this._parent = this._index = null, this._applyMatrix = this._canApplyMatrix && v.applyMatrix, r && h.translate(r), h._owner = this, this._style = new Pe(f._currentStyle, this, f), d || l && t.insert == !1 || !v.insertItems && !(l && t.insert == !0) ? this._setProject(f) : (l && t.parent || f)._insertItem(i, this, !0), l && t !== Y.NO_INSERT && t !== Y.INSERT && this.set(t, {
+            return this._id = d ? null : k.get(), this._parent = this._index = null, this._applyMatrix = this._canApplyMatrix && v.applyMatrix, r && h.translate(r), h._owner = this, this._style = new Le(f._currentStyle, this, f), d || l && t.insert == !1 || !v.insertItems && !(l && t.insert == !0) ? this._setProject(f) : (l && t.parent || f)._insertItem(i, this, !0), l && t !== Y.NO_INSERT && t !== Y.INSERT && this.set(t, {
               internal: !0,
               insert: !0,
               project: !0,
@@ -25174,14 +25185,14 @@ function z8() {
               var d = r.matrices, h = r.viewMatrix, f = this._matrix, v = d[d.length - 1].appended(f);
               if (v.isInvertible()) {
                 h = h ? h.appended(v) : v, d.push(v), r.updateMatrix && (this._globalMatrix = v);
-                var y = this._blendMode, b = C.clamp(this._opacity, 0, 1), S = y === "normal", L = Pt.nativeModes[y], F = S && b === 1 || r.dontStart || r.clip || (L || S && b < 1) && this._canComposite(), P = r.pixelRatio || 1, N, D, Z;
+                var y = this._blendMode, b = C.clamp(this._opacity, 0, 1), S = y === "normal", L = Rt.nativeModes[y], F = S && b === 1 || r.dontStart || r.clip || (L || S && b < 1) && this._canComposite(), P = r.pixelRatio || 1, N, D, Z;
                 if (!F) {
                   var K = this.getStrokeBounds(h);
                   if (!K.width || !K.height) {
                     d.pop();
                     return;
                   }
-                  Z = r.offset, D = r.offset = K.getTopLeft().floor(), N = t, t = dt.getContext(K.getSize().ceil().add(1).multiply(P)), P !== 1 && t.scale(P, P);
+                  Z = r.offset, D = r.offset = K.getTopLeft().floor(), N = t, t = ct.getContext(K.getSize().ceil().add(1).multiply(P)), P !== 1 && t.scale(P, P);
                 }
                 t.save();
                 var j = l ? l.appended(f) : this._canScaleStroke && !this.getStrokeScaling(!0) && h, q = !F && r.clipItem, T = !j || q;
@@ -25190,19 +25201,19 @@ function z8() {
                   var $ = r.offset;
                   $ && t.translate(-$.x, -$.y);
                 }
-                this._draw(t, r, h, j), t.restore(), d.pop(), r.clip && !r.dontFinish && t.clip(this.getFillRule()), F || (Pt.process(
+                this._draw(t, r, h, j), t.restore(), d.pop(), r.clip && !r.dontFinish && t.clip(this.getFillRule()), F || (Rt.process(
                   y,
                   t,
                   N,
                   b,
                   D.subtract(Z).multiply(P)
-                ), dt.release(t), r.offset = Z);
+                ), ct.release(t), r.offset = Z);
               }
             }
           },
           _isUpdated: function(t) {
             var r = this._parent;
-            if (r instanceof we)
+            if (r instanceof Ce)
               return r._isUpdated(t);
             var l = this._updateVersion === t;
             return !l && r && r._visible && r._isUpdated(t) && (this._updateVersion = t, l = !0), l;
@@ -25617,7 +25628,7 @@ function z8() {
                 l = h;
               else if (h) {
                 var f = E.read(arguments);
-                f.isZero() || (l = dt.getCanvas(f));
+                f.isZero() || (l = ct.getCanvas(f));
               }
             }
             l ? this.setImage(l) : this.setSource(t);
@@ -25632,7 +25643,7 @@ function z8() {
           if (r)
             this._setImage(r);
           else if (l) {
-            var d = dt.getCanvas(t._size);
+            var d = ct.getCanvas(t._size);
             d.getContext("2d").drawImage(l, 0, 0), this._setImage(d);
           }
           this._crossOrigin = t._crossOrigin;
@@ -25652,7 +25663,7 @@ function z8() {
             r && this.clear();
           else if (l.width > 0 && l.height > 0) {
             var d = !r && this.getElement();
-            this._setImage(dt.getCanvas(l)), d && this.getContext(!0).drawImage(
+            this._setImage(ct.getCanvas(l)), d && this.getContext(!0).drawImage(
               d,
               0,
               0,
@@ -25660,7 +25671,7 @@ function z8() {
               l.height
             );
           } else
-            this._canvas && dt.release(this._canvas), this._size = l.clone();
+            this._canvas && ct.release(this._canvas), this._size = l.clone();
         },
         getWidth: function() {
           return this._size ? this._size.width : 0;
@@ -25706,18 +25717,18 @@ function z8() {
           });
         },
         _setImage: function(t) {
-          this._canvas && dt.release(this._canvas), t && t.getContext ? (this._image = null, this._canvas = t, this._loaded = !0) : (this._image = t, this._canvas = null, this._loaded = !!(t && t.src && t.complete)), this._size = new E(
+          this._canvas && ct.release(this._canvas), t && t.getContext ? (this._image = null, this._canvas = t, this._loaded = !0) : (this._image = t, this._canvas = null, this._loaded = !!(t && t.src && t.complete)), this._size = new E(
             t ? t.naturalWidth || t.width : 0,
             t ? t.naturalHeight || t.height : 0
           ), this._context = null, this._changed(1033);
         },
         getCanvas: function() {
           if (!this._canvas) {
-            var t = dt.getContext(this._size);
+            var t = ct.getContext(this._size);
             try {
               this._image && t.drawImage(this._image, 0, 0), this._canvas = t.canvas;
             } catch {
-              dt.release(t);
+              ct.release(t);
             }
           }
           return this._canvas;
@@ -25758,7 +25769,7 @@ function z8() {
       }, {
         beans: !1,
         getSubCanvas: function() {
-          var t = I.read(arguments), r = dt.getContext(t.getSize());
+          var t = I.read(arguments), r = ct.getContext(t.getSize());
           return r.drawImage(
             this.getCanvas(),
             t.x,
@@ -25791,7 +25802,7 @@ function z8() {
           if (t ? t instanceof me ? (l = t, r = t.getBounds()) : typeof t == "object" && ("width" in t ? r = new I(t) : "x" in t && (r = new I(t.x - 0.5, t.y - 0.5, 1, 1))) : r = this.getBounds(), !r)
             return null;
           var d = 32, h = Math.min(r.width, d), f = Math.min(r.height, d), v = se._sampleContext;
-          v ? v.clearRect(0, 0, d + 1, d + 1) : v = se._sampleContext = dt.getContext(
+          v ? v.clearRect(0, 0, d + 1, d + 1) : v = se._sampleContext = ct.getContext(
             new E(d)
           ), v.save();
           var y = new R().scale(h / r.width, f / r.height).translate(-r.x, -r.y);
@@ -26664,10 +26675,10 @@ function z8() {
               var h = d[0], f = d[1], v = d[2], y = d[3], b = d[4], S = d[5], L = d[6], F = d[7], P = h * (F - S) + f * (b - L) + L * S - F * b, N = v * (f - F) + y * (L - h) + h * F - f * L, D = b * (y - f) + S * (h - v) + v * f - y * h, Z = 3 * D, K = Z - N, j = K - N + P, q = Math.sqrt(j * j + K * K + Z * Z), T = q !== 0 ? 1 / q : 0, $ = C.isZero, H = "serpentine";
               j *= T, K *= T, Z *= T;
               function W(he, fe, ue) {
-                var ge = fe !== i, ve = ge && fe > 0 && fe < 1, xe = ge && ue > 0 && ue < 1;
-                return ge && (!(ve || xe) || he === "loop" && !(ve && xe)) && (he = "arch", ve = xe = !1), {
+                var ge = fe !== i, ve = ge && fe > 0 && fe < 1, we = ge && ue > 0 && ue < 1;
+                return ge && (!(ve || we) || he === "loop" && !(ve && we)) && (he = "arch", ve = we = !1), {
                   type: he,
-                  roots: ve || xe ? ve && xe ? fe < ue ? [fe, ue] : [ue, fe] : [ve ? fe : ue] : null
+                  roots: ve || we ? ve && we ? fe < ue ? [fe, ue] : [ue, fe] : [ve ? fe : ue] : null
                 };
               }
               if ($(j))
@@ -26766,31 +26777,31 @@ function z8() {
           function r(N, D, Z, K, j, q, T, $, H, W, re, ae, ce) {
             if (++H >= 4096 || ++$ >= 40)
               return H;
-            var he = 1e-9, fe = D[0], ue = D[1], ge = D[6], ve = D[7], xe = G.getSignedDistance, ke = xe(fe, ue, ge, ve, D[2], D[3]), Ee = xe(fe, ue, ge, ve, D[4], D[5]), ze = ke * Ee > 0 ? 3 / 4 : 4 / 9, $e = ze * Math.min(0, ke, Ee), Be = ze * Math.max(0, ke, Ee), Xe = xe(fe, ue, ge, ve, N[0], N[1]), Ge = xe(fe, ue, ge, ve, N[2], N[3]), Ve = xe(fe, ue, ge, ve, N[4], N[5]), qe = xe(fe, ue, ge, ve, N[6], N[7]), Ue = l(Xe, Ge, Ve, qe), He = Ue[0], ct = Ue[1], et, it;
-            if (ke === 0 && Ee === 0 && Xe === 0 && Ge === 0 && Ve === 0 && qe === 0 || (et = d(He, ct, $e, Be)) == null || (it = d(
+            var he = 1e-9, fe = D[0], ue = D[1], ge = D[6], ve = D[7], we = G.getSignedDistance, ke = we(fe, ue, ge, ve, D[2], D[3]), Ee = we(fe, ue, ge, ve, D[4], D[5]), ze = ke * Ee > 0 ? 3 / 4 : 4 / 9, $e = ze * Math.min(0, ke, Ee), Be = ze * Math.max(0, ke, Ee), Xe = we(fe, ue, ge, ve, N[0], N[1]), Ge = we(fe, ue, ge, ve, N[2], N[3]), Ve = we(fe, ue, ge, ve, N[4], N[5]), qe = we(fe, ue, ge, ve, N[6], N[7]), Ue = l(Xe, Ge, Ve, qe), He = Ue[0], dt = Ue[1], et, it;
+            if (ke === 0 && Ee === 0 && Xe === 0 && Ge === 0 && Ve === 0 && qe === 0 || (et = d(He, dt, $e, Be)) == null || (it = d(
               He.reverse(),
-              ct.reverse(),
+              dt.reverse(),
               $e,
               Be
             )) == null)
               return H;
             var at = W + (re - W) * et, rt = W + (re - W) * it;
             if (Math.max(ce - ae, rt - at) < he) {
-              var Lt = (at + rt) / 2, Tt = (ae + ce) / 2;
+              var Pt = (at + rt) / 2, Lt = (ae + ce) / 2;
               t(
                 j,
                 q,
                 T ? K : Z,
-                T ? Tt : Lt,
+                T ? Lt : Pt,
                 T ? Z : K,
-                T ? Lt : Tt
+                T ? Pt : Lt
               );
             } else {
               N = te.getPart(N, et, it);
-              var Ot = ce - ae;
+              var It = ce - ae;
               if (it - et > 0.8)
-                if (rt - at > Ot) {
-                  var St = te.subdivide(N, 0.5), Lt = (at + rt) / 2;
+                if (rt - at > It) {
+                  var St = te.subdivide(N, 0.5), Pt = (at + rt) / 2;
                   H = r(
                     D,
                     St[0],
@@ -26804,7 +26815,7 @@ function z8() {
                     ae,
                     ce,
                     at,
-                    Lt
+                    Pt
                   ), H = r(
                     D,
                     St[1],
@@ -26817,11 +26828,11 @@ function z8() {
                     H,
                     ae,
                     ce,
-                    Lt,
+                    Pt,
                     rt
                   );
                 } else {
-                  var St = te.subdivide(D, 0.5), Tt = (ae + ce) / 2;
+                  var St = te.subdivide(D, 0.5), Lt = (ae + ce) / 2;
                   H = r(
                     St[0],
                     N,
@@ -26833,7 +26844,7 @@ function z8() {
                     $,
                     H,
                     ae,
-                    Tt,
+                    Lt,
                     at,
                     rt
                   ), H = r(
@@ -26846,14 +26857,14 @@ function z8() {
                     !T,
                     $,
                     H,
-                    Tt,
+                    Lt,
                     ce,
                     at,
                     rt
                   );
                 }
               else
-                Ot === 0 || Ot >= he ? H = r(
+                It === 0 || It >= he ? H = r(
                   D,
                   N,
                   K,
@@ -26993,14 +27004,14 @@ function z8() {
                   1
                 ), !fe || j.length === ge)
                   for (var re = 0; re < 4; re++) {
-                    var ve = re >> 1, xe = re & 1, ke = ve * 6, Ee = xe * 6, ze = new _(N[ke], N[ke + 1]), $e = new _(D[Ee], D[Ee + 1]);
+                    var ve = re >> 1, we = re & 1, ke = ve * 6, Ee = we * 6, ze = new _(N[ke], N[ke + 1]), $e = new _(D[Ee], D[Ee + 1]);
                     ze.isClose($e, T) && t(
                       j,
                       q,
                       Z,
                       ve,
                       K,
-                      xe
+                      we
                     );
                   }
               }
@@ -27037,12 +27048,12 @@ function z8() {
             ), ue = 0; ue < H; ue++) {
               var ge = N[ue], ve = re[ue];
               $ && S(ve, ge, ce, Z);
-              var xe = fe[ue];
-              if (xe)
-                for (var ke = 0; ke < xe.length; ke++) {
+              var we = fe[ue];
+              if (we)
+                for (var ke = 0; ke < we.length; ke++) {
                   if (q && ce.length)
                     return ce;
-                  var Ee = xe[ke];
+                  var Ee = we[ke];
                   if (!$ || Ee > ue) {
                     var ze = D[Ee], $e = ae[Ee];
                     b(
@@ -27070,36 +27081,36 @@ function z8() {
               return null;
             if ($ ^ H)
               return null;
-            for (var ve = [N, D], xe = [], ke = 0; ke < 4 && xe.length < 2; ke++) {
+            for (var ve = [N, D], we = [], ke = 0; ke < 4 && we.length < 2; ke++) {
               var Ee = ke & 1, ze = Ee ^ 1, $e = ke >> 1, Be = te.getTimeOf(ve[Ee], new _(
                 ve[ze][$e ? 6 : 0],
                 ve[ze][$e ? 7 : 1]
               ));
               if (Be != null) {
                 var Xe = Ee ? [$e, Be] : [Be, $e];
-                (!xe.length || K(Xe[0] - xe[0][0]) > q && K(Xe[1] - xe[0][1]) > q) && xe.push(Xe);
+                (!we.length || K(Xe[0] - we[0][0]) > q && K(Xe[1] - we[0][1]) > q) && we.push(Xe);
               }
-              if (ke > 2 && !xe.length)
+              if (ke > 2 && !we.length)
                 break;
             }
-            if (xe.length !== 2)
-              xe = null;
+            if (we.length !== 2)
+              we = null;
             else if (!W) {
-              var Ge = te.getPart(N, xe[0][0], xe[1][0]), Ve = te.getPart(D, xe[0][1], xe[1][1]);
-              (K(Ve[2] - Ge[2]) > T || K(Ve[3] - Ge[3]) > T || K(Ve[4] - Ge[4]) > T || K(Ve[5] - Ge[5]) > T) && (xe = null);
+              var Ge = te.getPart(N, we[0][0], we[1][0]), Ve = te.getPart(D, we[0][1], we[1][1]);
+              (K(Ve[2] - Ge[2]) > T || K(Ve[3] - Ge[3]) > T || K(Ve[4] - Ge[4]) > T || K(Ve[5] - Ge[5]) > T) && (we = null);
             }
-            return xe;
+            return we;
           }
           function P(N, D) {
-            var Z = N[0], K = N[1], j = N[2], q = N[3], T = N[4], $ = N[5], H = N[6], W = N[7], re = D.normalize(), ae = re.x, ce = re.y, he = 3 * H - 9 * T + 9 * j - 3 * Z, fe = 3 * W - 9 * $ + 9 * q - 3 * K, ue = 6 * T - 12 * j + 6 * Z, ge = 6 * $ - 12 * q + 6 * K, ve = 3 * j - 3 * Z, xe = 3 * q - 3 * K, ke = 2 * he * ce - 2 * fe * ae, Ee = [];
+            var Z = N[0], K = N[1], j = N[2], q = N[3], T = N[4], $ = N[5], H = N[6], W = N[7], re = D.normalize(), ae = re.x, ce = re.y, he = 3 * H - 9 * T + 9 * j - 3 * Z, fe = 3 * W - 9 * $ + 9 * q - 3 * K, ue = 6 * T - 12 * j + 6 * Z, ge = 6 * $ - 12 * q + 6 * K, ve = 3 * j - 3 * Z, we = 3 * q - 3 * K, ke = 2 * he * ce - 2 * fe * ae, Ee = [];
             if (Math.abs(ke) < C.CURVETIME_EPSILON) {
-              var ze = he * xe - fe * ve, ke = he * ge - fe * ue;
+              var ze = he * we - fe * ve, ke = he * ge - fe * ue;
               if (ke != 0) {
                 var $e = -ze / ke;
                 $e >= 0 && $e <= 1 && Ee.push($e);
               }
             } else {
-              var Be = (ue * ue - 4 * he * ve) * ce * ce + (-2 * ue * ge + 4 * fe * ve + 4 * he * xe) * ae * ce + (ge * ge - 4 * fe * xe) * ae * ae, Xe = ue * ce - ge * ae;
+              var Be = (ue * ue - 4 * he * ve) * ce * ce + (-2 * ue * ge + 4 * fe * ve + 4 * he * we) * ae * ce + (ge * ge - 4 * fe * we) * ae * ae, Xe = ue * ce - ge * ae;
               if (Be >= 0 && ke != 0) {
                 var Ge = Math.sqrt(Be), Ve = -(Xe + Ge) / ke, qe = (-Xe + Ge) / ke;
                 Ve >= 0 && Ve <= 1 && Ee.push(Ve), qe >= 0 && qe <= 1 && Ee.push(qe);
@@ -27322,7 +27333,7 @@ function z8() {
               var h = l[0];
               d = h && Array.isArray(h[0]);
             } else r && (d = (r.match(/m/gi) || []).length > 1 || /z\s*\S+/i.test(r));
-            var f = d ? we : ye;
+            var f = d ? Ce : ye;
             return new f(t);
           }
         },
@@ -27512,7 +27523,7 @@ function z8() {
           },
           getStyle: function() {
             var t = this._parent;
-            return (t instanceof we ? t : this)._style;
+            return (t instanceof Ce ? t : this)._style;
           },
           getSegments: function() {
             return this._segments;
@@ -27784,7 +27795,7 @@ function z8() {
             this._curves = null, this._changed(9);
           },
           flatten: function(t) {
-            for (var r = new be(this, t || 0.25, 256, !0), l = r.parts, d = l.length, h = [], f = 0; f < d; f++)
+            for (var r = new xe(this, t || 0.25, 256, !0), l = r.parts, d = l.length, h = [], f = 0; f < d; f++)
               h.push(new U(l[f].curve.slice(0, 2)));
             !this._closed && d > 0 && h.push(new U(l[d - 1].curve.slice(6))), this.setSegments(h);
           },
@@ -27794,15 +27805,15 @@ function z8() {
           },
           smooth: function(t) {
             var r = this, l = t || {}, d = l.type || "asymmetric", h = this._segments, f = h.length, v = this._closed;
-            function y(He, ct) {
+            function y(He, dt) {
               var et = He && He.index;
               if (et != null) {
                 var it = He.path;
                 if (it && it !== r)
                   throw new Error(He._class + " " + et + " of " + it + " is not part of " + r);
-                ct && He instanceof te && et++;
+                dt && He instanceof te && et++;
               } else
-                et = typeof He == "number" ? He : ct;
+                et = typeof He == "number" ? He : dt;
               return Math.min(et < 0 && v ? et % f : et < 0 ? et + f : et, f - 1);
             }
             var b = v && l.from === i && l.to === i, S = y(l.from, 0), L = y(l.to, f - 1);
@@ -27820,7 +27831,7 @@ function z8() {
               for (var $ = 0, H = S - j; $ <= Z; $++, H++)
                 T[$] = h[(H < 0 ? H + f : H) % f]._point;
               for (var W = T[0]._x + 2 * T[1]._x, re = T[0]._y + 2 * T[1]._y, ae = 2, ce = Z - 1, he = [W], fe = [re], ue = [ae], ge = [], ve = [], $ = 1; $ < Z; $++) {
-                var xe = $ < ce, ke = xe || P ? 1 : 2, Ee = xe ? 4 : P ? 2 : 7, ze = xe ? 4 : P ? 3 : 8, $e = xe ? 2 : P ? 0 : 1, Be = ke / ae;
+                var we = $ < ce, ke = we || P ? 1 : 2, Ee = we ? 4 : P ? 2 : 7, ze = we ? 4 : P ? 3 : 8, $e = we ? 2 : P ? 0 : 1, Be = ke / ae;
                 ae = ue[$] = Ee - Be, W = he[$] = ze * T[$]._x + $e * T[$ + 1]._x - Be * W, re = fe[$] = ze * T[$]._y + $e * T[$ + 1]._y - Be * re;
               }
               ge[ce] = he[ce] / ue[ce], ve[ce] = fe[ce] / ue[ce];
@@ -27885,7 +27896,7 @@ function z8() {
           },
           toPath: "#clone",
           compare: function t(r) {
-            if (!r || r instanceof we)
+            if (!r || r instanceof Ce)
               return t.base.call(this, r);
             var l = this.getCurves(), d = r.getCurves(), h = l.length, f = d.length;
             if (!h || !f)
@@ -27925,11 +27936,11 @@ function z8() {
             function H(ge, ve) {
               return t.subtract(ge).divide(ve).length <= 1;
             }
-            function W(ge, ve, xe) {
+            function W(ge, ve, we) {
               if (!r.selected || ve.isSelected()) {
                 var ke = ge._point;
                 if (ve !== ke && (ve = ve.add(ke)), H(ve, L))
-                  return new J(xe, h, {
+                  return new J(we, h, {
                     segment: ge,
                     point: ve
                   });
@@ -27963,8 +27974,8 @@ function z8() {
                 ae,
                 !0
               ), !D.isEmpty()) {
-                var xe;
-                return D.contains(t) || (xe = D.getNearestLocation(t)) && H(xe.getPoint(), S);
+                var we;
+                return D.contains(t) || (we = D.getNearestLocation(t)) && H(we.getPoint(), S);
               }
             }
             if (r.ends && !r.segments && !b) {
@@ -28102,7 +28113,7 @@ function z8() {
               if (!y && (S || L) && (this._setStyles(l, d, h), S && (l.fill(b.getFillRule()), l.shadowColor = "rgba(0,0,0,0)"), L)) {
                 if (P) {
                   v || l.beginPath();
-                  for (var D = new be(
+                  for (var D = new xe(
                     this,
                     0.25,
                     32,
@@ -28191,7 +28202,7 @@ function z8() {
                   D.add(v).divide(2),
                   v.subtract(D).rotate(90),
                   !0
-                ), xe = new G(f, v), ke = xe.getSide(D);
+                ), we = new G(f, v), ke = we.getSide(D);
                 if (S = ge.intersect(ve, !0), !S) {
                   if (!ke)
                     return this.lineTo(v);
@@ -28200,7 +28211,7 @@ function z8() {
                   );
                 }
                 F = f.subtract(S), L = F.getDirectedAngle(v.subtract(S));
-                var Ee = xe.getSide(S, !0);
+                var Ee = we.getSide(S, !0);
                 Ee === 0 ? L = ke * l(L) : ke === Ee && (L += L < 0 ? 360 : -360);
               }
               if (L) {
@@ -28209,8 +28220,8 @@ function z8() {
                   if (Ue < Be && (He = F.rotate(90).multiply(Ve), P ? (T = P._transformPoint(F), He = P._transformPoint(F.add(He)).subtract(T)) : T = S.add(F)), !Ue)
                     h.setHandleOut(He);
                   else {
-                    var ct = F.rotate(-90).multiply(Ve);
-                    P && (ct = P._transformPoint(F.add(ct)).subtract(T)), qe.push(new U(T, ct, He));
+                    var dt = F.rotate(-90).multiply(Ve);
+                    P && (dt = P._transformPoint(F.add(dt)).subtract(T)), qe.push(new U(T, dt, He));
                   }
                   F = F.rotate(Xe);
                 }
@@ -28466,7 +28477,7 @@ function z8() {
           }
         };
       }() });
-      var we = me.extend(
+      var Ce = me.extend(
         {
           _class: "CompoundPath",
           _serializeFields: {
@@ -28481,7 +28492,7 @@ function z8() {
             h && typeof h[0] == "number" && (d = [d]);
             for (var f = l.length - 1; f >= 0; f--) {
               var v = d[f];
-              d === l && !(v instanceof ye) && (d = a.slice(d)), Array.isArray(v) ? d[f] = new ye({ segments: v, insert: !1 }) : v instanceof we && (d.splice.apply(d, [f, 1].concat(v.removeChildren())), v.remove());
+              d === l && !(v instanceof ye) && (d = a.slice(d)), Array.isArray(v) ? d[f] = new ye({ segments: v, insert: !1 }) : v instanceof Ce && (d.splice.apply(d, [f, 1].concat(v.removeChildren())), v.remove());
             }
             return t.base.call(this, r, d);
           },
@@ -28643,7 +28654,7 @@ function z8() {
           return T;
         }
         function v(j, q, T, $, H) {
-          var W = new we(Y.NO_INSERT);
+          var W = new Ce(Y.NO_INSERT);
           return W.addChildren(j, !0), W = W.reduce({ simplify: q }), H && H.insert == !1 || W.insertAbove($ && T.isSibling($) && T.getIndex() < $.getIndex() ? $ : T), W.copyAttributes(T, !0), W;
         }
         function y(j) {
@@ -28658,15 +28669,15 @@ function z8() {
             H.getIntersections(W, y)
           )), ce = h(H), he = W && h(W), fe = [], ue = [], ge;
           function ve(He) {
-            for (var ct = 0, et = He.length; ct < et; ct++) {
-              var it = He[ct];
+            for (var dt = 0, et = He.length; dt < et; dt++) {
+              var it = He[dt];
               a.push(fe, it._segments), a.push(ue, it.getCurves()), it._overlapsOnly = !0;
             }
           }
-          function xe(He) {
-            for (var ct = [], et = 0, it = He && He.length; et < it; et++)
-              ct.push(ue[He[et]]);
-            return ct;
+          function we(He) {
+            for (var dt = [], et = 0, it = He && He.length; et < it; et++)
+              dt.push(ue[He[et]]);
+            return dt;
           }
           if (ae.length) {
             ve(ce), he && ve(he);
@@ -28680,8 +28691,8 @@ function z8() {
             ), Be = {}, Ee = 0; Ee < ue.length; Ee++) {
               var Xe = ue[Ee], Ge = Xe._path._id, Ve = Be[Ge] = Be[Ge] || {};
               Ve[Xe.getIndex()] = {
-                hor: xe($e[Ee].hor),
-                ver: xe($e[Ee].ver)
+                hor: we($e[Ee].hor),
+                ver: we($e[Ee].ver)
               };
             }
             for (var Ee = 0, ze = ae.length; Ee < ze; Ee++)
@@ -28762,10 +28773,10 @@ function z8() {
             for (var ce = 0; ce < $; ce++) {
               var he = W[ce], fe = H[he._id], ue = 0, ge = ae[ce];
               if (ge) {
-                for (var ve = null, xe = ge.length - 1; xe >= 0; xe--)
-                  if (ge[xe] < ce) {
+                for (var ve = null, we = ge.length - 1; we >= 0; we--)
+                  if (ge[we] < ce) {
                     ve = ve || he.getInteriorPoint();
-                    var ke = W[ge[xe]];
+                    var ke = W[ge[we]];
                     if (ke.contains(ve)) {
                       var Ee = H[ke._id];
                       ue = Ee.winding, fe.winding += ue, fe.container = Ee.exclude ? Ee.container : ke;
@@ -28787,26 +28798,26 @@ function z8() {
         }
         function N(j, q, T) {
           var $ = q && [], H = 1e-8, W = 1 - H, re = !1, ae = T || [], ce = T && {}, he, fe, ue;
-          function ge(ct) {
-            return ct._path._id + "." + ct._segment1._index;
+          function ge(dt) {
+            return dt._path._id + "." + dt._segment1._index;
           }
           for (var ve = (T && T.length) - 1; ve >= 0; ve--) {
-            var xe = T[ve];
-            xe._path && (ce[ge(xe)] = !0);
+            var we = T[ve];
+            we._path && (ce[ge(we)] = !0);
           }
           for (var ve = j.length - 1; ve >= 0; ve--) {
-            var ke = j[ve], Ee = ke._time, ze = Ee, $e = q && !q(ke), xe = ke._curve, Be;
-            if (xe && (xe !== fe ? (re = !xe.hasHandles() || ce && ce[ge(xe)], he = [], ue = null, fe = xe) : ue >= H && (Ee /= ue)), $e) {
+            var ke = j[ve], Ee = ke._time, ze = Ee, $e = q && !q(ke), we = ke._curve, Be;
+            if (we && (we !== fe ? (re = !we.hasHandles() || ce && ce[ge(we)], he = [], ue = null, fe = we) : ue >= H && (Ee /= ue)), $e) {
               he && he.push(ke);
               continue;
             } else q && $.unshift(ke);
             if (ue = ze, Ee < H)
-              Be = xe._segment1;
+              Be = we._segment1;
             else if (Ee > W)
-              Be = xe._segment2;
+              Be = we._segment2;
             else {
-              var Xe = xe.divideAtTime(Ee, !0);
-              re && ae.push(xe, Xe), Be = Xe._segment1;
+              var Xe = we.divideAtTime(Ee, !0);
+              re && ae.push(we, Xe), Be = Xe._segment1;
               for (var Ge = he.length - 1; Ge >= 0; Ge--) {
                 var Ve = he[Ge];
                 Ve._time = (Ve._time - Ee) / (1 - Ee);
@@ -28824,50 +28835,50 @@ function z8() {
           return T || F(ae), $ || j;
         }
         function D(j, q, T, $, H) {
-          var W = Array.isArray(q) ? q : q[T ? "hor" : "ver"], re = T ? 1 : 0, ae = re ^ 1, ce = [j.x, j.y], he = ce[re], fe = ce[ae], ue = 1e-9, ge = 1e-6, ve = he - ue, xe = he + ue, ke = 0, Ee = 0, ze = 0, $e = 0, Be = !1, Xe = !1, Ge = 1, Ve = [], qe, Ue;
-          function He(pt) {
-            var kt = pt[ae + 0], Vt = pt[ae + 6];
+          var W = Array.isArray(q) ? q : q[T ? "hor" : "ver"], re = T ? 1 : 0, ae = re ^ 1, ce = [j.x, j.y], he = ce[re], fe = ce[ae], ue = 1e-9, ge = 1e-6, ve = he - ue, we = he + ue, ke = 0, Ee = 0, ze = 0, $e = 0, Be = !1, Xe = !1, Ge = 1, Ve = [], qe, Ue;
+          function He(ut) {
+            var kt = ut[ae + 0], Vt = ut[ae + 6];
             if (!(fe < t(kt, Vt) || fe > r(kt, Vt))) {
-              var yt = pt[re + 0], ii = pt[re + 2], gi = pt[re + 4], ni = pt[re + 6];
+              var yt = ut[re + 0], ii = ut[re + 2], gi = ut[re + 4], ni = ut[re + 6];
               if (kt === Vt) {
-                (yt < xe && ni > ve || ni < xe && yt > ve) && (Be = !0);
+                (yt < we && ni > ve || ni < we && yt > ve) && (Be = !0);
                 return;
               }
-              var gt = fe === kt ? 0 : fe === Vt || ve > r(yt, ii, gi, ni) || xe < t(yt, ii, gi, ni) ? 1 : te.solveCubic(pt, ae, fe, Ve, 0, 1) > 0 ? Ve[0] : 1, qt = gt === 0 ? yt : gt === 1 ? ni : te.getPoint(pt, gt)[T ? "y" : "x"], Yt = kt > Vt ? 1 : -1, Si = qe[ae] > qe[ae + 6] ? 1 : -1, ai = qe[re + 6];
-              return fe !== kt ? (qt < ve ? ze += Yt : qt > xe ? $e += Yt : Be = !0, qt > he - ge && qt < he + ge && (Ge /= 2)) : (Yt !== Si ? yt < ve ? ze += Yt : yt > xe && ($e += Yt) : yt != ai && (ai < xe && qt > xe ? ($e += Yt, Be = !0) : ai > ve && qt < ve && (ze += Yt, Be = !0)), Ge /= 4), qe = pt, !H && qt > ve && qt < xe && te.getTangent(pt, gt)[T ? "x" : "y"] === 0 && D(j, q, !T, $, !0);
+              var gt = fe === kt ? 0 : fe === Vt || ve > r(yt, ii, gi, ni) || we < t(yt, ii, gi, ni) ? 1 : te.solveCubic(ut, ae, fe, Ve, 0, 1) > 0 ? Ve[0] : 1, Gt = gt === 0 ? yt : gt === 1 ? ni : te.getPoint(ut, gt)[T ? "y" : "x"], Yt = kt > Vt ? 1 : -1, Si = qe[ae] > qe[ae + 6] ? 1 : -1, ai = qe[re + 6];
+              return fe !== kt ? (Gt < ve ? ze += Yt : Gt > we ? $e += Yt : Be = !0, Gt > he - ge && Gt < he + ge && (Ge /= 2)) : (Yt !== Si ? yt < ve ? ze += Yt : yt > we && ($e += Yt) : yt != ai && (ai < we && Gt > we ? ($e += Yt, Be = !0) : ai > ve && Gt < ve && (ze += Yt, Be = !0)), Ge /= 4), qe = ut, !H && Gt > ve && Gt < we && te.getTangent(ut, gt)[T ? "x" : "y"] === 0 && D(j, q, !T, $, !0);
             }
           }
-          function ct(pt) {
-            var kt = pt[ae + 0], Vt = pt[ae + 2], yt = pt[ae + 4], ii = pt[ae + 6];
+          function dt(ut) {
+            var kt = ut[ae + 0], Vt = ut[ae + 2], yt = ut[ae + 4], ii = ut[ae + 6];
             if (fe <= r(kt, Vt, yt, ii) && fe >= t(kt, Vt, yt, ii)) {
-              for (var gi = pt[re + 0], ni = pt[re + 2], gt = pt[re + 4], qt = pt[re + 6], Yt = ve > r(gi, ni, gt, qt) || xe < t(gi, ni, gt, qt) ? [pt] : te.getMonoCurves(pt, T), Si, ai = 0, or = Yt.length; ai < or; ai++)
+              for (var gi = ut[re + 0], ni = ut[re + 2], gt = ut[re + 4], Gt = ut[re + 6], Yt = ve > r(gi, ni, gt, Gt) || we < t(gi, ni, gt, Gt) ? [ut] : te.getMonoCurves(ut, T), Si, ai = 0, or = Yt.length; ai < or; ai++)
                 if (Si = He(Yt[ai]))
                   return Si;
             }
           }
           for (var et = 0, it = W.length; et < it; et++) {
-            var at = W[et], rt = at._path, Lt = at.getValues(), Tt;
+            var at = W[et], rt = at._path, Pt = at.getValues(), Lt;
             if ((!et || W[et - 1]._path !== rt) && (qe = null, rt._closed || (Ue = te.getValues(
               rt.getLastCurve().getSegment2(),
               at.getSegment1(),
               null,
               !$
             ), Ue[ae] !== Ue[ae + 6] && (qe = Ue)), !qe)) {
-              qe = Lt;
-              for (var Ot = rt.getLastCurve(); Ot && Ot !== at; ) {
-                var St = Ot.getValues();
+              qe = Pt;
+              for (var It = rt.getLastCurve(); It && It !== at; ) {
+                var St = It.getValues();
                 if (St[ae] !== St[ae + 6]) {
                   qe = St;
                   break;
                 }
-                Ot = Ot.getPrevious();
+                It = It.getPrevious();
               }
             }
-            if (Tt = ct(Lt))
-              return Tt;
+            if (Lt = dt(Pt))
+              return Lt;
             if (et + 1 === it || W[et + 1]._path !== rt) {
-              if (Ue && (Tt = ct(Ue)))
-                return Tt;
+              if (Ue && (Lt = dt(Ue)))
+                return Lt;
               Be && !ze && !$e && (ze = $e = rt.isClockwise($) ^ T ? 1 : -1), ke += ze, Ee += $e, ze = $e = 0, Be && (Xe = !0, Be = !1), Ue = null;
             }
           }
@@ -28889,13 +28900,13 @@ function z8() {
             }
             j = j.getNext();
           } while (j && !j._intersection && j !== re);
-          for (var ue = [0.5, 0.25, 0.75], ce = { winding: 0, quality: -1 }, ge = 1e-3, ve = 1 - ge, xe = 0; xe < ue.length && ce.quality < 0.5; xe++)
-            for (var fe = ae * ue[xe], ke = 0, Ee = W.length; ke < Ee; ke++) {
+          for (var ue = [0.5, 0.25, 0.75], ce = { winding: 0, quality: -1 }, ge = 1e-3, ve = 1 - ge, we = 0; we < ue.length && ce.quality < 0.5; we++)
+            for (var fe = ae * ue[we], ke = 0, Ee = W.length; ke < Ee; ke++) {
               var ze = W[ke], $e = ze.length;
               if (fe <= $e) {
-                var he = ze.curve, Be = he._path, Xe = Be._parent, Ge = Xe instanceof we ? Xe : Be, Ve = C.clamp(he.getTimeAt(fe), ge, ve), qe = he.getPointAtTime(Ve), Ue = l(he.getTangentAtTime(Ve).y) < Math.SQRT1_2, He = null;
+                var he = ze.curve, Be = he._path, Xe = Be._parent, Ge = Xe instanceof Ce ? Xe : Be, Ve = C.clamp(he.getTimeAt(fe), ge, ve), qe = he.getPointAtTime(Ve), Ue = l(he.getTangentAtTime(Ve).y) < Math.SQRT1_2, He = null;
                 if (H.subtract && T) {
-                  var ct = Ge === q ? T : q, et = ct._getWinding(qe, Ue, !0);
+                  var dt = Ge === q ? T : q, et = dt._getWinding(qe, Ue, !0);
                   if (Ge === q && et.winding || Ge === T && !et.winding) {
                     if (et.quality < 1)
                       continue;
@@ -28930,35 +28941,35 @@ function z8() {
             return !1;
           }
           function re(it) {
-            for (var at = it._segments, rt = 0, Lt = at.length; rt < Lt; rt++)
+            for (var at = it._segments, rt = 0, Pt = at.length; rt < Pt; rt++)
               at[rt]._visited = !0;
           }
           function ae(it, at) {
-            var rt = it._intersection, Lt = rt, Tt = [];
+            var rt = it._intersection, Pt = rt, Lt = [];
             at && ($ = [it]);
-            function Ot(St, pt) {
-              for (; St && St !== pt; ) {
+            function It(St, ut) {
+              for (; St && St !== ut; ) {
                 var kt = St._segment, Vt = kt && kt._path;
                 if (Vt) {
                   var yt = kt.getNext() || Vt.getFirstSegment(), ii = yt._intersection;
-                  kt !== it && (W(kt) || W(yt) || yt && H(kt) && (H(yt) || ii && H(ii._segment))) && Tt.push(kt), at && $.push(kt);
+                  kt !== it && (W(kt) || W(yt) || yt && H(kt) && (H(yt) || ii && H(ii._segment))) && Lt.push(kt), at && $.push(kt);
                 }
                 St = St._next;
               }
             }
             if (rt) {
-              for (Ot(rt); rt && rt._previous; )
+              for (It(rt); rt && rt._previous; )
                 rt = rt._previous;
-              Ot(rt, Lt);
+              It(rt, Pt);
             }
-            return Tt;
+            return Lt;
           }
           j.sort(function(it, at) {
-            var rt = it._intersection, Lt = at._intersection, Tt = !!(rt && rt._overlap), Ot = !!(Lt && Lt._overlap), St = it._path, pt = at._path;
-            return Tt ^ Ot ? Tt ? 1 : -1 : !rt ^ !Lt ? rt ? 1 : -1 : St !== pt ? St._id - pt._id : it._index - at._index;
+            var rt = it._intersection, Pt = at._intersection, Lt = !!(rt && rt._overlap), It = !!(Pt && Pt._overlap), St = it._path, ut = at._path;
+            return Lt ^ It ? Lt ? 1 : -1 : !rt ^ !Pt ? rt ? 1 : -1 : St !== ut ? St._id - ut._id : it._index - at._index;
           });
           for (var ce = 0, he = j.length; ce < he; ce++) {
-            var fe = j[ce], ue = H(fe), ge = null, ve = !1, xe = !0, ke = [], Ee, ze, $e;
+            var fe = j[ce], ue = H(fe), ge = null, ve = !1, we = !0, ke = [], Ee, ze, $e;
             if (ue && fe._path._overlapsOnly) {
               var Be = fe._path, Xe = fe._intersection._segment._path;
               Be.compare(Xe) && (Be.getArea() && T.push(Be.clone(!1)), re(Be), re(Xe), ue = !1);
@@ -28966,7 +28977,7 @@ function z8() {
             for (; ue; ) {
               var Ge = !ge, Ve = ae(fe, Ge), qe = Ve.shift(), ve = !Ge && (W(fe) || W(qe)), Ue = !ve && qe;
               if (Ge && (ge = new ye(Y.NO_INSERT), Ee = null), ve) {
-                (fe.isFirst() || fe.isLast()) && (xe = fe._path._closed), fe._visited = !0;
+                (fe.isFirst() || fe.isLast()) && (we = fe._path._closed), fe._visited = !0;
                 break;
               }
               if (Ue && Ee && (ke.push(Ee), Ee = null), Ee || (Ue && Ve.push(fe), Ee = {
@@ -28976,7 +28987,7 @@ function z8() {
                 handleIn: $e
               }), Ue && (fe = qe), !H(fe)) {
                 ge.removeSegments(Ee.start);
-                for (var He = 0, ct = ze.length; He < ct; He++)
+                for (var He = 0, dt = ze.length; He < dt; He++)
                   ze[He]._visited = !1;
                 ze.length = 0;
                 do
@@ -28992,7 +29003,7 @@ function z8() {
                 et && fe._handleOut
               )), fe._visited = !0, ze.push(fe), fe = et || fe._path.getFirstSegment(), $e = et && et._handleIn;
             }
-            ve && (xe && (ge.getFirstSegment().setHandleIn($e), ge.setClosed(xe)), ge.getArea() !== 0 && T.push(ge));
+            ve && (we && (ge.getFirstSegment().setHandleIn($e), ge.setClosed(we)), ge.getArea() !== 0 && T.push(ge));
           }
           return T;
         }
@@ -29042,8 +29053,8 @@ function z8() {
             }, re), re && F(re), q = K(a.each(q, function(Ee) {
               a.push(this, Ee._segments);
             }, [])));
-            var xe = q.length, ke;
-            return xe > 1 && j ? (q !== j && this.setChildren(q), ke = this) : xe === 1 && !j && (q[0] !== this && this.setSegments(q[0].removeSegments()), ke = this), ke || (ke = new we(Y.NO_INSERT), ke.addChildren(q), ke = ke.reduce(), ke.copyAttributes(this), this.replaceWith(ke)), ke;
+            var we = q.length, ke;
+            return we > 1 && j ? (q !== j && this.setChildren(q), ke = this) : we === 1 && !j && (q[0] !== this && this.setSegments(q[0].removeSegments()), ke = this), ke || (ke = new Ce(Y.NO_INSERT), ke.addChildren(q), ke = ke.reduce(), ke.copyAttributes(this), this.replaceWith(ke)), ke;
           },
           reorient: function(j, q) {
             var T = this._children;
@@ -29061,8 +29072,8 @@ function z8() {
               for (var T = this.getCurves(), $ = q.y, H = [], W = [], re = 0, ae = T.length; re < ae; re++) {
                 var ce = T[re].getValues(), he = ce[1], fe = ce[3], ue = ce[5], ge = ce[7];
                 if ($ >= t(he, fe, ue, ge) && $ <= r(he, fe, ue, ge))
-                  for (var ve = te.getMonoCurves(ce), xe = 0, ke = ve.length; xe < ke; xe++) {
-                    var Ee = ve[xe], ze = Ee[1], $e = Ee[7];
+                  for (var ve = te.getMonoCurves(ce), we = 0, ke = ve.length; we < ke; we++) {
+                    var Ee = ve[we], ze = Ee[1], $e = Ee[7];
                     if (ze !== $e && ($ >= ze && $ <= $e || $ >= $e && $ <= ze)) {
                       var Be = $ === ze ? Ee[0] : $ === $e ? Ee[6] : te.solveCubic(Ee, 1, $, W, 0, 1) === 1 ? te.getPoint(Ee, W[0]).x : (Ee[0] + Ee[6]) / 2;
                       H.push(Be);
@@ -29077,7 +29088,7 @@ function z8() {
           }
         };
       }());
-      var be = a.extend(
+      var xe = a.extend(
         {
           _class: "PathFlattener",
           initialize: function(t, r, l, d, h) {
@@ -29205,12 +29216,12 @@ function z8() {
             var ge = L[0][0] + L[0][1], ve = L[1][0] + L[1][1];
             ce = he = v(ge) > f ? F[0] / ge : v(ve) > f ? F[1] / ve : 0;
           }
-          var xe = S.getDistance(b), ke = f * xe, Ee, ze;
+          var we = S.getDistance(b), ke = f * we, Ee, ze;
           if (ce < ke || he < ke)
-            ce = he = xe / 3;
+            ce = he = we / 3;
           else {
             var $e = S.subtract(b);
-            Ee = d.normalize(ce), ze = h.normalize(he), Ee.dot($e) - ze.dot($e) > xe * xe && (ce = he = xe / 3, Ee = ze = null);
+            Ee = d.normalize(ce), ze = h.normalize(he), Ee.dot($e) - ze.dot($e) > we * we && (ce = he = we / 3, Ee = ze = null);
           }
           return [
             b,
@@ -29370,7 +29381,7 @@ function z8() {
               var q = l[y];
               if (!q)
                 if (n) {
-                  d || (d = dt.getContext(1, 1, {
+                  d || (d = ct.getContext(1, 1, {
                     willReadFrequently: !0
                   }), d.globalCompositeOperation = "copy"), d.fillStyle = "rgba(0,0,0,0)", d.fillStyle = y, d.fillRect(0, 0, 1, 1);
                   var T = d.getImageData(0, 0, 1, 1).data;
@@ -29443,7 +29454,7 @@ function z8() {
             r[b] = [], a.each(y, function(S, L) {
               var F = a.capitalize(S), P = /^(hue|saturation)$/.test(S), N = r[b][L] = b === "gradient" ? S === "gradient" ? function(D) {
                 var Z = this._components[0];
-                return D = Ce.read(
+                return D = be.read(
                   Array.isArray(D) ? D : arguments,
                   0,
                   { readNull: !0 }
@@ -29484,7 +29495,7 @@ function z8() {
                         var H = N[T];
                         H && (N[T] = H.clone());
                       }
-                  } else if (b.constructor === Ce)
+                  } else if (b.constructor === be)
                     P = "gradient", Z = S;
                   else {
                     P = "hue" in b ? "lightness" in b ? "hsl" : "hsb" : "gradient" in b || "stops" in b || "radial" in b ? "gradient" : "gray" in b ? "gray" : "rgb";
@@ -29663,7 +29674,7 @@ function z8() {
             };
           }, {});
         }()
-      ), Ce = a.extend({
+      ), be = a.extend({
         _class: "Gradient",
         initialize: function(t, r) {
           this._id = k.get(), t && a.isPlainObject(t) && (this.set(t), t = r = null), this._stops == null && this.setStops(t || ["white", "black"]), this._radial == null && this.setRadial(typeof r == "string" && r === "radial" || r || !1);
@@ -29692,7 +29703,7 @@ function z8() {
         clone: function() {
           for (var t = [], r = 0, l = this._stops.length; r < l; r++)
             t[r] = this._stops[r].clone();
-          return new Ce(t, this._radial);
+          return new be(t, this._radial);
         },
         getStops: function() {
           return this._stops;
@@ -29706,7 +29717,7 @@ function z8() {
           if (r)
             for (var l = 0, d = r.length; l < d; l++)
               r[l]._owner = i;
-          r = this._stops = Le.readList(t, 0, { clone: !0 });
+          r = this._stops = Pe.readList(t, 0, { clone: !0 });
           for (var l = 0, d = r.length; l < d; l++)
             r[l]._owner = this;
           this._changed();
@@ -29731,14 +29742,14 @@ function z8() {
           }
           return !1;
         }
-      }), Le = a.extend({
+      }), Pe = a.extend({
         _class: "GradientStop",
         initialize: function(t, r) {
           var l = t, d = r;
           typeof t == "object" && r === i && (Array.isArray(t) && typeof t[0] != "number" ? (l = t[0], d = t[1]) : ("color" in t || "offset" in t || "rampPoint" in t) && (l = t.color, d = t.offset || t.rampPoint || 0)), this.setColor(l), this.setOffset(d);
         },
         clone: function() {
-          return new Le(this._color.clone(), this._offset);
+          return new Pe(this._color.clone(), this._offset);
         },
         _serialize: function(t, r) {
           var l = this._color, d = this._offset;
@@ -29773,7 +29784,7 @@ function z8() {
         equals: function(t) {
           return t === this || t && this._class === t._class && this._color.equals(t._color) && this._offset == t._offset || !1;
         }
-      }), Pe = a.extend(new function() {
+      }), Le = a.extend(new function() {
         var t = {
           fillColor: null,
           fillRule: "nonzero",
@@ -29821,7 +29832,7 @@ function z8() {
         return a.each(r, function(v, y) {
           var b = /Color$/.test(y), S = y === "shadowOffset", L = a.capitalize(y), F = d[y], P = "set" + L, N = "get" + L;
           f[P] = function(D) {
-            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof we);
+            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof Ce);
             if (j)
               for (var q = 0, T = K.length; q < T; q++)
                 K[q]._style[P](D);
@@ -29834,7 +29845,7 @@ function z8() {
               ))), this._values[y] = D, Z && Z._changed(F || 129));
             }
           }, f[N] = function(D) {
-            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof we), q;
+            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof Ce), q;
             if (j && !D)
               for (var T = 0, $ = K.length; T < $; T++) {
                 var H = K[T]._style[N]();
@@ -29871,7 +29882,7 @@ function z8() {
         }), Y.inject(h), f;
       }(), {
         set: function(t) {
-          var r = t instanceof Pe, l = r ? t._values : t;
+          var r = t instanceof Le, l = r ? t._values : t;
           if (l) {
             for (var d in l)
               if (d in this._defaults) {
@@ -30327,8 +30338,8 @@ function z8() {
             mouseout: function(ue) {
               var ge = De._focused, ve = Oe.getRelatedTarget(ue);
               if (ge && (!ve || ve.nodeName === "HTML")) {
-                var xe = Oe.getOffset(ue, ge._element), ke = xe.x, Ee = Math.abs, ze = Ee(ke), $e = 1 << 25, Be = ze - $e;
-                xe.x = Ee(Be) < ze ? Be * (ke < 0 ? -1 : 1) : ke, v(ge, ue, ge.viewToProject(xe));
+                var we = Oe.getOffset(ue, ge._element), ke = we.x, Ee = Math.abs, ze = Ee(ke), $e = 1 << 25, Be = ze - $e;
+                we.x = Ee(Be) < ze ? Be * (ke < 0 ? -1 : 1) : ke, v(ge, ue, ge.viewToProject(we));
               }
             },
             scroll: f
@@ -30355,13 +30366,13 @@ function z8() {
             doubleclick: "click",
             mousedrag: "mousemove"
           }, K = !1, j, q, T, $, H, W, re, ae;
-          function ce(ue, ge, ve, xe, ke, Ee, ze) {
+          function ce(ue, ge, ve, we, ke, Ee, ze) {
             var $e = !1, Be;
             function Xe(Ge, Ve) {
               if (Ge.responds(Ve)) {
-                if (Be || (Be = new ut(
+                if (Be || (Be = new pt(
                   Ve,
-                  xe,
+                  we,
                   ke,
                   ge || Ge,
                   Ee ? ke.subtract(Ee) : null
@@ -30377,19 +30388,19 @@ function z8() {
               ue = ue._parent;
             return $e;
           }
-          function he(ue, ge, ve, xe, ke, Ee) {
+          function he(ue, ge, ve, we, ke, Ee) {
             return ue._project.removeOn(ve), D = N = !1, H && ce(
               H,
               null,
               ve,
-              xe,
+              we,
               ke,
               Ee
-            ) || ge && ge !== H && !ge.isDescendant(H) && ce(ge, null, ve === "mousedrag" ? "mousemove" : ve, xe, ke, Ee, H) || ce(
+            ) || ge && ge !== H && !ge.isDescendant(H) && ce(ge, null, ve === "mousedrag" ? "mousemove" : ve, we, ke, Ee, H) || ce(
               ue,
               H || ge || ue,
               ve,
-              xe,
+              we,
               ke,
               Ee
             );
@@ -30417,9 +30428,9 @@ function z8() {
           return {
             _viewEvents: F,
             _handleMouseEvent: function(ue, ge, ve) {
-              var xe = this._itemEvents, ke = xe.native[ue], Ee = ue === "mousemove", ze = this._scope.tool, $e = this;
-              function Be(ct) {
-                return xe.virtual[ct] || $e.responds(ct) || ze && ze.responds(ct);
+              var we = this._itemEvents, ke = we.native[ue], Ee = ue === "mousemove", ze = this._scope.tool, $e = this;
+              function Be(dt) {
+                return we.virtual[dt] || $e.responds(dt) || ze && ze.responds(dt);
               }
               Ee && l && Be("mousedrag") && (ue = "mousedrag"), ve || (ve = this.getEventPoint(ge));
               var Xe = this.getBounds().contains(ve), Ge = ke && Xe && $e._project.hitTest(ve, {
@@ -30453,17 +30464,17 @@ function z8() {
               }
               q = ve, qe && ze && (N = ze._handleMouseEvent(ue, ge, ve, Ue) || N), ge.cancelable !== !1 && (N && !Ue.move || Ue.down && Be("mouseup")) && ge.preventDefault();
             },
-            _handleKeyEvent: function(ue, ge, ve, xe) {
+            _handleKeyEvent: function(ue, ge, ve, we) {
               var ke = this._scope, Ee = ke.tool, ze;
               function $e(Be) {
-                Be.responds(ue) && (Je = ke, Be.emit(ue, ze = ze || new tt(ue, ge, ve, xe)));
+                Be.responds(ue) && (Je = ke, Be.emit(ue, ze = ze || new tt(ue, ge, ve, we)));
               }
               this.isVisible() && ($e(this), Ee && Ee.responds(ue) && $e(Ee));
             },
             _countItemEvent: function(ue, ge) {
-              var ve = this._itemEvents, xe = ve.native, ke = ve.virtual;
+              var ve = this._itemEvents, we = ve.native, ke = ve.virtual;
               for (var Ee in fe)
-                xe[Ee] = (xe[Ee] || 0) + (fe[Ee][ue] || 0) * ge;
+                we[Ee] = (we[Ee] || 0) + (fe[Ee][ue] || 0) * ge;
               ke[ue] = (ke[ue] || 0) + ge;
             },
             statics: {
@@ -30483,7 +30494,7 @@ function z8() {
               throw new Error(
                 "Cannot create CanvasView with the provided argument: " + a.slice(arguments, 1)
               );
-            r = dt.getCanvas(l);
+            r = ct.getCanvas(l);
           }
           var d = this._context = r.getContext("2d");
           if (d.save(), this._pixelRatio = 1, !/^off|false$/.test(u.getAttribute(r, "hidpi"))) {
@@ -30655,7 +30666,7 @@ function z8() {
             return !!l[S];
           }
         };
-      }(), ut = Ke.extend({
+      }(), pt = Ke.extend({
         _class: "MouseEvent",
         initialize: function(t, r, l, d, h) {
           this.type = t, this.event = r, this.point = l, this.target = d, this.delta = h;
@@ -30928,7 +30939,7 @@ function z8() {
           var l = this._getProperty(t, 1);
           l && (l[t[t.length - 1]] = r);
         }
-      }), Gt = {
+      }), qt = {
         request: function(t) {
           var r = new e.XMLHttpRequest();
           return r.open(
@@ -30946,7 +30957,7 @@ function z8() {
               throw new Error(d);
           }, r.send(null);
         }
-      }, dt = a.exports.CanvasProvider = {
+      }, ct = a.exports.CanvasProvider = {
         canvases: [],
         getCanvas: function(t, r, l) {
           if (!n)
@@ -30966,7 +30977,7 @@ function z8() {
           var r = t && t.canvas ? t.canvas : t;
           r && r.getContext && (r.getContext("2d").restore(), this.canvases.push(r));
         }
-      }, Pt = new function() {
+      }, Rt = new function() {
         var t = Math.min, r = Math.max, l = Math.abs, d, h, f, v, y, b, S, L, F, P, N;
         function D(H, W, re) {
           return 0.2989 * H + 0.587 * W + 0.114 * re;
@@ -30980,8 +30991,8 @@ function z8() {
             F = he + (F - he) * he / ge, P = he + (P - he) * he / ge, N = he + (N - he) * he / ge;
           }
           if (ue > 255) {
-            var ve = 255 - he, xe = ue - he;
-            F = he + (F - he) * ve / xe, P = he + (P - he) * ve / xe, N = he + (N - he) * ve / xe;
+            var ve = 255 - he, we = ue - he;
+            F = he + (F - he) * ve / we, P = he + (P - he) * ve / we, N = he + (N - he) * ve / we;
           }
         }
         function K(H, W, re) {
@@ -31065,7 +31076,7 @@ function z8() {
           "xor"
         ], function(H) {
           this[H] = !0;
-        }, {}), $ = dt.getContext(1, 1, { willReadFrequently: !0 });
+        }, {}), $ = ct.getContext(1, 1, { willReadFrequently: !0 });
         $ && (a.each(q, function(H, W) {
           var re = W === "darken", ae = !1;
           $.save();
@@ -31074,7 +31085,7 @@ function z8() {
           } catch {
           }
           $.restore(), T[W] = ae;
-        }), dt.release($)), this.process = function(H, W, re, ae, ce) {
+        }), ct.release($)), this.process = function(H, W, re, ae, ce) {
           var he = W.canvas, fe = H === "normal";
           if (fe || T[H])
             re.save(), re.setTransform(1, 0, 0, 1, 0, 0), re.globalAlpha = ae, fe || (re.globalCompositeOperation = H), re.drawImage(he, ce.x, ce.y), re.restore();
@@ -31087,13 +31098,13 @@ function z8() {
               ce.y,
               he.width,
               he.height
-            ), ve = ge.data, xe = W.getImageData(
+            ), ve = ge.data, we = W.getImageData(
               0,
               0,
               he.width,
               he.height
             ).data, ke = 0, Ee = ve.length; ke < Ee; ke += 4) {
-              d = xe[ke], y = ve[ke], h = xe[ke + 1], b = ve[ke + 1], f = xe[ke + 2], S = ve[ke + 2], v = xe[ke + 3], L = ve[ke + 3], ue();
+              d = we[ke], y = ve[ke], h = we[ke + 1], b = ve[ke + 1], f = we[ke + 2], S = ve[ke + 2], v = we[ke + 3], L = ve[ke + 3], ue();
               var ze = v * ae / 255, $e = 1 - ze;
               ve[ke] = ze * F + $e * y, ve[ke + 1] = ze * P + $e * b, ve[ke + 2] = ze * N + $e * S, ve[ke + 3] = v * ae + $e * L;
             }
@@ -31274,10 +31285,10 @@ function z8() {
               };
             ae.gradientUnits = "userSpaceOnUse", T = ot.create((H ? "radial" : "linear") + "Gradient", ae, t);
             for (var he = $._stops, fe = 0, ue = he.length; fe < ue; fe++) {
-              var ge = he[fe], ve = ge._color, xe = ve.getAlpha(), ke = ge._offset;
+              var ge = he[fe], ve = ge._color, we = ve.getAlpha(), ke = ge._offset;
               ae = {
                 offset: ke ?? fe / (ue - 1)
-              }, ve && (ae["stop-color"] = ve.toCSS(!0)), xe < 1 && (ae["stop-opacity"] = xe), T.appendChild(
+              }, ve && (ae["stop-color"] = ve.toCSS(!0)), we < 1 && (ae["stop-opacity"] = we), T.appendChild(
                 ot.create("stop", ae, t)
               );
             }
@@ -31393,10 +31404,10 @@ function z8() {
         function v(T, $, H, W) {
           var re = T.childNodes, ae = $ === "clippath", ce = $ === "defs", he = new B(), fe = he._project, ue = fe._currentStyle, ge = [];
           if (!ae && !ce && (he = Z(he, T, W), fe._currentStyle = he._style.clone()), W)
-            for (var ve = T.querySelectorAll("defs"), xe = 0, ke = ve.length; xe < ke; xe++)
-              j(ve[xe], H, !1);
-          for (var xe = 0, ke = re.length; xe < ke; xe++) {
-            var Ee = re[xe], ze;
+            for (var ve = T.querySelectorAll("defs"), we = 0, ke = ve.length; we < ke; we++)
+              j(ve[we], H, !1);
+          for (var we = 0, ke = re.length; we < ke; we++) {
+            var Ee = re[we], ze;
             Ee.nodeType === 1 && !/^defs$/i.test(Ee.nodeName) && (ze = j(Ee, H, !1)) && !(ze instanceof ee) && ge.push(ze);
           }
           return he.addChildren(ge), ae && (he = Z(he.reduce(), T, W)), fe._currentStyle = ue, (ae || ce) && (he.remove(), he = null), he;
@@ -31422,11 +31433,11 @@ function z8() {
           else {
             for (var ae = T.childNodes, ce = [], he = 0, fe = ae.length; he < fe; he++) {
               var ue = ae[he];
-              ue.nodeType === 1 && ce.push(Z(new Le(), ue));
+              ue.nodeType === 1 && ce.push(Z(new Pe(), ue));
             }
-            re = new Ce(ce, W);
+            re = new be(ce, W);
           }
-          var ge, ve, xe, ke = l(T, "gradientUnits", !0) !== "userSpaceOnUse";
+          var ge, ve, we, ke = l(T, "gradientUnits", !0) !== "userSpaceOnUse";
           W ? (ge = d(
             T,
             "cx",
@@ -31438,7 +31449,7 @@ function z8() {
           ), ve = ge.add(
             l(T, "r", !1, !1, ke, "50%"),
             0
-          ), xe = d(T, "fx", "fy", !0, ke)) : (ge = d(
+          ), we = d(T, "fx", "fy", !0, ke)) : (ge = d(
             T,
             "x1",
             "y1",
@@ -31456,7 +31467,7 @@ function z8() {
             "0%"
           ));
           var Ee = Z(
-            new Me(re, ge, ve, xe),
+            new Me(re, ge, ve, we),
             T
           );
           return Ee._scaleToBounds = ke, null;
@@ -31535,8 +31546,8 @@ function z8() {
               var fe = re[ce];
               if (!fe)
                 break;
-              for (var ue = fe.split(/\(\s*/), ge = ue[0].trim(), ve = ue[1].split(/[\s,]+/g), xe = 0, ke = ve.length; xe < ke; xe++)
-                ve[xe] = parseFloat(ve[xe]);
+              for (var ue = fe.split(/\(\s*/), ge = ue[0].trim(), ve = ue[1].split(/[\s,]+/g), we = 0, ke = ve.length; we < ke; we++)
+                ve[we] = parseFloat(ve[we]);
               switch (ge) {
                 case "matrix":
                   ae.append(
@@ -31655,7 +31666,7 @@ function z8() {
           }), he = T.parentNode, fe = T.nextSibling, ce.appendChild(T), ae.appendChild(ce));
           var ue = Je.settings, ge = ue.applyMatrix, ve = ue.insertItems;
           ue.applyMatrix = !1, ue.insertItems = !1;
-          var xe = L[W], ke = xe && xe(T, W, $, H) || null;
+          var we = L[W], ke = we && we(T, W, $, H) || null;
           if (ue.insertItems = ve, ue.applyMatrix = ge, ke) {
             re && !(ke instanceof B) && (ke = Z(ke, T, H));
             var Ee = $.onImport, ze = re && T.getAttribute("data-paper-data");
@@ -31679,8 +31690,8 @@ function z8() {
               Je = W, re = j(ge, $, !0), (!$ || $.insert !== !1) && H._insertItem(i, re);
               var ve = $.onLoad;
               ve && ve(re, ue);
-            } catch (xe) {
-              ce(xe);
+            } catch (we) {
+              ce(we);
             }
           }
           function ce(ue, ge) {
@@ -31692,7 +31703,7 @@ function z8() {
           }
           if (typeof T == "string" && !/^[\s\S]*</.test(T)) {
             var he = s.getElementById(T);
-            he ? ae(he) : Gt.request({
+            he ? ae(he) : qt.request({
               url: T,
               async: !0,
               onLoad: ae,
@@ -32059,7 +32070,7 @@ function H8() {
         for (ne = 0; ne < V.t; ++ne) x[ne + A.t] = A.am(0, V[ne], x, ne, 0, A.t);
         x.s = 0, x.clamp(), this.s != p.s && u.ZERO.subTo(x, x);
       }
-      function we(p) {
+      function Ce(p) {
         for (var x = this.abs(), A = p.t = 2 * x.t; --A >= 0; ) p[A] = 0;
         for (A = 0; A < x.t - 1; ++A) {
           var V = x.am(A, x[A], p, 2 * A, 0, 1);
@@ -32067,7 +32078,7 @@ function H8() {
         }
         p.t > 0 && (p[p.t - 1] += x.am(A, x[A], p, 2 * A, 0, 1)), p.s = 0, p.clamp();
       }
-      function be(p, x, A) {
+      function xe(p, x, A) {
         var V = p.abs();
         if (!(V.t <= 0)) {
           var ne = this.abs();
@@ -32104,16 +32115,16 @@ function H8() {
       function Me(p) {
         return p;
       }
-      function Ce(p) {
+      function be(p) {
         p.divRemTo(this.m, null, p);
       }
-      function Le(p, x, A) {
+      function Pe(p, x, A) {
         p.multiplyTo(x, A), this.reduce(A);
       }
-      function Pe(p, x) {
+      function Le(p, x) {
         p.squareTo(x), this.reduce(x);
       }
-      Ae.prototype.convert = Fe, Ae.prototype.revert = Me, Ae.prototype.reduce = Ce, Ae.prototype.mulTo = Le, Ae.prototype.sqrTo = Pe;
+      Ae.prototype.convert = Fe, Ae.prototype.revert = Me, Ae.prototype.reduce = be, Ae.prototype.mulTo = Pe, Ae.prototype.sqrTo = Le;
       function Ie() {
         if (this.t < 1) return 0;
         var p = this[0];
@@ -32149,7 +32160,7 @@ function H8() {
         p.multiplyTo(x, A), this.reduce(A);
       }
       Oe.prototype.convert = De, Oe.prototype.revert = st, Oe.prototype.reduce = Ke, Oe.prototype.mulTo = lt, Oe.prototype.sqrTo = tt;
-      function ut() {
+      function pt() {
         return (this.t > 0 ? this[0] & 1 : this.s) == 0;
       }
       function ht(p, x) {
@@ -32167,12 +32178,12 @@ function H8() {
         var A;
         return p < 256 || x.isEven() ? A = new Ae(x) : A = new Oe(x), this.exp(p, A);
       }
-      u.prototype.copyTo = R, u.prototype.fromInt = G, u.prototype.fromString = Y, u.prototype.clamp = B, u.prototype.dlShiftTo = U, u.prototype.drShiftTo = de, u.prototype.lShiftTo = te, u.prototype.rShiftTo = le, u.prototype.subTo = me, u.prototype.multiplyTo = ye, u.prototype.squareTo = we, u.prototype.divRemTo = be, u.prototype.invDigit = Ie, u.prototype.isEven = ut, u.prototype.exp = ht, u.prototype.toString = ie, u.prototype.negate = oe, u.prototype.abs = se, u.prototype.compareTo = Q, u.prototype.bitLength = J, u.prototype.mod = Se, u.prototype.modPowInt = xt, u.ZERO = X(0), u.ONE = X(1);
-      function Gt() {
+      u.prototype.copyTo = R, u.prototype.fromInt = G, u.prototype.fromString = Y, u.prototype.clamp = B, u.prototype.dlShiftTo = U, u.prototype.drShiftTo = de, u.prototype.lShiftTo = te, u.prototype.rShiftTo = le, u.prototype.subTo = me, u.prototype.multiplyTo = ye, u.prototype.squareTo = Ce, u.prototype.divRemTo = xe, u.prototype.invDigit = Ie, u.prototype.isEven = pt, u.prototype.exp = ht, u.prototype.toString = ie, u.prototype.negate = oe, u.prototype.abs = se, u.prototype.compareTo = Q, u.prototype.bitLength = J, u.prototype.mod = Se, u.prototype.modPowInt = xt, u.ZERO = X(0), u.ONE = X(1);
+      function qt() {
         var p = g();
         return this.copyTo(p), p;
       }
-      function dt() {
+      function ct() {
         if (this.s < 0) {
           if (this.t == 1) return this[0] - this.DV;
           if (this.t == 0) return -1;
@@ -32182,7 +32193,7 @@ function H8() {
         }
         return (this[1] & (1 << 32 - this.DB) - 1) << this.DB | this[0];
       }
-      function Pt() {
+      function Rt() {
         return this.t == 0 ? this.s : this[0] << 24 >> 24;
       }
       function ot() {
@@ -32352,7 +32363,7 @@ function H8() {
         var x = g();
         return this.subTo(p, x), x;
       }
-      function xe(p) {
+      function we(p) {
         var x = g();
         return this.multiplyTo(p, x), x;
       }
@@ -32397,7 +32408,7 @@ function H8() {
       function He(p) {
         return this.exp(p, new Ge());
       }
-      function ct(p, x, A) {
+      function dt(p, x, A) {
         var V = Math.min(this.t + p.t, x);
         for (A.s = 0, A.t = V; V > 0; ) A[--V] = 0;
         var ne;
@@ -32425,17 +32436,17 @@ function H8() {
       function rt(p) {
         return p;
       }
-      function Lt(p) {
+      function Pt(p) {
         for (p.drShiftTo(this.m.t - 1, this.r2), p.t > this.m.t + 1 && (p.t = this.m.t + 1, p.clamp()), this.mu.multiplyUpperTo(this.r2, this.m.t + 1, this.q3), this.m.multiplyLowerTo(this.q3, this.m.t + 1, this.r2); p.compareTo(this.r2) < 0; ) p.dAddOffset(1, this.m.t + 1);
         for (p.subTo(this.r2, p); p.compareTo(this.m) >= 0; ) p.subTo(this.m, p);
       }
-      function Tt(p, x) {
+      function Lt(p, x) {
         p.squareTo(x), this.reduce(x);
       }
-      function Ot(p, x, A) {
+      function It(p, x, A) {
         p.multiplyTo(x, A), this.reduce(A);
       }
-      it.prototype.convert = at, it.prototype.revert = rt, it.prototype.reduce = Lt, it.prototype.mulTo = Ot, it.prototype.sqrTo = Tt;
+      it.prototype.convert = at, it.prototype.revert = rt, it.prototype.reduce = Pt, it.prototype.mulTo = It, it.prototype.sqrTo = Lt;
       function St(p, x) {
         var A = p.bitLength(), V, ne = X(1), pe;
         if (A <= 0) return ne;
@@ -32462,7 +32473,7 @@ function H8() {
         }
         return pe.revert(ne);
       }
-      function pt(p) {
+      function ut(p) {
         var x = this.s < 0 ? this.negate() : this.clone(), A = p.s < 0 ? p.negate() : p.clone();
         if (x.compareTo(A) < 0) {
           var V = x;
@@ -32531,7 +32542,7 @@ function H8() {
         }
         return !0;
       }
-      u.prototype.chunkSize = si, u.prototype.toRadix = t, u.prototype.fromRadix = r, u.prototype.fromNumber = l, u.prototype.bitwiseTo = y, u.prototype.changeBit = ae, u.prototype.addTo = ue, u.prototype.dMultiply = Be, u.prototype.dAddOffset = Xe, u.prototype.multiplyLowerTo = ct, u.prototype.multiplyUpperTo = et, u.prototype.modInt = kt, u.prototype.millerRabin = ni, u.prototype.clone = Gt, u.prototype.intValue = dt, u.prototype.byteValue = Pt, u.prototype.shortValue = ot, u.prototype.signum = Je, u.prototype.toByteArray = d, u.prototype.equals = h, u.prototype.min = f, u.prototype.max = v, u.prototype.and = S, u.prototype.or = F, u.prototype.xor = N, u.prototype.andNot = Z, u.prototype.not = K, u.prototype.shiftLeft = j, u.prototype.shiftRight = q, u.prototype.getLowestSetBit = $, u.prototype.bitCount = W, u.prototype.testBit = re, u.prototype.setBit = ce, u.prototype.clearBit = he, u.prototype.flipBit = fe, u.prototype.add = ge, u.prototype.subtract = ve, u.prototype.multiply = xe, u.prototype.divide = Ee, u.prototype.remainder = ze, u.prototype.divideAndRemainder = $e, u.prototype.modPow = St, u.prototype.modInverse = Vt, u.prototype.pow = He, u.prototype.gcd = pt, u.prototype.isProbablePrime = gi, u.prototype.square = ke;
+      u.prototype.chunkSize = si, u.prototype.toRadix = t, u.prototype.fromRadix = r, u.prototype.fromNumber = l, u.prototype.bitwiseTo = y, u.prototype.changeBit = ae, u.prototype.addTo = ue, u.prototype.dMultiply = Be, u.prototype.dAddOffset = Xe, u.prototype.multiplyLowerTo = dt, u.prototype.multiplyUpperTo = et, u.prototype.modInt = kt, u.prototype.millerRabin = ni, u.prototype.clone = qt, u.prototype.intValue = ct, u.prototype.byteValue = Rt, u.prototype.shortValue = ot, u.prototype.signum = Je, u.prototype.toByteArray = d, u.prototype.equals = h, u.prototype.min = f, u.prototype.max = v, u.prototype.and = S, u.prototype.or = F, u.prototype.xor = N, u.prototype.andNot = Z, u.prototype.not = K, u.prototype.shiftLeft = j, u.prototype.shiftRight = q, u.prototype.getLowestSetBit = $, u.prototype.bitCount = W, u.prototype.testBit = re, u.prototype.setBit = ce, u.prototype.clearBit = he, u.prototype.flipBit = fe, u.prototype.add = ge, u.prototype.subtract = ve, u.prototype.multiply = we, u.prototype.divide = Ee, u.prototype.remainder = ze, u.prototype.divideAndRemainder = $e, u.prototype.modPow = St, u.prototype.modInverse = Vt, u.prototype.pow = He, u.prototype.gcd = ut, u.prototype.isProbablePrime = gi, u.prototype.square = ke;
       var gt = u;
       gt.prototype.IsNegative = function() {
         return this.compareTo(gt.ZERO) == -1;
@@ -32554,7 +32565,7 @@ function H8() {
       }, gt.prototype.ToDouble = function() {
         return parseFloat(this.toString());
       };
-      var qt = function(p, x) {
+      var Gt = function(p, x) {
         var A;
         if (typeof Object.getOwnPropertyNames > "u") {
           for (A in x.prototype)
@@ -32617,7 +32628,7 @@ function H8() {
       }, e.PolyTree.prototype.Total = function() {
         var p = this.m_AllPolys.length;
         return p > 0 && this.m_Childs[0] !== this.m_AllPolys[0] && p--, p;
-      }, qt(e.PolyTree, e.PolyNode), e.Math_Abs_Int64 = e.Math_Abs_Int32 = e.Math_Abs_Double = function(p) {
+      }, Gt(e.PolyTree, e.PolyNode), e.Math_Abs_Int64 = e.Math_Abs_Int32 = e.Math_Abs_Double = function(p) {
         return Math.abs(p);
       }, e.Math_Max_Int32_Int32 = function(p, x) {
         return Math.max(p, x);
@@ -34113,7 +34124,7 @@ function H8() {
       }, e.Clipper.ClosedPathsFromPolyTree = function(p) {
         var x = new e.Paths();
         return e.Clipper.AddPolyNodeToPaths(p, e.Clipper.NodeType.ntClosed, x), x;
-      }, qt(e.Clipper, e.ClipperBase), e.Clipper.NodeType = {
+      }, Gt(e.Clipper, e.ClipperBase), e.Clipper.NodeType = {
         ntAny: 0,
         ntOpen: 1,
         ntClosed: 2
@@ -34695,7 +34706,7 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
       Math.abs(k.x - _.x) < 1e-9 && Math.abs(k.y - _.y) < 1e-9 && C.pts.pop();
     }
   return a;
-}, Ir = (o) => o.map(({ closed: e, pts: i }) => i.map((n, s) => `${s === 0 ? "M" : "L"}${zt(n.x)},${zt(n.y)}`).join(" ") + (e ? " Z" : "")).join(" "), zt = (o) => Math.round(o * 1e6) / 1e6, zo = (o, e, i, n) => {
+}, Ir = (o) => o.map(({ closed: e, pts: i }) => i.map((n, s) => `${s === 0 ? "M" : "L"}${Ot(n.x)},${Ot(n.y)}`).join(" ") + (e ? " Z" : "")).join(" "), Ot = (o) => Math.round(o * 1e6) / 1e6, zo = (o, e, i, n) => {
   const s = o.x - e.x, a = o.y - e.y, c = i.x - e.x, u = i.y - e.y, g = Math.hypot(s, a), m = Math.hypot(c, u);
   if (g < 1e-9 || m < 1e-9) return null;
   const w = s * u - a * c, C = s * c + a * u, k = Math.atan2(Math.abs(w), C);
@@ -34710,19 +34721,19 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
   const a = [];
   if (i) {
     const c = zo(n[s - 1], n[0], n[1], e);
-    a.push(c ? `M${zt(c.ex)},${zt(c.ey)} A${zt(c.r)} ${zt(c.r)} 0 0 ${c.sweep} ${zt(c.xx)},${zt(c.xy)}` : `M${zt(n[0].x)},${zt(n[0].y)}`);
+    a.push(c ? `M${Ot(c.ex)},${Ot(c.ey)} A${Ot(c.r)} ${Ot(c.r)} 0 0 ${c.sweep} ${Ot(c.xx)},${Ot(c.xy)}` : `M${Ot(n[0].x)},${Ot(n[0].y)}`);
     for (let u = 1; u < s; ++u) {
       const g = zo(n[u - 1], n[u], n[(u + 1) % s], e);
-      a.push(g ? `L${zt(g.ex)},${zt(g.ey)} A${zt(g.r)} ${zt(g.r)} 0 0 ${g.sweep} ${zt(g.xx)},${zt(g.xy)}` : `L${zt(n[u].x)},${zt(n[u].y)}`);
+      a.push(g ? `L${Ot(g.ex)},${Ot(g.ey)} A${Ot(g.r)} ${Ot(g.r)} 0 0 ${g.sweep} ${Ot(g.xx)},${Ot(g.xy)}` : `L${Ot(n[u].x)},${Ot(n[u].y)}`);
     }
     a.push("Z");
   } else {
-    a.push(`M${zt(n[0].x)},${zt(n[0].y)}`);
+    a.push(`M${Ot(n[0].x)},${Ot(n[0].y)}`);
     for (let c = 1; c < s - 1; ++c) {
       const u = zo(n[c - 1], n[c], n[c + 1], e);
-      a.push(u ? `L${zt(u.ex)},${zt(u.ey)} A${zt(u.r)} ${zt(u.r)} 0 0 ${u.sweep} ${zt(u.xx)},${zt(u.xy)}` : `L${zt(n[c].x)},${zt(n[c].y)}`);
+      a.push(u ? `L${Ot(u.ex)},${Ot(u.ey)} A${Ot(u.r)} ${Ot(u.r)} 0 0 ${u.sweep} ${Ot(u.xx)},${Ot(u.xy)}` : `L${Ot(n[c].x)},${Ot(n[c].y)}`);
     }
-    a.push(`L${zt(n[s - 1].x)},${zt(n[s - 1].y)}`);
+    a.push(`L${Ot(n[s - 1].x)},${Ot(n[s - 1].y)}`);
   }
   return a.join(" ");
 }).join(" "), e9 = (o, e, i, n) => {
@@ -34733,7 +34744,7 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
   for (const g of a)
     g.pts = g.pts.map((m) => e(m.x, m.y));
   const c = Math.sqrt(Math.abs(i(1) * n(1))), u = (parseFloat(o.getAttribute(Hn)) || 0) * c;
-  o.setAttribute(Xi, Ir(a)), o.setAttribute(Hn, String(zt(u))), o.setAttribute("d", u > 0 ? z2(a, u) : Ir(a));
+  o.setAttribute(Xi, Ir(a)), o.setAttribute(Hn, String(Ot(u))), o.setAttribute("d", u > 0 ? z2(a, u) : Ir(a));
 }, t9 = (o) => {
   const e = o;
   _l(Xi, e9);
@@ -35177,10 +35188,10 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
         te.push(...le.segs.slice(1, -1));
         return;
       }
-      const ye = U[(me - 1 + de) % de].segs, we = U[(me + 1) % de].segs, be = le.segs[0].clone();
-      be.handleIn = ye[ye.length - 1].handleIn;
+      const ye = U[(me - 1 + de) % de].segs, Ce = U[(me + 1) % de].segs, xe = le.segs[0].clone();
+      xe.handleIn = ye[ye.length - 1].handleIn;
       const Se = le.segs[le.segs.length - 1].clone();
-      Se.handleOut = we[0].handleOut, te.push(be, ...le.segs.slice(1, -1), Se);
+      Se.handleOut = Ce[0].handleOut, te.push(xe, ...le.segs.slice(1, -1), Se);
     }), te;
   }, Q = (U) => new o.Path({ segments: se(U), closed: !0, insert: !1 }), ee = Q(oe(Y[0].items)), J = ie.map((U, de) => Q([{ type: "chord", segs: M[de] }, ...oe(U)]));
   return X(), { core: ee, bites: J };
@@ -35556,7 +35567,7 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
   document.addEventListener("keydown", (C) => {
     C.key === "Escape" && e.getMode() === "imagecrop" && m();
   }), e.startImageCrop = g, e.applyImageCrop = w, e.cancelImageCrop = m, e.isImageCropEligible = l1;
-}, Ft = (o, e, i, n) => {
+}, Nt = (o, e, i, n) => {
   const s = new Map(Object.keys(o).map((a) => [a, o[a]]));
   i(o);
   for (const a of Object.keys(o)) {
@@ -35578,7 +35589,7 @@ const ei = /* @__PURE__ */ dl(Y8), nn = 1e3, Oo = 0.25, W0 = (o) => {
   "mask",
   "stroke"
 ], t7 = 0.8, i7 = 10, ji = "svgedit_clipboard";
-class $t extends EventTarget {
+class zt extends EventTarget {
   /**
    * @param {HTMLElement} container - The container HTML element that should hold the SVG root element
    * @param {module:SVGeditor.configObj.curConfig} config - An object that contains configuration data
@@ -35586,12 +35597,12 @@ class $t extends EventTarget {
   constructor(e, i, n = null) {
     super(), this.initializeSvgCanvasMethods();
     const s = /* @__PURE__ */ new Map();
-    Ft(this, "units", o6, s), this.importIds = {}, this.extensions = {}, this.removedElements = {}, this.idprefix = "svg_", this.encodableImages = {}, this.encodableFonts = {}, this.saveOptions = { round_digits: 2 }, this.curConfig = {
+    Nt(this, "units", o6, s), this.importIds = {}, this.extensions = {}, this.removedElements = {}, this.idprefix = "svg_", this.encodableImages = {}, this.encodableFonts = {}, this.saveOptions = { round_digits: 2 }, this.curConfig = {
       // Default configuration options
       show_outside_canvas: !0,
       selectNew: !0,
       dimensions: [640, 480]
-    }, i && (this.curConfig = $t.mergeDeep(this.curConfig, i)), this.lastGoodImgUrl = `${this.curConfig.imgPath}/logo.svg`;
+    }, i && (this.curConfig = zt.mergeDeep(this.curConfig, i)), this.lastGoodImgUrl = `${this.curConfig.imgPath}/logo.svg`;
     const { dimensions: a } = this.curConfig, c = {
       shape: {
         fill: (this.curConfig.initFill.color === "none" ? "" : "#") + this.curConfig.initFill.color,
@@ -35607,7 +35618,7 @@ class $t extends EventTarget {
         opacity: this.curConfig.initOpacity
       }
     };
-    c.text = $t.mergeDeep({}, c.shape), c.text = $t.mergeDeep(c.text, {
+    c.text = zt.mergeDeep({}, c.shape), c.text = zt.mergeDeep(c.text, {
       fill: "#000000",
       stroke_width: this.curConfig.text?.stroke_width,
       font_size: this.curConfig.text?.font_size,
@@ -35690,13 +35701,13 @@ class $t extends EventTarget {
         filter: null,
         filterHidden: !1
       }
-    }, this.svgdoc = window.document, this.container = e, this.scopeRoot = n, n && (this.$id = v2(n), this.$qq = _2(n), this.$qa = b2(n)), this.svgroot = G6(this.svgdoc, a), e.append(this.svgroot), this.svgContent = this.svgdoc.createElementNS(Ze.SVG, "svg"), Ft(this, "touch", j6, s), Ft(this, "clear", N8, s), this.clearSvgContentElement(), this.current_drawing_ = new Ia(this.svgContent, this.idprefix), Ft(this, "json", y8, s), Ft(this, "domUtils", c6, s), Ft(this, "bboxUtils", v6, s), Ft(this, "sanitize", C8, s), Ft(this, "coords", P8, s), Ft(this, "recalculate", L8, s), Ft(this, "select", T8, s), Ft(this, "undo", X6, s), Ft(this, "selection", Z6, s), this.nsMap = o2(), Ft(this, "path", E6, s), this.uiStrings = {}, this.opacAni = document.createElementNS(Ze.SVG, "animate"), this.opacAni.setAttribute("attributeName", "opacity"), this.opacAni.setAttribute("begin", "indefinite"), this.opacAni.setAttribute("dur", 1), this.opacAni.setAttribute("fill", "freeze"), this.svgroot.appendChild(this.opacAni), Ft(this, "event", m8, s), Ft(this, "textActions", W6, s), Ft(this, "svg", E8, s), Ft(this, "draw", $6, s), Ft(this, "elemGetSet", v8, s);
+    }, this.svgdoc = window.document, this.container = e, this.scopeRoot = n, n && (this.$id = v2(n), this.$qq = _2(n), this.$qa = b2(n)), this.svgroot = G6(this.svgdoc, a), e.append(this.svgroot), this.svgContent = this.svgdoc.createElementNS(Ze.SVG, "svg"), Nt(this, "touch", j6, s), Nt(this, "clear", N8, s), this.clearSvgContentElement(), this.current_drawing_ = new Ia(this.svgContent, this.idprefix), Nt(this, "json", y8, s), Nt(this, "domUtils", c6, s), Nt(this, "bboxUtils", v6, s), Nt(this, "sanitize", C8, s), Nt(this, "coords", P8, s), Nt(this, "recalculate", L8, s), Nt(this, "select", T8, s), Nt(this, "undo", X6, s), Nt(this, "selection", Z6, s), this.nsMap = o2(), Nt(this, "path", E6, s), this.uiStrings = {}, this.opacAni = document.createElementNS(Ze.SVG, "animate"), this.opacAni.setAttribute("attributeName", "opacity"), this.opacAni.setAttribute("begin", "indefinite"), this.opacAni.setAttribute("dur", 1), this.opacAni.setAttribute("fill", "freeze"), this.svgroot.appendChild(this.opacAni), Nt(this, "event", m8, s), Nt(this, "textActions", W6, s), Nt(this, "svg", E8, s), Nt(this, "draw", $6, s), Nt(this, "elemGetSet", v8, s);
     const u = (m) => (m.preventDefault(), !1);
-    e.addEventListener("mousedown", this.mouseDownEvent), e.addEventListener("mousemove", this.mouseMoveEvent), Ts(e, u), e.addEventListener("dblclick", this.dblClickEvent), e.addEventListener("mouseup", this.mouseUpEvent), e.addEventListener("mouseleave", this.mouseOutEvent), e.addEventListener("mousewheel", this.DOMMouseScrollEvent), e.addEventListener("DOMMouseScroll", this.DOMMouseScrollEvent), this.linkControlPoints = this.pathActions.linkControlPoints, Ft(this, "blur", b8, s), Ft(this, "selectedElem", _8, s), Ft(this, "booleanOps", V8, s), Ft(this, "pathOffset", X8, s), Ft(this, "pathSimplify", Q8, s), Ft(this, "cornerRadius", t9, s), Ft(this, "taperStroke", n9, s), Ft(this, "textPath", s9, s), Ft(this, "shapeBuilder", l9, s), Ft(this, "clipMask", f9, s), Ft(this, "cutter", k9, s), Ft(this, "segment", Y9, s), Ft(this, "imageCrop", Q9, s);
+    e.addEventListener("mousedown", this.mouseDownEvent), e.addEventListener("mousemove", this.mouseMoveEvent), Ts(e, u), e.addEventListener("dblclick", this.dblClickEvent), e.addEventListener("mouseup", this.mouseUpEvent), e.addEventListener("mouseleave", this.mouseOutEvent), e.addEventListener("mousewheel", this.DOMMouseScrollEvent), e.addEventListener("DOMMouseScroll", this.DOMMouseScrollEvent), this.linkControlPoints = this.pathActions.linkControlPoints, Nt(this, "blur", b8, s), Nt(this, "selectedElem", _8, s), Nt(this, "booleanOps", V8, s), Nt(this, "pathOffset", X8, s), Nt(this, "pathSimplify", Q8, s), Nt(this, "cornerRadius", t9, s), Nt(this, "taperStroke", n9, s), Nt(this, "textPath", s9, s), Nt(this, "shapeBuilder", l9, s), Nt(this, "clipMask", f9, s), Nt(this, "cutter", k9, s), Nt(this, "segment", Y9, s), Nt(this, "imageCrop", Q9, s);
     const g = (m) => {
       m.newValue && (m.key === `${ji}_startup` ? (localStorage.removeItem(`${ji}_startup`), this.flashStorage()) : m.key === ji && sessionStorage.setItem(ji, m.newValue));
     };
-    this.destroyAbort = new AbortController(), window.addEventListener("storage", g, { signal: this.destroyAbort.signal }), localStorage.setItem(`${ji}_startup`, Math.random()), Ft(this, "paste", R6, s), this.contentW = this.getResolution().w, this.contentH = this.getResolution().h, this.clear(), this.modeChangeEvent();
+    this.destroyAbort = new AbortController(), window.addEventListener("storage", g, { signal: this.destroyAbort.signal }), localStorage.setItem(`${ji}_startup`, Math.random()), Nt(this, "paste", R6, s), this.contentW = this.getResolution().w, this.contentH = this.getResolution().h, this.clear(), this.modeChangeEvent();
   }
   // End constructor
   /**
@@ -36551,7 +36562,7 @@ class $t extends EventTarget {
     this.copySelectedElements(), this.deleteSelectedElements();
   }
   initializeSvgCanvasMethods() {
-    this.stringToHTML = g2, this.insertChildAtIndex = u6, this.getClosest = Dr, this.getParents = jr, this.isLayer = ci.isLayer, this.matrixMultiply = Wt, this.hasMatrixTransform = $r, this.transformListToTransform = wt, this.convertToNum = Ht, this.convertUnit = Ls, this.remapElementIdsAndRefs = h6, this.getUrlFromAttr = hn, this.getHref = Ni, this.setHref = yi, this.assignAttributes = It, this.cleanupElement = Ys, this.getTypeMap = pl, this.history = fn, this.NS = Ze, this.$id = f2, this.$qq = m2, this.$qa = y2, this.$click = Ts, this.encode64 = E2, this.decode64 = A2, this.mergeDeep = Rr;
+    this.stringToHTML = g2, this.insertChildAtIndex = u6, this.getClosest = Dr, this.getParents = jr, this.isLayer = ci.isLayer, this.matrixMultiply = Wt, this.hasMatrixTransform = $r, this.transformListToTransform = wt, this.convertToNum = Ht, this.convertUnit = Ls, this.remapElementIdsAndRefs = h6, this.getUrlFromAttr = hn, this.getHref = Ni, this.setHref = yi, this.assignAttributes = Ft, this.cleanupElement = Ys, this.getTypeMap = pl, this.history = fn, this.NS = Ze, this.$id = f2, this.$qq = m2, this.$qa = y2, this.$click = Ts, this.encode64 = E2, this.decode64 = A2, this.mergeDeep = Rr;
   }
   /**
    * Creates modeChange event, adds it as an svgCanvas property
@@ -36561,24 +36572,24 @@ class $t extends EventTarget {
     this.modeEvent = e;
   }
 }
-$t.$id = f2;
-$t.$qq = m2;
-$t.$qa = y2;
-$t.scopedId = v2;
-$t.scopedQq = _2;
-$t.scopedQa = b2;
-$t.$click = Ts;
-$t.encode64 = E2;
-$t.decode64 = A2;
-$t.mergeDeep = Rr;
-$t.getClosest = Dr;
-$t.getParents = jr;
-$t.blankPageObjectURL = T6;
-$t.Paint = Ti;
-$t.getTypeMap = pl;
-$t.convertToNum = Ht;
-$t.isValidUnit = l6;
-$t.convertUnit = Ls;
+zt.$id = f2;
+zt.$qq = m2;
+zt.$qa = y2;
+zt.scopedId = v2;
+zt.scopedQq = _2;
+zt.scopedQa = b2;
+zt.$click = Ts;
+zt.encode64 = E2;
+zt.decode64 = A2;
+zt.mergeDeep = Rr;
+zt.getClosest = Dr;
+zt.getParents = jr;
+zt.blankPageObjectURL = T6;
+zt.Paint = Ti;
+zt.getTypeMap = pl;
+zt.convertToNum = Ht;
+zt.isValidUnit = l6;
+zt.convertUnit = Ls;
 const n7 = `<style>:not(:defined){display: none;}body::-webkit-scrollbar{background: lightgray;}body::-webkit-scrollbar-thumb{background: darkgray;}
 #svg_docprops #svg_docprops_container {
 padding: 10px;background-color: #5a6162;color: #c5c5c5;border: 1px outset #777;opacity: 1.0;font-family: Verdana,Helvetica,sans-serif;font-size: .8em;z-index: 20001;}
@@ -36599,7 +36610,7 @@ padding: 5px;margin: 5px;border: 1px solid #DDD;}
 #svg_docprops_container label {
 display: block;margin: .5em;}
 #svg_docprops::backdrop {
-background: rgba(0,0,0,0.2);}</style><dialog id="svg_docprops" aria-label="Sample dialog"><div id="svg_docprops_container"><div id="tool_docprops_back" class="toolbar_button"><button id="tool_docprops_save"></button><button id="tool_docprops_cancel"></button></div><fieldset id="svg_docprops_docprops"><legend id="svginfo_image_props"></legend><label><span id="svginfo_title"></span><input type="text" id="canvas_title"/></label><fieldset id="change_resolution"><legend id="svginfo_dim"></legend><label><span id="svginfo_width"></span><input type="text" id="canvas_width" size="6"/></label><label><span id="svginfo_height"></span><input type="text" id="canvas_height" size="6"/></label><label><select id="resolution"><option id="selectedPredefined" selected="selected"></option><option>640x480</option><option>800x600</option><option>1024x768</option><option>1280x960</option><option>1600x1200</option><option id="fitToContent" value="content"></option></select></label></fieldset><fieldset id="image_save_opts"><legend id="includedImages"></legend><label><input type="radio" id="image_embed" name="image_opt" value="embed" checked="checked"/><span id="image_opt_embed"></span></label><label><input type="radio" id="image_ref" name="image_opt" value="ref"/><span id="image_opt_ref"></span></label></fieldset></fieldset></div></dialog>`, { isValidUnit: d1 } = $t, q2 = document.createElement("template");
+background: rgba(0,0,0,0.2);}</style><dialog id="svg_docprops" aria-label="Sample dialog"><div id="svg_docprops_container"><div id="tool_docprops_back" class="toolbar_button"><button id="tool_docprops_save"></button><button id="tool_docprops_cancel"></button></div><fieldset id="svg_docprops_docprops"><legend id="svginfo_image_props"></legend><label><span id="svginfo_title"></span><input type="text" id="canvas_title"/></label><fieldset id="change_resolution"><legend id="svginfo_dim"></legend><label><span id="svginfo_width"></span><input type="text" id="canvas_width" size="6"/></label><label><span id="svginfo_height"></span><input type="text" id="canvas_height" size="6"/></label><label><select id="resolution"><option id="selectedPredefined" selected="selected"></option><option>640x480</option><option>800x600</option><option>1024x768</option><option>1280x960</option><option>1600x1200</option><option id="fitToContent" value="content"></option></select></label></fieldset><fieldset id="image_save_opts"><legend id="includedImages"></legend><label><input type="radio" id="image_embed" name="image_opt" value="embed" checked="checked"/><span id="image_opt_embed"></span></label><label><input type="radio" id="image_ref" name="image_opt" value="ref"/><span id="image_opt_ref"></span></label></fieldset></fieldset></div></dialog>`, { isValidUnit: d1 } = zt, q2 = document.createElement("template");
 q2.innerHTML = n7;
 class r7 extends HTMLElement {
   /**
@@ -39758,7 +39769,7 @@ background: var(--ruler-color);grid-area: rulerX;height: 15px;border-bottom: 1px
 #ruler_y {
 background: var(--ruler-color);grid-area: rulerY;width: 15px;border-right: 1px solid;border-top: 1px solid #777;overflow: hidden;}
 #ruler_x canvas {
-float: left;}</style><div id="ruler_corner"></div><div id="ruler_x"><div><canvas height="15"></canvas></div></div><div id="ruler_y"><div><canvas width="15"></canvas></div></div>`, { getTypeMap: gm } = $t;
+float: left;}</style><div id="ruler_corner"></div><div id="ruler_x"><div><canvas height="15"></canvas></div></div><div id="ruler_y"><div><canvas width="15"></canvas></div></div>`, { getTypeMap: gm } = zt;
 class fm {
   /**
    * @type {Module}
@@ -40623,11 +40634,11 @@ function km() {
           }), this.project = null, this.projects = [], this.tools = [], this._id = t._id++, t._scopes[this._id] = this;
           var r = t.prototype;
           if (!this.support) {
-            var l = dt.getContext(1, 1) || {};
+            var l = ct.getContext(1, 1) || {};
             r.support = {
               nativeDash: "setLineDash" in l || "mozDash" in l,
-              nativeBlendModes: Pt.nativeModes
-            }, dt.release(l);
+              nativeBlendModes: Rt.nativeModes
+            }, ct.release(l);
           }
           if (!this.agent) {
             var d = e.navigator.userAgent.toLowerCase(), h = (/(darwin|win|mac|linux|freebsd|sunos)/.exec(d) || [])[0], f = h === "darwin" ? "mac" : h, v = r.agent = r.browser = { platform: f };
@@ -40669,7 +40680,7 @@ function km() {
           return Je = this, this.project = new X(t), this;
         },
         createCanvas: function(t, r) {
-          return dt.getCanvas(t, r);
+          return ct.getCanvas(t, r);
         },
         activate: function() {
           Je = this;
@@ -40793,8 +40804,8 @@ function km() {
                 }
               } else
                 for (var fe = T[N], ue = T[P], ce = 0; ce < K.length; ce++) {
-                  var he = K[ce], ge = v[he], ve = he < y, xe = f || he >= y;
-                  (h || (H && xe || W && ve) && fe >= ge[P] - l && ue <= ge[N] + l) && (H && xe && re.push(
+                  var he = K[ce], ge = v[he], ve = he < y, we = f || he >= y;
+                  (h || (H && we || W && ve) && fe >= ge[P] - l && ue <= ge[N] + l) && (H && we && re.push(
                     f ? he : he - y
                   ), W && ve && j[he].push($));
                 }
@@ -40965,8 +40976,8 @@ function km() {
                 l(F) * T * T > l(D / T) && (H = -D / T, $ = (H - N) / T);
               }
             }
-            var xe = C.solveQuadratic(F, $, H, Z, K, j), ke = K == null;
-            return isFinite(T) && (xe === 0 || xe > 0 && T !== Z[0] && T !== Z[1]) && (ke || T > K - v && T < j + v) && (Z[xe++] = ke ? T : b(T, K, j)), xe;
+            var we = C.solveQuadratic(F, $, H, Z, K, j), ke = K == null;
+            return isFinite(T) && (we === 0 || we > 0 && T !== Z[0] && T !== Z[1]) && (ke || T > K - v && T < j + v) && (Z[we++] = ke ? T : b(T, K, j)), we;
           }
         };
       }(), k = {
@@ -41903,9 +41914,9 @@ function km() {
         _reference: "project",
         _compactSerialize: !0,
         initialize: function(r) {
-          g.call(this, !0), this._children = [], this._namedChildren = {}, this._activeLayer = null, this._currentStyle = new Pe(null, null, this), this._view = De.create(
+          g.call(this, !0), this._children = [], this._namedChildren = {}, this._activeLayer = null, this._currentStyle = new Le(null, null, this), this._view = De.create(
             this,
-            r || dt.getCanvas(1, 1)
+            r || ct.getCanvas(1, 1)
           ), this._selectionItems = {}, this._selectionCount = 0, this._updateVersion = 0;
         },
         _serialize: function(t, r) {
@@ -42143,7 +42154,7 @@ function km() {
           },
           _initialize: function(t, r) {
             var l = t && a.isPlainObject(t), d = l && t.internal === !0, h = this._matrix = new R(), f = l && t.project || Je.project, v = Je.settings;
-            return this._id = d ? null : k.get(), this._parent = this._index = null, this._applyMatrix = this._canApplyMatrix && v.applyMatrix, r && h.translate(r), h._owner = this, this._style = new Pe(f._currentStyle, this, f), d || l && t.insert == !1 || !v.insertItems && !(l && t.insert == !0) ? this._setProject(f) : (l && t.parent || f)._insertItem(i, this, !0), l && t !== Y.NO_INSERT && t !== Y.INSERT && this.set(t, {
+            return this._id = d ? null : k.get(), this._parent = this._index = null, this._applyMatrix = this._canApplyMatrix && v.applyMatrix, r && h.translate(r), h._owner = this, this._style = new Le(f._currentStyle, this, f), d || l && t.insert == !1 || !v.insertItems && !(l && t.insert == !0) ? this._setProject(f) : (l && t.parent || f)._insertItem(i, this, !0), l && t !== Y.NO_INSERT && t !== Y.INSERT && this.set(t, {
               internal: !0,
               insert: !0,
               project: !0,
@@ -43090,14 +43101,14 @@ function km() {
               var d = r.matrices, h = r.viewMatrix, f = this._matrix, v = d[d.length - 1].appended(f);
               if (v.isInvertible()) {
                 h = h ? h.appended(v) : v, d.push(v), r.updateMatrix && (this._globalMatrix = v);
-                var y = this._blendMode, b = C.clamp(this._opacity, 0, 1), S = y === "normal", L = Pt.nativeModes[y], F = S && b === 1 || r.dontStart || r.clip || (L || S && b < 1) && this._canComposite(), P = r.pixelRatio || 1, N, D, Z;
+                var y = this._blendMode, b = C.clamp(this._opacity, 0, 1), S = y === "normal", L = Rt.nativeModes[y], F = S && b === 1 || r.dontStart || r.clip || (L || S && b < 1) && this._canComposite(), P = r.pixelRatio || 1, N, D, Z;
                 if (!F) {
                   var K = this.getStrokeBounds(h);
                   if (!K.width || !K.height) {
                     d.pop();
                     return;
                   }
-                  Z = r.offset, D = r.offset = K.getTopLeft().floor(), N = t, t = dt.getContext(K.getSize().ceil().add(1).multiply(P)), P !== 1 && t.scale(P, P);
+                  Z = r.offset, D = r.offset = K.getTopLeft().floor(), N = t, t = ct.getContext(K.getSize().ceil().add(1).multiply(P)), P !== 1 && t.scale(P, P);
                 }
                 t.save();
                 var j = l ? l.appended(f) : this._canScaleStroke && !this.getStrokeScaling(!0) && h, q = !F && r.clipItem, T = !j || q;
@@ -43106,19 +43117,19 @@ function km() {
                   var $ = r.offset;
                   $ && t.translate(-$.x, -$.y);
                 }
-                this._draw(t, r, h, j), t.restore(), d.pop(), r.clip && !r.dontFinish && t.clip(this.getFillRule()), F || (Pt.process(
+                this._draw(t, r, h, j), t.restore(), d.pop(), r.clip && !r.dontFinish && t.clip(this.getFillRule()), F || (Rt.process(
                   y,
                   t,
                   N,
                   b,
                   D.subtract(Z).multiply(P)
-                ), dt.release(t), r.offset = Z);
+                ), ct.release(t), r.offset = Z);
               }
             }
           },
           _isUpdated: function(t) {
             var r = this._parent;
-            if (r instanceof we)
+            if (r instanceof Ce)
               return r._isUpdated(t);
             var l = this._updateVersion === t;
             return !l && r && r._visible && r._isUpdated(t) && (this._updateVersion = t, l = !0), l;
@@ -43533,7 +43544,7 @@ function km() {
                 d = f;
               else if (f) {
                 var v = E.read(arguments);
-                v.isZero() || (d = dt.getCanvas(v));
+                v.isZero() || (d = ct.getCanvas(v));
               }
             }
             d ? this.setImage(d) : this.setSource(r);
@@ -43548,7 +43559,7 @@ function km() {
           if (r)
             this._setImage(r);
           else if (l) {
-            var d = dt.getCanvas(t._size);
+            var d = ct.getCanvas(t._size);
             d.getContext("2d").drawImage(l, 0, 0), this._setImage(d);
           }
           this._crossOrigin = t._crossOrigin;
@@ -43568,7 +43579,7 @@ function km() {
             r && this.clear();
           else if (l.width > 0 && l.height > 0) {
             var d = !r && this.getElement();
-            this._setImage(dt.getCanvas(l)), d && this.getContext(!0).drawImage(
+            this._setImage(ct.getCanvas(l)), d && this.getContext(!0).drawImage(
               d,
               0,
               0,
@@ -43576,7 +43587,7 @@ function km() {
               l.height
             );
           } else
-            this._canvas && dt.release(this._canvas), this._size = l.clone();
+            this._canvas && ct.release(this._canvas), this._size = l.clone();
         },
         getWidth: function() {
           return this._size ? this._size.width : 0;
@@ -43622,18 +43633,18 @@ function km() {
           });
         },
         _setImage: function(t) {
-          this._canvas && dt.release(this._canvas), t && t.getContext ? (this._image = null, this._canvas = t, this._loaded = !0) : (this._image = t, this._canvas = null, this._loaded = !!(t && t.src && t.complete)), this._size = new E(
+          this._canvas && ct.release(this._canvas), t && t.getContext ? (this._image = null, this._canvas = t, this._loaded = !0) : (this._image = t, this._canvas = null, this._loaded = !!(t && t.src && t.complete)), this._size = new E(
             t ? t.naturalWidth || t.width : 0,
             t ? t.naturalHeight || t.height : 0
           ), this._context = null, this._changed(1033);
         },
         getCanvas: function() {
           if (!this._canvas) {
-            var t = dt.getContext(this._size);
+            var t = ct.getContext(this._size);
             try {
               this._image && t.drawImage(this._image, 0, 0), this._canvas = t.canvas;
             } catch {
-              dt.release(t);
+              ct.release(t);
             }
           }
           return this._canvas;
@@ -43674,7 +43685,7 @@ function km() {
       }, {
         beans: !1,
         getSubCanvas: function() {
-          var t = I.read(arguments), r = dt.getContext(t.getSize());
+          var t = I.read(arguments), r = ct.getContext(t.getSize());
           return r.drawImage(
             this.getCanvas(),
             t.x,
@@ -43707,7 +43718,7 @@ function km() {
           if (t ? t instanceof me ? (l = t, r = t.getBounds()) : typeof t == "object" && ("width" in t ? r = new I(t) : "x" in t && (r = new I(t.x - 0.5, t.y - 0.5, 1, 1))) : r = this.getBounds(), !r)
             return null;
           var d = 32, h = Math.min(r.width, d), f = Math.min(r.height, d), v = se._sampleContext;
-          v ? v.clearRect(0, 0, d + 1, d + 1) : v = se._sampleContext = dt.getContext(
+          v ? v.clearRect(0, 0, d + 1, d + 1) : v = se._sampleContext = ct.getContext(
             new E(d)
           ), v.save();
           var y = new R().scale(h / r.width, f / r.height).translate(-r.x, -r.y);
@@ -44580,10 +44591,10 @@ function km() {
               var h = d[0], f = d[1], v = d[2], y = d[3], b = d[4], S = d[5], L = d[6], F = d[7], P = h * (F - S) + f * (b - L) + L * S - F * b, N = v * (f - F) + y * (L - h) + h * F - f * L, D = b * (y - f) + S * (h - v) + v * f - y * h, Z = 3 * D, K = Z - N, j = K - N + P, q = Math.sqrt(j * j + K * K + Z * Z), T = q !== 0 ? 1 / q : 0, $ = C.isZero, H = "serpentine";
               j *= T, K *= T, Z *= T;
               function W(he, fe, ue) {
-                var ge = fe !== i, ve = ge && fe > 0 && fe < 1, xe = ge && ue > 0 && ue < 1;
-                return ge && (!(ve || xe) || he === "loop" && !(ve && xe)) && (he = "arch", ve = xe = !1), {
+                var ge = fe !== i, ve = ge && fe > 0 && fe < 1, we = ge && ue > 0 && ue < 1;
+                return ge && (!(ve || we) || he === "loop" && !(ve && we)) && (he = "arch", ve = we = !1), {
                   type: he,
-                  roots: ve || xe ? ve && xe ? fe < ue ? [fe, ue] : [ue, fe] : [ve ? fe : ue] : null
+                  roots: ve || we ? ve && we ? fe < ue ? [fe, ue] : [ue, fe] : [ve ? fe : ue] : null
                 };
               }
               if ($(j))
@@ -44682,31 +44693,31 @@ function km() {
           function r(N, D, Z, K, j, q, T, $, H, W, re, ae, ce) {
             if (++H >= 4096 || ++$ >= 40)
               return H;
-            var he = 1e-9, fe = D[0], ue = D[1], ge = D[6], ve = D[7], xe = G.getSignedDistance, ke = xe(fe, ue, ge, ve, D[2], D[3]), Ee = xe(fe, ue, ge, ve, D[4], D[5]), ze = ke * Ee > 0 ? 3 / 4 : 4 / 9, $e = ze * Math.min(0, ke, Ee), Be = ze * Math.max(0, ke, Ee), Xe = xe(fe, ue, ge, ve, N[0], N[1]), Ge = xe(fe, ue, ge, ve, N[2], N[3]), Ve = xe(fe, ue, ge, ve, N[4], N[5]), qe = xe(fe, ue, ge, ve, N[6], N[7]), Ue = l(Xe, Ge, Ve, qe), He = Ue[0], ct = Ue[1], et, it;
-            if (ke === 0 && Ee === 0 && Xe === 0 && Ge === 0 && Ve === 0 && qe === 0 || (et = d(He, ct, $e, Be)) == null || (it = d(
+            var he = 1e-9, fe = D[0], ue = D[1], ge = D[6], ve = D[7], we = G.getSignedDistance, ke = we(fe, ue, ge, ve, D[2], D[3]), Ee = we(fe, ue, ge, ve, D[4], D[5]), ze = ke * Ee > 0 ? 3 / 4 : 4 / 9, $e = ze * Math.min(0, ke, Ee), Be = ze * Math.max(0, ke, Ee), Xe = we(fe, ue, ge, ve, N[0], N[1]), Ge = we(fe, ue, ge, ve, N[2], N[3]), Ve = we(fe, ue, ge, ve, N[4], N[5]), qe = we(fe, ue, ge, ve, N[6], N[7]), Ue = l(Xe, Ge, Ve, qe), He = Ue[0], dt = Ue[1], et, it;
+            if (ke === 0 && Ee === 0 && Xe === 0 && Ge === 0 && Ve === 0 && qe === 0 || (et = d(He, dt, $e, Be)) == null || (it = d(
               He.reverse(),
-              ct.reverse(),
+              dt.reverse(),
               $e,
               Be
             )) == null)
               return H;
             var at = W + (re - W) * et, rt = W + (re - W) * it;
             if (Math.max(ce - ae, rt - at) < he) {
-              var Lt = (at + rt) / 2, Tt = (ae + ce) / 2;
+              var Pt = (at + rt) / 2, Lt = (ae + ce) / 2;
               t(
                 j,
                 q,
                 T ? K : Z,
-                T ? Tt : Lt,
+                T ? Lt : Pt,
                 T ? Z : K,
-                T ? Lt : Tt
+                T ? Pt : Lt
               );
             } else {
               N = te.getPart(N, et, it);
-              var Ot = ce - ae;
+              var It = ce - ae;
               if (it - et > 0.8)
-                if (rt - at > Ot) {
-                  var St = te.subdivide(N, 0.5), Lt = (at + rt) / 2;
+                if (rt - at > It) {
+                  var St = te.subdivide(N, 0.5), Pt = (at + rt) / 2;
                   H = r(
                     D,
                     St[0],
@@ -44720,7 +44731,7 @@ function km() {
                     ae,
                     ce,
                     at,
-                    Lt
+                    Pt
                   ), H = r(
                     D,
                     St[1],
@@ -44733,11 +44744,11 @@ function km() {
                     H,
                     ae,
                     ce,
-                    Lt,
+                    Pt,
                     rt
                   );
                 } else {
-                  var St = te.subdivide(D, 0.5), Tt = (ae + ce) / 2;
+                  var St = te.subdivide(D, 0.5), Lt = (ae + ce) / 2;
                   H = r(
                     St[0],
                     N,
@@ -44749,7 +44760,7 @@ function km() {
                     $,
                     H,
                     ae,
-                    Tt,
+                    Lt,
                     at,
                     rt
                   ), H = r(
@@ -44762,14 +44773,14 @@ function km() {
                     !T,
                     $,
                     H,
-                    Tt,
+                    Lt,
                     ce,
                     at,
                     rt
                   );
                 }
               else
-                Ot === 0 || Ot >= he ? H = r(
+                It === 0 || It >= he ? H = r(
                   D,
                   N,
                   K,
@@ -44909,14 +44920,14 @@ function km() {
                   1
                 ), !fe || j.length === ge)
                   for (var re = 0; re < 4; re++) {
-                    var ve = re >> 1, xe = re & 1, ke = ve * 6, Ee = xe * 6, ze = new _(N[ke], N[ke + 1]), $e = new _(D[Ee], D[Ee + 1]);
+                    var ve = re >> 1, we = re & 1, ke = ve * 6, Ee = we * 6, ze = new _(N[ke], N[ke + 1]), $e = new _(D[Ee], D[Ee + 1]);
                     ze.isClose($e, T) && t(
                       j,
                       q,
                       Z,
                       ve,
                       K,
-                      xe
+                      we
                     );
                   }
               }
@@ -44953,12 +44964,12 @@ function km() {
             ), ue = 0; ue < H; ue++) {
               var ge = N[ue], ve = re[ue];
               $ && S(ve, ge, ce, Z);
-              var xe = fe[ue];
-              if (xe)
-                for (var ke = 0; ke < xe.length; ke++) {
+              var we = fe[ue];
+              if (we)
+                for (var ke = 0; ke < we.length; ke++) {
                   if (q && ce.length)
                     return ce;
-                  var Ee = xe[ke];
+                  var Ee = we[ke];
                   if (!$ || Ee > ue) {
                     var ze = D[Ee], $e = ae[Ee];
                     b(
@@ -44986,36 +44997,36 @@ function km() {
               return null;
             if ($ ^ H)
               return null;
-            for (var ve = [N, D], xe = [], ke = 0; ke < 4 && xe.length < 2; ke++) {
+            for (var ve = [N, D], we = [], ke = 0; ke < 4 && we.length < 2; ke++) {
               var Ee = ke & 1, ze = Ee ^ 1, $e = ke >> 1, Be = te.getTimeOf(ve[Ee], new _(
                 ve[ze][$e ? 6 : 0],
                 ve[ze][$e ? 7 : 1]
               ));
               if (Be != null) {
                 var Xe = Ee ? [$e, Be] : [Be, $e];
-                (!xe.length || K(Xe[0] - xe[0][0]) > q && K(Xe[1] - xe[0][1]) > q) && xe.push(Xe);
+                (!we.length || K(Xe[0] - we[0][0]) > q && K(Xe[1] - we[0][1]) > q) && we.push(Xe);
               }
-              if (ke > 2 && !xe.length)
+              if (ke > 2 && !we.length)
                 break;
             }
-            if (xe.length !== 2)
-              xe = null;
+            if (we.length !== 2)
+              we = null;
             else if (!W) {
-              var Ge = te.getPart(N, xe[0][0], xe[1][0]), Ve = te.getPart(D, xe[0][1], xe[1][1]);
-              (K(Ve[2] - Ge[2]) > T || K(Ve[3] - Ge[3]) > T || K(Ve[4] - Ge[4]) > T || K(Ve[5] - Ge[5]) > T) && (xe = null);
+              var Ge = te.getPart(N, we[0][0], we[1][0]), Ve = te.getPart(D, we[0][1], we[1][1]);
+              (K(Ve[2] - Ge[2]) > T || K(Ve[3] - Ge[3]) > T || K(Ve[4] - Ge[4]) > T || K(Ve[5] - Ge[5]) > T) && (we = null);
             }
-            return xe;
+            return we;
           }
           function P(N, D) {
-            var Z = N[0], K = N[1], j = N[2], q = N[3], T = N[4], $ = N[5], H = N[6], W = N[7], re = D.normalize(), ae = re.x, ce = re.y, he = 3 * H - 9 * T + 9 * j - 3 * Z, fe = 3 * W - 9 * $ + 9 * q - 3 * K, ue = 6 * T - 12 * j + 6 * Z, ge = 6 * $ - 12 * q + 6 * K, ve = 3 * j - 3 * Z, xe = 3 * q - 3 * K, ke = 2 * he * ce - 2 * fe * ae, Ee = [];
+            var Z = N[0], K = N[1], j = N[2], q = N[3], T = N[4], $ = N[5], H = N[6], W = N[7], re = D.normalize(), ae = re.x, ce = re.y, he = 3 * H - 9 * T + 9 * j - 3 * Z, fe = 3 * W - 9 * $ + 9 * q - 3 * K, ue = 6 * T - 12 * j + 6 * Z, ge = 6 * $ - 12 * q + 6 * K, ve = 3 * j - 3 * Z, we = 3 * q - 3 * K, ke = 2 * he * ce - 2 * fe * ae, Ee = [];
             if (Math.abs(ke) < C.CURVETIME_EPSILON) {
-              var ze = he * xe - fe * ve, ke = he * ge - fe * ue;
+              var ze = he * we - fe * ve, ke = he * ge - fe * ue;
               if (ke != 0) {
                 var $e = -ze / ke;
                 $e >= 0 && $e <= 1 && Ee.push($e);
               }
             } else {
-              var Be = (ue * ue - 4 * he * ve) * ce * ce + (-2 * ue * ge + 4 * fe * ve + 4 * he * xe) * ae * ce + (ge * ge - 4 * fe * xe) * ae * ae, Xe = ue * ce - ge * ae;
+              var Be = (ue * ue - 4 * he * ve) * ce * ce + (-2 * ue * ge + 4 * fe * ve + 4 * he * we) * ae * ce + (ge * ge - 4 * fe * we) * ae * ae, Xe = ue * ce - ge * ae;
               if (Be >= 0 && ke != 0) {
                 var Ge = Math.sqrt(Be), Ve = -(Xe + Ge) / ke, qe = (-Xe + Ge) / ke;
                 Ve >= 0 && Ve <= 1 && Ee.push(Ve), qe >= 0 && qe <= 1 && Ee.push(qe);
@@ -45238,7 +45249,7 @@ function km() {
               var h = l[0];
               d = h && Array.isArray(h[0]);
             } else r && (d = (r.match(/m/gi) || []).length > 1 || /z\s*\S+/i.test(r));
-            var f = d ? we : ye;
+            var f = d ? Ce : ye;
             return new f(t);
           }
         },
@@ -45428,7 +45439,7 @@ function km() {
           },
           getStyle: function() {
             var t = this._parent;
-            return (t instanceof we ? t : this)._style;
+            return (t instanceof Ce ? t : this)._style;
           },
           getSegments: function() {
             return this._segments;
@@ -45700,7 +45711,7 @@ function km() {
             this._curves = null, this._changed(9);
           },
           flatten: function(t) {
-            for (var r = new be(this, t || 0.25, 256, !0), l = r.parts, d = l.length, h = [], f = 0; f < d; f++)
+            for (var r = new xe(this, t || 0.25, 256, !0), l = r.parts, d = l.length, h = [], f = 0; f < d; f++)
               h.push(new U(l[f].curve.slice(0, 2)));
             !this._closed && d > 0 && h.push(new U(l[d - 1].curve.slice(6))), this.setSegments(h);
           },
@@ -45710,15 +45721,15 @@ function km() {
           },
           smooth: function(t) {
             var r = this, l = t || {}, d = l.type || "asymmetric", h = this._segments, f = h.length, v = this._closed;
-            function y(He, ct) {
+            function y(He, dt) {
               var et = He && He.index;
               if (et != null) {
                 var it = He.path;
                 if (it && it !== r)
                   throw new Error(He._class + " " + et + " of " + it + " is not part of " + r);
-                ct && He instanceof te && et++;
+                dt && He instanceof te && et++;
               } else
-                et = typeof He == "number" ? He : ct;
+                et = typeof He == "number" ? He : dt;
               return Math.min(et < 0 && v ? et % f : et < 0 ? et + f : et, f - 1);
             }
             var b = v && l.from === i && l.to === i, S = y(l.from, 0), L = y(l.to, f - 1);
@@ -45736,7 +45747,7 @@ function km() {
               for (var $ = 0, H = S - j; $ <= Z; $++, H++)
                 T[$] = h[(H < 0 ? H + f : H) % f]._point;
               for (var W = T[0]._x + 2 * T[1]._x, re = T[0]._y + 2 * T[1]._y, ae = 2, ce = Z - 1, he = [W], fe = [re], ue = [ae], ge = [], ve = [], $ = 1; $ < Z; $++) {
-                var xe = $ < ce, ke = xe || P ? 1 : 2, Ee = xe ? 4 : P ? 2 : 7, ze = xe ? 4 : P ? 3 : 8, $e = xe ? 2 : P ? 0 : 1, Be = ke / ae;
+                var we = $ < ce, ke = we || P ? 1 : 2, Ee = we ? 4 : P ? 2 : 7, ze = we ? 4 : P ? 3 : 8, $e = we ? 2 : P ? 0 : 1, Be = ke / ae;
                 ae = ue[$] = Ee - Be, W = he[$] = ze * T[$]._x + $e * T[$ + 1]._x - Be * W, re = fe[$] = ze * T[$]._y + $e * T[$ + 1]._y - Be * re;
               }
               ge[ce] = he[ce] / ue[ce], ve[ce] = fe[ce] / ue[ce];
@@ -45801,7 +45812,7 @@ function km() {
           },
           toPath: "#clone",
           compare: function t(r) {
-            if (!r || r instanceof we)
+            if (!r || r instanceof Ce)
               return t.base.call(this, r);
             var l = this.getCurves(), d = r.getCurves(), h = l.length, f = d.length;
             if (!h || !f)
@@ -45841,11 +45852,11 @@ function km() {
             function H(ge, ve) {
               return t.subtract(ge).divide(ve).length <= 1;
             }
-            function W(ge, ve, xe) {
+            function W(ge, ve, we) {
               if (!r.selected || ve.isSelected()) {
                 var ke = ge._point;
                 if (ve !== ke && (ve = ve.add(ke)), H(ve, L))
-                  return new J(xe, h, {
+                  return new J(we, h, {
                     segment: ge,
                     point: ve
                   });
@@ -45879,8 +45890,8 @@ function km() {
                 ae,
                 !0
               ), !D.isEmpty()) {
-                var xe;
-                return D.contains(t) || (xe = D.getNearestLocation(t)) && H(xe.getPoint(), S);
+                var we;
+                return D.contains(t) || (we = D.getNearestLocation(t)) && H(we.getPoint(), S);
               }
             }
             if (r.ends && !r.segments && !b) {
@@ -46018,7 +46029,7 @@ function km() {
               if (!y && (S || L) && (this._setStyles(l, d, h), S && (l.fill(b.getFillRule()), l.shadowColor = "rgba(0,0,0,0)"), L)) {
                 if (P) {
                   v || l.beginPath();
-                  for (var D = new be(
+                  for (var D = new xe(
                     this,
                     0.25,
                     32,
@@ -46107,7 +46118,7 @@ function km() {
                   y.add(v).divide(2),
                   v.subtract(y).rotate(90),
                   !0
-                ), xe = new G(f, v), ke = xe.getSide(y);
+                ), we = new G(f, v), ke = we.getSide(y);
                 if (L = ge.intersect(ve, !0), !L) {
                   if (!ke)
                     return this.lineTo(v);
@@ -46116,7 +46127,7 @@ function km() {
                   );
                 }
                 P = f.subtract(L), F = P.getDirectedAngle(v.subtract(L));
-                var Ee = xe.getSide(L, !0);
+                var Ee = we.getSide(L, !0);
                 Ee === 0 ? F = ke * l(F) : ke === Ee && (F += F < 0 ? 360 : -360);
               }
               if (F) {
@@ -46125,8 +46136,8 @@ function km() {
                   if (Ue < Be && (He = P.rotate(90).multiply(Ve), N ? (T = N._transformPoint(P), He = N._transformPoint(P.add(He)).subtract(T)) : T = L.add(P)), !Ue)
                     h.setHandleOut(He);
                   else {
-                    var ct = P.rotate(-90).multiply(Ve);
-                    N && (ct = N._transformPoint(P.add(ct)).subtract(T)), qe.push(new U(T, ct, He));
+                    var dt = P.rotate(-90).multiply(Ve);
+                    N && (dt = N._transformPoint(P.add(dt)).subtract(T)), qe.push(new U(T, dt, He));
                   }
                   P = P.rotate(Xe);
                 }
@@ -46382,7 +46393,7 @@ function km() {
           }
         };
       }() });
-      var we = me.extend(
+      var Ce = me.extend(
         {
           _class: "CompoundPath",
           _serializeFields: {
@@ -46397,7 +46408,7 @@ function km() {
             h && typeof h[0] == "number" && (d = [d]);
             for (var f = l.length - 1; f >= 0; f--) {
               var v = d[f];
-              d === l && !(v instanceof ye) && (d = a.slice(d)), Array.isArray(v) ? d[f] = new ye({ segments: v, insert: !1 }) : v instanceof we && (d.splice.apply(d, [f, 1].concat(v.removeChildren())), v.remove());
+              d === l && !(v instanceof ye) && (d = a.slice(d)), Array.isArray(v) ? d[f] = new ye({ segments: v, insert: !1 }) : v instanceof Ce && (d.splice.apply(d, [f, 1].concat(v.removeChildren())), v.remove());
             }
             return t.base.call(this, r, d);
           },
@@ -46559,7 +46570,7 @@ function km() {
           return T;
         }
         function v(j, q, T, $, H) {
-          var W = new we(Y.NO_INSERT);
+          var W = new Ce(Y.NO_INSERT);
           return W.addChildren(j, !0), W = W.reduce({ simplify: q }), H && H.insert == !1 || W.insertAbove($ && T.isSibling($) && T.getIndex() < $.getIndex() ? $ : T), W.copyAttributes(T, !0), W;
         }
         function y(j) {
@@ -46574,15 +46585,15 @@ function km() {
             H.getIntersections(W, y)
           )), ce = h(H), he = W && h(W), fe = [], ue = [], ge;
           function ve(He) {
-            for (var ct = 0, et = He.length; ct < et; ct++) {
-              var it = He[ct];
+            for (var dt = 0, et = He.length; dt < et; dt++) {
+              var it = He[dt];
               a.push(fe, it._segments), a.push(ue, it.getCurves()), it._overlapsOnly = !0;
             }
           }
-          function xe(He) {
-            for (var ct = [], et = 0, it = He && He.length; et < it; et++)
-              ct.push(ue[He[et]]);
-            return ct;
+          function we(He) {
+            for (var dt = [], et = 0, it = He && He.length; et < it; et++)
+              dt.push(ue[He[et]]);
+            return dt;
           }
           if (ae.length) {
             ve(ce), he && ve(he);
@@ -46596,8 +46607,8 @@ function km() {
             ), Be = {}, Ee = 0; Ee < ue.length; Ee++) {
               var Xe = ue[Ee], Ge = Xe._path._id, Ve = Be[Ge] = Be[Ge] || {};
               Ve[Xe.getIndex()] = {
-                hor: xe($e[Ee].hor),
-                ver: xe($e[Ee].ver)
+                hor: we($e[Ee].hor),
+                ver: we($e[Ee].ver)
               };
             }
             for (var Ee = 0, ze = ae.length; Ee < ze; Ee++)
@@ -46678,10 +46689,10 @@ function km() {
             for (var ce = 0; ce < $; ce++) {
               var he = W[ce], fe = H[he._id], ue = 0, ge = ae[ce];
               if (ge) {
-                for (var ve = null, xe = ge.length - 1; xe >= 0; xe--)
-                  if (ge[xe] < ce) {
+                for (var ve = null, we = ge.length - 1; we >= 0; we--)
+                  if (ge[we] < ce) {
                     ve = ve || he.getInteriorPoint();
-                    var ke = W[ge[xe]];
+                    var ke = W[ge[we]];
                     if (ke.contains(ve)) {
                       var Ee = H[ke._id];
                       ue = Ee.winding, fe.winding += ue, fe.container = Ee.exclude ? Ee.container : ke;
@@ -46703,26 +46714,26 @@ function km() {
         }
         function N(j, q, T) {
           var $ = q && [], H = 1e-8, W = 1 - H, re = !1, ae = T || [], ce = T && {}, he, fe, ue;
-          function ge(ct) {
-            return ct._path._id + "." + ct._segment1._index;
+          function ge(dt) {
+            return dt._path._id + "." + dt._segment1._index;
           }
           for (var ve = (T && T.length) - 1; ve >= 0; ve--) {
-            var xe = T[ve];
-            xe._path && (ce[ge(xe)] = !0);
+            var we = T[ve];
+            we._path && (ce[ge(we)] = !0);
           }
           for (var ve = j.length - 1; ve >= 0; ve--) {
-            var ke = j[ve], Ee = ke._time, ze = Ee, $e = q && !q(ke), xe = ke._curve, Be;
-            if (xe && (xe !== fe ? (re = !xe.hasHandles() || ce && ce[ge(xe)], he = [], ue = null, fe = xe) : ue >= H && (Ee /= ue)), $e) {
+            var ke = j[ve], Ee = ke._time, ze = Ee, $e = q && !q(ke), we = ke._curve, Be;
+            if (we && (we !== fe ? (re = !we.hasHandles() || ce && ce[ge(we)], he = [], ue = null, fe = we) : ue >= H && (Ee /= ue)), $e) {
               he && he.push(ke);
               continue;
             } else q && $.unshift(ke);
             if (ue = ze, Ee < H)
-              Be = xe._segment1;
+              Be = we._segment1;
             else if (Ee > W)
-              Be = xe._segment2;
+              Be = we._segment2;
             else {
-              var Xe = xe.divideAtTime(Ee, !0);
-              re && ae.push(xe, Xe), Be = Xe._segment1;
+              var Xe = we.divideAtTime(Ee, !0);
+              re && ae.push(we, Xe), Be = Xe._segment1;
               for (var Ge = he.length - 1; Ge >= 0; Ge--) {
                 var Ve = he[Ge];
                 Ve._time = (Ve._time - Ee) / (1 - Ee);
@@ -46740,50 +46751,50 @@ function km() {
           return T || F(ae), $ || j;
         }
         function D(j, q, T, $, H) {
-          var W = Array.isArray(q) ? q : q[T ? "hor" : "ver"], re = T ? 1 : 0, ae = re ^ 1, ce = [j.x, j.y], he = ce[re], fe = ce[ae], ue = 1e-9, ge = 1e-6, ve = he - ue, xe = he + ue, ke = 0, Ee = 0, ze = 0, $e = 0, Be = !1, Xe = !1, Ge = 1, Ve = [], qe, Ue;
-          function He(pt) {
-            var kt = pt[ae + 0], Vt = pt[ae + 6];
+          var W = Array.isArray(q) ? q : q[T ? "hor" : "ver"], re = T ? 1 : 0, ae = re ^ 1, ce = [j.x, j.y], he = ce[re], fe = ce[ae], ue = 1e-9, ge = 1e-6, ve = he - ue, we = he + ue, ke = 0, Ee = 0, ze = 0, $e = 0, Be = !1, Xe = !1, Ge = 1, Ve = [], qe, Ue;
+          function He(ut) {
+            var kt = ut[ae + 0], Vt = ut[ae + 6];
             if (!(fe < t(kt, Vt) || fe > r(kt, Vt))) {
-              var yt = pt[re + 0], ii = pt[re + 2], gi = pt[re + 4], ni = pt[re + 6];
+              var yt = ut[re + 0], ii = ut[re + 2], gi = ut[re + 4], ni = ut[re + 6];
               if (kt === Vt) {
-                (yt < xe && ni > ve || ni < xe && yt > ve) && (Be = !0);
+                (yt < we && ni > ve || ni < we && yt > ve) && (Be = !0);
                 return;
               }
-              var gt = fe === kt ? 0 : fe === Vt || ve > r(yt, ii, gi, ni) || xe < t(yt, ii, gi, ni) ? 1 : te.solveCubic(pt, ae, fe, Ve, 0, 1) > 0 ? Ve[0] : 1, qt = gt === 0 ? yt : gt === 1 ? ni : te.getPoint(pt, gt)[T ? "y" : "x"], Yt = kt > Vt ? 1 : -1, Si = qe[ae] > qe[ae + 6] ? 1 : -1, ai = qe[re + 6];
-              return fe !== kt ? (qt < ve ? ze += Yt : qt > xe ? $e += Yt : Be = !0, qt > he - ge && qt < he + ge && (Ge /= 2)) : (Yt !== Si ? yt < ve ? ze += Yt : yt > xe && ($e += Yt) : yt != ai && (ai < xe && qt > xe ? ($e += Yt, Be = !0) : ai > ve && qt < ve && (ze += Yt, Be = !0)), Ge /= 4), qe = pt, !H && qt > ve && qt < xe && te.getTangent(pt, gt)[T ? "x" : "y"] === 0 && D(j, q, !T, $, !0);
+              var gt = fe === kt ? 0 : fe === Vt || ve > r(yt, ii, gi, ni) || we < t(yt, ii, gi, ni) ? 1 : te.solveCubic(ut, ae, fe, Ve, 0, 1) > 0 ? Ve[0] : 1, Gt = gt === 0 ? yt : gt === 1 ? ni : te.getPoint(ut, gt)[T ? "y" : "x"], Yt = kt > Vt ? 1 : -1, Si = qe[ae] > qe[ae + 6] ? 1 : -1, ai = qe[re + 6];
+              return fe !== kt ? (Gt < ve ? ze += Yt : Gt > we ? $e += Yt : Be = !0, Gt > he - ge && Gt < he + ge && (Ge /= 2)) : (Yt !== Si ? yt < ve ? ze += Yt : yt > we && ($e += Yt) : yt != ai && (ai < we && Gt > we ? ($e += Yt, Be = !0) : ai > ve && Gt < ve && (ze += Yt, Be = !0)), Ge /= 4), qe = ut, !H && Gt > ve && Gt < we && te.getTangent(ut, gt)[T ? "x" : "y"] === 0 && D(j, q, !T, $, !0);
             }
           }
-          function ct(pt) {
-            var kt = pt[ae + 0], Vt = pt[ae + 2], yt = pt[ae + 4], ii = pt[ae + 6];
+          function dt(ut) {
+            var kt = ut[ae + 0], Vt = ut[ae + 2], yt = ut[ae + 4], ii = ut[ae + 6];
             if (fe <= r(kt, Vt, yt, ii) && fe >= t(kt, Vt, yt, ii)) {
-              for (var gi = pt[re + 0], ni = pt[re + 2], gt = pt[re + 4], qt = pt[re + 6], Yt = ve > r(gi, ni, gt, qt) || xe < t(gi, ni, gt, qt) ? [pt] : te.getMonoCurves(pt, T), Si, ai = 0, or = Yt.length; ai < or; ai++)
+              for (var gi = ut[re + 0], ni = ut[re + 2], gt = ut[re + 4], Gt = ut[re + 6], Yt = ve > r(gi, ni, gt, Gt) || we < t(gi, ni, gt, Gt) ? [ut] : te.getMonoCurves(ut, T), Si, ai = 0, or = Yt.length; ai < or; ai++)
                 if (Si = He(Yt[ai]))
                   return Si;
             }
           }
           for (var et = 0, it = W.length; et < it; et++) {
-            var at = W[et], rt = at._path, Lt = at.getValues(), Tt;
+            var at = W[et], rt = at._path, Pt = at.getValues(), Lt;
             if ((!et || W[et - 1]._path !== rt) && (qe = null, rt._closed || (Ue = te.getValues(
               rt.getLastCurve().getSegment2(),
               at.getSegment1(),
               null,
               !$
             ), Ue[ae] !== Ue[ae + 6] && (qe = Ue)), !qe)) {
-              qe = Lt;
-              for (var Ot = rt.getLastCurve(); Ot && Ot !== at; ) {
-                var St = Ot.getValues();
+              qe = Pt;
+              for (var It = rt.getLastCurve(); It && It !== at; ) {
+                var St = It.getValues();
                 if (St[ae] !== St[ae + 6]) {
                   qe = St;
                   break;
                 }
-                Ot = Ot.getPrevious();
+                It = It.getPrevious();
               }
             }
-            if (Tt = ct(Lt))
-              return Tt;
+            if (Lt = dt(Pt))
+              return Lt;
             if (et + 1 === it || W[et + 1]._path !== rt) {
-              if (Ue && (Tt = ct(Ue)))
-                return Tt;
+              if (Ue && (Lt = dt(Ue)))
+                return Lt;
               Be && !ze && !$e && (ze = $e = rt.isClockwise($) ^ T ? 1 : -1), ke += ze, Ee += $e, ze = $e = 0, Be && (Xe = !0, Be = !1), Ue = null;
             }
           }
@@ -46805,13 +46816,13 @@ function km() {
             }
             j = j.getNext();
           } while (j && !j._intersection && j !== re);
-          for (var fe = [0.5, 0.25, 0.75], ue = { winding: 0, quality: -1 }, ge = 1e-3, ve = 1 - ge, xe = 0; xe < fe.length && ue.quality < 0.5; xe++)
-            for (var he = ae * fe[xe], ke = 0, Ee = W.length; ke < Ee; ke++) {
+          for (var fe = [0.5, 0.25, 0.75], ue = { winding: 0, quality: -1 }, ge = 1e-3, ve = 1 - ge, we = 0; we < fe.length && ue.quality < 0.5; we++)
+            for (var he = ae * fe[we], ke = 0, Ee = W.length; ke < Ee; ke++) {
               var ze = W[ke], $e = ze.length;
               if (he <= $e) {
-                var ce = ze.curve, Be = ce._path, Xe = Be._parent, Ge = Xe instanceof we ? Xe : Be, Ve = C.clamp(ce.getTimeAt(he), ge, ve), qe = ce.getPointAtTime(Ve), Ue = l(ce.getTangentAtTime(Ve).y) < Math.SQRT1_2, He = null;
+                var ce = ze.curve, Be = ce._path, Xe = Be._parent, Ge = Xe instanceof Ce ? Xe : Be, Ve = C.clamp(ce.getTimeAt(he), ge, ve), qe = ce.getPointAtTime(Ve), Ue = l(ce.getTangentAtTime(Ve).y) < Math.SQRT1_2, He = null;
                 if (H.subtract && T) {
-                  var ct = Ge === q ? T : q, et = ct._getWinding(qe, Ue, !0);
+                  var dt = Ge === q ? T : q, et = dt._getWinding(qe, Ue, !0);
                   if (Ge === q && et.winding || Ge === T && !et.winding) {
                     if (et.quality < 1)
                       continue;
@@ -46846,35 +46857,35 @@ function km() {
             return !1;
           }
           function re(it) {
-            for (var at = it._segments, rt = 0, Lt = at.length; rt < Lt; rt++)
+            for (var at = it._segments, rt = 0, Pt = at.length; rt < Pt; rt++)
               at[rt]._visited = !0;
           }
           function ae(it, at) {
-            var rt = it._intersection, Lt = rt, Tt = [];
+            var rt = it._intersection, Pt = rt, Lt = [];
             at && ($ = [it]);
-            function Ot(St, pt) {
-              for (; St && St !== pt; ) {
+            function It(St, ut) {
+              for (; St && St !== ut; ) {
                 var kt = St._segment, Vt = kt && kt._path;
                 if (Vt) {
                   var yt = kt.getNext() || Vt.getFirstSegment(), ii = yt._intersection;
-                  kt !== it && (W(kt) || W(yt) || yt && H(kt) && (H(yt) || ii && H(ii._segment))) && Tt.push(kt), at && $.push(kt);
+                  kt !== it && (W(kt) || W(yt) || yt && H(kt) && (H(yt) || ii && H(ii._segment))) && Lt.push(kt), at && $.push(kt);
                 }
                 St = St._next;
               }
             }
             if (rt) {
-              for (Ot(rt); rt && rt._previous; )
+              for (It(rt); rt && rt._previous; )
                 rt = rt._previous;
-              Ot(rt, Lt);
+              It(rt, Pt);
             }
-            return Tt;
+            return Lt;
           }
           j.sort(function(it, at) {
-            var rt = it._intersection, Lt = at._intersection, Tt = !!(rt && rt._overlap), Ot = !!(Lt && Lt._overlap), St = it._path, pt = at._path;
-            return Tt ^ Ot ? Tt ? 1 : -1 : !rt ^ !Lt ? rt ? 1 : -1 : St !== pt ? St._id - pt._id : it._index - at._index;
+            var rt = it._intersection, Pt = at._intersection, Lt = !!(rt && rt._overlap), It = !!(Pt && Pt._overlap), St = it._path, ut = at._path;
+            return Lt ^ It ? Lt ? 1 : -1 : !rt ^ !Pt ? rt ? 1 : -1 : St !== ut ? St._id - ut._id : it._index - at._index;
           });
           for (var ce = 0, he = j.length; ce < he; ce++) {
-            var fe = j[ce], ue = H(fe), ge = null, ve = !1, xe = !0, ke = [], Ee, ze, $e;
+            var fe = j[ce], ue = H(fe), ge = null, ve = !1, we = !0, ke = [], Ee, ze, $e;
             if (ue && fe._path._overlapsOnly) {
               var Be = fe._path, Xe = fe._intersection._segment._path;
               Be.compare(Xe) && (Be.getArea() && T.push(Be.clone(!1)), re(Be), re(Xe), ue = !1);
@@ -46882,7 +46893,7 @@ function km() {
             for (; ue; ) {
               var Ge = !ge, Ve = ae(fe, Ge), qe = Ve.shift(), ve = !Ge && (W(fe) || W(qe)), Ue = !ve && qe;
               if (Ge && (ge = new ye(Y.NO_INSERT), Ee = null), ve) {
-                (fe.isFirst() || fe.isLast()) && (xe = fe._path._closed), fe._visited = !0;
+                (fe.isFirst() || fe.isLast()) && (we = fe._path._closed), fe._visited = !0;
                 break;
               }
               if (Ue && Ee && (ke.push(Ee), Ee = null), Ee || (Ue && Ve.push(fe), Ee = {
@@ -46892,7 +46903,7 @@ function km() {
                 handleIn: $e
               }), Ue && (fe = qe), !H(fe)) {
                 ge.removeSegments(Ee.start);
-                for (var He = 0, ct = ze.length; He < ct; He++)
+                for (var He = 0, dt = ze.length; He < dt; He++)
                   ze[He]._visited = !1;
                 ze.length = 0;
                 do
@@ -46908,7 +46919,7 @@ function km() {
                 et && fe._handleOut
               )), fe._visited = !0, ze.push(fe), fe = et || fe._path.getFirstSegment(), $e = et && et._handleIn;
             }
-            ve && (xe && (ge.getFirstSegment().setHandleIn($e), ge.setClosed(xe)), ge.getArea() !== 0 && T.push(ge));
+            ve && (we && (ge.getFirstSegment().setHandleIn($e), ge.setClosed(we)), ge.getArea() !== 0 && T.push(ge));
           }
           return T;
         }
@@ -46958,8 +46969,8 @@ function km() {
             }, re), re && F(re), q = K(a.each(q, function(Ee) {
               a.push(this, Ee._segments);
             }, [])));
-            var xe = q.length, ke;
-            return xe > 1 && j ? (q !== j && this.setChildren(q), ke = this) : xe === 1 && !j && (q[0] !== this && this.setSegments(q[0].removeSegments()), ke = this), ke || (ke = new we(Y.NO_INSERT), ke.addChildren(q), ke = ke.reduce(), ke.copyAttributes(this), this.replaceWith(ke)), ke;
+            var we = q.length, ke;
+            return we > 1 && j ? (q !== j && this.setChildren(q), ke = this) : we === 1 && !j && (q[0] !== this && this.setSegments(q[0].removeSegments()), ke = this), ke || (ke = new Ce(Y.NO_INSERT), ke.addChildren(q), ke = ke.reduce(), ke.copyAttributes(this), this.replaceWith(ke)), ke;
           },
           reorient: function(j, q) {
             var T = this._children;
@@ -46977,8 +46988,8 @@ function km() {
               for (var T = this.getCurves(), $ = q.y, H = [], W = [], re = 0, ae = T.length; re < ae; re++) {
                 var ce = T[re].getValues(), he = ce[1], fe = ce[3], ue = ce[5], ge = ce[7];
                 if ($ >= t(he, fe, ue, ge) && $ <= r(he, fe, ue, ge))
-                  for (var ve = te.getMonoCurves(ce), xe = 0, ke = ve.length; xe < ke; xe++) {
-                    var Ee = ve[xe], ze = Ee[1], $e = Ee[7];
+                  for (var ve = te.getMonoCurves(ce), we = 0, ke = ve.length; we < ke; we++) {
+                    var Ee = ve[we], ze = Ee[1], $e = Ee[7];
                     if (ze !== $e && ($ >= ze && $ <= $e || $ >= $e && $ <= ze)) {
                       var Be = $ === ze ? Ee[0] : $ === $e ? Ee[6] : te.solveCubic(Ee, 1, $, W, 0, 1) === 1 ? te.getPoint(Ee, W[0]).x : (Ee[0] + Ee[6]) / 2;
                       H.push(Be);
@@ -46993,7 +47004,7 @@ function km() {
           }
         };
       }());
-      var be = a.extend(
+      var xe = a.extend(
         {
           _class: "PathFlattener",
           initialize: function(t, r, l, d, h) {
@@ -47121,12 +47132,12 @@ function km() {
             var ge = L[0][0] + L[0][1], ve = L[1][0] + L[1][1];
             ce = he = v(ge) > f ? F[0] / ge : v(ve) > f ? F[1] / ve : 0;
           }
-          var xe = S.getDistance(b), ke = f * xe, Ee, ze;
+          var we = S.getDistance(b), ke = f * we, Ee, ze;
           if (ce < ke || he < ke)
-            ce = he = xe / 3;
+            ce = he = we / 3;
           else {
             var $e = S.subtract(b);
-            Ee = d.normalize(ce), ze = h.normalize(he), Ee.dot($e) - ze.dot($e) > xe * xe && (ce = he = xe / 3, Ee = ze = null);
+            Ee = d.normalize(ce), ze = h.normalize(he), Ee.dot($e) - ze.dot($e) > we * we && (ce = he = we / 3, Ee = ze = null);
           }
           return [
             b,
@@ -47286,7 +47297,7 @@ function km() {
               var q = l[y];
               if (!q)
                 if (n) {
-                  d || (d = dt.getContext(1, 1, {
+                  d || (d = ct.getContext(1, 1, {
                     willReadFrequently: !0
                   }), d.globalCompositeOperation = "copy"), d.fillStyle = "rgba(0,0,0,0)", d.fillStyle = y, d.fillRect(0, 0, 1, 1);
                   var T = d.getImageData(0, 0, 1, 1).data;
@@ -47359,7 +47370,7 @@ function km() {
             r[b] = [], a.each(y, function(S, L) {
               var F = a.capitalize(S), P = /^(hue|saturation)$/.test(S), N = r[b][L] = b === "gradient" ? S === "gradient" ? function(D) {
                 var Z = this._components[0];
-                return D = Ce.read(
+                return D = be.read(
                   Array.isArray(D) ? D : arguments,
                   0,
                   { readNull: !0 }
@@ -47400,7 +47411,7 @@ function km() {
                         var H = N[T];
                         H && (N[T] = H.clone());
                       }
-                  } else if (b.constructor === Ce)
+                  } else if (b.constructor === be)
                     P = "gradient", Z = S;
                   else {
                     P = "hue" in b ? "lightness" in b ? "hsl" : "hsb" : "gradient" in b || "stops" in b || "radial" in b ? "gradient" : "gray" in b ? "gray" : "rgb";
@@ -47579,7 +47590,7 @@ function km() {
             };
           }, {});
         }()
-      ), Ce = a.extend({
+      ), be = a.extend({
         _class: "Gradient",
         initialize: function(r, l) {
           this._id = k.get(), r && a.isPlainObject(r) && (this.set(r), r = l = null), this._stops == null && this.setStops(r || ["white", "black"]), this._radial == null && this.setRadial(typeof l == "string" && l === "radial" || l || !1);
@@ -47608,7 +47619,7 @@ function km() {
         clone: function() {
           for (var t = [], r = 0, l = this._stops.length; r < l; r++)
             t[r] = this._stops[r].clone();
-          return new Ce(t, this._radial);
+          return new be(t, this._radial);
         },
         getStops: function() {
           return this._stops;
@@ -47622,7 +47633,7 @@ function km() {
           if (r)
             for (var l = 0, d = r.length; l < d; l++)
               r[l]._owner = i;
-          r = this._stops = Le.readList(t, 0, { clone: !0 });
+          r = this._stops = Pe.readList(t, 0, { clone: !0 });
           for (var l = 0, d = r.length; l < d; l++)
             r[l]._owner = this;
           this._changed();
@@ -47647,14 +47658,14 @@ function km() {
           }
           return !1;
         }
-      }), Le = a.extend({
+      }), Pe = a.extend({
         _class: "GradientStop",
         initialize: function(r, l) {
           var d = r, h = l;
           typeof r == "object" && l === i && (Array.isArray(r) && typeof r[0] != "number" ? (d = r[0], h = r[1]) : ("color" in r || "offset" in r || "rampPoint" in r) && (d = r.color, h = r.offset || r.rampPoint || 0)), this.setColor(d), this.setOffset(h);
         },
         clone: function() {
-          return new Le(this._color.clone(), this._offset);
+          return new Pe(this._color.clone(), this._offset);
         },
         _serialize: function(t, r) {
           var l = this._color, d = this._offset;
@@ -47689,7 +47700,7 @@ function km() {
         equals: function(t) {
           return t === this || t && this._class === t._class && this._color.equals(t._color) && this._offset == t._offset || !1;
         }
-      }), Pe = a.extend(new function() {
+      }), Le = a.extend(new function() {
         var t = {
           fillColor: null,
           fillRule: "nonzero",
@@ -47737,7 +47748,7 @@ function km() {
         return a.each(r, function(v, y) {
           var b = /Color$/.test(y), S = y === "shadowOffset", L = a.capitalize(y), F = d[y], P = "set" + L, N = "get" + L;
           f[P] = function(D) {
-            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof we);
+            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof Ce);
             if (j)
               for (var q = 0, T = K.length; q < T; q++)
                 K[q]._style[P](D);
@@ -47750,7 +47761,7 @@ function km() {
               ))), this._values[y] = D, Z && Z._changed(F || 129));
             }
           }, f[N] = function(D) {
-            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof we), q;
+            var Z = this._owner, K = Z && Z._children, j = K && K.length > 0 && !(Z instanceof Ce), q;
             if (j && !D)
               for (var T = 0, $ = K.length; T < $; T++) {
                 var H = K[T]._style[N]();
@@ -47787,7 +47798,7 @@ function km() {
         }), Y.inject(h), f;
       }(), {
         set: function(t) {
-          var r = t instanceof Pe, l = r ? t._values : t;
+          var r = t instanceof Le, l = r ? t._values : t;
           if (l) {
             for (var d in l)
               if (d in this._defaults) {
@@ -48243,8 +48254,8 @@ function km() {
             mouseout: function(ue) {
               var ge = De._focused, ve = Oe.getRelatedTarget(ue);
               if (ge && (!ve || ve.nodeName === "HTML")) {
-                var xe = Oe.getOffset(ue, ge._element), ke = xe.x, Ee = Math.abs, ze = Ee(ke), $e = 1 << 25, Be = ze - $e;
-                xe.x = Ee(Be) < ze ? Be * (ke < 0 ? -1 : 1) : ke, v(ge, ue, ge.viewToProject(xe));
+                var we = Oe.getOffset(ue, ge._element), ke = we.x, Ee = Math.abs, ze = Ee(ke), $e = 1 << 25, Be = ze - $e;
+                we.x = Ee(Be) < ze ? Be * (ke < 0 ? -1 : 1) : ke, v(ge, ue, ge.viewToProject(we));
               }
             },
             scroll: f
@@ -48271,13 +48282,13 @@ function km() {
             doubleclick: "click",
             mousedrag: "mousemove"
           }, K = !1, j, q, T, $, H, W, re, ae;
-          function ce(ue, ge, ve, xe, ke, Ee, ze) {
+          function ce(ue, ge, ve, we, ke, Ee, ze) {
             var $e = !1, Be;
             function Xe(Ge, Ve) {
               if (Ge.responds(Ve)) {
-                if (Be || (Be = new ut(
+                if (Be || (Be = new pt(
                   Ve,
-                  xe,
+                  we,
                   ke,
                   ge || Ge,
                   Ee ? ke.subtract(Ee) : null
@@ -48293,19 +48304,19 @@ function km() {
               ue = ue._parent;
             return $e;
           }
-          function he(ue, ge, ve, xe, ke, Ee) {
+          function he(ue, ge, ve, we, ke, Ee) {
             return ue._project.removeOn(ve), D = N = !1, H && ce(
               H,
               null,
               ve,
-              xe,
+              we,
               ke,
               Ee
-            ) || ge && ge !== H && !ge.isDescendant(H) && ce(ge, null, ve === "mousedrag" ? "mousemove" : ve, xe, ke, Ee, H) || ce(
+            ) || ge && ge !== H && !ge.isDescendant(H) && ce(ge, null, ve === "mousedrag" ? "mousemove" : ve, we, ke, Ee, H) || ce(
               ue,
               H || ge || ue,
               ve,
-              xe,
+              we,
               ke,
               Ee
             );
@@ -48333,9 +48344,9 @@ function km() {
           return {
             _viewEvents: F,
             _handleMouseEvent: function(ue, ge, ve) {
-              var xe = this._itemEvents, ke = xe.native[ue], Ee = ue === "mousemove", ze = this._scope.tool, $e = this;
-              function Be(ct) {
-                return xe.virtual[ct] || $e.responds(ct) || ze && ze.responds(ct);
+              var we = this._itemEvents, ke = we.native[ue], Ee = ue === "mousemove", ze = this._scope.tool, $e = this;
+              function Be(dt) {
+                return we.virtual[dt] || $e.responds(dt) || ze && ze.responds(dt);
               }
               Ee && l && Be("mousedrag") && (ue = "mousedrag"), ve || (ve = this.getEventPoint(ge));
               var Xe = this.getBounds().contains(ve), Ge = ke && Xe && $e._project.hitTest(ve, {
@@ -48369,17 +48380,17 @@ function km() {
               }
               q = ve, qe && ze && (N = ze._handleMouseEvent(ue, ge, ve, Ue) || N), ge.cancelable !== !1 && (N && !Ue.move || Ue.down && Be("mouseup")) && ge.preventDefault();
             },
-            _handleKeyEvent: function(ue, ge, ve, xe) {
+            _handleKeyEvent: function(ue, ge, ve, we) {
               var ke = this._scope, Ee = ke.tool, ze;
               function $e(Be) {
-                Be.responds(ue) && (Je = ke, Be.emit(ue, ze = ze || new tt(ue, ge, ve, xe)));
+                Be.responds(ue) && (Je = ke, Be.emit(ue, ze = ze || new tt(ue, ge, ve, we)));
               }
               this.isVisible() && ($e(this), Ee && Ee.responds(ue) && $e(Ee));
             },
             _countItemEvent: function(ue, ge) {
-              var ve = this._itemEvents, xe = ve.native, ke = ve.virtual;
+              var ve = this._itemEvents, we = ve.native, ke = ve.virtual;
               for (var Ee in fe)
-                xe[Ee] = (xe[Ee] || 0) + (fe[Ee][ue] || 0) * ge;
+                we[Ee] = (we[Ee] || 0) + (fe[Ee][ue] || 0) * ge;
               ke[ue] = (ke[ue] || 0) + ge;
             },
             statics: {
@@ -48399,7 +48410,7 @@ function km() {
               throw new Error(
                 "Cannot create CanvasView with the provided argument: " + a.slice(arguments, 1)
               );
-            l = dt.getCanvas(d);
+            l = ct.getCanvas(d);
           }
           var h = this._context = l.getContext("2d");
           if (h.save(), this._pixelRatio = 1, !/^off|false$/.test(u.getAttribute(l, "hidpi"))) {
@@ -48571,7 +48582,7 @@ function km() {
             return !!l[S];
           }
         };
-      }(), ut = Ke.extend({
+      }(), pt = Ke.extend({
         _class: "MouseEvent",
         initialize: function(r, l, d, h, f) {
           this.type = r, this.event = l, this.point = d, this.target = h, this.delta = f;
@@ -48844,7 +48855,7 @@ function km() {
           var l = this._getProperty(t, 1);
           l && (l[t[t.length - 1]] = r);
         }
-      }), Gt = {
+      }), qt = {
         request: function(t) {
           var r = new e.XMLHttpRequest();
           return r.open(
@@ -48862,7 +48873,7 @@ function km() {
               throw new Error(d);
           }, r.send(null);
         }
-      }, dt = a.exports.CanvasProvider = {
+      }, ct = a.exports.CanvasProvider = {
         canvases: [],
         getCanvas: function(t, r, l) {
           if (!n)
@@ -48882,7 +48893,7 @@ function km() {
           var r = t && t.canvas ? t.canvas : t;
           r && r.getContext && (r.getContext("2d").restore(), this.canvases.push(r));
         }
-      }, Pt = new function() {
+      }, Rt = new function() {
         var t = Math.min, r = Math.max, l = Math.abs, d, h, f, v, y, b, S, L, F, P, N;
         function D(H, W, re) {
           return 0.2989 * H + 0.587 * W + 0.114 * re;
@@ -48896,8 +48907,8 @@ function km() {
             F = he + (F - he) * he / ge, P = he + (P - he) * he / ge, N = he + (N - he) * he / ge;
           }
           if (ue > 255) {
-            var ve = 255 - he, xe = ue - he;
-            F = he + (F - he) * ve / xe, P = he + (P - he) * ve / xe, N = he + (N - he) * ve / xe;
+            var ve = 255 - he, we = ue - he;
+            F = he + (F - he) * ve / we, P = he + (P - he) * ve / we, N = he + (N - he) * ve / we;
           }
         }
         function K(H, W, re) {
@@ -48981,7 +48992,7 @@ function km() {
           "xor"
         ], function(H) {
           this[H] = !0;
-        }, {}), $ = dt.getContext(1, 1, { willReadFrequently: !0 });
+        }, {}), $ = ct.getContext(1, 1, { willReadFrequently: !0 });
         $ && (a.each(q, function(H, W) {
           var re = W === "darken", ae = !1;
           $.save();
@@ -48990,7 +49001,7 @@ function km() {
           } catch {
           }
           $.restore(), T[W] = ae;
-        }), dt.release($)), this.process = function(H, W, re, ae, ce) {
+        }), ct.release($)), this.process = function(H, W, re, ae, ce) {
           var he = W.canvas, fe = H === "normal";
           if (fe || T[H])
             re.save(), re.setTransform(1, 0, 0, 1, 0, 0), re.globalAlpha = ae, fe || (re.globalCompositeOperation = H), re.drawImage(he, ce.x, ce.y), re.restore();
@@ -49003,13 +49014,13 @@ function km() {
               ce.y,
               he.width,
               he.height
-            ), ve = ge.data, xe = W.getImageData(
+            ), ve = ge.data, we = W.getImageData(
               0,
               0,
               he.width,
               he.height
             ).data, ke = 0, Ee = ve.length; ke < Ee; ke += 4) {
-              d = xe[ke], y = ve[ke], h = xe[ke + 1], b = ve[ke + 1], f = xe[ke + 2], S = ve[ke + 2], v = xe[ke + 3], L = ve[ke + 3], ue();
+              d = we[ke], y = ve[ke], h = we[ke + 1], b = ve[ke + 1], f = we[ke + 2], S = ve[ke + 2], v = we[ke + 3], L = ve[ke + 3], ue();
               var ze = v * ae / 255, $e = 1 - ze;
               ve[ke] = ze * F + $e * y, ve[ke + 1] = ze * P + $e * b, ve[ke + 2] = ze * N + $e * S, ve[ke + 3] = v * ae + $e * L;
             }
@@ -49190,10 +49201,10 @@ function km() {
               };
             ae.gradientUnits = "userSpaceOnUse", T = ot.create((H ? "radial" : "linear") + "Gradient", ae, t);
             for (var he = $._stops, fe = 0, ue = he.length; fe < ue; fe++) {
-              var ge = he[fe], ve = ge._color, xe = ve.getAlpha(), ke = ge._offset;
+              var ge = he[fe], ve = ge._color, we = ve.getAlpha(), ke = ge._offset;
               ae = {
                 offset: ke ?? fe / (ue - 1)
-              }, ve && (ae["stop-color"] = ve.toCSS(!0)), xe < 1 && (ae["stop-opacity"] = xe), T.appendChild(
+              }, ve && (ae["stop-color"] = ve.toCSS(!0)), we < 1 && (ae["stop-opacity"] = we), T.appendChild(
                 ot.create("stop", ae, t)
               );
             }
@@ -49309,10 +49320,10 @@ function km() {
         function v(T, $, H, W) {
           var re = T.childNodes, ae = $ === "clippath", ce = $ === "defs", he = new B(), fe = he._project, ue = fe._currentStyle, ge = [];
           if (!ae && !ce && (he = Z(he, T, W), fe._currentStyle = he._style.clone()), W)
-            for (var ve = T.querySelectorAll("defs"), xe = 0, ke = ve.length; xe < ke; xe++)
-              j(ve[xe], H, !1);
-          for (var xe = 0, ke = re.length; xe < ke; xe++) {
-            var Ee = re[xe], ze;
+            for (var ve = T.querySelectorAll("defs"), we = 0, ke = ve.length; we < ke; we++)
+              j(ve[we], H, !1);
+          for (var we = 0, ke = re.length; we < ke; we++) {
+            var Ee = re[we], ze;
             Ee.nodeType === 1 && !/^defs$/i.test(Ee.nodeName) && (ze = j(Ee, H, !1)) && !(ze instanceof ee) && ge.push(ze);
           }
           return he.addChildren(ge), ae && (he = Z(he.reduce(), T, W)), fe._currentStyle = ue, (ae || ce) && (he.remove(), he = null), he;
@@ -49338,11 +49349,11 @@ function km() {
           else {
             for (var ae = T.childNodes, ce = [], he = 0, fe = ae.length; he < fe; he++) {
               var ue = ae[he];
-              ue.nodeType === 1 && ce.push(Z(new Le(), ue));
+              ue.nodeType === 1 && ce.push(Z(new Pe(), ue));
             }
-            re = new Ce(ce, W);
+            re = new be(ce, W);
           }
-          var ge, ve, xe, ke = l(T, "gradientUnits", !0) !== "userSpaceOnUse";
+          var ge, ve, we, ke = l(T, "gradientUnits", !0) !== "userSpaceOnUse";
           W ? (ge = d(
             T,
             "cx",
@@ -49354,7 +49365,7 @@ function km() {
           ), ve = ge.add(
             l(T, "r", !1, !1, ke, "50%"),
             0
-          ), xe = d(T, "fx", "fy", !0, ke)) : (ge = d(
+          ), we = d(T, "fx", "fy", !0, ke)) : (ge = d(
             T,
             "x1",
             "y1",
@@ -49372,7 +49383,7 @@ function km() {
             "0%"
           ));
           var Ee = Z(
-            new Me(re, ge, ve, xe),
+            new Me(re, ge, ve, we),
             T
           );
           return Ee._scaleToBounds = ke, null;
@@ -49451,8 +49462,8 @@ function km() {
               var fe = re[ce];
               if (!fe)
                 break;
-              for (var ue = fe.split(/\(\s*/), ge = ue[0].trim(), ve = ue[1].split(/[\s,]+/g), xe = 0, ke = ve.length; xe < ke; xe++)
-                ve[xe] = parseFloat(ve[xe]);
+              for (var ue = fe.split(/\(\s*/), ge = ue[0].trim(), ve = ue[1].split(/[\s,]+/g), we = 0, ke = ve.length; we < ke; we++)
+                ve[we] = parseFloat(ve[we]);
               switch (ge) {
                 case "matrix":
                   ae.append(
@@ -49571,7 +49582,7 @@ function km() {
           }), he = T.parentNode, fe = T.nextSibling, ce.appendChild(T), ae.appendChild(ce));
           var ue = Je.settings, ge = ue.applyMatrix, ve = ue.insertItems;
           ue.applyMatrix = !1, ue.insertItems = !1;
-          var xe = L[W], ke = xe && xe(T, W, $, H) || null;
+          var we = L[W], ke = we && we(T, W, $, H) || null;
           if (ue.insertItems = ve, ue.applyMatrix = ge, ke) {
             re && !(ke instanceof B) && (ke = Z(ke, T, H));
             var Ee = $.onImport, ze = re && T.getAttribute("data-paper-data");
@@ -49595,8 +49606,8 @@ function km() {
               Je = W, re = j(ge, $, !0), (!$ || $.insert !== !1) && H._insertItem(i, re);
               var ve = $.onLoad;
               ve && ve(re, ue);
-            } catch (xe) {
-              ce(xe);
+            } catch (we) {
+              ce(we);
             }
           }
           function ce(ue, ge) {
@@ -49608,7 +49619,7 @@ function km() {
           }
           if (typeof T == "string" && !/^[\s\S]*</.test(T)) {
             var he = s.getElementById(T);
-            he ? ae(he) : Gt.request({
+            he ? ae(he) : qt.request({
               url: T,
               async: !0,
               onLoad: ae,
@@ -50054,184 +50065,184 @@ const qm = (o) => {
       [-9, 9],
       [9, -9],
       [-9, -9]
-    ], O = (Ce) => {
-      const Le = Ce.getAttributeNS(g, "connector");
-      if (Le) {
-        const [Pe, Ie] = Le.split(" ");
-        return { start: Pe || null, end: Ie || null };
+    ], O = (be) => {
+      const Pe = be.getAttributeNS(g, "connector");
+      if (Pe) {
+        const [Le, Ie] = Pe.split(" ");
+        return { start: Le || null, end: Ie || null };
       }
       return {
-        start: Ce.getAttributeNS(g, "bind-start") || null,
-        end: Ce.getAttributeNS(g, "bind-end") || null
+        start: be.getAttributeNS(g, "bind-start") || null,
+        end: be.getAttributeNS(g, "bind-end") || null
       };
     }, R = () => {
-      const Ce = i.getSvgContent();
-      return Array.from(Ce.querySelectorAll("line, polyline")).filter((Le) => {
-        const { start: Pe, end: Ie } = O(Le);
-        return Pe || Ie;
+      const be = i.getSvgContent();
+      return Array.from(be.querySelectorAll("line, polyline")).filter((Pe) => {
+        const { start: Le, end: Ie } = O(Pe);
+        return Le || Ie;
       });
     }, G = i.groupSelectedElements;
-    i.groupSelectedElements = function(...Ce) {
-      return i.removeFromSelection(R()), G.apply(this, Ce);
+    i.groupSelectedElements = function(...be) {
+      return i.removeFromSelection(R()), G.apply(this, be);
     };
     const X = i.moveSelectedElements;
-    i.moveSelectedElements = function(...Ce) {
-      const Le = X.apply(this, Ce);
-      return Fe(i.getSelectedElements()), Le;
+    i.moveSelectedElements = function(...be) {
+      const Pe = X.apply(this, be);
+      return Fe(i.getSelectedElements()), Pe;
     };
-    const Y = (Ce, Le, Pe, Ie = 0) => {
-      const Oe = Pe.x + Pe.width / 2, De = Pe.y + Pe.height / 2, st = Ce - Oe, Ke = Le - De, tt = Pe.width / 2 || 1, lt = Pe.height / 2 || 1;
-      return Math.abs(st) / tt >= Math.abs(Ke) / lt ? st >= 0 ? { x: Pe.x + Pe.width + Ie, y: De } : { x: Pe.x - Ie, y: De } : Ke >= 0 ? { x: Oe, y: Pe.y + Pe.height + Ie } : { x: Oe, y: Pe.y - Ie };
-    }, B = (Ce, Le) => Math.hypot(Ce.x - Le.x, Ce.y - Le.y), ie = (Ce, Le) => {
-      const Pe = i.getSvgContent(), Ie = (Oe) => {
-        if (!Oe || Oe === Pe || Oe.tagName === "svg" || Oe.id?.startsWith("conn_") || Oe.id?.startsWith("se_conn_") || Oe.tagName === "line" || Oe.tagName === "polyline") return !1;
+    const Y = (be, Pe, Le, Ie = 0) => {
+      const Oe = Le.x + Le.width / 2, De = Le.y + Le.height / 2, st = be - Oe, Ke = Pe - De, tt = Le.width / 2 || 1, lt = Le.height / 2 || 1;
+      return Math.abs(st) / tt >= Math.abs(Ke) / lt ? st >= 0 ? { x: Le.x + Le.width + Ie, y: De } : { x: Le.x - Ie, y: De } : Ke >= 0 ? { x: Oe, y: Le.y + Le.height + Ie } : { x: Oe, y: Le.y - Ie };
+    }, B = (be, Pe) => Math.hypot(be.x - Pe.x, be.y - Pe.y), ie = (be, Pe) => {
+      const Le = i.getSvgContent(), Ie = (Oe) => {
+        if (!Oe || Oe === Le || Oe.tagName === "svg" || Oe.id?.startsWith("conn_") || Oe.id?.startsWith("se_conn_") || Oe.tagName === "line" || Oe.tagName === "polyline") return !1;
         let De = Oe.parentNode;
         for (; De; ) {
-          if (De === Pe) return !0;
+          if (De === Le) return !0;
           De = De.parentNode;
         }
         return !1;
       };
       for (const [Oe, De] of I)
-        for (const st of document.elementsFromPoint(Ce + Oe, Le + De))
+        for (const st of document.elementsFromPoint(be + Oe, Pe + De))
           if (Ie(st)) return st;
       return null;
     }, oe = () => {
       if (s("se_conn_hover")) return;
-      const Ce = "http://www.w3.org/2000/svg", Le = document.createElementNS(Ce, "g");
-      Le.id = "se_conn_hover", Le.setAttribute("style", "pointer-events:none");
-      const Pe = document.createElementNS(Ce, "rect");
-      Pe.id = "se_conn_hrect", Pe.setAttribute("fill", "none"), Pe.setAttribute("stroke", "#6965db"), Pe.setAttribute("stroke-width", "2"), Pe.setAttribute("rx", "3"), Pe.setAttribute("opacity", "0.8"), Pe.style.display = "none", Le.appendChild(Pe), M = Pe;
+      const be = "http://www.w3.org/2000/svg", Pe = document.createElementNS(be, "g");
+      Pe.id = "se_conn_hover", Pe.setAttribute("style", "pointer-events:none");
+      const Le = document.createElementNS(be, "rect");
+      Le.id = "se_conn_hrect", Le.setAttribute("fill", "none"), Le.setAttribute("stroke", "#6965db"), Le.setAttribute("stroke-width", "2"), Le.setAttribute("rx", "3"), Le.setAttribute("opacity", "0.8"), Le.style.display = "none", Pe.appendChild(Le), M = Le;
       for (const Ie of ["n", "s", "e", "w"]) {
-        const Oe = document.createElementNS(Ce, "circle");
-        Oe.id = `se_conn_snap_${Ie}`, Oe.setAttribute("r", "5"), Oe.setAttribute("fill", "#6965db"), Oe.setAttribute("stroke", "#fff"), Oe.setAttribute("stroke-width", "1.5"), Oe.style.display = "none", Le.appendChild(Oe), E[Ie] = Oe;
+        const Oe = document.createElementNS(be, "circle");
+        Oe.id = `se_conn_snap_${Ie}`, Oe.setAttribute("r", "5"), Oe.setAttribute("fill", "#6965db"), Oe.setAttribute("stroke", "#fff"), Oe.setAttribute("stroke-width", "1.5"), Oe.style.display = "none", Pe.appendChild(Oe), E[Ie] = Oe;
       }
-      c.appendChild(Le);
-    }, se = (Ce, Le) => {
-      const Pe = c.getScreenCTM();
-      if (!Pe) return { x: Ce, y: Le };
+      c.appendChild(Pe);
+    }, se = (be, Pe) => {
+      const Le = c.getScreenCTM();
+      if (!Le) return { x: be, y: Pe };
       const Ie = c.createSVGPoint();
-      Ie.x = Ce, Ie.y = Le;
-      const Oe = Ie.matrixTransform(Pe.inverse());
+      Ie.x = be, Ie.y = Pe;
+      const Oe = Ie.matrixTransform(Le.inverse());
       return { x: Oe.x, y: Oe.y };
-    }, Q = (Ce, Le, Pe) => {
+    }, Q = (be, Pe, Le) => {
       if (!M) return;
-      const Ie = Ce.getBoundingClientRect();
+      const Ie = be.getBoundingClientRect();
       if (!Ie || !Ie.width) return;
-      const Oe = 5, De = se(Ie.left - Oe, Ie.top - Oe), st = se(Ie.right + Oe, Ie.bottom + Oe), Ke = De.x, tt = De.y, lt = st.x - De.x, ut = st.y - De.y;
-      M.setAttribute("x", Ke), M.setAttribute("y", tt), M.setAttribute("width", lt), M.setAttribute("height", ut), M.style.display = "";
+      const Oe = 5, De = se(Ie.left - Oe, Ie.top - Oe), st = se(Ie.right + Oe, Ie.bottom + Oe), Ke = De.x, tt = De.y, lt = st.x - De.x, pt = st.y - De.y;
+      M.setAttribute("x", Ke), M.setAttribute("y", tt), M.setAttribute("width", lt), M.setAttribute("height", pt), M.style.display = "";
       const ht = {
         n: { x: Ke + lt / 2, y: tt },
-        s: { x: Ke + lt / 2, y: tt + ut },
-        e: { x: Ke + lt, y: tt + ut / 2 },
-        w: { x: Ke, y: tt + ut / 2 }
-      }, xt = se(Le, Pe);
-      let Gt = null, dt = 1 / 0;
-      for (const [Pt, ot] of Object.entries(ht)) {
+        s: { x: Ke + lt / 2, y: tt + pt },
+        e: { x: Ke + lt, y: tt + pt / 2 },
+        w: { x: Ke, y: tt + pt / 2 }
+      }, xt = se(Pe, Le);
+      let qt = null, ct = 1 / 0;
+      for (const [Rt, ot] of Object.entries(ht)) {
         const si = B(xt, ot);
-        si < dt && (dt = si, Gt = Pt);
+        si < ct && (ct = si, qt = Rt);
       }
-      for (const [Pt, ot] of Object.entries(E)) {
-        ot.setAttribute("cx", ht[Pt].x), ot.setAttribute("cy", ht[Pt].y), ot.style.display = "";
-        const si = Pt === Gt;
+      for (const [Rt, ot] of Object.entries(E)) {
+        ot.setAttribute("cx", ht[Rt].x), ot.setAttribute("cy", ht[Rt].y), ot.style.display = "";
+        const si = Rt === qt;
         ot.setAttribute("r", si ? "7" : "5"), ot.setAttribute("fill-opacity", si ? "1" : "0.55");
       }
-    }, ee = (Ce, Le, Pe) => {
+    }, ee = (be, Pe, Le) => {
       if (!M || M.style.display === "none") return;
-      const Ie = Pe.getBoundingClientRect();
+      const Ie = Le.getBoundingClientRect();
       if (!Ie || !Ie.width) return;
-      const Oe = se(Ie.left, Ie.top), De = se(Ie.right, Ie.bottom), st = Oe.x, Ke = Oe.y, tt = De.x - Oe.x, lt = De.y - Oe.y, ut = {
+      const Oe = se(Ie.left, Ie.top), De = se(Ie.right, Ie.bottom), st = Oe.x, Ke = Oe.y, tt = De.x - Oe.x, lt = De.y - Oe.y, pt = {
         n: { x: st + tt / 2, y: Ke },
         s: { x: st + tt / 2, y: Ke + lt },
         e: { x: st + tt, y: Ke + lt / 2 },
         w: { x: st, y: Ke + lt / 2 }
-      }, ht = se(Ce, Le);
-      let xt = null, Gt = 1 / 0;
-      for (const [dt, Pt] of Object.entries(ut)) {
-        const ot = B(ht, Pt);
-        ot < Gt && (Gt = ot, xt = dt);
+      }, ht = se(be, Pe);
+      let xt = null, qt = 1 / 0;
+      for (const [ct, Rt] of Object.entries(pt)) {
+        const ot = B(ht, Rt);
+        ot < qt && (qt = ot, xt = ct);
       }
-      for (const [dt, Pt] of Object.entries(E)) {
-        const ot = dt === xt;
-        Pt.setAttribute("r", ot ? "7" : "5"), Pt.setAttribute("fill-opacity", ot ? "1" : "0.55");
+      for (const [ct, Rt] of Object.entries(E)) {
+        const ot = ct === xt;
+        Rt.setAttribute("r", ot ? "7" : "5"), Rt.setAttribute("fill-opacity", ot ? "1" : "0.55");
       }
     }, J = () => {
       M && (M.style.display = "none");
-      for (const Ce of Object.values(E)) Ce.style.display = "none";
+      for (const be of Object.values(E)) be.style.display = "none";
       z = null;
-    }, U = (Ce, Le) => {
-      const Pe = i.getSvgContent(), Ie = Pe.getScreenCTM();
-      if (!Ie) return { x: Ce, y: Le };
-      const Oe = Pe.createSVGPoint();
-      Oe.x = Ce, Oe.y = Le;
+    }, U = (be, Pe) => {
+      const Le = i.getSvgContent(), Ie = Le.getScreenCTM();
+      if (!Ie) return { x: be, y: Pe };
+      const Oe = Le.createSVGPoint();
+      Oe.x = be, Oe.y = Pe;
       const De = Oe.matrixTransform(Ie);
       return { x: De.x, y: De.y };
-    }, de = (Ce, Le, Pe, Ie) => {
-      Ie && (Pe = { ...Pe }, Pe.width += Ie, Pe.height += Ie, Pe.x -= Ie / 2, Pe.y -= Ie / 2);
-      const Oe = Pe.x + Pe.width / 2, De = Pe.y + Pe.height / 2, st = Ce - Oe, Ke = Le - De, tt = Math.abs(Ke / st);
+    }, de = (be, Pe, Le, Ie) => {
+      Ie && (Le = { ...Le }, Le.width += Ie, Le.height += Ie, Le.x -= Ie / 2, Le.y -= Ie / 2);
+      const Oe = Le.x + Le.width / 2, De = Le.y + Le.height / 2, st = be - Oe, Ke = Pe - De, tt = Math.abs(Ke / st);
       let lt;
-      return tt < Pe.height / Pe.width ? lt = Pe.width / 2 / Math.abs(st) : lt = Ke ? Pe.height / 2 / Math.abs(Ke) : 0, {
+      return tt < Le.height / Le.width ? lt = Le.width / 2 / Math.abs(st) : lt = Ke ? Le.height / 2 / Math.abs(Ke) : 0, {
         x: Oe + st * lt,
         y: De + Ke * lt
       };
-    }, te = (Ce, Le) => {
-      const Pe = Le.getAttribute("marker-" + Ce), Ie = (Le.getAttribute("stroke-width") ?? 1) * 5;
-      return Pe ? Ie : 0;
-    }, le = (Ce) => Ce.getAttributeNS(g, "conn_mode") === "elbow" ? "elbow" : "straight", me = (Ce, Le, Pe) => {
-      const Ie = { x: Ce.x + Ce.width / 2, y: Ce.y + Ce.height / 2 }, Oe = { x: Le.x + Le.width / 2, y: Le.y + Le.height / 2 };
-      if (le(Pe) === "elbow") {
-        const Ke = te("start", Pe) / 2, tt = te("end", Pe) / 2, lt = Oe.x - Ie.x, ut = Oe.y - Ie.y;
+    }, te = (be, Pe) => {
+      const Le = Pe.getAttribute("marker-" + be), Ie = (Pe.getAttribute("stroke-width") ?? 1) * 5;
+      return Le ? Ie : 0;
+    }, le = (be) => be.getAttributeNS(g, "conn_mode") === "elbow" ? "elbow" : "straight", me = (be, Pe, Le) => {
+      const Ie = { x: be.x + be.width / 2, y: be.y + be.height / 2 }, Oe = { x: Pe.x + Pe.width / 2, y: Pe.y + Pe.height / 2 };
+      if (le(Le) === "elbow") {
+        const Ke = te("start", Le) / 2, tt = te("end", Le) / 2, lt = Oe.x - Ie.x, pt = Oe.y - Ie.y;
         let ht, xt;
-        if (Math.abs(lt) >= Math.abs(ut)) {
-          lt >= 0 ? (ht = { x: Ce.x + Ce.width + Ke, y: Ie.y }, xt = { x: Le.x - tt, y: Oe.y }) : (ht = { x: Ce.x - Ke, y: Ie.y }, xt = { x: Le.x + Le.width + tt, y: Oe.y });
-          const dt = (ht.x + xt.x) / 2;
-          return [ht, { x: dt, y: ht.y }, { x: dt, y: xt.y }, xt];
+        if (Math.abs(lt) >= Math.abs(pt)) {
+          lt >= 0 ? (ht = { x: be.x + be.width + Ke, y: Ie.y }, xt = { x: Pe.x - tt, y: Oe.y }) : (ht = { x: be.x - Ke, y: Ie.y }, xt = { x: Pe.x + Pe.width + tt, y: Oe.y });
+          const ct = (ht.x + xt.x) / 2;
+          return [ht, { x: ct, y: ht.y }, { x: ct, y: xt.y }, xt];
         }
-        ut >= 0 ? (ht = { x: Ie.x, y: Ce.y + Ce.height + Ke }, xt = { x: Oe.x, y: Le.y - tt }) : (ht = { x: Ie.x, y: Ce.y - Ke }, xt = { x: Oe.x, y: Le.y + Le.height + tt });
-        const Gt = (ht.y + xt.y) / 2;
-        return [ht, { x: ht.x, y: Gt }, { x: xt.x, y: Gt }, xt];
+        pt >= 0 ? (ht = { x: Ie.x, y: be.y + be.height + Ke }, xt = { x: Oe.x, y: Pe.y - tt }) : (ht = { x: Ie.x, y: be.y - Ke }, xt = { x: Oe.x, y: Pe.y + Pe.height + tt });
+        const qt = (ht.y + xt.y) / 2;
+        return [ht, { x: ht.x, y: qt }, { x: xt.x, y: qt }, xt];
       }
-      const De = Y(Oe.x, Oe.y, Ce, te("start", Pe)), st = Y(Ie.x, Ie.y, Le, te("end", Pe));
+      const De = Y(Oe.x, Oe.y, be, te("start", Le)), st = Y(Ie.x, Ie.y, Pe, te("end", Le));
       return [De, { x: (De.x + st.x) / 2, y: (De.y + st.y) / 2 }, st];
-    }, ye = (Ce, Le, Pe) => {
-      if (!Le || !Pe) return;
-      const Ie = me(Le, Pe, Ce);
-      Ce.setAttribute("points", Ie.map((Oe) => `${Oe.x},${Oe.y}`).join(" "));
-    }, we = (Ce) => {
-      const Le = i.getDataStorage(), { start: Pe, end: Ie } = O(Ce), Oe = Pe ? Le.get(Ce, "start_bb") : null, De = Ie ? Le.get(Ce, "end_bb") : null;
+    }, ye = (be, Pe, Le) => {
+      if (!Pe || !Le) return;
+      const Ie = me(Pe, Le, be);
+      be.setAttribute("points", Ie.map((Oe) => `${Oe.x},${Oe.y}`).join(" "));
+    }, Ce = (be) => {
+      const Pe = i.getDataStorage(), { start: Le, end: Ie } = O(be), Oe = Le ? Pe.get(be, "start_bb") : null, De = Ie ? Pe.get(be, "end_bb") : null;
       if (!Oe && !De) return;
-      let st = Number(Ce.getAttribute("x1")), Ke = Number(Ce.getAttribute("y1")), tt = Number(Ce.getAttribute("x2")), lt = Number(Ce.getAttribute("y2"));
-      const ut = De ? { x: De.x + De.width / 2, y: De.y + De.height / 2 } : { x: tt, y: lt }, ht = Oe ? { x: Oe.x + Oe.width / 2, y: Oe.y + Oe.height / 2 } : { x: st, y: Ke };
+      let st = Number(be.getAttribute("x1")), Ke = Number(be.getAttribute("y1")), tt = Number(be.getAttribute("x2")), lt = Number(be.getAttribute("y2"));
+      const pt = De ? { x: De.x + De.width / 2, y: De.y + De.height / 2 } : { x: tt, y: lt }, ht = Oe ? { x: Oe.x + Oe.width / 2, y: Oe.y + Oe.height / 2 } : { x: st, y: Ke };
       if (Oe) {
-        const xt = de(ut.x, ut.y, Oe, te("start", Ce));
-        st = xt.x, Ke = xt.y, Ce.setAttribute("x1", st), Ce.setAttribute("y1", Ke);
+        const xt = de(pt.x, pt.y, Oe, te("start", be));
+        st = xt.x, Ke = xt.y, be.setAttribute("x1", st), be.setAttribute("y1", Ke);
       }
       if (De) {
-        const xt = de(ht.x, ht.y, De, te("end", Ce));
-        tt = xt.x, lt = xt.y, Ce.setAttribute("x2", tt), Ce.setAttribute("y2", lt);
+        const xt = de(ht.x, ht.y, De, te("end", be));
+        tt = xt.x, lt = xt.y, be.setAttribute("x2", tt), be.setAttribute("y2", lt);
       }
-    }, be = (Ce) => {
-      if (Ce.tagName === "line")
-        we(Ce);
+    }, xe = (be) => {
+      if (be.tagName === "line")
+        Ce(be);
       else {
-        const Le = i.getDataStorage();
-        ye(Ce, Le.get(Ce, "start_bb"), Le.get(Ce, "end_bb"));
+        const Pe = i.getDataStorage();
+        ye(be, Pe.get(be, "start_bb"), Pe.get(be, "end_bb"));
       }
-    }, Se = (Ce, Le) => {
-      const Pe = i.getDataStorage();
+    }, Se = (be, Pe) => {
+      const Le = i.getDataStorage();
       for (const Ie of _) {
-        const { connector: Oe, is_start: De, start_x: st, start_y: Ke } = Ie, tt = De ? "start" : "end", lt = { ...Pe.get(Oe, `${tt}_bb`) };
-        if (lt.x = st + Ce, lt.y = Ke + Le, Pe.put(Oe, `${tt}_bb`, lt), Oe.tagName === "line")
-          we(Oe);
+        const { connector: Oe, is_start: De, start_x: st, start_y: Ke } = Ie, tt = De ? "start" : "end", lt = { ...Le.get(Oe, `${tt}_bb`) };
+        if (lt.x = st + be, lt.y = Ke + Pe, Le.put(Oe, `${tt}_bb`, lt), Oe.tagName === "line")
+          Ce(Oe);
         else {
-          const ut = De ? "end" : "start", ht = Pe.get(Oe, `${ut}_bb`);
+          const pt = De ? "end" : "start", ht = Le.get(Oe, `${pt}_bb`);
           ye(Oe, De ? lt : ht, De ? ht : lt);
         }
       }
-    }, Ae = (Ce = []) => {
-      const Le = i.getDataStorage(), Pe = R();
+    }, Ae = (be = []) => {
+      const Pe = i.getDataStorage(), Le = R();
       _ = [];
-      for (const Ie of Pe) {
+      for (const Ie of Le) {
         const Oe = O(Ie), De = [Oe.start, Oe.end], st = [];
         for (const [Ke, tt] of ["start", "end"].entries()) {
           const lt = De[Ke];
@@ -50239,20 +50250,20 @@ const qm = (o) => {
             st.push(null);
             continue;
           }
-          let ut = Le.get(Ie, `c_${tt}`);
-          ut ? ut = i.$id(ut) : (ut = i.$id(lt), ut && (Le.put(Ie, `c_${tt}`, ut.id), Le.put(Ie, `${tt}_bb`, i.getStrokedBBox([ut])))), st.push(ut);
+          let pt = Pe.get(Ie, `c_${tt}`);
+          pt ? pt = i.$id(pt) : (pt = i.$id(lt), pt && (Pe.put(Ie, `c_${tt}`, pt.id), Pe.put(Ie, `${tt}_bb`, i.getStrokedBBox([pt])))), st.push(pt);
         }
         for (let Ke = 0; Ke < 2; Ke++) {
           const tt = st[Ke];
           if (!tt || !tt.parentNode) continue;
           let lt = !1;
-          const ut = i.getParents(tt.parentNode);
-          for (const ht of ut)
-            if (Ce.includes(ht)) {
+          const pt = i.getParents(tt.parentNode);
+          for (const ht of pt)
+            if (be.includes(ht)) {
               lt = !0;
               break;
             }
-          if (Ce.includes(tt) || lt) {
+          if (be.includes(tt) || lt) {
             const ht = i.getStrokedBBox([tt]);
             _.push({
               elem: tt,
@@ -50264,146 +50275,148 @@ const qm = (o) => {
           }
         }
       }
-    }, Fe = (Ce) => {
-      const Le = i.getDataStorage();
-      if (Ae(Ce), !!_.length)
-        for (const Pe of _) {
-          const { elem: Ie, connector: Oe, is_start: De, start_x: st, start_y: Ke } = Pe, tt = De ? "start" : "end", lt = i.getStrokedBBox([Ie]);
-          if (lt.x = st, lt.y = Ke, Le.put(Oe, `${tt}_bb`, lt), Oe.tagName === "line")
-            we(Oe);
+    }, Fe = (be) => {
+      const Pe = i.getDataStorage();
+      if (Ae(be), !!_.length)
+        for (const Le of _) {
+          const { elem: Ie, connector: Oe, is_start: De, start_x: st, start_y: Ke } = Le, tt = De ? "start" : "end", lt = i.getStrokedBBox([Ie]);
+          if (lt.x = st, lt.y = Ke, Pe.put(Oe, `${tt}_bb`, lt), Oe.tagName === "line")
+            Ce(Oe);
           else {
-            const ut = De ? "end" : "start", ht = Le.get(Oe, `${ut}_bb`);
+            const pt = De ? "end" : "start", ht = Pe.get(Oe, `${pt}_bb`);
             ye(Oe, De ? lt : ht, De ? ht : lt);
           }
         }
     }, Me = () => {
-      const Ce = i.getDataStorage();
-      for (const Le of R()) {
-        const { start: Pe, end: Ie } = O(Le);
-        if (Pe) {
-          const Oe = n(Pe);
-          Oe && (Ce.put(Le, "c_start", Pe), Ce.put(Le, "start_bb", i.getStrokedBBox([Oe])));
+      const be = i.getDataStorage();
+      for (const Pe of R()) {
+        const { start: Le, end: Ie } = O(Pe);
+        if (Le) {
+          const Oe = n(Le);
+          Oe && (be.put(Pe, "c_start", Le), be.put(Pe, "start_bb", i.getStrokedBBox([Oe])));
         }
         if (Ie) {
           const Oe = n(Ie);
-          Oe && (Ce.put(Le, "c_end", Ie), Ce.put(Le, "end_bb", i.getStrokedBBox([Oe])));
+          Oe && (be.put(Pe, "c_end", Ie), be.put(Pe, "end_bb", i.getStrokedBBox([Oe])));
         }
       }
     };
     return Me(), {
       name: e.i18next.t(`${Ha}:name`),
       callback() {
-        oe(), s("workarea")?.addEventListener("mousemove", (Le) => {
+        oe(), s("workarea")?.addEventListener("mousemove", (Pe) => {
           if (i.getMode() !== "line" || k) return;
-          const Pe = ie(Le.clientX, Le.clientY);
-          if (Pe === z) {
-            Pe && ee(Le.clientX, Le.clientY, Pe);
+          const Le = ie(Pe.clientX, Pe.clientY);
+          if (Le === z) {
+            Le && ee(Pe.clientX, Pe.clientY, Le);
             return;
           }
-          z = Pe, Pe ? Q(Pe, Le.clientX, Le.clientY) : J();
+          z = Le, Le ? Q(Le, Pe.clientX, Pe.clientY) : J();
         });
       },
-      mouseDown(Ce) {
-        const { event: Le } = Ce, Pe = i.getMode();
-        if (Pe === "line") {
-          k = !0, C = ie(Le.clientX, Le.clientY), J();
+      mouseDown(be) {
+        const { event: Pe } = be, Le = i.getMode();
+        if (Le === "line") {
+          k = !0, C = ie(Pe.clientX, Pe.clientY), J();
           return;
         }
-        Pe === "select" && (m = Ce.start_x, w = Ce.start_y, Ae(Ce.selectedElements));
+        Le === "select" && (m = be.start_x, w = be.start_y, Ae(be.selectedElements));
       },
-      mouseMove(Ce) {
-        const Le = i.getZoom(), Pe = Ce.mouse_x / Le, Ie = Ce.mouse_y / Le;
+      mouseMove(be) {
+        const Pe = i.getZoom(), Le = be.mouse_x / Pe, Ie = be.mouse_y / Pe;
         if (i.getMode() === "line") {
           if (k) {
-            const tt = U(Pe, Ie), lt = ie(tt.x, tt.y), ut = lt && lt !== C ? lt : null;
-            ut !== z ? (z = ut, ut ? Q(ut, tt.x, tt.y) : J()) : ut && ee(tt.x, tt.y, ut);
+            const tt = U(Le, Ie), lt = ie(tt.x, tt.y), pt = lt && lt !== C ? lt : null;
+            pt !== z ? (z = pt, pt ? Q(pt, tt.x, tt.y) : J()) : pt && ee(tt.x, tt.y, pt);
           }
           return;
         }
         if (!_.length || !m || !w) return;
-        const De = i.getDataStorage(), st = Pe - m, Ke = Ie - w;
+        const De = i.getDataStorage(), st = Le - m, Ke = Ie - w;
         for (const tt of i.getSelectedElements())
           tt && De.has(tt, "c_start") && (i.removeFromSelection([tt]), tt.transform.baseVal.clear());
         _.length && Se(st, Ke);
       },
-      mouseUp(Ce) {
-        const { event: Le, element: Pe } = Ce;
+      mouseUp(be) {
+        const { event: Pe, element: Le } = be;
         if (i.getMode() !== "line") return;
-        if (k = !1, J(), !Pe || Pe.tagName !== "line") {
+        if (k = !1, J(), !Le || Le.tagName !== "line") {
           C = null;
           return;
         }
-        if (Le.altKey) {
+        if (Pe.altKey) {
           C = null;
           return;
         }
-        const Ie = i.getDataStorage(), Oe = ie(Le.clientX, Le.clientY), De = C && C.parentNode ? C : null, st = Oe && Oe.parentNode && Oe !== De ? Oe : null;
+        const Ie = i.getDataStorage(), Oe = ie(Pe.clientX, Pe.clientY), De = C && C.parentNode ? C : null, st = Oe && Oe.parentNode && Oe !== De ? Oe : null;
         C = null;
         let Ke = !1;
-        De && (Pe.setAttributeNS(g, "se:bind-start", De.id), Ie.put(Pe, "c_start", De.id), Ie.put(Pe, "start_bb", i.getStrokedBBox([De])), Ke = !0), st && (Pe.setAttributeNS(g, "se:bind-end", st.id), Ie.put(Pe, "c_end", st.id), Ie.put(Pe, "end_bb", i.getStrokedBBox([st])), Ke = !0), Ke && we(Pe);
+        De && (Le.setAttributeNS(g, "se:bind-start", De.id), Ie.put(Le, "c_start", De.id), Ie.put(Le, "start_bb", i.getStrokedBBox([De])), Ke = !0), st && (Le.setAttributeNS(g, "se:bind-end", st.id), Ie.put(Le, "c_end", st.id), Ie.put(Le, "end_bb", i.getStrokedBBox([st])), Ke = !0), Ke && Ce(Le);
       },
-      selectedChanged(Ce) {
+      selectedChanged(be) {
         if (J(), !R().length) return;
-        const Le = i.getDataStorage(), { elems: Pe } = Ce;
-        for (const Ie of Pe)
-          Ie?.id?.startsWith("conn_") && Le.has(Ie, "c_start") && u.requestSelector(Ie).showGrips(!1);
-        Fe(Pe.filter(Boolean));
+        const Pe = i.getDataStorage(), { elems: Le } = be;
+        for (const Ie of Le)
+          Ie?.id?.startsWith("conn_") && Pe.has(Ie, "c_start") && u.requestSelector(Ie).showGrips(!1);
+        Fe(Le.filter(Boolean));
       },
       // Fires on every mousemove while elements are being dragged/resized.
       // Primary hook for keeping bound lines in sync during interactive drag,
       // because svgCanvas moves elements via SVG transforms (not attribute
       // changes) and does NOT fire 'changed' on mouseUp for move operations.
-      elementTransition(Ce) {
+      elementTransition(be) {
         if (k) return;
-        const Le = Ce.elems?.filter(Boolean) || [];
-        Le.length && Fe(Le);
+        const Pe = be.elems?.filter(Boolean) || [];
+        Pe.length && Fe(Pe);
       },
-      elementChanged(Ce) {
-        const Le = i.getDataStorage();
-        let [Pe] = Ce.elems;
-        if (!Pe) return;
-        Pe.tagName === "svg" && Pe.id === "svgcontent" && Me();
-        const { markerStart: Ie, markerMid: Oe, markerEnd: De } = Pe.attributes;
-        if ((Ie || Oe || De) && (Le.put(Pe, "start_off", !!Ie), Le.put(Pe, "end_off", !!De), Pe.tagName === "line" && Oe)) {
-          const { x1: Ke, x2: tt, y1: lt, y2: ut, id: ht } = Pe.attributes, xt = Pe.getAttributeNS(g, "bind-start"), Gt = Pe.getAttributeNS(g, "bind-end"), dt = `${(Number(Ke.value) + Number(tt.value)) / 2},${(Number(lt.value) + Number(ut.value)) / 2}`, Pt = a({
+      elementChanged(be) {
+        for (const Pe of be.elems?.filter(Boolean) || [])
+          this.handleOneChangedElement(Pe);
+      },
+      handleOneChangedElement(be) {
+        const Pe = i.getDataStorage();
+        be.tagName === "svg" && be.id === "svgcontent" && Me();
+        const { markerStart: Le, markerMid: Ie, markerEnd: Oe } = be.attributes;
+        if ((Le || Ie || Oe) && (Pe.put(be, "start_off", !!Le), Pe.put(be, "end_off", !!Oe), be.tagName === "line" && Ie)) {
+          const { x1: st, x2: Ke, y1: tt, y2: lt, id: pt } = be.attributes, ht = be.getAttributeNS(g, "bind-start"), xt = be.getAttributeNS(g, "bind-end"), qt = `${(Number(st.value) + Number(Ke.value)) / 2},${(Number(tt.value) + Number(lt.value)) / 2}`, ct = a({
             element: "polyline",
             attr: {
-              points: `${Ke.value},${lt.value} ${dt} ${tt.value},${ut.value}`,
-              stroke: Pe.getAttribute("stroke"),
+              points: `${st.value},${tt.value} ${qt} ${Ke.value},${lt.value}`,
+              stroke: be.getAttribute("stroke"),
               // A missing stroke-width means the SVG initial value of 1 — pass
               // that through explicitly, since assignAttributes would otherwise
               // set the attribute to the literal string "null".
-              "stroke-width": Pe.getAttribute("stroke-width") ?? 1,
-              "marker-mid": Oe.value,
+              "stroke-width": be.getAttribute("stroke-width") ?? 1,
+              "marker-mid": Ie.value,
               fill: "none",
-              opacity: Pe.getAttribute("opacity") || 1
+              opacity: be.getAttribute("opacity") || 1
             }
           });
-          xt && Pt.setAttributeNS(g, "se:bind-start", xt), Gt && Pt.setAttributeNS(g, "se:bind-end", Gt), Pe.insertAdjacentElement("afterend", Pt), Pe.remove(), i.clearSelection(), Pt.id = ht.value, i.addToSelection([Pt]), Pe = Pt;
+          ht && ct.setAttributeNS(g, "se:bind-start", ht), xt && ct.setAttributeNS(g, "se:bind-end", xt), be.insertAdjacentElement("afterend", ct), be.remove(), i.clearSelection(), ct.id = pt.value, i.addToSelection([ct]), be = ct;
         }
-        const st = O(Pe);
-        if (st.start || st.end) {
-          if (st.start && !Le.get(Pe, "start_bb")) {
-            const Ke = n(st.start);
-            Ke && Le.put(Pe, "start_bb", i.getStrokedBBox([Ke]));
+        const De = O(be);
+        if (De.start || De.end) {
+          if (De.start && !Pe.get(be, "start_bb")) {
+            const st = n(De.start);
+            st && Pe.put(be, "start_bb", i.getStrokedBBox([st]));
           }
-          if (st.end && !Le.get(Pe, "end_bb")) {
-            const Ke = n(st.end);
-            Ke && Le.put(Pe, "end_bb", i.getStrokedBBox([Ke]));
+          if (De.end && !Pe.get(be, "end_bb")) {
+            const st = n(De.end);
+            st && Pe.put(be, "end_bb", i.getStrokedBBox([st]));
           }
-          be(Pe);
+          xe(be);
         } else
-          Fe([Pe]);
+          Fe([be]);
       },
-      IDsUpdated(Ce) {
-        const Le = [];
-        return Ce.elems.forEach(function(Pe) {
-          "se:connector" in Pe.attr && (Pe.attr["se:connector"] = Pe.attr["se:connector"].split(" ").map(function(Ie) {
-            return Ce.changes[Ie];
-          }).join(" "), /. ./.test(Pe.attr["se:connector"]) || Le.push(Pe.attr.id));
+      IDsUpdated(be) {
+        const Pe = [];
+        return be.elems.forEach(function(Le) {
+          "se:connector" in Le.attr && (Le.attr["se:connector"] = Le.attr["se:connector"].split(" ").map(function(Ie) {
+            return be.changes[Ie];
+          }).join(" "), /. ./.test(Le.attr["se:connector"]) || Pe.push(Le.attr.id));
           for (const Ie of ["se:bind-start", "se:bind-end"])
-            Ie in Pe.attr && Ce.changes[Pe.attr[Ie]] && (Pe.attr[Ie] = Ce.changes[Pe.attr[Ie]]);
-        }), { remove: Le };
+            Ie in Le.attr && be.changes[Le.attr[Ie]] && (Le.attr[Ie] = be.changes[Le.attr[Ie]]);
+        }), { remove: Pe };
       }
     };
   }
@@ -50455,7 +50468,7 @@ const ss = "se:corner-radius", Ho = "se:orig-d", ey = (o, e) => {
       Math.abs(k.x - _.x) < 1e-9 && Math.abs(k.y - _.y) < 1e-9 && C.pts.pop();
     }
   return a;
-}, wd = (o) => o.map(({ closed: e, pts: i }) => i.map((s, a) => `${a === 0 ? "M" : "L"}${Bt(s.x)},${Bt(s.y)}`).join(" ") + (e ? " Z" : "")).join(" "), Bt = (o) => Math.round(o * 1e6) / 1e6, Yo = (o, e, i, n) => {
+}, wd = (o) => o.map(({ closed: e, pts: i }) => i.map((s, a) => `${a === 0 ? "M" : "L"}${$t(s.x)},${$t(s.y)}`).join(" ") + (e ? " Z" : "")).join(" "), $t = (o) => Math.round(o * 1e6) / 1e6, Yo = (o, e, i, n) => {
   const s = o.x - e.x, a = o.y - e.y, c = i.x - e.x, u = i.y - e.y, g = Math.hypot(s, a), m = Math.hypot(c, u);
   if (g < 1e-9 || m < 1e-9) return null;
   const w = s * u - a * c, C = s * c + a * u, k = Math.atan2(Math.abs(w), C);
@@ -50470,19 +50483,19 @@ const ss = "se:corner-radius", Ho = "se:orig-d", ey = (o, e) => {
   const a = [];
   if (i) {
     const c = Yo(n[s - 1], n[0], n[1], e);
-    a.push(c ? `M${Bt(c.ex)},${Bt(c.ey)} A${Bt(c.r)} ${Bt(c.r)} 0 0 ${c.sweep} ${Bt(c.xx)},${Bt(c.xy)}` : `M${Bt(n[0].x)},${Bt(n[0].y)}`);
+    a.push(c ? `M${$t(c.ex)},${$t(c.ey)} A${$t(c.r)} ${$t(c.r)} 0 0 ${c.sweep} ${$t(c.xx)},${$t(c.xy)}` : `M${$t(n[0].x)},${$t(n[0].y)}`);
     for (let u = 1; u < s; ++u) {
       const g = Yo(n[u - 1], n[u], n[(u + 1) % s], e);
-      a.push(g ? `L${Bt(g.ex)},${Bt(g.ey)} A${Bt(g.r)} ${Bt(g.r)} 0 0 ${g.sweep} ${Bt(g.xx)},${Bt(g.xy)}` : `L${Bt(n[u].x)},${Bt(n[u].y)}`);
+      a.push(g ? `L${$t(g.ex)},${$t(g.ey)} A${$t(g.r)} ${$t(g.r)} 0 0 ${g.sweep} ${$t(g.xx)},${$t(g.xy)}` : `L${$t(n[u].x)},${$t(n[u].y)}`);
     }
     a.push("Z");
   } else {
-    a.push(`M${Bt(n[0].x)},${Bt(n[0].y)}`);
+    a.push(`M${$t(n[0].x)},${$t(n[0].y)}`);
     for (let c = 1; c < s - 1; ++c) {
       const u = Yo(n[c - 1], n[c], n[c + 1], e);
-      a.push(u ? `L${Bt(u.ex)},${Bt(u.ey)} A${Bt(u.r)} ${Bt(u.r)} 0 0 ${u.sweep} ${Bt(u.xx)},${Bt(u.xy)}` : `L${Bt(n[c].x)},${Bt(n[c].y)}`);
+      a.push(u ? `L${$t(u.ex)},${$t(u.ey)} A${$t(u.r)} ${$t(u.r)} 0 0 ${u.sweep} ${$t(u.xx)},${$t(u.xy)}` : `L${$t(n[c].x)},${$t(n[c].y)}`);
     }
-    a.push(`L${Bt(n[s - 1].x)},${Bt(n[s - 1].y)}`);
+    a.push(`L${$t(n[s - 1].x)},${$t(n[s - 1].y)}`);
   }
   return a.join(" ");
 }).join(" "), Vn = "corner-radius", iy = function(o) {
@@ -51082,8 +51095,8 @@ function T1() {
     for (let X = 0; X < o; X++) {
       let Y, B, ie, oe, se, Q;
       ie = ((1 / 6 * I * O + 0.5 * z) * O + E) * O + M, oe = ((0.5 * I * O + z) * O + E) * C, se = (I * O + z) * k, Q = I * _;
-      const ee = ie, J = 0.5 * oe, U = 1 / 6 * se, de = 1 / 24 * Q, te = ee * ee, le = 2 * (ee * J), me = 2 * (ee * U) + J * J, ye = 2 * (ee * de + J * U), we = 2 * (J * de) + U * U, be = 2 * (U * de), Se = de * de, Ae = te * J + le * ee, Fe = te * de + le * U + me * J + ye * ee, Me = me * de + ye * U + we * J + be * ee, Ce = we * de + be * U + Se * J, Le = te * te, Pe = 2 * (te * le), Ie = 2 * (te * me) + le * le, Oe = 2 * (te * ye + le * me), De = 2 * (te * we + le * ye) + me * me, st = 2 * (te * be + le * we + me * ye), Ke = 2 * (te * Se + le * be + me * we) + ye * ye, tt = Le * J + Pe * ee, lt = Le * de + Pe * U + Ie * J + Oe * ee, ut = Ie * de + Oe * U + De * J + st * ee, ht = Le * te, xt = Le * le + Pe * te, Gt = Le * me + Pe * le + Ie * te, dt = Le * ye + Pe * me + Ie * le + Oe * te, Pt = Le * we + Pe * ye + Ie * me + Oe * le + De * te, ot = ht * J + xt * ee, si = ht * de + xt * U + Gt * J + dt * ee, Je = ht * te, t = ht * le + xt * te, r = ht * me + xt * le + Gt * te, l = Je * J + t * ee, d = Je * te;
-      Y = 1, B = 0, B += 1 / 12 * J + 1 / 80 * de, Y -= 1 / 24 * te + 1 / 160 * me + 1 / 896 * we + 1 / 4608 * Se, B -= 1 / 480 * Ae + 1 / 2688 * Fe + 1 / 13824 * Me + 1 / 67584 * Ce, Y += 1 / 1920 * Le + 1 / 10752 * Ie + 1 / 55296 * De + 1 / 270336 * Ke, B += 1 / 53760 * tt + 1 / 276480 * lt + 1 / 1351680 * ut, Y -= 1 / 322560 * ht + 1 / 1658880 * Gt + 1 / 8110080 * Pt, B -= 1 / 11612200 * ot + 1 / 56770600 * si, Y += 1 / 92897300 * Je + 1 / 454164e3 * r, B += 1 / 408748e4 * l, Y -= 1 / 408748e5 * d;
+      const ee = ie, J = 0.5 * oe, U = 1 / 6 * se, de = 1 / 24 * Q, te = ee * ee, le = 2 * (ee * J), me = 2 * (ee * U) + J * J, ye = 2 * (ee * de + J * U), Ce = 2 * (J * de) + U * U, xe = 2 * (U * de), Se = de * de, Ae = te * J + le * ee, Fe = te * de + le * U + me * J + ye * ee, Me = me * de + ye * U + Ce * J + xe * ee, be = Ce * de + xe * U + Se * J, Pe = te * te, Le = 2 * (te * le), Ie = 2 * (te * me) + le * le, Oe = 2 * (te * ye + le * me), De = 2 * (te * Ce + le * ye) + me * me, st = 2 * (te * xe + le * Ce + me * ye), Ke = 2 * (te * Se + le * xe + me * Ce) + ye * ye, tt = Pe * J + Le * ee, lt = Pe * de + Le * U + Ie * J + Oe * ee, pt = Ie * de + Oe * U + De * J + st * ee, ht = Pe * te, xt = Pe * le + Le * te, qt = Pe * me + Le * le + Ie * te, ct = Pe * ye + Le * me + Ie * le + Oe * te, Rt = Pe * Ce + Le * ye + Ie * me + Oe * le + De * te, ot = ht * J + xt * ee, si = ht * de + xt * U + qt * J + ct * ee, Je = ht * te, t = ht * le + xt * te, r = ht * me + xt * le + qt * te, l = Je * J + t * ee, d = Je * te;
+      Y = 1, B = 0, B += 1 / 12 * J + 1 / 80 * de, Y -= 1 / 24 * te + 1 / 160 * me + 1 / 896 * Ce + 1 / 4608 * Se, B -= 1 / 480 * Ae + 1 / 2688 * Fe + 1 / 13824 * Me + 1 / 67584 * be, Y += 1 / 1920 * Pe + 1 / 10752 * Ie + 1 / 55296 * De + 1 / 270336 * Ke, B += 1 / 53760 * tt + 1 / 276480 * lt + 1 / 1351680 * pt, Y -= 1 / 322560 * ht + 1 / 1658880 * qt + 1 / 8110080 * Rt, B -= 1 / 11612200 * ot + 1 / 56770600 * si, Y += 1 / 92897300 * Je + 1 / 454164e3 * r, B += 1 / 408748e4 * l, Y -= 1 / 408748e5 * d;
       const h = (((w * O + m) * O + g) * O + u) * O, f = Math.cos(h), v = Math.sin(h);
       R += f * Y - v * B, G += f * B + v * Y, O += C;
     }
@@ -51171,37 +51184,37 @@ function py() {
         this.a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], this.al = [0, 0, 0, 0, 0];
       }
     }
-    function g(le, me, ye, we, be) {
-      for (let Se = 0; Se < be; Se++)
-        ye[we + Se] = le[me + Se];
+    function g(le, me, ye, Ce, xe) {
+      for (let Se = 0; Se < xe; Se++)
+        ye[Ce + Se] = le[me + Se];
     }
-    function m(le, me, ye, we, be) {
-      for (let Se = 0; Se < be; ++Se)
-        ye[Se + we].a = [...le[Se + me].a], ye[Se + we].al = [...le[Se + me].al];
+    function m(le, me, ye, Ce, xe) {
+      for (let Se = 0; Se < xe; ++Se)
+        ye[Se + Ce].a = [...le[Se + me].a], ye[Se + Ce].al = [...le[Se + me].al];
     }
     function w(le, me, ye) {
-      const we = (0, n.integrate_spiro)(le), be = Math.hypot(we[0], we[1]), Se = Math.atan2(we[1], we[0]), Ae = be / ye, Fe = 0.5 * le[0] + 1 / 48 * le[2], Me = 0.125 * le[1] + 1 / 384 * le[3] - Se;
+      const Ce = (0, n.integrate_spiro)(le), xe = Math.hypot(Ce[0], Ce[1]), Se = Math.atan2(Ce[1], Ce[0]), Ae = xe / ye, Fe = 0.5 * le[0] + 1 / 48 * le[2], Me = 0.125 * le[1] + 1 / 384 * le[3] - Se;
       me[0][0] = Fe - Me, me[1][0] = Fe + Me;
-      const Ce = Ae * (le[0] + 0.125 * le[2]), Le = Ae * (0.5 * le[1] + 1 / 48 * le[3]);
-      me[0][1] = Ce - Le, me[1][1] = Ce + Le;
-      const Pe = Ae * Ae, Ie = Pe * (le[1] + 0.125 * le[3]), Oe = Pe * 0.5 * le[2];
+      const be = Ae * (le[0] + 0.125 * le[2]), Pe = Ae * (0.5 * le[1] + 1 / 48 * le[3]);
+      me[0][1] = be - Pe, me[1][1] = be + Pe;
+      const Le = Ae * Ae, Ie = Le * (le[1] + 0.125 * le[3]), Oe = Le * 0.5 * le[2];
       me[0][2] = Ie - Oe, me[1][2] = Ie + Oe;
-      const De = Pe * Ae, st = De * le[2], Ke = De * 0.5 * le[3];
+      const De = Le * Ae, st = De * le[2], Ke = De * 0.5 * le[3];
       return me[0][3] = st - Ke, me[1][3] = st + Ke, Ae;
     }
-    function C(le, me, ye, we) {
+    function C(le, me, ye, Ce) {
       let Ae = [0, 0, 0, 0], Fe = [
         [0, 0, 0, 0],
         [0, 0, 0, 0]
       ];
       w(le.ks, me, le.seg_ch);
-      for (let Me = 0; Me < we; Me++) {
-        for (let Ce = 0; Ce < 4; Ce++)
-          Ae[Ce] = le.ks[Ce];
+      for (let Me = 0; Me < Ce; Me++) {
+        for (let be = 0; be < 4; be++)
+          Ae[be] = le.ks[be];
         Ae[Me] += 5e-7, w(Ae, Fe, le.seg_ch);
-        for (let Ce = 0; Ce < 2; Ce++)
-          for (let Le = 0; Le < 4; Le++)
-            ye[Le][Ce][Me] = 2e6 * (Fe[Ce][Le] - me[Ce][Le]);
+        for (let be = 0; be < 2; be++)
+          for (let Pe = 0; Pe < 4; Pe++)
+            ye[Pe][be][Me] = 2e6 * (Fe[be][Pe] - me[be][Pe]);
       }
     }
     function k(le) {
@@ -51209,63 +51222,63 @@ function py() {
       return 2 * Math.PI * (me - Math.floor(me + 0.5));
     }
     function _(le, me) {
-      let ye = le[0].type === "open" ? me - 1 : me, we = [];
+      let ye = le[0].type === "open" ? me - 1 : me, Ce = [];
       for (let Se = 0; Se < ye + 1; Se++)
-        we[Se] = new c();
+        Ce[Se] = new c();
       for (let Se = 0; Se < ye; Se++)
-        we[Se] = new c(), we[Se].x = le[Se].x, we[Se].y = le[Se].y, we[Se].type = le[Se].type, we[Se].af = le[Se].af, we[Se].ks = [0, 0, 0, 0];
-      we[ye] = new c(), we[ye].x = le[ye % me].x, we[ye].y = le[ye % me].y, we[ye].type = le[ye % me].type, we[ye].af = le[ye % me].af;
+        Ce[Se] = new c(), Ce[Se].x = le[Se].x, Ce[Se].y = le[Se].y, Ce[Se].type = le[Se].type, Ce[Se].af = le[Se].af, Ce[Se].ks = [0, 0, 0, 0];
+      Ce[ye] = new c(), Ce[ye].x = le[ye % me].x, Ce[ye].y = le[ye % me].y, Ce[ye].type = le[ye % me].type, Ce[ye].af = le[ye % me].af;
       for (let Se = 0; Se < ye; Se++) {
-        let Ae = we[Se + 1].x - we[Se].x, Fe = we[Se + 1].y - we[Se].y;
-        we[Se].seg_ch = Math.hypot(Ae, Fe), we[Se].seg_th = Math.atan2(Fe, Ae);
+        let Ae = Ce[Se + 1].x - Ce[Se].x, Fe = Ce[Se + 1].y - Ce[Se].y;
+        Ce[Se].seg_ch = Math.hypot(Ae, Fe), Ce[Se].seg_th = Math.atan2(Fe, Ae);
       }
-      let be = ye - 1;
+      let xe = ye - 1;
       for (let Se = 0; Se < ye; Se++)
-        we[Se].type === "open" || we[Se].type === "open_end" || we[Se].type === "corner" ? we[Se].bend_th = 0 : we[Se].bend_th = k(we[Se].seg_th - we[be].seg_th), be = Se;
-      return we;
+        Ce[Se].type === "open" || Ce[Se].type === "open_end" || Ce[Se].type === "corner" ? Ce[Se].bend_th = 0 : Ce[Se].bend_th = k(Ce[Se].seg_th - Ce[xe].seg_th), xe = Se;
+      return Ce;
     }
     function M(le, me, ye) {
-      let we, be, Se, Ae;
-      for (we = 0; we < 5; we++) {
-        for (be = 0; be < we + 6; be++)
-          le[we].a[be] = le[we].a[be + 5 - we];
-        for (; be < 11; be++)
-          le[we].a[be] = 0;
+      let Ce, xe, Se, Ae;
+      for (Ce = 0; Ce < 5; Ce++) {
+        for (xe = 0; xe < Ce + 6; xe++)
+          le[Ce].a[xe] = le[Ce].a[xe + 5 - Ce];
+        for (; xe < 11; xe++)
+          le[Ce].a[xe] = 0;
       }
       for (Ae = 5, Se = 0; Se < ye; Se++) {
         let Fe = Se, Me = le[Se].a[0];
-        for (Ae = Ae < ye ? Ae + 1 : ye, be = Se + 1; be < Ae; be++)
-          Math.abs(le[be].a[0]) > Math.abs(Me) && (Me = le[be].a[0], Fe = be);
+        for (Ae = Ae < ye ? Ae + 1 : ye, xe = Se + 1; xe < Ae; xe++)
+          Math.abs(le[xe].a[0]) > Math.abs(Me) && (Me = le[xe].a[0], Fe = xe);
         if (me[Se] = Fe, Fe !== Se)
-          for (be = 0; be < 11; be++) {
-            let Le = le[Se].a[be];
-            le[Se].a[be] = le[Fe].a[be], le[Fe].a[be] = Le;
+          for (xe = 0; xe < 11; xe++) {
+            let Pe = le[Se].a[xe];
+            le[Se].a[xe] = le[Fe].a[xe], le[Fe].a[xe] = Pe;
           }
         Math.abs(Me) < 1e-12 && (Me = 1e-12);
-        const Ce = 1 / Me;
-        for (we = Se + 1; we < Ae; we++) {
-          let Le = le[we].a[0] * Ce;
-          for (le[Se].al[we - Se - 1] = Le, be = 1; be < 11; be++)
-            le[we].a[be - 1] = le[we].a[be] - Le * le[Se].a[be];
-          le[we].a[10] = 0;
+        const be = 1 / Me;
+        for (Ce = Se + 1; Ce < Ae; Ce++) {
+          let Pe = le[Ce].a[0] * be;
+          for (le[Se].al[Ce - Se - 1] = Pe, xe = 1; xe < 11; xe++)
+            le[Ce].a[xe - 1] = le[Ce].a[xe] - Pe * le[Se].a[xe];
+          le[Ce].a[10] = 0;
         }
       }
     }
-    function E(le, me, ye, we) {
-      let be, Se, Ae;
-      for (Ae = 5, Se = 0; Se < we; Se++) {
-        if (be = me[Se], be !== Se) {
+    function E(le, me, ye, Ce) {
+      let xe, Se, Ae;
+      for (Ae = 5, Se = 0; Se < Ce; Se++) {
+        if (xe = me[Se], xe !== Se) {
           let Fe = ye[Se];
-          ye[Se] = ye[be], ye[be] = Fe;
+          ye[Se] = ye[xe], ye[xe] = Fe;
         }
-        for (Ae < we && Ae++, be = Se + 1; be < Ae; be++)
-          ye[be] -= le[Se].al[be - Se - 1] * ye[Se];
+        for (Ae < Ce && Ae++, xe = Se + 1; xe < Ae; xe++)
+          ye[xe] -= le[Se].al[xe - Se - 1] * ye[Se];
       }
-      for (Ae = 1, be = we - 1; be >= 0; be--) {
-        let Fe = ye[be];
+      for (Ae = 1, xe = Ce - 1; xe >= 0; xe--) {
+        let Fe = ye[xe];
         for (Se = 1; Se < Ae; Se++)
-          Fe -= le[be].a[Se] * ye[Se + be];
-        ye[be] = Fe / le[be].a[0], Ae < 11 && Ae++;
+          Fe -= le[xe].a[Se] * ye[Se + xe];
+        ye[xe] = Fe / le[xe].a[0], Ae < 11 && Ae++;
       }
     }
     function z(le, me) {
@@ -51273,24 +51286,24 @@ function py() {
     }
     function I(le, me) {
       let ye = 0;
-      for (let we = 0; we < me; we++)
-        ye += z(le[we].type, le[we + 1].type);
+      for (let Ce = 0; Ce < me; Ce++)
+        ye += z(le[Ce].type, le[Ce + 1].type);
       return ye;
     }
-    function O(le, me, ye, we, be, Se, Ae, Fe, Me) {
+    function O(le, me, ye, Ce, xe, Se, Ae, Fe, Me) {
       if (Ae >= 0) {
-        let Ce = (Se + 5 - Ae + Me) % Me;
-        Me < 6 ? Ce = Se + 5 - Ae : Me === 6 && (Ce = 2 + (Se + 3 - Ae + Me) % Me), me[Ae] += we;
-        for (let Le = 0; Le < Fe; Le++)
-          le[Ae].a[Ce + Le] += be * ye[Le];
+        let be = (Se + 5 - Ae + Me) % Me;
+        Me < 6 ? be = Se + 5 - Ae : Me === 6 && (be = 2 + (Se + 3 - Ae + Me) % Me), me[Ae] += Ce;
+        for (let Pe = 0; Pe < Fe; Pe++)
+          le[Ae].a[be + Pe] += xe * ye[Pe];
       }
     }
-    function R(le, me, ye, we, be) {
+    function R(le, me, ye, Ce, xe) {
       const Se = le[0].type !== "open" && le[0].type !== "corner";
-      let Ae, Fe, Me, Ce = I(le, be), Le, Pe;
-      for (Ae = 0; Ae < Ce; Ae++)
-        we[Ae] = 0, me[Ae] = new u();
-      for (Fe = 0, le[0].type === "g4" ? Me = Ce - 2 : le[0].type === "g2" ? Me = Ce - 1 : Me = 0, Ae = 0; Ae < be; Ae++) {
+      let Ae, Fe, Me, be = I(le, xe), Pe, Le;
+      for (Ae = 0; Ae < be; Ae++)
+        Ce[Ae] = 0, me[Ae] = new u();
+      for (Fe = 0, le[0].type === "g4" ? Me = be - 2 : le[0].type === "g2" ? Me = be - 1 : Me = 0, Ae = 0; Ae < xe; Ae++) {
         const Ie = le[Ae].type, Oe = le[Ae + 1].type, De = z(Ie, Oe), st = le[Ae].bend_th;
         let Ke = [
           [0, 0, 0, 0],
@@ -51312,90 +51325,90 @@ function py() {
             [0, 0, 0, 0],
             [0, 0, 0, 0]
           ]
-        ], lt = -1, ut = -1, ht = -1, xt = -1, Gt = -1, dt = -1, Pt = -1, ot = -1;
-        C(le[Ae], Ke, tt, De), (Ie === "g4" || Ie === "g2" || Ie === "left" || Ie === "right") && (lt = Me++, Me %= Ce, ut = Me++), Ie === "g4" && (Me %= Ce, ht = Me++, xt = Me++), (Ie === "left" || Ie === "corner" || Ie === "open" || Ie === "g2") && De === 4 && (Ie !== "g2" && (ht = Me++), xt = Me++), (Oe === "right" || Oe === "corner" || Oe === "open_end" || Oe === "g2") && De === 4 && (Oe !== "g2" && (Pt = Me++), ot = Me++), (Oe === "g4" || Oe === "g2" || Oe === "left" || Oe === "right") && (Gt = Me, dt = (Me + 1) % Ce), Oe === "g4" && (Pt = (Me + 2) % Ce, ot = (Me + 3) % Ce), O(me, we, tt[0][0], st - Ke[0][0], 1, Fe, lt, De, Ce), O(me, we, tt[1][0], Ke[0][1], -1, Fe, ut, De, Ce), O(me, we, tt[2][0], Ke[0][2], -1, Fe, ht, De, Ce), O(me, we, tt[3][0], Ke[0][3], -1, Fe, xt, De, Ce), O(me, we, tt[0][1], -Ke[1][0], 1, Fe, Gt, De, Ce), O(me, we, tt[1][1], -Ke[1][1], 1, Fe, dt, De, Ce), O(me, we, tt[2][1], -Ke[1][2], 1, Fe, Pt, De, Ce), O(me, we, tt[3][1], -Ke[1][3], 1, Fe, ot, De, Ce), Fe += De;
+        ], lt = -1, pt = -1, ht = -1, xt = -1, qt = -1, ct = -1, Rt = -1, ot = -1;
+        C(le[Ae], Ke, tt, De), (Ie === "g4" || Ie === "g2" || Ie === "left" || Ie === "right") && (lt = Me++, Me %= be, pt = Me++), Ie === "g4" && (Me %= be, ht = Me++, xt = Me++), (Ie === "left" || Ie === "corner" || Ie === "open" || Ie === "g2") && De === 4 && (Ie !== "g2" && (ht = Me++), xt = Me++), (Oe === "right" || Oe === "corner" || Oe === "open_end" || Oe === "g2") && De === 4 && (Oe !== "g2" && (Rt = Me++), ot = Me++), (Oe === "g4" || Oe === "g2" || Oe === "left" || Oe === "right") && (qt = Me, ct = (Me + 1) % be), Oe === "g4" && (Rt = (Me + 2) % be, ot = (Me + 3) % be), O(me, Ce, tt[0][0], st - Ke[0][0], 1, Fe, lt, De, be), O(me, Ce, tt[1][0], Ke[0][1], -1, Fe, pt, De, be), O(me, Ce, tt[2][0], Ke[0][2], -1, Fe, ht, De, be), O(me, Ce, tt[3][0], Ke[0][3], -1, Fe, xt, De, be), O(me, Ce, tt[0][1], -Ke[1][0], 1, Fe, qt, De, be), O(me, Ce, tt[1][1], -Ke[1][1], 1, Fe, ct, De, be), O(me, Ce, tt[2][1], -Ke[1][2], 1, Fe, Rt, De, be), O(me, Ce, tt[3][1], -Ke[1][3], 1, Fe, ot, De, be), Fe += De;
       }
-      for (Se ? (m(me, 0, me, Ce, Ce), m(me, 0, me, 2 * Ce, Ce), g(we, 0, we, Ce, Ce), g(we, 0, we, 2 * Ce, Ce), Pe = 3 * Ce, Fe = Ce) : (Pe = Ce, Fe = 0), M(me, ye, Pe), E(me, ye, we, Pe), Le = 0, Ae = 0; Ae < be; Ae++) {
+      for (Se ? (m(me, 0, me, be, be), m(me, 0, me, 2 * be, be), g(Ce, 0, Ce, be, be), g(Ce, 0, Ce, 2 * be, be), Le = 3 * be, Fe = be) : (Le = be, Fe = 0), M(me, ye, Le), E(me, ye, Ce, Le), Pe = 0, Ae = 0; Ae < xe; Ae++) {
         const Ie = le[Ae].type, Oe = le[Ae + 1].type, De = z(Ie, Oe);
         for (let st = 0; st < De; st++) {
-          const Ke = we[Fe++];
-          le[Ae].ks[st] += Ke, Le += Ke * Ke;
+          const Ke = Ce[Fe++];
+          le[Ae].ks[st] += Ke, Pe += Ke * Ke;
         }
       }
-      return Le;
+      return Pe;
     }
     function G(le, me) {
-      let ye = [], we = [], be = [], Se = I(le, me), Ae = Se, Fe;
+      let ye = [], Ce = [], xe = [], Se = I(le, me), Ae = Se, Fe;
       if (Se === 0)
         return 0;
       le[0].type !== "open" && le[0].type !== "corner" && (Ae *= 3), Ae < 5 && (Ae = 5);
       for (let Me = 0; Me < Ae; Me++)
-        ye[Me] = new u(), we[Me] = 0, be[Me] = 0;
-      for (let Me = 0; Me < 10 && (Fe = R(le, ye, be, we, me), !(Fe < 1e-12)); Me++)
+        ye[Me] = new u(), Ce[Me] = 0, xe[Me] = 0;
+      for (let Me = 0; Me < 10 && (Fe = R(le, ye, xe, Ce, me), !(Fe < 1e-12)); Me++)
         ;
       return 0;
     }
     const X = 1e-8;
-    function Y(le, me, ye, we) {
+    function Y(le, me, ye, Ce) {
       if (le.bend <= X)
         me.lineTo(le.x1, le.y1);
       else {
-        const be = B(le, we);
-        for (const Se of be) {
-          const [Ae, Fe, Me, Ce] = Se.toCubicBezier();
-          me.cubicTo(Fe.x, Fe.y, Me.x, Me.y, Ce.x, Ce.y);
+        const xe = B(le, Ce);
+        for (const Se of xe) {
+          const [Ae, Fe, Me, be] = Se.toCubicBezier();
+          me.cubicTo(Fe.x, Fe.y, Me.x, Me.y, be.x, be.y);
         }
       }
       ye && ye.call(me, le.x0, le.y0, le.x1, le.y1);
     }
     function B(le, me) {
-      e: for (let we = 1; we < a; we++) {
-        let be = [];
-        ie(le, we, be);
-        for (const Se of be)
+      e: for (let Ce = 1; Ce < a; Ce++) {
+        let xe = [];
+        ie(le, Ce, xe);
+        for (const Se of xe)
           if (Se.bend > me)
             continue e;
-        return be;
+        return xe;
       }
       let ye = [];
       return ie(le, a, ye), ye;
     }
     function ie(le, me, ye) {
       for (; me > 1; me--) {
-        const we = le.subdivide(1 / me);
-        ye.push(we[0]), le = we[1];
+        const Ce = le.subdivide(1 / me);
+        ye.push(Ce[0]), le = Ce[1];
       }
       ye.push(le);
     }
     function oe(le, me) {
-      const ye = le[0].type === "open" ? me - 1 : me, we = _(le, me);
-      return ye > 1 && G(we, ye), we;
+      const ye = le[0].type === "open" ? me - 1 : me, Ce = _(le, me);
+      return ye > 1 && G(Ce, ye), Ce;
     }
     function se(le, me) {
       let ye;
-      const we = le.length;
+      const Ce = le.length;
       if (me)
-        ye = oe(le, we);
+        ye = oe(le, Ce);
       else {
-        let be = le[0].type, Se = le[we - 1].type;
-        le[0].type = "open", le[we - 1].type = "open_end", ye = oe(le, we), le[we - 1].type = Se, le[0].type = be;
+        let xe = le[0].type, Se = le[Ce - 1].type;
+        le[0].type = "open", le[Ce - 1].type = "open_end", ye = oe(le, Ce), le[Ce - 1].type = Se, le[0].type = xe;
       }
-      return { s: ye, n: we };
+      return { s: ye, n: Ce };
     }
     function Q(le, me, ye) {
-      const we = le[me - 1].type === "open_end" ? me - 1 : me;
-      for (let be = 0; be < we; be++) {
-        const Se = le[be].x, Ae = le[be].y, Fe = le[be + 1].x, Me = le[be + 1].y;
-        be === 0 && (ye.moveTo(Se, Ae), le[0].af && le[0].af.call(ye, Se, Ae));
-        const Ce = new n.SpiroArc(le[be].ks, Se, Ae, Fe, Me);
-        ye.arcTo(Ce, Fe, Me, Ce.bend <= X), le[be + 1].af && le[be + 1].af.call(ye, Se, Ae, Fe, Me);
+      const Ce = le[me - 1].type === "open_end" ? me - 1 : me;
+      for (let xe = 0; xe < Ce; xe++) {
+        const Se = le[xe].x, Ae = le[xe].y, Fe = le[xe + 1].x, Me = le[xe + 1].y;
+        xe === 0 && (ye.moveTo(Se, Ae), le[0].af && le[0].af.call(ye, Se, Ae));
+        const be = new n.SpiroArc(le[xe].ks, Se, Ae, Fe, Me);
+        ye.arcTo(be, Fe, Me, be.bend <= X), le[xe + 1].af && le[xe + 1].af.call(ye, Se, Ae, Fe, Me);
       }
     }
-    function ee(le, me, ye, we = 1) {
-      const be = le[me - 1].type === "open_end" ? me - 1 : me;
-      for (let Se = 0; Se < be; Se++) {
-        const Ae = le[Se].x, Fe = le[Se].y, Me = le[Se + 1].x, Ce = le[Se + 1].y;
-        Se === 0 && (ye.moveTo(Ae, Fe), le[0].af && le[0].af.call(ye, Ae, Fe)), Y(new n.SpiroArc(le[Se].ks, Ae, Fe, Me, Ce), ye, le[Se + 1].af, we);
+    function ee(le, me, ye, Ce = 1) {
+      const xe = le[me - 1].type === "open_end" ? me - 1 : me;
+      for (let Se = 0; Se < xe; Se++) {
+        const Ae = le[Se].x, Fe = le[Se].y, Me = le[Se + 1].x, be = le[Se + 1].y;
+        Se === 0 && (ye.moveTo(Ae, Fe), le[0].af && le[0].af.call(ye, Ae, Fe)), Y(new n.SpiroArc(le[Se].ks, Ae, Fe, Me, be), ye, le[Se + 1].af, Ce);
       }
     }
     function J(le, me) {
@@ -51405,16 +51418,16 @@ function py() {
     o.spiroToArcs = J;
     function U(le, me, ye) {
       if (ye.beginShape && ye.beginShape(), le.length) {
-        const { s: we, n: be } = se(le, me);
-        Q(we, be, ye);
+        const { s: Ce, n: xe } = se(le, me);
+        Q(Ce, xe, ye);
       }
       ye.endShape && ye.endShape();
     }
     o.spiroToArcsOnContext = U;
-    function de(le, me, ye, we = 1) {
+    function de(le, me, ye, Ce = 1) {
       if (ye.beginShape && ye.beginShape(), le.length) {
-        const { s: be, n: Se } = se(le, me);
-        ee(be, Se, ye, we);
+        const { s: xe, n: Se } = se(le, me);
+        ee(xe, Se, ye, Ce);
       }
       ye.endShape && ye.endShape();
     }
@@ -52266,7 +52279,7 @@ const Ly = (
       )
     )
   )
-) : void 0, $i = {}, Kd = {}, $s = [], Jd = {}, Ry = (o) => o, Rt = (o) => ($i[o.mode] = {
+) : void 0, $i = {}, Kd = {}, $s = [], Jd = {}, Ry = (o) => o, Bt = (o) => ($i[o.mode] = {
   ...$i[o.mode],
   ...o.toMode
 }, Object.keys(o.fromMode || {}).forEach((e) => {
@@ -53638,8 +53651,8 @@ function Hv(o, e, i, n, s, a = null) {
     {
       let u = i - s, g = n, m = 0.3963377774 * o + 0.2158037573 * e, w = -0.1055613458 * o - 0.0638541728 * e, C = -0.0894841775 * o - 1.291485548 * e, k = u + g * m, _ = u + g * w, M = u + g * C;
       {
-        let E = s * (1 - c) + c * i, z = c * n, I = E + z * m, O = E + z * w, R = E + z * C, G = I * I * I, X = O * O * O, Y = R * R * R, B = 3 * k * I * I, ie = 3 * _ * O * O, oe = 3 * M * R * R, se = 6 * k * k * I, Q = 6 * _ * _ * O, ee = 6 * M * M * R, J = 4.0767416621 * G - 3.3077115913 * X + 0.2309699292 * Y - 1, U = 4.0767416621 * B - 3.3077115913 * ie + 0.2309699292 * oe, de = 4.0767416621 * se - 3.3077115913 * Q + 0.2309699292 * ee, te = U / (U * U - 0.5 * J * de), le = -J * te, me = -1.2684380046 * G + 2.6097574011 * X - 0.3413193965 * Y - 1, ye = -1.2684380046 * B + 2.6097574011 * ie - 0.3413193965 * oe, we = -1.2684380046 * se + 2.6097574011 * Q - 0.3413193965 * ee, be = ye / (ye * ye - 0.5 * me * we), Se = -me * be, Ae = -0.0041960863 * G - 0.7034186147 * X + 1.707614701 * Y - 1, Fe = -0.0041960863 * B - 0.7034186147 * ie + 1.707614701 * oe, Me = -0.0041960863 * se - 0.7034186147 * Q + 1.707614701 * ee, Ce = Fe / (Fe * Fe - 0.5 * Ae * Me), Le = -Ae * Ce;
-        le = te >= 0 ? le : 1e6, Se = be >= 0 ? Se : 1e6, Le = Ce >= 0 ? Le : 1e6, c += Math.min(le, Math.min(Se, Le));
+        let E = s * (1 - c) + c * i, z = c * n, I = E + z * m, O = E + z * w, R = E + z * C, G = I * I * I, X = O * O * O, Y = R * R * R, B = 3 * k * I * I, ie = 3 * _ * O * O, oe = 3 * M * R * R, se = 6 * k * k * I, Q = 6 * _ * _ * O, ee = 6 * M * M * R, J = 4.0767416621 * G - 3.3077115913 * X + 0.2309699292 * Y - 1, U = 4.0767416621 * B - 3.3077115913 * ie + 0.2309699292 * oe, de = 4.0767416621 * se - 3.3077115913 * Q + 0.2309699292 * ee, te = U / (U * U - 0.5 * J * de), le = -J * te, me = -1.2684380046 * G + 2.6097574011 * X - 0.3413193965 * Y - 1, ye = -1.2684380046 * B + 2.6097574011 * ie - 0.3413193965 * oe, Ce = -1.2684380046 * se + 2.6097574011 * Q - 0.3413193965 * ee, xe = ye / (ye * ye - 0.5 * me * Ce), Se = -me * xe, Ae = -0.0041960863 * G - 0.7034186147 * X + 1.707614701 * Y - 1, Fe = -0.0041960863 * B - 0.7034186147 * ie + 1.707614701 * oe, Me = -0.0041960863 * se - 0.7034186147 * Q + 1.707614701 * ee, be = Fe / (Fe * Fe - 0.5 * Ae * Me), Pe = -Ae * be;
+        le = te >= 0 ? le : 1e6, Se = xe >= 0 ? Se : 1e6, Pe = be >= 0 ? Pe : 1e6, c += Math.min(le, Math.min(Se, Pe));
       }
     }
   }
@@ -54145,36 +54158,36 @@ function b_(o, e) {
   let i = cc(o), n = cc(e);
   return (Math.max(i, n) + 0.05) / (Math.min(i, n) + 0.05);
 }
-Rt(Qy);
-Rt(ov);
-Rt(av);
-Rt(lv);
-Rt(hv);
-Rt(oh);
-Rt(ch);
-Rt(xv);
-Rt(wv);
-Rt(Ev);
-Rt(Av);
-Rt(Nl);
-Rt(Pv);
-Rt(Fl);
-Rt(Tv);
-Rt(jv);
-Rt(Gv);
-Rt(qv);
-Rt(Yv);
-Rt(Xv);
-Rt(Zv);
-Rt(Kv);
-Rt(Jv);
-Rt(Qv);
-Rt(i_);
-Rt(nr);
-Rt(s_);
-Rt(o_);
-Rt(c_);
-Rt(u_);
+Bt(Qy);
+Bt(ov);
+Bt(av);
+Bt(lv);
+Bt(hv);
+Bt(oh);
+Bt(ch);
+Bt(xv);
+Bt(wv);
+Bt(Ev);
+Bt(Av);
+Bt(Nl);
+Bt(Pv);
+Bt(Fl);
+Bt(Tv);
+Bt(jv);
+Bt(Gv);
+Bt(qv);
+Bt(Yv);
+Bt(Xv);
+Bt(Zv);
+Bt(Kv);
+Bt(Jv);
+Bt(Qv);
+Bt(i_);
+Bt(nr);
+Bt(s_);
+Bt(o_);
+Bt(c_);
+Bt(u_);
 const x_ = Di("rgb");
 function w_(o, e, i = 0.4) {
   return __({ mode: "oklch", l: o, c: i, h: e }, "oklch");
@@ -54678,10 +54691,10 @@ const ib = "fonts", nb = {
     }), i("canvasGrid").appendChild(G);
     const X = (se, Q, ee, J) => {
       const U = [], de = (me) => {
-        const ye = me * Math.PI / 180, we = { x: Math.cos(ye), y: Math.sin(ye) }, be = { x: -Math.sin(ye), y: Math.cos(ye) }, Ae = [[0, 0], [Q, 0], [0, ee], [Q, ee]].map(([Le, Pe]) => Le * be.x + Pe * be.y), Fe = Math.min(...Ae), Me = Math.max(...Ae), Ce = Math.hypot(Q, ee);
-        for (let Le = Math.floor(Fe / J) * J; Le <= Me; Le += J) {
-          const Pe = Le * be.x, Ie = Le * be.y;
-          U.push([Pe - Ce * we.x, Ie - Ce * we.y, Pe + Ce * we.x, Ie + Ce * we.y]);
+        const ye = me * Math.PI / 180, Ce = { x: Math.cos(ye), y: Math.sin(ye) }, xe = { x: -Math.sin(ye), y: Math.cos(ye) }, Ae = [[0, 0], [Q, 0], [0, ee], [Q, ee]].map(([Pe, Le]) => Pe * xe.x + Le * xe.y), Fe = Math.min(...Ae), Me = Math.max(...Ae), be = Math.hypot(Q, ee);
+        for (let Pe = Math.floor(Fe / J) * J; Pe <= Me; Pe += J) {
+          const Le = Pe * xe.x, Ie = Pe * xe.y;
+          U.push([Le - be * Ce.x, Ie - be * Ce.y, Le + be * Ce.x, Ie + be * Ce.y]);
         }
       }, te = () => {
         const me = [];
@@ -54703,17 +54716,17 @@ const ib = "fonts", nb = {
           break;
         case "perspective1": {
           const me = [Q / 2, ee / 2];
-          U.push([0, ee / 2, Q, ee / 2]), te().forEach(([ye, we]) => U.push([me[0], me[1], ye, we]));
+          U.push([0, ee / 2, Q, ee / 2]), te().forEach(([ye, Ce]) => U.push([me[0], me[1], ye, Ce]));
           break;
         }
         case "perspective2": {
           const me = [0, ee / 2], ye = [Q, ee / 2];
           U.push([0, ee / 2, Q, ee / 2]);
-          const we = [];
-          for (let be = 0; be <= Q; be += J)
-            we.push([be, 0], [be, ee]);
-          we.forEach(([be, Se]) => {
-            U.push([me[0], me[1], be, Se]), U.push([ye[0], ye[1], be, Se]);
+          const Ce = [];
+          for (let xe = 0; xe <= Q; xe += J)
+            Ce.push([xe, 0], [xe, ee]);
+          Ce.forEach(([xe, Se]) => {
+            U.push([me[0], me[1], xe, Se]), U.push([ye[0], ye[1], xe, Se]);
           });
           break;
         }
@@ -54738,12 +54751,12 @@ const ib = "fonts", nb = {
           te *= 2;
       O.setAttribute("width", J), O.setAttribute("height", U);
       const le = X(se, J, U, te), me = s.createDocumentFragment();
-      le.forEach(([ye, we, be, Se]) => {
+      le.forEach(([ye, Ce, xe, Se]) => {
         const Ae = s.createElementNS(n.SVG, "line");
         a(Ae, {
           x1: ye,
-          y1: we,
-          x2: be,
+          y1: Ce,
+          x2: xe,
           y2: Se,
           stroke: w.gridColor,
           "stroke-width": 1,
@@ -54753,14 +54766,14 @@ const ib = "fonts", nb = {
     }, B = (se) => {
       const ee = g[o.configObj.curConfig.baseUnit] * se, J = 100 / ee;
       let U = 1;
-      m.some((we) => (U = we, J <= we));
+      m.some((Ce) => (U = Ce, J <= Ce));
       const de = U * ee;
       c.width = de, c.height = de;
       const te = c.getContext("2d"), le = 0.5, me = de / 10;
       te.globalAlpha = 0.2, te.strokeStyle = o.configObj.curConfig.gridColor;
-      for (let we = 1; we < 10; we++) {
-        const be = Math.round(me * we) + 0.5, Se = 0;
-        te.moveTo(be, de), te.lineTo(be, Se), te.moveTo(de, be), te.lineTo(Se, be);
+      for (let Ce = 1; Ce < 10; Ce++) {
+        const xe = Math.round(me * Ce) + 0.5, Se = 0;
+        te.moveTo(xe, de), te.lineTo(xe, Se), te.moveTo(de, xe), te.lineTo(Se, xe);
       }
       te.stroke(), te.beginPath(), te.globalAlpha = 0.5, te.moveTo(le, de), te.lineTo(le, 0), te.moveTo(de, le), te.lineTo(0, le), te.stroke();
       const ye = c.toDataURL("image/png");
@@ -55989,18 +56002,18 @@ const Oh = (o) => {
               const de = U.getAttribute("sides"), te = U.getAttribute("points");
               let le = 0, me = 0;
               if (U.points) {
-                const ye = U.points, we = ye.numberOfItems;
-                for (let Le = 0; Le < we; ++Le) {
-                  const Pe = ye.getItem(Le);
-                  le += parseFloat(Pe.x), me += parseFloat(Pe.y);
+                const ye = U.points, Ce = ye.numberOfItems;
+                for (let Pe = 0; Pe < Ce; ++Pe) {
+                  const Le = ye.getItem(Pe);
+                  le += parseFloat(Le.x), me += parseFloat(Le.y);
                 }
-                const be = le / we, Se = me / we, Me = U.getAttribute("edge") / 2 * C(Math.PI / ee) * k(Math.PI / ee);
-                let Ce = "";
-                for (let Le = 0; ee >= Le; Le++) {
-                  const Pe = 2 * Math.PI * Le / ee, Ie = Me * Math.cos(Pe) + be, Oe = Me * Math.sin(Pe) + Se;
-                  Ce += Ie + "," + Oe + " ";
+                const xe = le / Ce, Se = me / Ce, Me = U.getAttribute("edge") / 2 * C(Math.PI / ee) * k(Math.PI / ee);
+                let be = "";
+                for (let Pe = 0; ee >= Pe; Pe++) {
+                  const Le = 2 * Math.PI * Pe / ee, Ie = Me * Math.cos(Le) + xe, Oe = Me * Math.sin(Le) + Se;
+                  be += Ie + "," + Oe + " ";
                 }
-                U.setAttribute("points", Ce), n(new i(U, { sides: de, points: te }));
+                U.setAttribute("points", be), n(new i(U, { sides: de, points: te }));
               }
             }
           }
@@ -56322,19 +56335,19 @@ const mc = 1e-8, fx = (o, e, i = 1) => {
       const U = J ?? pd(se);
       if (!U) return [];
       const de = El(), te = new de.CompoundPath(U), le = te.children?.length ? te.children : [te], me = [], ye = Bh(ee);
-      for (const we of le) {
-        const be = we.length;
-        if (!be) {
-          const Me = we.segments?.[0]?.point;
+      for (const Ce of le) {
+        const xe = Ce.length;
+        if (!xe) {
+          const Me = Ce.segments?.[0]?.point;
           Me && me.push({ pts: [xr(Me.x, Me.y, Q)], closed: !1 });
           continue;
         }
-        const Se = Math.max(8, Math.min(400, Math.ceil(be / ye))), Ae = we.closed ? Se - 1 : Se, Fe = [];
+        const Se = Math.max(8, Math.min(400, Math.ceil(xe / ye))), Ae = Ce.closed ? Se - 1 : Se, Fe = [];
         for (let Me = 0; Me <= Ae; Me++) {
-          const Ce = we.getPointAt(Me / Se * be);
-          Ce && Fe.push(xr(Ce.x, Ce.y, Q));
+          const be = Ce.getPointAt(Me / Se * xe);
+          be && Fe.push(xr(be.x, be.y, Q));
         }
-        Fe.length && me.push({ pts: Fe, closed: we.closed });
+        Fe.length && me.push({ pts: Fe, closed: Ce.closed });
       }
       return te.remove(), me;
     }, z = () => {
@@ -58257,7 +58270,7 @@ const sl = /* @__PURE__ */ yd(xw), ww = (o) => new Promise((e, i) => {
   if (!a) throw new Error("No image source to trace.");
   const c = await Ew(a), u = kw(i, n), g = sl.imagedataToSVG(c, u), m = s.getStrokedBBox([o]);
   Ih(g, { asPaths: !0, fitTo: m });
-}, { $click: Ai } = $t, Uh = "__svgedit_move_to_new_layer__";
+}, { $click: Ai } = zt, Uh = "__svgedit_move_to_new_layer__";
 class Mw {
   /**
    * @param {PlainObject} editor
@@ -58636,7 +58649,7 @@ const Pw = '.svg_editor.ui-tablet{--hit: 56px;--hit-sm: 46px;--r-md: 16px;--r-lg
   if (document.querySelector("style[data-svgedit-css]")) return;
   const o = document.createElement("style");
   o.setAttribute("data-svgedit-css", ""), o.textContent = Pw, document.head.append(o);
-}, { $click: Nw, convertUnit: Cc, scopedId: Fw, scopedQa: Iw, scopedQq: Ow } = $t;
+}, { $click: Nw, convertUnit: Cc, scopedId: Fw, scopedQa: Iw, scopedQq: Ow } = zt;
 class zw {
   /**
    *
@@ -58673,10 +58686,10 @@ class zw {
       me.setAttribute("id", "se-alert-dialog"), this.$container.append(me);
       const ye = document.createElement("se-prompt-dialog");
       ye.setAttribute("id", "se-prompt-dialog"), this.$container.append(ye);
-      const we = document.createElement("se-text-prompt-dialog");
-      we.setAttribute("id", "se-text-prompt-dialog"), this.$container.append(we), we.init(this.i18next);
-      const be = document.createElement("se-export-dialog");
-      be.setAttribute("id", "se-export-dialog"), this.$container.append(be), be.init(this.i18next);
+      const Ce = document.createElement("se-text-prompt-dialog");
+      Ce.setAttribute("id", "se-text-prompt-dialog"), this.$container.append(Ce), Ce.init(this.i18next);
+      const xe = document.createElement("se-export-dialog");
+      xe.setAttribute("id", "se-export-dialog"), this.$container.append(xe), xe.init(this.i18next);
       const Se = document.createElement("se-image-import-dialog");
       Se.setAttribute("id", "se-image-import-dialog"), this.$container.append(Se), Se.init(this.i18next);
       const Ae = document.createElement("se-trace-dialog");
@@ -58685,12 +58698,12 @@ class zw {
       Fe.setAttribute("id", "se-hotkey-dialog"), this.$container.append(Fe), Fe.init(this.i18next);
       const Me = document.createElement("se-favorites-dialog");
       Me.setAttribute("id", "se-favorites-dialog"), this.$container.append(Me), Me.init(this.i18next);
-      const Ce = document.createElement("se-command-search-dialog");
-      Ce.setAttribute("id", "se-command-search-dialog"), this.$container.append(Ce), Ce.init(this.i18next);
+      const be = document.createElement("se-command-search-dialog");
+      be.setAttribute("id", "se-command-search-dialog"), this.$container.append(be), be.init(this.i18next);
     } catch (U) {
       console.error(U);
     }
-    this.svgCanvas = new $t(
+    this.svgCanvas = new zt(
       e("svgcanvas"),
       this.configObj.curConfig,
       this.$container
@@ -58781,12 +58794,12 @@ class zw {
       if (!me) {
         const ye = de.getSelectedElements().filter(Boolean);
         if (ye.length) {
-          let we = 1 / 0, be = 1 / 0, Se = -1 / 0, Ae = -1 / 0;
+          let Ce = 1 / 0, xe = 1 / 0, Se = -1 / 0, Ae = -1 / 0;
           for (const Fe of ye) {
             const Me = Fe.getBoundingClientRect();
-            we = Math.min(we, Me.left), be = Math.min(be, Me.top), Se = Math.max(Se, Me.right), Ae = Math.max(Ae, Me.bottom);
+            Ce = Math.min(Ce, Me.left), xe = Math.min(xe, Me.top), Se = Math.max(Se, Me.right), Ae = Math.max(Ae, Me.bottom);
           }
-          me = U.clientX >= we && U.clientX <= Se && U.clientY >= be && U.clientY <= Ae;
+          me = U.clientX >= Ce && U.clientX <= Se && U.clientY >= xe && U.clientY <= Ae;
         }
       }
       this.workarea.style.cursor = me ? g : "auto";
@@ -59432,7 +59445,7 @@ const ds = (o) => {
   }), o.addEventListener("keydown", G), o.addEventListener("focusout", X), new MutationObserver(() => {
     k(), _();
   }).observe(e, { attributes: !0, attributeFilter: ["opened"] }), o.setAttribute("role", "toolbar"), o.setAttribute("aria-orientation", "vertical"), w(), k(), _();
-}, { $click: qi } = $t, Ec = ["tool_fhpath", "tool_line", "tool_path", "tool_text", "tools_shapes"];
+}, { $click: qi } = zt, Ec = ["tool_fhpath", "tool_line", "tool_path", "tool_text", "tools_shapes"];
 class Gw {
   /**
    * @param {PlainObject} editor svgedit handler
@@ -59593,7 +59606,7 @@ const qw = '<div id="tools_top"><div id="title_panel"><p>untitled.svg</p></div><
     } catch (n) {
       console.error(`Step failed: ${e}; `, n);
     }
-}, { $click: Nt, isValidUnit: Vw, getTypeMap: Hw, convertUnit: ba } = $t, jt = (o) => Number(Number(o).toFixed(1)), Yw = [
+}, { $click: Tt, isValidUnit: Vw, getTypeMap: Hw, convertUnit: ba } = zt, jt = (o) => Number(Number(o).toFixed(1)), Yw = [
   "selected_panel",
   "multiselected_panel",
   "g_panel",
@@ -60412,16 +60425,16 @@ class Xw {
     const s = document.createElement(
       "se-svg-source-editor-dialog"
     );
-    s.setAttribute("id", "se-svg-editor-dialog"), this.editor.$container.append(s), this.updateTitle(), s.init(n), e("tool_link_url").setAttribute("title", n.t("tools.set_link_url")), Nt(e("tool_frame"), this.clickFrame.bind(this)), Nt(e("tool_wireframe"), this.clickWireframe.bind(this)), Nt(e("tool_undo"), this.clickUndo.bind(this)), Nt(e("tool_redo"), this.clickRedo.bind(this)), Nt(e("tool_clone"), this.clickClone.bind(this)), Nt(e("tool_clone_multi"), this.clickClone.bind(this)), Nt(e("tool_delete"), this.deleteSelected.bind(this)), Nt(e("tool_delete_multi"), this.deleteSelected.bind(this)), e("tool_arrange").addEventListener("change", this.clickArrange.bind(this)), e("tool_arrange_multi").addEventListener("change", this.clickArrange.bind(this)), Nt(e("tool_topath"), this.convertToPath.bind(this)), Nt(e("tool_stroke_to_path"), this.strokeToPath.bind(this)), e("tool_select_same").addEventListener("change", this.clickSelectSame.bind(this)), Nt(e("tool_match_strokes"), this.clickMatchStrokes.bind(this)), Nt(e("tool_make_link"), this.makeHyperlink.bind(this)), Nt(e("tool_make_link_multi"), this.makeHyperlink.bind(this)), Nt(e("tool_flip_h"), this.clickFlipHorizontal.bind(this)), Nt(e("tool_flip_v"), this.clickFlipVertical.bind(this)), Nt(e("tool_group_elements"), this.clickGroup.bind(this)), e("tool_bool_ops").addEventListener("change", this.clickBoolOps.bind(this)), Nt(e("tool_clip_set"), this.clickClipSet.bind(this)), Nt(e("tool_mask_set"), this.clickMaskSet.bind(this)), Nt(e("clipmask_release"), this.clickClipRelease.bind(this)), e("clipmask_feather").addEventListener("change", this.changeFeather.bind(this)), e("tool_position").addEventListener(
+    s.setAttribute("id", "se-svg-editor-dialog"), this.editor.$container.append(s), this.updateTitle(), s.init(n), e("tool_link_url").setAttribute("title", n.t("tools.set_link_url")), Tt(e("tool_frame"), this.clickFrame.bind(this)), Tt(e("tool_wireframe"), this.clickWireframe.bind(this)), Tt(e("tool_undo"), this.clickUndo.bind(this)), Tt(e("tool_redo"), this.clickRedo.bind(this)), Tt(e("tool_clone"), this.clickClone.bind(this)), Tt(e("tool_clone_multi"), this.clickClone.bind(this)), Tt(e("tool_delete"), this.deleteSelected.bind(this)), Tt(e("tool_delete_multi"), this.deleteSelected.bind(this)), e("tool_arrange").addEventListener("change", this.clickArrange.bind(this)), e("tool_arrange_multi").addEventListener("change", this.clickArrange.bind(this)), Tt(e("tool_topath"), this.convertToPath.bind(this)), Tt(e("tool_stroke_to_path"), this.strokeToPath.bind(this)), e("tool_select_same").addEventListener("change", this.clickSelectSame.bind(this)), Tt(e("tool_match_strokes"), this.clickMatchStrokes.bind(this)), Tt(e("tool_make_link"), this.makeHyperlink.bind(this)), Tt(e("tool_make_link_multi"), this.makeHyperlink.bind(this)), Tt(e("tool_flip_h"), this.clickFlipHorizontal.bind(this)), Tt(e("tool_flip_v"), this.clickFlipVertical.bind(this)), Tt(e("tool_group_elements"), this.clickGroup.bind(this)), e("tool_bool_ops").addEventListener("change", this.clickBoolOps.bind(this)), Tt(e("tool_clip_set"), this.clickClipSet.bind(this)), Tt(e("tool_mask_set"), this.clickMaskSet.bind(this)), Tt(e("clipmask_release"), this.clickClipRelease.bind(this)), e("clipmask_feather").addEventListener("change", this.changeFeather.bind(this)), e("tool_position").addEventListener(
       "change",
       (c) => this.clickAlignEle.bind(this)(c)
-    ), e("tool_align_multi").addEventListener("change", this.clickAlignMulti.bind(this)), Nt(e("tool_node_smooth"), this.smoothPathNode.bind(this)), Nt(e("tool_node_clone"), this.clonePathNode.bind(this)), Nt(e("tool_node_delete"), this.deletePathNode.bind(this)), Nt(e("tool_openclose_path"), this.opencloseSubPath.bind(this)), Nt(e("tool_add_subpath"), this.addSubPath.bind(this)), Nt(e("tool_node_link"), this.linkControlPoints.bind(this)), e("angle").addEventListener("change", this.changeRotationAngle.bind(this)), e("blur").addEventListener("change", this.changeBlur.bind(this)), e("rect_rx").addEventListener("change", this.changeRectRadius.bind(this)), e("circle_arc").addEventListener("change", this.changeCircleArc.bind(this)), e("ellipse_arc").addEventListener("change", this.changeCircleArc.bind(this)), e("font_size").addEventListener("change", this.changeFontSize.bind(this)), Nt(e("tool_ungroup"), this.clickGroup.bind(this)), Nt(e("tool_bold"), this.clickBold.bind(this)), Nt(e("tool_italic"), this.clickItalic.bind(this)), Nt(
+    ), e("tool_align_multi").addEventListener("change", this.clickAlignMulti.bind(this)), Tt(e("tool_node_smooth"), this.smoothPathNode.bind(this)), Tt(e("tool_node_clone"), this.clonePathNode.bind(this)), Tt(e("tool_node_delete"), this.deletePathNode.bind(this)), Tt(e("tool_openclose_path"), this.opencloseSubPath.bind(this)), Tt(e("tool_add_subpath"), this.addSubPath.bind(this)), Tt(e("tool_node_link"), this.linkControlPoints.bind(this)), e("angle").addEventListener("change", this.changeRotationAngle.bind(this)), e("blur").addEventListener("change", this.changeBlur.bind(this)), e("rect_rx").addEventListener("change", this.changeRectRadius.bind(this)), e("circle_arc").addEventListener("change", this.changeCircleArc.bind(this)), e("ellipse_arc").addEventListener("change", this.changeCircleArc.bind(this)), e("font_size").addEventListener("change", this.changeFontSize.bind(this)), Tt(e("tool_ungroup"), this.clickGroup.bind(this)), Tt(e("tool_bold"), this.clickBold.bind(this)), Tt(e("tool_italic"), this.clickItalic.bind(this)), Tt(
       e("tool_text_decoration_underline"),
       () => this.clickTextDecoration.bind(this)("underline")
-    ), Nt(
+    ), Tt(
       e("tool_text_decoration_linethrough"),
       () => this.clickTextDecoration.bind(this)("line-through")
-    ), Nt(
+    ), Tt(
       e("tool_text_decoration_overline"),
       () => this.clickTextDecoration.bind(this)("overline")
     ), e("tool_text_anchor").addEventListener(
@@ -60445,9 +60458,9 @@ class Xw {
     ), e("tool_perspective_y").addEventListener(
       "change",
       this.changeTextPerspectiveY.bind(this)
-    ), Nt(e("tool_unlink_use"), this.clickGroup.bind(this)), e("image_url").addEventListener("change", (c) => {
+    ), Tt(e("tool_unlink_use"), this.clickGroup.bind(this)), e("image_url").addEventListener("change", (c) => {
       this.setImageURL(c.currentTarget.value);
-    }), Nt(e("tool_image_crop"), this.clickImageCrop.bind(this)), Nt(e("tool_image_crop_apply"), this.applyImageCrop.bind(this)), Nt(e("tool_image_crop_cancel"), () => this.editor.svgCanvas.cancelImageCrop());
+    }), Tt(e("tool_image_crop"), this.clickImageCrop.bind(this)), Tt(e("tool_image_crop_apply"), this.applyImageCrop.bind(this)), Tt(e("tool_image_crop_cancel"), () => this.editor.svgCanvas.cancelImageCrop());
     const a = this.editor.bottomPanel;
     e("zoom").addEventListener("change", (c) => a.changeZoom(c.detail.value)), e("stroke_width").addEventListener("change", (c) => a.changeStrokeWidth(c)), e("stroke_style").addEventListener(
       "change",
@@ -60974,7 +60987,7 @@ class tC {
     i.style.background = !n || n === "none" ? "#fff" : n;
   }
 }
-const { $click: yr } = $t;
+const { $click: yr } = zt;
 class iC {
   /**
    * @param {PlainObject} editor svgedit handler
@@ -61096,7 +61109,7 @@ class iC {
     );
   }
 }
-const { $click: nC, decode64: rC } = $t;
+const { $click: nC, decode64: rC } = zt;
 class sC extends zw {
   /**
    *
