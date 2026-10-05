@@ -3,7 +3,8 @@ import type SvgPlugin from "./main";
 import { SvgView } from "./view/SvgView";
 import { NewDrawingModal } from "./modals/NewDrawingModal";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
-import { exportSvg, exportPng } from "./export/exporter";
+import { exportDrawing } from "./export/exporter";
+import { listFrames } from "./export/frames";
 import { ExportModal } from "./modals/ExportModal";
 import { VersionsModal } from "./modals/VersionsModal";
 import { extractSvg, replaceSvg, createDrawingTemplate } from "./data/SvgData";
@@ -279,8 +280,8 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getExportSvgString();
         if (!svgString) return true;
-        const { exportFrame } = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
-        exportSvg(plugin.app, view.file, svgString, plugin.settings, exportFrame)
+        const effective = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
+        exportDrawing(plugin.app, view.file, svgString, plugin.settings, effective, { svg: true, png: false }, "#ffffff", () => plugin.saveSettings())
           .then(() => new Notice("Exported SVG"))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }
@@ -297,10 +298,41 @@ export function registerCommands(plugin: SvgPlugin): void {
       if (!checking) {
         const svgString = view.getExportSvgString();
         if (!svgString) return true;
-        const { transparentBackground, exportFrame } =
-          resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
-        exportPng(plugin.app, view.file, svgString, plugin.settings.pngScale, transparentBackground, plugin.settings, exportFrame, "", view.getCanvasBgColor())
+        const effective = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
+        exportDrawing(plugin.app, view.file, svgString, plugin.settings, effective, { svg: false, png: true }, view.getCanvasBgColor(), () => plugin.saveSettings())
           .then(() => new Notice("Exported PNG"))
+          .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
+      }
+      return true;
+    },
+  });
+
+  // Export every frame as its own file, regardless of the file's export-frame
+  // setting. Formats follow the file's auto-export settings (PNG if none enabled).
+  plugin.addCommand({
+    id: "export-all-frames",
+    name: "Export all frames",
+    checkCallback: (checking) => {
+      const view = getActiveSvgView(plugin);
+      if (!view || !view.file) return false;
+      if (!checking) {
+        const svgString = view.getExportSvgString();
+        if (!svgString) return true;
+        const effective = resolveEffectiveSettings(plugin.app, view.file, plugin.settings);
+        const formats = effective.autoExportSvg || effective.autoExportPng
+          ? { svg: effective.autoExportSvg, png: effective.autoExportPng }
+          : { svg: false, png: true };
+        const count = listFrames(svgString).length;
+        if (count === 0) {
+          new Notice("No frames in this drawing");
+          return true;
+        }
+        exportDrawing(
+          plugin.app, view.file, svgString, plugin.settings,
+          { ...effective, exportFrame: "all-frames" }, formats,
+          view.getCanvasBgColor(), () => plugin.saveSettings(),
+        )
+          .then(() => new Notice(`Exported ${count} frame${count === 1 ? "" : "s"}`))
           .catch((e: unknown) => new Notice(`Export failed: ${(e as Error).message}`));
       }
       return true;

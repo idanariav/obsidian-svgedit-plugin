@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { listFrames, prepareSvgForExport } from "../../src/export/frames";
+import { listFrames, prepareSvgForExport, resolveExportJobs } from "../../src/export/frames";
+import { frameFileSuffix } from "../../src/export/exporter";
 
 const SVG_WITH_FRAMES =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">' +
@@ -52,5 +53,45 @@ describe("prepareSvgForExport", () => {
   it("exports the whole canvas when the named frame doesn't match", () => {
     const result = prepareSvgForExport(SVG_WITH_FRAMES, "Nope");
     expect(result).toContain('viewBox="0 0 200 100"');
+  });
+});
+
+describe("resolveExportJobs", () => {
+  const frames = [
+    { id: "f1", name: "Intro" },
+    { id: "f2", name: "Hero shot" },
+  ];
+  const suffixOf = (n: string) => frameFileSuffix(n);
+  const canvas = { frameName: "", suffix: "" };
+  const intro = { frameName: "Intro", suffix: "-Intro" };
+  const hero = { frameName: "Hero shot", suffix: "-Hero-shot" };
+
+  it("keeps legacy behaviour for blank and single-name specs", () => {
+    expect(resolveExportJobs("", frames, suffixOf)).toEqual([canvas]);
+    expect(resolveExportJobs("Intro", frames, suffixOf)).toEqual([{ frameName: "Intro", suffix: "" }]);
+    expect(resolveExportJobs("Nope", frames, suffixOf)).toEqual([canvas]);
+  });
+
+  it("all-frames exports one suffixed file per frame and no canvas", () => {
+    expect(resolveExportJobs("all-frames", frames, suffixOf)).toEqual([intro, hero]);
+  });
+
+  it("all-frames-inc-canvas also exports the whole canvas", () => {
+    expect(resolveExportJobs("all-frames-inc-canvas", frames, suffixOf)).toEqual([intro, hero, canvas]);
+  });
+
+  it("a list exports only the named existing frames", () => {
+    expect(resolveExportJobs(["Hero shot", "Missing"], frames, suffixOf)).toEqual([hero]);
+    expect(resolveExportJobs(["Missing"], frames, suffixOf)).toEqual([canvas]);
+  });
+
+  it("falls back to the whole canvas when the drawing has no frames", () => {
+    expect(resolveExportJobs("all-frames", [], suffixOf)).toEqual([canvas]);
+  });
+
+  it("disambiguates frames whose names slug to the same filename", () => {
+    const clash = [{ id: "a", name: "A b" }, { id: "b", name: "A-b" }];
+    const jobs = resolveExportJobs("all-frames", clash, suffixOf);
+    expect(jobs.map((j) => j.suffix)).toEqual(["-A-b", "-A-b-2"]);
   });
 });

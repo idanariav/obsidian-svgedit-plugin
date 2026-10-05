@@ -87,6 +87,13 @@ When you export a specific frame, it's written to a **separate file** named afte
 drawing plus the frame name (for example `diagram-hero-shot.png`). That way it never
 clobbers the normal companion file that auto-export keeps up to date.
 
+### Export all frames
+
+Writes **every frame** as its own file (`<drawing>-<frame-name>.png`), whatever the
+file's [export-frame](frontmatter.md#sketch-editor-export-frame) setting says. Formats
+follow the file's auto-export settings (PNG if none are enabled). The whole canvas is
+not written, and per-frame files left over from deleted or renamed frames are removed.
+
 Only available when a drawing is open.
 
 ---

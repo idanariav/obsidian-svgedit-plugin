@@ -72,8 +72,12 @@ export interface EffectiveDrawingSettings {
   autoExportSvg: boolean;
   autoExportPng: boolean;
   transparentBackground: boolean;
-  /** Name of the frame to crop exports to. Empty string = export the whole canvas. */
-  exportFrame: string;
+  /**
+   * Frame export spec. Empty string = whole canvas; a frame name = crop to it;
+   * "all-frames" / "all-frames-inc-canvas" or a frontmatter list of frame names =
+   * one file per frame (see `resolveExportJobs`).
+   */
+  exportFrame: string | string[];
 }
 
 export interface SvgPluginSettings {
@@ -106,6 +110,8 @@ export interface SvgPluginSettings {
   transparentBackground: boolean;
   /** Global default frame name to crop exports to. Empty = export the whole canvas. */
   exportFrame: string;
+  /** Per-frame companion files written for each drawing (keyed by drawing path), so stale ones can be deleted. */
+  frameExportManifest: Record<string, string[]>;
   /** Per-folder overrides, applied before per-file frontmatter. */
   folderConfigs: FolderConfig[];
   /** When true, rename/delete of a drawing also renames/deletes its companion files. */
@@ -209,6 +215,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   openAsMarkdown: false,
   transparentBackground: false,
   exportFrame: "",
+  frameExportManifest: {},
   folderConfigs: [],
   keepInSync: false,
   removeExcalidrawData: false,

@@ -101,6 +101,16 @@ when you want a specific file to behave differently.
   instead.
 - Frame rectangles are always removed from the exported image, so they never appear
   in the result.
+- **Exporting several frames as separate files:**
+  - `all-frames` — one file per frame, named `<drawing>-<frame-name>.png` / `.svg`.
+    The whole canvas is **not** written.
+  - `all-frames-inc-canvas` — the same, plus the whole canvas as `<drawing>.png` / `.svg`.
+  - a YAML list of frame names (`[Intro, Hero shot]`) — only those frames, as separate
+    files. Names that match no frame are skipped.
+- The plugin remembers which per-frame files it wrote for each drawing. When a frame
+  is deleted or renamed (or you switch back to a single frame / the whole canvas), the
+  files it previously wrote that are no longer produced are **deleted** on the next
+  export. Files it didn't write are never touched.
 - Overrides the global [Export region](settings.md#export-region-frame-name) setting
   and folder overrides for this file.
 

@@ -27,6 +27,66 @@ export function listFrames(svgString: string): FrameInfo[] {
   }));
 }
 
+/** `exportFrame` value that exports every frame as its own file. */
+export const EXPORT_ALL_FRAMES = "all-frames";
+/** `exportFrame` value that exports every frame plus the whole canvas. */
+export const EXPORT_ALL_FRAMES_INC_CANVAS = "all-frames-inc-canvas";
+
+/** One export to perform: `frameName` "" = whole canvas; `suffix` goes on the filename. */
+export interface ExportJob {
+  frameName: string;
+  suffix: string;
+}
+
+/**
+ * Resolve an `exportFrame` setting into the exports to perform.
+ *
+ * - `""` → whole canvas; a frame name → that frame, written to the *unsuffixed*
+ *   companion path (a name matching no frame falls back to the whole canvas).
+ * - `"all-frames"` / `"all-frames-inc-canvas"`, or a list of frame names → one
+ *   suffixed file per frame (`drawing-<frame>.png`); the canvas goes to the
+ *   unsuffixed path and is included only for `-inc-canvas`. A list naming no
+ *   existing frame falls back to the whole canvas.
+ */
+export function resolveExportJobs(
+  spec: string | string[],
+  available: FrameInfo[],
+  suffixOf: (frameName: string) => string,
+): ExportJob[] {
+  const canvas: ExportJob = { frameName: "", suffix: "" };
+  const names = available.map((f) => f.name);
+  let wanted: string[];
+  let withCanvas = false;
+
+  if (Array.isArray(spec)) {
+    const list = spec.map((n) => String(n).trim()).filter(Boolean);
+    if (list.some((n) => n.toLowerCase() === EXPORT_ALL_FRAMES)) wanted = names;
+    else wanted = list.filter((n) => names.includes(n));
+  } else {
+    const v = spec.trim();
+    const key = v.toLowerCase();
+    if (key === EXPORT_ALL_FRAMES) wanted = names;
+    else if (key === EXPORT_ALL_FRAMES_INC_CANVAS) { wanted = names; withCanvas = true; }
+    else if (!v) return [canvas];
+    else return [names.includes(v) ? { frameName: v, suffix: "" } : canvas];
+  }
+
+  if (wanted.length === 0) return [canvas];
+
+  // Distinct frames can slug to the same filename ("A b" vs "A-b"); number the repeats.
+  const used = new Set<string>();
+  const jobs: ExportJob[] = [];
+  for (const name of new Set(wanted)) {
+    const base = suffixOf(name) || "-frame";
+    let suffix = base;
+    for (let n = 2; used.has(suffix); n++) suffix = `${base}-${n}`;
+    used.add(suffix);
+    jobs.push({ frameName: name, suffix });
+  }
+  if (withCanvas) jobs.push(canvas);
+  return jobs;
+}
+
 /**
  * Produce the SVG string to export.
  *

@@ -63,7 +63,7 @@ export function resolveEffectiveSettings(
   let autoExportSvg         = globalSettings.autoExportSvg;
   let autoExportPng         = globalSettings.autoExportPng;
   let transparentBackground = globalSettings.transparentBackground;
-  let exportFrame           = globalSettings.exportFrame;
+  let exportFrame: string | string[] = globalSettings.exportFrame;
 
   // 2. Apply the best-matching folder override (longest matching path wins)
   const folder = resolveFolderConfig(file.path, globalSettings.folderConfigs);
@@ -95,7 +95,8 @@ export function resolveEffectiveSettings(
   const transparent = readFm(fm, FRONTMATTER_KEY_TRANSPARENT_BG, LEGACY_FRONTMATTER_KEY_TRANSPARENT_BG);
   if (transparent !== undefined && transparent !== null) transparentBackground = !!transparent;
   const frame = readFm(fm, FRONTMATTER_KEY_EXPORT_FRAME, LEGACY_FRONTMATTER_KEY_EXPORT_FRAME);
-  if (frame !== undefined && frame !== null) exportFrame = String(frame);
+  if (Array.isArray(frame)) exportFrame = frame.map(String);
+  else if (frame !== undefined && frame !== null) exportFrame = String(frame);
 
   return { openAsMarkdown, autoExportSvg, autoExportPng, transparentBackground, exportFrame };
 }

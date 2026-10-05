@@ -871,6 +871,7 @@ export class SvgView extends TextFileView {
         this.plugin.settings,
         effective,
         this.getCanvasBgColor(),
+        () => this.plugin.saveSettings(),
       );
       this.companionStale = false;
     } catch (e) {

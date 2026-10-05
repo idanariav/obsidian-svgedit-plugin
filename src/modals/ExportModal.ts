@@ -40,7 +40,7 @@ export class ExportModal extends Modal {
     this.source = source;
     const effective = resolveEffectiveSettings(plugin.app, view.file!, plugin.settings);
     this.transparent = effective.transparentBackground;
-    this.frameName = effective.exportFrame;
+    this.frameName = typeof effective.exportFrame === "string" ? effective.exportFrame : "";
   }
 
   onOpen(): void {
