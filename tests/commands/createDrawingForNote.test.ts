@@ -34,6 +34,7 @@ function makeVault() {
   return {
     files,
     getAbstractFileByPath: (path: string) => files.get(path) ?? null,
+    getMarkdownFiles: () => [...files.values()],
     create: vi.fn(async (path: string, _content: string) => {
       const file = new TFile();
       file.path = path;
@@ -161,5 +162,33 @@ describe("createDrawingForNote", () => {
     expect(plugin.app.fileManager.processFrontMatter).toHaveBeenCalledWith(note, expect.any(Function));
     // The command still completes and opens the drawing rather than aborting.
     expect(plugin.openFile).toHaveBeenCalled();
+  });
+
+  it("never hands Templater a basename already used elsewhere in the vault", async () => {
+    // Regression: with an empty suffix the temp file was named exactly like the
+    // source note. Obsidian then resolved other drawings' `Source: [[note]]`
+    // links to the temp file, and Templater's move rewrote them to the new
+    // drawing's final name.
+    const note = noteFile("mattering (book)");
+    note.path = "Books/mattering (book).md";
+    const plugin = makePlugin();
+    plugin.app.vault.files.set(note.path, note);
+
+    const createFromTemplate = vi.fn(async (_t: unknown, _folder: string, filename: string) => {
+      const file = new TFile();
+      file.basename = filename;
+      file.path = `Drawings/${filename}.md`;
+      return file;
+    });
+    plugin.settings.defaultTemplate = "Templates/sketch.md";
+    plugin.app.vault.files.set("Templates/sketch.md", new TFile());
+    plugin.app.plugins = {
+      plugins: { "templater-obsidian": { templater: { create_new_note_from_template: createFromTemplate } } },
+    };
+
+    await createDrawingForNote(plugin as any, note);
+
+    const [, , filename] = createFromTemplate.mock.calls[0];
+    expect(filename).toBe("mattering (book) 1");
   });
 });

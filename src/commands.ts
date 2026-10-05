@@ -495,9 +495,20 @@ export async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): 
     // Templater, rather than only checking uniqueness in the fallback branch
     // below — otherwise a colliding name reliably breaks templates that
     // rename/move the note using it (e.g. via tp.file.move).
+    //
+    // The basename must also be free vault-wide, not just in drawingsFolder:
+    // Templater creates the file under this name before the template moves it
+    // to its final name. While it exists, a note sharing the basename (e.g. the
+    // source note itself, with an empty suffix) makes `[[basename]]` links
+    // ambiguous, and Obsidian resolves them to the closest file — the temp one
+    // — so the later move rewrites other drawings' links to the note onto the
+    // new drawing.
+    const takenBasenames = new Set(plugin.app.vault.getMarkdownFiles().map((f) => f.basename));
     const path = normalizePath(
       uniqueVaultPath(
-        (p) => plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null,
+        (p) =>
+          plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null
+          || takenBasenames.has(p.split("/").pop()!.replace(/\.md$/, "")),
         plugin.settings.drawingsFolder,
         baseName,
         "md",
