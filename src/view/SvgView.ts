@@ -349,6 +349,7 @@ export class SvgView extends TextFileView {
         "ext-connector",
         "ext-grid",
         "ext-proportion-markers",
+        "ext-frame-labels",
         "ext-smart-guides",
         "ext-corner-radius",
         "ext-repeat",
