@@ -57,6 +57,11 @@ interface SvgEditorInstance {
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
+    /** Insert raw SVG child markup into the current layer/group as one
+     *  undoable step (selects it, fires `changed`). Returns the new elements,
+     *  or null if the markup couldn't be parsed. Optional-free: the fork's
+     *  bundle must carry it (see `npm run sync-svgedit`). */
+    insertSvgFragment(xmlFragment: string): Element[] | null;
     /** Serialize the drawing honoring the current save options. With the
      *  `apply` option on it embeds @font-face and base64 images, yielding a
      *  self-contained SVG suitable for export (see getExportSvgString). */
@@ -1007,20 +1012,12 @@ export class SvgView extends TextFileView {
   async insertSvgFragment(fragment: string): Promise<void> {
     if (!this.svgEditor) return;
 
-    const parser = new DOMParser();
-    const serializer = new XMLSerializer();
-    const doc = parser.parseFromString(this.svgEditor.svgCanvas.getSvgString(), "image/svg+xml");
-    const root = doc.documentElement;
-    const fragDoc = parser.parseFromString(
-      `<svg xmlns="http://www.w3.org/2000/svg">${fragment}</svg>`,
-      "image/svg+xml",
-    );
-    for (const child of Array.from(fragDoc.documentElement.childNodes)) {
-      root.appendChild(doc.importNode(child, true));
-    }
-    this.isLoading = true;
-    try { await this.svgEditor.loadFromString(serializer.serializeToString(root)); }
-    finally { this.isLoading = false; }
+    // An incremental, undoable edit — not a document reload — so the user's
+    // selection/zoom/group context and undo history survive. svgCanvas fires
+    // "changed" itself, which marks the drawing dirty via the binding in
+    // onOpen (isLoading stays false on purpose).
+    const inserted = this.svgEditor.svgCanvas.insertSvgFragment(fragment);
+    if (!inserted) throw new Error("the SVG fragment could not be inserted");
     // A deliberate one-off insert — flush it now rather than waiting on the
     // periodic timer, so the embedded file can't be lost to a crash.
     this.setDirty(true);
