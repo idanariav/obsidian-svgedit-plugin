@@ -80,7 +80,7 @@
   height: 100% !important;
   display: grid !important;
   /* mirrors svgedit.css `.svg_editor` (--top-toolbar-min-height: 56px) */
-  grid-template-rows: minmax(56px, auto) 15px 1fr 40px !important;
+  grid-template-rows: minmax(56px, auto) 15px 1fr 56px !important;
   grid-template-columns: 56px 15px 50px 1fr 15px !important;
   grid-template-areas:
     "main main   main   top    top"
@@ -91,7 +91,7 @@
 
 /* Right-hand side panel open state — mirrors svgedit.css `.svg_editor.open`. */
 .svg-plugin-editor-container .svg_editor.open {
-  grid-template-columns: 34px 15px 50px 1fr 280px !important;
+  grid-template-columns: 56px 15px 50px 1fr 280px !important;
 }
 
 /* Pin each region to its grid cell so Obsidian's rules can't displace them. */
