@@ -7,7 +7,7 @@
  * svgedit-dist/ is shipped to the vault at runtime. So we copy only Editor.js.
  *
  * Alongside it we write svgedit-dist/SOURCE.json, recording exactly which
- * svgedit commit (or npm version) produced the bundle. That's what makes
+ * svgedit commit (or GitHub release) produced the bundle. That's what makes
  * "does plugin version X contain fix Y" a single lookup instead of git
  * archaeology: find the commit that set manifest.json's version to X, then
  * read SOURCE.json as of that same commit.
@@ -15,17 +15,25 @@
  * Resolution order:
  *   1. $SVGEDIT_LOCAL_PATH env var (explicit override)
  *   2. Sibling ../svgedit directory (local dev convention)
- *   3. Install svgedit@SVGEDIT_VERSION from npm into a temp dir (CI / publishing)
+ *   3. Download the `Editor.js` asset of the fork's GitHub release
+ *      SVGEDIT_RELEASE (CI / fresh clone). Skipped when svgedit-dist/SOURCE.json
+ *      already records that release. Fails loudly if the download fails — it
+ *      never falls back to upstream svgedit from npm, which would silently
+ *      bundle an editor without this fork's features.
  *
- * To bump the npm fallback version, update SVGEDIT_VERSION below.
+ * To move to a newer fork release, bump SVGEDIT_RELEASE below (or run once with
+ * SVGEDIT_RELEASE=<tag|latest> in the environment to try one). Releases are cut
+ * in the fork — see its docs/ReleaseInstructions.md.
  */
 
-import { existsSync, mkdirSync, copyFileSync, rmSync, writeFileSync, statSync } from "fs";
+import { existsSync, mkdirSync, copyFileSync, writeFileSync, readFileSync, statSync } from "fs";
+import { createHash } from "crypto";
 import { execSync } from "child_process";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
 
-const SVGEDIT_VERSION = "7.4.1";
+const FORK_REPO = "idanariav/svgedit";
+const SVGEDIT_RELEASE = process.env.SVGEDIT_RELEASE || "v7.4.1-milani.1";
 
 const ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
 const TARGET = join(ROOT, "svgedit-dist");
@@ -48,8 +56,8 @@ function getGitInfo(repoRoot) {
 /** Guard against recording a commit hash the bundle doesn't actually reflect:
  *  if Editor.js is older than its repo's last commit, the local `npm run
  *  build` predates that commit and SOURCE.json would lie about provenance.
- *  Only meaningful for a git-backed source (the npm fallback is always a
- *  fresh install, never stale). */
+ *  Only meaningful for a git-backed source (a downloaded release is always
+ *  fresh, never stale). */
 function checkFreshness(editorDir, gitInfo) {
   if (!gitInfo) return;
   const builtAtMs = statSync(join(editorDir, "Editor.js")).mtimeMs;
@@ -66,8 +74,8 @@ function checkFreshness(editorDir, gitInfo) {
 /** Write svgedit-dist/SOURCE.json describing where Editor.js came from. A
  *  dirty source tree means the bundle may include uncommitted changes not
  *  reflected by `commit` — flagged rather than silently recorded as truth. */
-function writeSourceInfo({ commit, dirty, npmVersion }) {
-  const info = { commit, dirty, ...(npmVersion ? { npmVersion } : {}), syncedAt: new Date().toISOString() };
+function writeSourceInfo({ commit, dirty, release, sha256 }) {
+  const info = { commit, dirty, ...(release ? { release, sha256 } : {}), syncedAt: new Date().toISOString() };
   writeFileSync(join(TARGET, "SOURCE.json"), JSON.stringify(info, null, 2) + "\n");
   if (dirty) {
     console.warn("[fetch-svgedit-dist] WARNING: svgedit working tree has uncommitted changes — SOURCE.json's commit won't fully describe this bundle.");
@@ -114,14 +122,43 @@ if (existsSync(siblingDist)) {
   process.exit(0);
 }
 
-// 3. Install from npm
-console.log(`[fetch-svgedit-dist] No local svgedit found — installing svgedit@${SVGEDIT_VERSION} from npm...`);
-const tmpDir = join(ROOT, ".svgedit-tmp");
-try {
-  execSync(`npm install --prefix "${tmpDir}" svgedit@${SVGEDIT_VERSION}`, { stdio: "inherit" });
-  const npmDist = join(tmpDir, "node_modules", "svgedit", "dist", "editor");
-  copyDist(npmDist);
-  writeSourceInfo({ commit: null, dirty: false, npmVersion: SVGEDIT_VERSION });
-} finally {
-  if (existsSync(tmpDir)) rmSync(tmpDir, { recursive: true, force: true });
+// 3. Download the fork's GitHub release asset
+const sourcePath = join(TARGET, "SOURCE.json");
+if (SVGEDIT_RELEASE !== "latest" && existsSync(join(TARGET, "Editor.js")) && existsSync(sourcePath)) {
+  try {
+    if (JSON.parse(readFileSync(sourcePath, "utf8")).release === SVGEDIT_RELEASE) {
+      console.log(`[fetch-svgedit-dist] svgedit-dist already holds release ${SVGEDIT_RELEASE}; nothing to do.`);
+      process.exit(0);
+    }
+  } catch {
+    // unreadable SOURCE.json: fall through and re-download
+  }
 }
+
+const base = SVGEDIT_RELEASE === "latest"
+  ? `https://github.com/${FORK_REPO}/releases/latest/download`
+  : `https://github.com/${FORK_REPO}/releases/download/${SVGEDIT_RELEASE}`;
+const url = `${base}/Editor.js`;
+console.log(`[fetch-svgedit-dist] No local svgedit found — downloading ${url}`);
+let bytes;
+try {
+  const res = await fetch(url, { redirect: "follow" });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  bytes = Buffer.from(await res.arrayBuffer());
+  if (bytes.length < 100_000) throw new Error(`asset is only ${bytes.length} bytes — not an editor bundle`);
+} catch (err) {
+  console.error(`[fetch-svgedit-dist] Could not download the svgedit bundle: ${err.message}`);
+  console.error(`  Release ${SVGEDIT_RELEASE} of ${FORK_REPO} must exist and carry an Editor.js asset.`);
+  console.error("  Alternatively clone the fork next to this repo (../svgedit), run 'npm run build' there,");
+  console.error("  or set SVGEDIT_LOCAL_PATH. Refusing to fall back to upstream svgedit from npm.");
+  process.exit(1);
+}
+mkdirSync(TARGET, { recursive: true });
+writeFileSync(join(TARGET, "Editor.js"), bytes);
+writeSourceInfo({
+  commit: null,
+  dirty: false,
+  release: SVGEDIT_RELEASE,
+  sha256: createHash("sha256").update(bytes).digest("hex"),
+});
+console.log(`[fetch-svgedit-dist] Wrote Editor.js (${bytes.length} bytes) from release ${SVGEDIT_RELEASE}`);

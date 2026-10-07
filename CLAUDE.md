@@ -45,7 +45,8 @@ migration ships without a version bump, drawings already stamped with that
 `sync-svgedit` also writes `svgedit-dist/SOURCE.json`, recording the exact
 svgedit commit (`commit`) the bundle was built from, whether that source tree
 had uncommitted changes (`dirty`), and when the sync ran (`syncedAt`) — or, for
-the npm-fallback path, the installed `npmVersion` instead of a commit. It
+the release-download path, the fork's GitHub `release` tag (plus the bundle's
+`sha256`) instead of a commit. It
 refuses to sync (and tells you to `npm run build` in `../svgedit` first) if the
 local build is older than that repo's last commit, so it can't record a commit
 hash the bundle doesn't actually reflect.
@@ -66,8 +67,13 @@ time `sync-svgedit` runs. If you find yourself editing it, stop — find the sou
 in `../svgedit/src/` and make the change there.
 
 **The only exception:** if `../svgedit` is unavailable (e.g. CI without the
-sibling repo), `sync-svgedit` falls back to installing from npm. In that case
-the bundle is read-only and no patching should occur.
+sibling repo), `sync-svgedit` downloads the `Editor.js` asset of the fork's
+GitHub release named by `SVGEDIT_RELEASE` in `scripts/fetch-svgedit-dist.mjs`
+(skipped when `SOURCE.json` already records that release). It **fails loudly**
+if the release or asset is missing — it never falls back to upstream svgedit
+from npm. In that case the bundle is read-only and no patching should occur.
+To move to a newer fork release: cut it in the fork (see its
+`docs/ReleaseInstructions.md`), bump `SVGEDIT_RELEASE`, run `npm run sync-svgedit`.
 
 ---
 
