@@ -37,7 +37,7 @@ import { join, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const FORK_REPO = "idanariav/svgedit";
-const SVGEDIT_RELEASE = process.env.SVGEDIT_RELEASE || "v7.4.1-fork.4";
+const SVGEDIT_RELEASE = process.env.SVGEDIT_RELEASE || "v7.4.1-fork.5";
 
 const ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
 const TARGET = join(ROOT, "svgedit-dist");
