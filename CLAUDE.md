@@ -72,7 +72,8 @@ GitHub release named by `SVGEDIT_RELEASE` in `scripts/fetch-svgedit-dist.mjs`
 (skipped when `SOURCE.json` already records that release). It **fails loudly**
 if the release or asset is missing — it never falls back to upstream svgedit
 from npm. In that case the bundle is read-only and no patching should occur.
-To move to a newer fork release: cut it in the fork (see its
+`SVGEDIT_FORCE_RELEASE=1 npm run sync-svgedit` forces this path even with a
+sibling checkout present. To move to a newer fork release: cut it in the fork (see its
 `docs/ReleaseInstructions.md`), bump `SVGEDIT_RELEASE`, run `npm run sync-svgedit`.
 
 ---

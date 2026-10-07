@@ -13,6 +13,8 @@
  * read SOURCE.json as of that same commit.
  *
  * Resolution order:
+ *   0. SVGEDIT_FORCE_RELEASE=1 skips 1 and 2 (use it to sync the bundle of the
+ *      pinned release, which is what a fresh clone / CI gets)
  *   1. $SVGEDIT_LOCAL_PATH env var (explicit override)
  *   2. Sibling ../svgedit directory (local dev convention)
  *   3. Download the `Editor.js` asset of the fork's GitHub release
@@ -95,7 +97,8 @@ function copyDist(editorDir) {
 }
 
 // 1. Explicit env var override
-const envPath = process.env.SVGEDIT_LOCAL_PATH;
+const forceRelease = Boolean(process.env.SVGEDIT_FORCE_RELEASE);
+const envPath = forceRelease ? undefined : process.env.SVGEDIT_LOCAL_PATH;
 if (envPath) {
   const editorDir = join(envPath, "dist", "editor");
   if (!existsSync(editorDir)) {
@@ -113,7 +116,7 @@ if (envPath) {
 // 2. Sibling ../svgedit directory
 const siblingRoot = resolve(ROOT, "../svgedit");
 const siblingDist = join(siblingRoot, "dist/editor");
-if (existsSync(siblingDist)) {
+if (!forceRelease && existsSync(siblingDist)) {
   console.log("[fetch-svgedit-dist] Found local sibling svgedit repo, using its build.");
   const gitInfo = getGitInfo(siblingRoot);
   checkFreshness(siblingDist, gitInfo);
