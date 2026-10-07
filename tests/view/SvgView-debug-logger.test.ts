@@ -32,6 +32,7 @@ const hoisted = vi.hoisted(() => {
       bind: () => undefined,
     };
     debugLoggerSinks: DebugSink[] = [];
+    logSinks: unknown[] = [];
 
     constructor(_container: HTMLElement) {
       instances.push(this);
@@ -43,6 +44,9 @@ const hoisted = vi.hoisted(() => {
     setBackground(): void {}
     setDebugLogger(sink: DebugSink): void {
       this.debugLoggerSinks.push(sink);
+    }
+    setLogSink(sink: unknown): void {
+      this.logSinks.push(sink);
     }
   }
 
@@ -148,6 +152,22 @@ describe("SvgView debug logger", () => {
     expect(plugin.debugLog.log).toHaveBeenCalledWith(
       "debug-snapshot",
       expect.objectContaining(snapshot),
+    );
+  });
+
+  it("installs svgedit's log sink once init resolves, and it feeds plugin.debugLog", async () => {
+    hoisted.instances.length = 0;
+    const plugin = makeFakePlugin(true);
+    const view = new SvgView({ app: makeFakeApp() } as any, plugin as any);
+    await view.onload();
+
+    const [sink] = hoisted.instances[0].logSinks as Array<(l: string, r: unknown) => void>;
+    expect(hoisted.instances[0].logSinks).toHaveLength(1);
+    sink("error", { message: "[SVGCanvas] boom", data: new Error("bad") });
+
+    expect(plugin.debugLog.log).toHaveBeenCalledWith(
+      "svgedit-error",
+      expect.objectContaining({ message: "[SVGCanvas] boom", data: expect.objectContaining({ message: "bad" }) }),
     );
   });
 });

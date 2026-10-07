@@ -7,6 +7,7 @@ import {
   setIcon,
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
+import { createSvgeditLogSink, type SvgeditLogSink } from "../debug/svgeditLogSink";
 import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, getDrawingVersion, setDrawingVersion, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds, extractSnapshots, replaceSnapshots, genSnapshotId, type DrawingSnapshot } from "../data/SvgData";
 import { runMigrations } from "../data/migrations";
@@ -54,6 +55,10 @@ interface SvgEditorInstance {
    *  setting rather than adding a second toggle. Optional: only present once
    *  the fork's bundle carries it. */
   setDebugLogger?(sink: ((event: string, detail?: Record<string, unknown>) => void) | null): void;
+  /** Forward svgedit's own warnings/errors (its central logger) to a sink,
+   *  `(level, { message, data })`. The logger is page-global, shared by every
+   *  open editor. Optional: only present once the fork's bundle carries it. */
+  setLogSink?(sink: SvgeditLogSink | null, level?: number): void;
   configObj: { pref(key: string, val?: unknown): unknown };
   svgCanvas: {
     getSvgString(): string;
@@ -398,6 +403,12 @@ export class SvgView extends TextFileView {
     // older bundles.
     this.svgEditor.setDebugLogger?.(
       this.plugin.settings.debugLogging ? (event, detail) => this.log(event, detail) : null,
+    );
+    // svgedit's own warnings/errors go to the same log. Always installed:
+    // DebugLog.log re-checks the "Debug logging" setting on every call, so the
+    // toggle needs no refresh here.
+    this.svgEditor.setLogSink?.(
+      createSvgeditLogSink(this.plugin.debugLog, () => this.plugin._loaded !== false),
     );
 
     // svgCanvas.bind() is backed by a native EventTarget: every bound handler
