@@ -38475,7 +38475,8 @@ const ni = /* @__PURE__ */ bl(S7), ln = 1e3, qo = 0.25, g1 = (s) => {
   "mask",
   "stroke"
 ], Fm = 0.8, Im = 10, Hi = "svgedit_clipboard";
-class jt extends EventTarget {
+class jt extends /** @type {new () => EventTarget & import("./svgcanvas-members.js").AttachedMembers} */
+EventTarget {
   /**
    * @param {HTMLElement} container - The container HTML element that should hold the SVG root element
    * @param {module:SVGeditor.configObj.curConfig} config - An object that contains configuration data
@@ -38587,13 +38588,15 @@ class jt extends EventTarget {
         filter: null,
         filterHidden: !1
       }
-    }, this.svgdoc = window.document, this.container = e, this.scopeRoot = n, n && (this.$id = sd(n), this.$qq = od(n), this.$qa = ad(n)), this.svgroot = u9(this.svgdoc, a), e.append(this.svgroot), this.svgContent = this.svgdoc.createElementNS(Ze.SVG, "svg"), zt(this, "touch", h9, o), zt(this, "clear", d7, o), this.clearSvgContentElement(), this.randIdsMode = gn.LET_DOCUMENT_DECIDE, this.current_drawing_ = new Ga(this.svgContent, this.idprefix, this.randIdsMode), zt(this, "json", q9, o), zt(this, "domUtils", N8, o), zt(this, "bboxUtils", G8, o), zt(this, "sanitize", J9, o), zt(this, "coords", a7, o), zt(this, "recalculate", l7, o), zt(this, "select", c7, o), zt(this, "undo", y9, o), zt(this, "selection", x9, o), this.nsMap = G2(), zt(this, "path", Z8, o), this.uiStrings = {}, this.opacAni = document.createElementNS(Ze.SVG, "animate"), this.opacAni.setAttribute("attributeName", "opacity"), this.opacAni.setAttribute("begin", "indefinite"), this.opacAni.setAttribute("dur", 1), this.opacAni.setAttribute("fill", "freeze"), this.svgroot.appendChild(this.opacAni), zt(this, "event", j9, o), zt(this, "textActions", w9, o), zt(this, "svg", n7, o), zt(this, "svgDefs", r7, o), zt(this, "draw", a9, o), zt(this, "elemGetSet", V9, o);
+    }, this.svgdoc = window.document, this.container = e, this.scopeRoot = n, n && (this.$id = sd(n), this.$qq = od(n), this.$qa = ad(n)), this.svgroot = u9(this.svgdoc, a), e.append(this.svgroot), this.svgContent = /** @type {SVGSVGElement} */
+    /** @type {unknown} */
+    this.svgdoc.createElementNS(Ze.SVG, "svg"), zt(this, "touch", h9, o), zt(this, "clear", d7, o), this.clearSvgContentElement(), this.randIdsMode = gn.LET_DOCUMENT_DECIDE, this.current_drawing_ = new Ga(this.svgContent, this.idprefix, this.randIdsMode), zt(this, "json", q9, o), zt(this, "domUtils", N8, o), zt(this, "bboxUtils", G8, o), zt(this, "sanitize", J9, o), zt(this, "coords", a7, o), zt(this, "recalculate", l7, o), zt(this, "select", c7, o), zt(this, "undo", y9, o), zt(this, "selection", x9, o), this.nsMap = G2(), zt(this, "path", Z8, o), this.uiStrings = {}, this.opacAni = document.createElementNS(Ze.SVG, "animate"), this.opacAni.setAttribute("attributeName", "opacity"), this.opacAni.setAttribute("begin", "indefinite"), this.opacAni.setAttribute("dur", "1"), this.opacAni.setAttribute("fill", "freeze"), this.svgroot.appendChild(this.opacAni), zt(this, "event", j9, o), zt(this, "textActions", w9, o), zt(this, "svg", n7, o), zt(this, "svgDefs", r7, o), zt(this, "draw", a9, o), zt(this, "elemGetSet", V9, o);
     const h = (f) => (f.preventDefault(), !1);
     e.addEventListener("mousedown", this.mouseDownEvent), e.addEventListener("mousemove", this.mouseMoveEvent), $s(e, h), e.addEventListener("dblclick", this.dblClickEvent), e.addEventListener("mouseup", this.mouseUpEvent), e.addEventListener("mouseleave", this.mouseOutEvent), e.addEventListener("mousewheel", this.DOMMouseScrollEvent), e.addEventListener("DOMMouseScroll", this.DOMMouseScrollEvent), this.linkControlPoints = this.pathActions.linkControlPoints, zt(this, "blur", Z9, o), zt(this, "selectedElem", U9, o), zt(this, "booleanOps", w7, o), zt(this, "pathOffset", k7, o), zt(this, "pathSimplify", T7, o), zt(this, "cornerRadius", F7, o), zt(this, "taperStroke", O7, o), zt(this, "textPath", $7, o), zt(this, "shapeBuilder", D7, o), zt(this, "clipMask", Y7, o), zt(this, "cutter", nm, o), zt(this, "segment", Sm, o), this.destroyAbort = new AbortController(), zt(this, "imageCrop", Tm, o);
     const g = (f) => {
       f.newValue && (f.key === `${Hi}_startup` ? (localStorage.removeItem(`${Hi}_startup`), this.flashStorage()) : f.key === Hi && sessionStorage.setItem(Hi, f.newValue));
     };
-    window.addEventListener("storage", g, { signal: this.destroyAbort.signal }), localStorage.setItem(`${Hi}_startup`, Math.random()), zt(this, "paste", c9, o), this.contentW = this.getResolution().w, this.contentH = this.getResolution().h, this.clear(), this.modeChangeEvent();
+    window.addEventListener("storage", g, { signal: this.destroyAbort.signal }), localStorage.setItem(`${Hi}_startup`, String(Math.random())), zt(this, "paste", c9, o), this.contentW = this.getResolution().w, this.contentH = this.getResolution().h, this.clear(), this.modeChangeEvent();
   }
   // End constructor
   /**
@@ -38744,10 +38747,10 @@ class jt extends EventTarget {
     return this.curConfig.baseUnit;
   }
   getHeight() {
-    return this.svgContent.getAttribute("height") / this.state.zoom.value;
+    return Number(this.svgContent.getAttribute("height")) / this.state.zoom.value;
   }
   getWidth() {
-    return this.svgContent.getAttribute("width") / this.state.zoom.value;
+    return Number(this.svgContent.getAttribute("width")) / this.state.zoom.value;
   }
   getRoundDigits() {
     return this.saveOptions.round_digits;
@@ -38772,7 +38775,7 @@ class jt extends EventTarget {
   }
   round(e) {
     const { value: i } = this.state.zoom;
-    return Number.parseInt(e * i) / i;
+    return Number.parseInt(String(e * i)) / i;
   }
   createSVGElement(e) {
     return this.addSVGElementsFromJson(e);
@@ -38793,9 +38796,7 @@ class jt extends EventTarget {
     this.pathActions.canDeleteNodes = !0, this.pathActions.closed_subpath = e, this.call("pointsAdded", { closedSubpath: e, grips: i }), this.call("selected", i);
   }
   /**
-   * @param {PlainObject} changes
-   * @param {ChangeElementCommand} changes.cmd
-   * @param {SVGPathElement} changes.elem
+   * @param {{cmd: import('./core/history.js').ChangeElementCommand, elem: SVGPathElement}} changes
    * @fires module:svgcanvas.SvgCanvas#event:changed
    * @returns {void}
    */
@@ -39173,7 +39174,10 @@ class jt extends EventTarget {
         this.restoreRefElements(n[o]);
   }
   call(e, i) {
-    const n = new CustomEvent(e, { detail: { arg: i } });
+    const n = new CustomEvent(e, { detail: (
+      /** @type {any} */
+      { arg: i }
+    ) });
     return this.dispatchEvent(n), n.detail.result;
   }
   /**
@@ -39188,7 +39192,11 @@ class jt extends EventTarget {
    */
   bind(e, i) {
     this.addEventListener(e, (n) => {
-      n.detail.result = i(window, n.detail.arg);
+      const { detail: o } = (
+        /** @type {CustomEvent} */
+        n
+      );
+      o.result = i(window, o.arg);
     });
   }
   /**
@@ -39204,8 +39212,8 @@ class jt extends EventTarget {
   /**
    * Selects only the given elements, shortcut for `clearSelection(); addToSelection()`.
    * @function module:svgcanvas.SvgCanvas#selectOnly
-   * @param {Element[]} elems - an array of DOM elements to be selected
-   * @param {boolean} showGrips - Indicates whether the resize grips should be shown
+   * @param {ArrayLike<Element>} elems - an array of DOM elements to be selected
+   * @param {boolean} [showGrips] - Indicates whether the resize grips should be shown
    * @returns {void}
    */
   selectOnly(e, i) {
@@ -39300,7 +39308,7 @@ class jt extends EventTarget {
   }
   /**
    * @function module:svgcanvas.SvgCanvas#getStrokeWidth
-   * @returns {Float|string} The current stroke-width value
+   * @returns {number|string} The current stroke-width value
    */
   getStrokeWidth() {
     return this.state.style.properties.stroke_width;
@@ -39323,14 +39331,14 @@ class jt extends EventTarget {
   }
   /**
    * @function module:svgcanvas.SvgCanvas#getFillOpacity
-   * @returns {Float} the current fill opacity
+   * @returns {number} the current fill opacity
    */
   getFillOpacity() {
     return this.state.style.shape.fill_opacity;
   }
   /**
    * @function module:svgcanvas.SvgCanvas#getStrokeOpacity
-   * @returns {string} the current stroke opacity
+   * @returns {number} the current stroke opacity
    */
   getStrokeOpacity() {
     return this.state.style.shape.stroke_opacity;
@@ -39339,7 +39347,7 @@ class jt extends EventTarget {
    * Sets the current fill/stroke opacity.
    * @function module:svgcanvas.SvgCanvas#setPaintOpacity
    * @param {string} type - String with "fill" or "stroke"
-   * @param {Float} val - Float with the new opacity value
+   * @param {number} val - Float with the new opacity value
    * @param {boolean} preventUndo - Indicates whether or not this should be an undoable action
    * @returns {void}
    */
@@ -39350,7 +39358,7 @@ class jt extends EventTarget {
    * Gets the current fill/stroke opacity.
    * @function module:svgcanvas.SvgCanvas#getPaintOpacity
    * @param {"fill"|"stroke"} type - String with "fill" or "stroke"
-   * @returns {Float} Fill/stroke opacity
+   * @returns {number} Fill/stroke opacity
    */
   getPaintOpacity(e) {
     return e === "fill" ? this.getFillOpacity() : this.getStrokeOpacity();
@@ -39359,7 +39367,7 @@ class jt extends EventTarget {
    * Gets the `stdDeviation` blur value of the given element.
    * @function module:svgcanvas.SvgCanvas#getBlur
    * @param {Element} elem - The element to check the blur value for
-   * @returns {string} stdDeviation blur attribute value
+   * @returns {number|string} stdDeviation blur attribute value (0 when unblurred)
    */
   getBlur(e) {
     let i = 0;
@@ -39368,7 +39376,8 @@ class jt extends EventTarget {
       if (n) {
         const o = this.getElement(`${e.id}_blur`);
         if (o)
-          i = o.firstChild.getAttribute("stdDeviation");
+          i = /** @type {Element} */
+          o.firstChild.getAttribute("stdDeviation");
         else {
           const a = this.getRefElem(n), c = Ba(a);
           c !== null && (i = c.getAttribute("stdDeviation"));
@@ -39412,7 +39421,7 @@ class jt extends EventTarget {
    * @function module:svgcanvas.SvgCanvas#convertToPath
    * @todo (codedread): Remove the getBBox argument and split this function into two.
    * @param {Element} elem - The DOM element to be converted
-   * @param {boolean} getBBox - Boolean on whether or not to only return the path's BBox
+   * @param {boolean} [getBBox] - Boolean on whether or not to only return the path's BBox
    * @returns {void|DOMRect|false|SVGPathElement|null} If the getBBox flag is true, the resulting path's bounding box object.
    * Otherwise the resulting path element is returned.
    */
@@ -59191,7 +59200,7 @@ class mC {
   /**
   * Auto-run after a Promise microtask.
   * @function module:SVGthis.init
-  * @returns {void}
+  * @returns {Promise<void>}
   */
   async init() {
     const { $id: e } = this;

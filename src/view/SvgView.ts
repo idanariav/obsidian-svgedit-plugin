@@ -7,7 +7,8 @@ import {
   setIcon,
 } from "obsidian";
 import SvgEditor from "svgedit-editor";
-import { createSvgeditLogSink, type SvgeditLogSink } from "../debug/svgeditLogSink";
+import type { EditorHostApi } from "../../svgedit-dist/hostApi";
+import { createSvgeditLogSink } from "../debug/svgeditLogSink";
 import type SvgPlugin from "../main";
 import { extractSvg, replaceSvg, reconcileLinkedFiles, getCanvasBg, setCanvasBg, getDrawingVersion, setDrawingVersion, encodeGradientBg, decodeGradientBg, parseGradientElement, isEmptyDrawing, namespaceSvgIds, extractSnapshots, replaceSnapshots, genSnapshotId, type DrawingSnapshot } from "../data/SvgData";
 import { runMigrations } from "../data/migrations";
@@ -26,74 +27,12 @@ import type {
 } from "../settings/defaults";
 import { listFonts, saveFont } from "../data/fontVault";
 
-interface SvgEditorInstance {
-  setConfig(cfg: Record<string, unknown>): void;
-  init(): Promise<void>;
-  /** Re-read custom palette + saved shapes from the userDataAdapter and re-render
-   *  this instance's components. Called after another view edited them. */
-  reloadUserData(): void;
-  loadFromString(svg: string): Promise<void>;
-  /** Set the canvas background. We use it to restore a saved per-drawing color
-   *  after load; svgedit also keeps the bottom-panel swatch in sync. Pass
-   *  `'gradient'` with a gradient element to restore a gradient background. */
-  setBackground(color: string, url?: string, gradientElem?: Element): void;
-  /** svgedit's root element; carries the theme-light / theme-dark class. */
-  $svgEditor?: HTMLElement;
-  /** Tear down document-level listeners this editor registered (multi-instance
-   *  cleanup). Present on the reentrant svgedit build. */
-  destroy?(): void;
-  /** Mark this editor instance as the one document-level shortcuts/paste route
-   *  to. svgedit tracks this itself on pointerdown/focusin *inside* its own
-   *  container, but switching Obsidian panes doesn't necessarily click inside
-   *  the target drawing's canvas — so call this when this leaf becomes active. */
-  activate?(): void;
-  /** Route svgedit's dev-mode "visibility" snapshot (selection boxes,
-   *  path-node grips, group-context dimming that are still rendered but no
-   *  longer backed by the model) to a sink instead of an on-canvas overlay.
-   *  The sink is called as `(event, detail)` whenever the snapshot changes;
-   *  pass `null` to stop. We drive it from the existing "Debug logging"
-   *  setting rather than adding a second toggle. Optional: only present once
-   *  the fork's bundle carries it. */
-  setDebugLogger?(sink: ((event: string, detail?: Record<string, unknown>) => void) | null): void;
-  /** Forward svgedit's own warnings/errors (its central logger) to a sink,
-   *  `(level, { message, data })`. The logger is page-global, shared by every
-   *  open editor. Optional: only present once the fork's bundle carries it. */
-  setLogSink?(sink: SvgeditLogSink | null, level?: number): void;
-  configObj: { pref(key: string, val?: unknown): unknown };
-  svgCanvas: {
-    getSvgString(): string;
-    /** Insert raw SVG child markup into the current layer/group as one
-     *  undoable step (selects it, fires `changed`). Returns the new elements,
-     *  or null if the markup couldn't be parsed. Optional-free: the fork's
-     *  bundle must carry it (see `npm run sync-svgedit`). */
-    insertSvgFragment(xmlFragment: string): Element[] | null;
-    /** Serialize the drawing honoring the current save options. With the
-     *  `apply` option on it embeds @font-face and base64 images, yielding a
-     *  self-contained SVG suitable for export (see getExportSvgString). */
-    svgCanvasToString(): string;
-    /** The mutable save-options object (apply, images, round_digits…). */
-    getSvgOption(): { apply?: boolean; [k: string]: unknown };
-    setSvgOption(key: string, value: unknown): void;
-    /** Attach a handler to a canvas event. svgedit's `bind` *replaces* any
-     *  existing handler for that event and returns the previous one, so chain
-     *  it (see the `changed` binding below) rather than dropping it. */
-    bind(
-      event: string,
-      cb: (win: Window, elems: unknown) => void,
-    ): ((win: Window, elems: unknown) => void) | undefined;
-    /** Current editor mode string (e.g. "select", "path", "pathedit"). */
-    getMode(): string;
-    /** Whether the active drawing tool stays armed after each object instead
-     *  of reverting to select (double-click a tool to toggle). */
-    getToolLocked(): boolean;
-    /** The single CustomEvent instance this svgCanvas reuses for every
-     *  setMode() call, dispatched on `document`. Reused (not recreated) per
-     *  dispatch, and per-instance (not shared across editors), so comparing
-     *  a received event against this by identity reliably tells whether it
-     *  came from *this* editor when several are open at once. */
-    modeEvent: Event;
-  };
-}
+/** svgedit's host API (vendored from the fork's release as svgedit-dist/hostApi.d.ts,
+ *  and checked there against the real Editor). The four lifecycle/diagnostic hooks
+ *  are optional here: bundles older than the fork's host API don't carry them, so
+ *  call sites keep their `?.` guards. */
+type OptionalHooks = "activate" | "destroy" | "setDebugLogger" | "setLogSink";
+type SvgEditorInstance = Omit<EditorHostApi, OptionalHooks> & Partial<Pick<EditorHostApi, OptionalHooks>>;
 
 
 export class SvgView extends TextFileView {

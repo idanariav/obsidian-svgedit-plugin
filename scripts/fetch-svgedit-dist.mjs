@@ -4,7 +4,9 @@
  * svgedit now ships a single self-contained ESM bundle (`Editor.js`) with CSS,
  * images, extensions and locales all inlined. This plugin imports that file at
  * BUILD time so esbuild bundles it straight into `main.js` — nothing from
- * svgedit-dist/ is shipped to the vault at runtime. So we copy only Editor.js.
+ * svgedit-dist/ is shipped to the vault at runtime. So we copy only Editor.js,
+ * plus `hostApi.d.ts` (the self-contained host API types the plugin's SvgView
+ * type-checks against; never bundled).
  *
  * Alongside it we write svgedit-dist/SOURCE.json, recording exactly which
  * svgedit commit (or GitHub release) produced the bundle. That's what makes
@@ -35,7 +37,7 @@ import { join, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const FORK_REPO = "idanariav/svgedit";
-const SVGEDIT_RELEASE = process.env.SVGEDIT_RELEASE || "v7.4.1-fork.2";
+const SVGEDIT_RELEASE = process.env.SVGEDIT_RELEASE || "v7.4.1-fork.3";
 
 const ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
 const TARGET = join(ROOT, "svgedit-dist");
@@ -93,7 +95,13 @@ function copyDist(editorDir) {
   }
   mkdirSync(TARGET, { recursive: true });
   copyFileSync(src, join(TARGET, "Editor.js"));
-  console.log(`[fetch-svgedit-dist] Copied Editor.js bundle from ${editorDir}`);
+  const types = join(editorDir, "hostApi.d.ts");
+  if (!existsSync(types)) {
+    console.error(`[fetch-svgedit-dist] hostApi.d.ts not found at ${types} — rebuild the svgedit fork ('npm run build').`);
+    process.exit(1);
+  }
+  copyFileSync(types, join(TARGET, "hostApi.d.ts"));
+  console.log(`[fetch-svgedit-dist] Copied Editor.js bundle and hostApi.d.ts from ${editorDir}`);
 }
 
 // 1. Explicit env var override
@@ -127,7 +135,7 @@ if (!forceRelease && existsSync(siblingDist)) {
 
 // 3. Download the fork's GitHub release asset
 const sourcePath = join(TARGET, "SOURCE.json");
-if (SVGEDIT_RELEASE !== "latest" && existsSync(join(TARGET, "Editor.js")) && existsSync(sourcePath)) {
+if (SVGEDIT_RELEASE !== "latest" && existsSync(join(TARGET, "Editor.js")) && existsSync(join(TARGET, "hostApi.d.ts")) && existsSync(sourcePath)) {
   try {
     if (JSON.parse(readFileSync(sourcePath, "utf8")).release === SVGEDIT_RELEASE) {
       console.log(`[fetch-svgedit-dist] svgedit-dist already holds release ${SVGEDIT_RELEASE}; nothing to do.`);
@@ -156,8 +164,20 @@ try {
   console.error("  or set SVGEDIT_LOCAL_PATH. Refusing to fall back to upstream svgedit from npm.");
   process.exit(1);
 }
+let typesText;
+try {
+  const res = await fetch(`${base}/hostApi.d.ts`, { redirect: "follow" });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  typesText = await res.text();
+  if (!typesText.includes("EditorHostApi")) throw new Error("asset is not the host API types");
+} catch (err) {
+  console.error(`[fetch-svgedit-dist] Could not download hostApi.d.ts: ${err.message}`);
+  console.error(`  Release ${SVGEDIT_RELEASE} of ${FORK_REPO} must carry a hostApi.d.ts asset (v7.4.1-fork.3 and later).`);
+  process.exit(1);
+}
 mkdirSync(TARGET, { recursive: true });
 writeFileSync(join(TARGET, "Editor.js"), bytes);
+writeFileSync(join(TARGET, "hostApi.d.ts"), typesText);
 writeSourceInfo({
   commit: null,
   dirty: false,
