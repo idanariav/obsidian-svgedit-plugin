@@ -34,7 +34,9 @@ ready-to-embed `.svg` and `.png` image in sync automatically.
 > This plugin is not yet in the Community Plugins directory. Until then, install it
 > manually:
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the latest release.
+1. Download `main.js`, `manifest.json`, and `styles.css` from the latest release
+   (or skip the manual steps and install via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+   add this repo, `idanariav/obsidian-svgedit-plugin`, as a beta plugin).
 2. In your vault, create the folder
    `<your-vault>/.obsidian/plugins/obsidian-svg-plugin/` and copy the three files
    into it.

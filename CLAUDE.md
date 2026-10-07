@@ -78,6 +78,22 @@ sibling checkout present. To move to a newer fork release: cut it in the fork (s
 
 ---
 
+## Releasing (for BRAT / manual installs)
+
+A release is a GitHub release whose assets are `main.js`, `manifest.json` and
+`styles.css`; BRAT and the README's manual install both read it. Steps:
+
+1. Land the change with the version bumped in `manifest.json`, `package.json`
+   and `versions.json` (every svgedit sync is a bump — see above), and
+   `npm test` + `npm run build` passing. `main.js` is committed, so commit the
+   fresh build.
+2. Tag with the **bare manifest version, no `v`**, and push:
+   `git tag 1.0.41 && git push origin main 1.0.41`.
+3. `.github/workflows/release.yml` checks the tag against the three version
+   files, runs the tests and build, and creates the release with the assets.
+4. In Obsidian, BRAT updates from that release (BRAT compares the release tag
+   with `manifest.json`, so a mismatched tag is not picked up).
+
 ## What belongs in this repo
 
 | Path | Purpose |

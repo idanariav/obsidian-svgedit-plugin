@@ -1,0 +1,53 @@
+name: release
+
+# Publishes the plugin as a GitHub release so BRAT (and manual installs) can
+# fetch it. Cut one by bumping the version (manifest.json, package.json,
+# versions.json — see CLAUDE.md), committing, then pushing a tag that equals the
+# manifest version exactly, with no "v" prefix (BRAT/Obsidian compare it to
+# manifest.json): git tag 1.0.41 && git push origin main 1.0.41
+
+on:
+  push:
+    tags: ['[0-9]+.[0-9]+.[0-9]+*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Tag must match manifest.json and package.json versions
+        run: |
+          MANIFEST=$(node -p "require('./manifest.json').version")
+          PKG=$(node -p "require('./package.json').version")
+          if [ "${GITHUB_REF_NAME}" != "${MANIFEST}" ] || [ "${MANIFEST}" != "${PKG}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} / manifest ${MANIFEST} / package ${PKG} must all match"
+            exit 1
+          fi
+          if ! node -e "process.exit(Object.hasOwn(require('./versions.json'), '${MANIFEST}') ? 0 : 1)"; then
+            echo "versions.json has no entry for ${MANIFEST}"
+            exit 1
+          fi
+
+      # `npm ci` runs `prepare`, which downloads the pinned svgedit release
+      # (SVGEDIT_RELEASE in scripts/fetch-svgedit-dist.mjs) into svgedit-dist/.
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium-headless-shell
+
+      - run: npm test
+
+      - run: npm run build
+
+      - name: Create release with the plugin files attached
+        run: gh release create "${GITHUB_REF_NAME}" main.js manifest.json styles.css --title "${GITHUB_REF_NAME}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
