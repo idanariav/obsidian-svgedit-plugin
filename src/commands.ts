@@ -150,7 +150,7 @@ export function registerCommands(plugin: SvgPlugin): void {
   // New drawing
   plugin.addCommand({
     id: "new-svg-drawing",
-    name: "New SVG drawing",
+    name: "New drawing…",
     callback: async () => {
       new NewDrawingModal(
         plugin.app,
@@ -180,7 +180,7 @@ export function registerCommands(plugin: SvgPlugin): void {
   // frontmatter field.
   plugin.addCommand({
     id: "new-drawing-for-note",
-    name: "New drawing for this file",
+    name: "New drawing for current note",
     checkCallback: (checking) => {
       const file = plugin.app.workspace.getActiveFile();
       if (!file || file.extension !== "md") return false;
@@ -192,7 +192,7 @@ export function registerCommands(plugin: SvgPlugin): void {
   // Convert the active Excalidraw drawing into an svgedit drawing (in place)
   plugin.addCommand({
     id: "convert-excalidraw-to-svg",
-    name: "Convert Excalidraw drawing to SVG",
+    name: "Convert Excalidraw drawing",
     checkCallback: (checking) => {
       const file = plugin.app.workspace.getActiveFile();
       if (!file || file.extension !== "md") return false;
@@ -205,7 +205,7 @@ export function registerCommands(plugin: SvgPlugin): void {
   // Convert existing markdown note to an SVG drawing
   plugin.addCommand({
     id: "convert-to-svg-drawing",
-    name: "Convert note to SVG drawing",
+    name: "Convert note to drawing",
     checkCallback: (checking) => {
       const file = plugin.app.workspace.getActiveFile();
       if (!file || file.extension !== "md") return false;

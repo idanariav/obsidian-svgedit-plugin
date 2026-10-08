@@ -11,23 +11,25 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-## Toggling the plugin off/on doesn't reload svgedit's custom elements
+The entries below came out of a UI/UX review (2026-10-07), run from the
+svgedit repo. Findings about the editor itself, are in
+`../svgedit/.claude/techdebt.md`.
 
-`src/compat/customElementsGuard.ts` makes `customElements.define()` a no-op
-for already-registered tag names, to stop the plugin's *second* load (Obsidian
-re-evaluates `main.js` from scratch on every disable/enable, but
-`window.customElements` survives) from throwing on svgedit's ~39
-`customElements.define('se-button', ...)` calls. Side effect: if a shadow-DOM
-component's source changes between two plugin (re)loads in the same Obsidian
-window, the second load's new class is silently discarded and the *first*
-load's class keeps rendering every instance of that tag — so CLAUDE.md's
-documented dev loop ("toggle the plugin off/on... to pick up the new build")
-does **not** actually pick up changes to svgedit's custom-element components.
-Only a full Obsidian window reload does.
+## Theme is set in three places, UI mode in two
 
-Not done now: this only matters for iterative dev testing (not a user-facing
-bug — real users only ever load the plugin once per window), and there's no
-clean fix short of tracking which tag names' constructors actually changed
-and calling some redefinition path the CustomElementRegistry doesn't natively
-support. Low effort to at least document in CLAUDE.md's testing section so
-future sessions don't waste time debugging "why didn't my change show up."
+The theme comes from Obsidian's own theme, the plugin's "Editor theme" setting,
+and the editor's moon button (`ext-theme-toggle`, in `SvgView`'s extension
+list). UI mode is set both by the "Editor UI mode (desktop/mobile)" settings
+and by "Tablet mode" in the editor's main menu. Users can't tell which one
+wins. Suggestion: follow Obsidian by default, drop `ext-theme-toggle` from the
+plugin's extensions, and hide the menu's tablet toggle when the host manages
+UI mode. That last part needs a small config flag in the fork. Small.
+
+## Two different export flows
+
+The editor's main menu still has "Export", which opens svgedit's own dialog and
+downloads the file the way a browser would. The plugin has "Export drawing…"
+(`ExportModal`), which supports frames, vault folders and PNG scale. The two
+behave differently. Either route the editor's menu item to `ExportModal` (a
+host hook in the fork, like `svgEditHost`) or hide it. Small to medium; needs
+changes in both repos.

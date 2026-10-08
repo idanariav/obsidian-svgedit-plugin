@@ -130,6 +130,9 @@ export class TextFileView {
     this.contentEl = document.createElement("div");
   }
 
+  addAction(_icon: string, _title: string, _cb: () => void): HTMLElement {
+    return document.createElement("div");
+  }
   register(_cb: () => void): void {}
   registerEvent(_ref: unknown): void {}
   // Real Obsidian also detaches this on unload; not needed for the tests

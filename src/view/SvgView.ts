@@ -40,7 +40,7 @@ export class SvgView extends TextFileView {
 
   private editorContainer!: HTMLElement;
   /** Topbar save button; its red `.svg-plugin-dirty` state mirrors `dirty`. */
-  private saveBtn: HTMLButtonElement | null = null;
+  private saveBtn: HTMLElement | null = null;
   private svgEditor: SvgEditorInstance | null = null;
   /** True only once svgEditor.init() has resolved. `svgEditor` itself goes
    *  non-null the instant the editor is constructed, well before init()
@@ -129,30 +129,12 @@ export class SvgView extends TextFileView {
     this.contentEl.empty();
     this.contentEl.addClass("svg-plugin-view");
 
-    // Topbar stays in Obsidian's DOM so global shortcuts (Cmd+P etc.) work
-    const toolbar = this.contentEl.createDiv("svg-plugin-topbar");
-    const mdBtn = toolbar.createEl("button", {
-      cls: "svg-plugin-topbar-btn",
-      attr: { "aria-label": "Edit as Markdown" },
-    });
-    setIcon(mdBtn, "code");
-    mdBtn.addEventListener("click", () => this.switchToMarkdown());
-
-    // Save button — its icon goes red (`.svg-plugin-dirty`) while there are
-    // unsaved edits, mirroring the periodic-autosave/dirty state.
-    this.saveBtn = toolbar.createEl("button", {
-      cls: "svg-plugin-topbar-btn",
-      attr: { "aria-label": "Save drawing" },
-    });
-    setIcon(this.saveBtn, "save");
-    this.saveBtn.addEventListener("click", () => void this.save());
-
-    const versionsBtn = toolbar.createEl("button", {
-      cls: "svg-plugin-topbar-btn",
-      attr: { "aria-label": "Drawing versions" },
-    });
-    setIcon(versionsBtn, "history");
-    versionsBtn.addEventListener("click", () => new VersionsModal(this.plugin, this).open());
+    // View actions live in Obsidian's own header (still Obsidian DOM, so global
+    // shortcuts keep working). addAction() prepends, so register in reverse.
+    this.addAction("history", "Drawing versions", () => new VersionsModal(this.plugin, this).open());
+    // Save icon gets a small dot (`.svg-plugin-dirty`) while there are unsaved edits.
+    this.saveBtn = this.addAction("save", "Save drawing", () => void this.save());
+    this.addAction("code", "Edit as Markdown", () => this.switchToMarkdown());
 
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
 

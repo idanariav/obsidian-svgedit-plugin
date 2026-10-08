@@ -29,8 +29,6 @@ export class SvgSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Sketch Editor" });
-
     // ── Open mode ────────────────────────────────────────────────────────────
     new Setting(containerEl).setHeading().setName("Open mode");
 
@@ -380,9 +378,9 @@ export class SvgSettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName("Default template")
+      .setName("Template for new drawings")
       .setDesc(
-        "New drawings (\"New SVG drawing\", \"New drawing for this file\") start "
+        "New drawings (\"New drawing\", \"New drawing for current note\") start "
         + "from this file. If Templater is installed, they're created by running "
         + "this file through Templater itself, so its script/frontmatter render "
         + "normally — e.g. a script that dynamically embeds a separate drawing "
@@ -411,9 +409,9 @@ export class SvgSettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName("Default drawing template")
+      .setName("Starting drawing for converted notes")
       .setDesc(
-        "\"Convert note to SVG drawing\" starts from this drawing's content. "
+        "\"Convert note to drawing\" starts from this drawing's content. "
         + "Read directly, without running Templater, so point this at a drawing "
         + "with literal Sketch Editor Data rather than at a Templater script — "
         + "if \"Default template\" above uses Templater to dynamically embed a "
