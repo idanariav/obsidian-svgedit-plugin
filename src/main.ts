@@ -9,6 +9,7 @@ import { DEFAULT_SETTINGS, SvgPluginSettings } from "./settings/defaults";
 import { markdownPostProcessor } from "./postprocessor/markdownPostProcessor";
 import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
+import { ExportModal } from "./modals/ExportModal";
 import {
   fileToDataUri,
   fileToResourceUrl,
@@ -224,6 +225,10 @@ export default class SvgPlugin extends Plugin {
         }
         const dataUrl = await fileToDataUri(this.app, file);
         return { dataUrl, link, locked: mode === "locked" };
+      },
+      exportDrawing: () => {
+        const view = this.app.workspace.getActiveViewOfType(SvgView);
+        if (view?.file) new ExportModal(this, view).open();
       },
       listVaultFiles: () => {
         const drawingPath = this.activeDrawingPath();

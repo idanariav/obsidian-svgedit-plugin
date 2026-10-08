@@ -17,6 +17,9 @@ export interface SvgEditHost {
    *  native <datalist>) instead of opening a separate host picker. Each entry
    *  pairs the searchable display path with the wikilink to record. */
   listVaultFiles(): { path: string; link: string }[];
+  /** Replaces the editor's own Export dialog: the menu's Export item opens the
+   *  plugin's ExportModal for the active drawing instead. */
+  exportDrawing(): void;
 }
 
 declare global {

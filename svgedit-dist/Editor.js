@@ -43,7 +43,7 @@ class xu {
    */
   #i() {
     const e = document.createElementNS(bo, "svg"), i = document.createElementNS(bo, "svg");
-    document.documentElement.append(e), i.setAttribute("x", 5), e.append(i);
+    document.documentElement.append(e), i.setAttribute("x", "5"), e.append(i);
     const n = document.createElementNS(bo, "text");
     n.textContent = "a", i.append(n);
     try {
@@ -55,13 +55,13 @@ class xu {
     }
   }
 }
-const wu = new xu(), Mr = () => wu.isMac, li = (s) => s?.closest?.("[data-svgedit-root]") ?? document;
+const wu = new xu(), Tr = () => wu.isMac, li = (s) => s?.closest?.("[data-svgedit-root]") ?? document;
 let yn = null;
 const Kl = (s) => {
   yn = s;
 }, Cu = (s) => {
   yn === s && (yn = null);
-}, Ar = (s) => {
+}, Nr = (s) => {
   const e = li(document.activeElement);
   return e !== document ? e === s?.$container : yn === null || yn === s;
 }, Su = () => {
@@ -922,7 +922,7 @@ Revert back to original SVG source?`,
   s.forEach((n) => {
     e[n] && (i[n] = e[n]);
   });
-}, Iu = /###/g, Ql = (s) => s && s.indexOf("###") > -1 ? s.replace(Iu, ".") : s, e0 = (s) => !s || Ct(s), Pr = (s, e, i) => {
+}, Iu = /###/g, Ql = (s) => s && s.indexOf("###") > -1 ? s.replace(Iu, ".") : s, e0 = (s) => !s || Ct(s), Ir = (s, e, i) => {
   const n = Ct(e) ? e.split(".") : e;
   let o = 0;
   for (; o < n.length - 1; ) {
@@ -938,26 +938,26 @@ Revert back to original SVG source?`,
   const {
     obj: n,
     k: o
-  } = Pr(s, e, Object);
+  } = Ir(s, e, Object);
   if (n !== void 0 || e.length === 1) {
     n[o] = i;
     return;
   }
-  let a = e[e.length - 1], c = e.slice(0, e.length - 1), h = Pr(s, c, Object);
+  let a = e[e.length - 1], c = e.slice(0, e.length - 1), h = Ir(s, c, Object);
   for (; h.obj === void 0 && c.length; )
-    a = `${c[c.length - 1]}.${a}`, c = c.slice(0, c.length - 1), h = Pr(s, c, Object), h?.obj && typeof h.obj[`${h.k}.${a}`] < "u" && (h.obj = void 0);
+    a = `${c[c.length - 1]}.${a}`, c = c.slice(0, c.length - 1), h = Ir(s, c, Object), h?.obj && typeof h.obj[`${h.k}.${a}`] < "u" && (h.obj = void 0);
   h.obj[`${h.k}.${a}`] = i;
 }, Fu = (s, e, i, n) => {
   const {
     obj: o,
     k: a
-  } = Pr(s, e, Object);
+  } = Ir(s, e, Object);
   o[a] = o[a] || [], o[a].push(i);
 }, Ps = (s, e) => {
   const {
     obj: i,
     k: n
-  } = Pr(s, e);
+  } = Ir(s, e);
   if (i && Object.prototype.hasOwnProperty.call(i, n))
     return i[n];
 }, Ou = (s, e, i) => {
@@ -1020,7 +1020,7 @@ const Ru = [" ", ",", "?", "!", ";"], Du = new Bu(20), Gu = (s, e, i) => {
     o = c;
   }
   return o;
-}, Fr = (s) => s?.replace("_", "-"), ju = {
+}, Br = (s) => s?.replace("_", "-"), ju = {
   type: "logger",
   log(s) {
     this.output("log", s);
@@ -1448,12 +1448,12 @@ class r0 {
     this.options = e, this.supportedLngs = this.options.supportedLngs || !1, this.logger = Gi.create("languageUtils");
   }
   getScriptPartFromCode(e) {
-    if (e = Fr(e), !e || e.indexOf("-") < 0) return null;
+    if (e = Br(e), !e || e.indexOf("-") < 0) return null;
     const i = e.split("-");
     return i.length === 2 || (i.pop(), i[i.length - 1].toLowerCase() === "x") ? null : this.formatLanguageCode(i.join("-"));
   }
   getLanguagePartFromCode(e) {
-    if (e = Fr(e), !e || e.indexOf("-") < 0) return e;
+    if (e = Br(e), !e || e.indexOf("-") < 0) return e;
     const i = e.split("-");
     return this.formatLanguageCode(i[0]);
   }
@@ -1528,7 +1528,7 @@ class Hu {
     this.pluralRulesCache = {};
   }
   getRule(e, i = {}) {
-    const n = Fr(e === "dev" ? "en" : e), o = i.ordinal ? "ordinal" : "cardinal", a = JSON.stringify({
+    const n = Br(e === "dev" ? "en" : e), o = i.ordinal ? "ordinal" : "cardinal", a = JSON.stringify({
       cleanedCode: n,
       type: o
     });
@@ -1714,9 +1714,9 @@ const Vu = (s) => {
     });
     const c = n + JSON.stringify(a);
     let h = e[c];
-    return h || (h = s(Fr(n), o), e[c] = h), h(i);
+    return h || (h = s(Br(n), o), e[c] = h), h(i);
   };
-}, Xu = (s) => (e, i, n) => s(Fr(i), n)(e);
+}, Xu = (s) => (e, i, n) => s(Br(i), n)(e);
 class Yu {
   constructor(e = {}) {
     this.logger = Gi.create("formatter"), this.options = e, this.init(e);
@@ -1986,13 +1986,13 @@ const Co = () => ({
     skipOnVariables: !0
   },
   cacheInBuiltFormats: !0
-}), d0 = (s) => (Ct(s.ns) && (s.ns = [s.ns]), Ct(s.fallbackLng) && (s.fallbackLng = [s.fallbackLng]), Ct(s.fallbackNS) && (s.fallbackNS = [s.fallbackNS]), s.supportedLngs?.indexOf?.("cimode") < 0 && (s.supportedLngs = s.supportedLngs.concat(["cimode"])), typeof s.initImmediate == "boolean" && (s.initAsync = s.initImmediate), s), Kr = () => {
+}), d0 = (s) => (Ct(s.ns) && (s.ns = [s.ns]), Ct(s.fallbackLng) && (s.fallbackLng = [s.fallbackLng]), Ct(s.fallbackNS) && (s.fallbackNS = [s.fallbackNS]), s.supportedLngs?.indexOf?.("cimode") < 0 && (s.supportedLngs = s.supportedLngs.concat(["cimode"])), typeof s.initImmediate == "boolean" && (s.initAsync = s.initImmediate), s), ts = () => {
 }, Wu = (s) => {
   Object.getOwnPropertyNames(Object.getPrototypeOf(s)).forEach((i) => {
     typeof s[i] == "function" && (s[i] = s[i].bind(s));
   });
 };
-class Lr extends Zs {
+class Fr extends Zs {
   constructor(e = {}, i) {
     if (super(), this.options = d0(e), this.services = {}, this.logger = Gi, this.modules = {
       external: []
@@ -2036,7 +2036,7 @@ class Lr extends Zs {
         y.init && y.init(this);
       });
     }
-    if (this.format = this.options.interpolation.format, i || (i = Kr), this.options.fallbackLng && !this.services.languageDetector && !this.options.lng) {
+    if (this.format = this.options.interpolation.format, i || (i = ts), this.options.fallbackLng && !this.services.languageDetector && !this.options.lng) {
       const f = this.services.languageUtils.getFallbackCodes(this.options.fallbackLng);
       f.length > 0 && f[0] !== "dev" && (this.options.lng = f[0]);
     }
@@ -2054,7 +2054,7 @@ class Lr extends Zs {
     };
     return this.options.resources || !this.options.initAsync ? g() : setTimeout(g, 0), h;
   }
-  loadResources(e, i = Kr) {
+  loadResources(e, i = ts) {
     let n = i;
     const o = Ct(e) ? e : this.language;
     if (typeof e == "function" && (n = e), !this.options.resources || this.options.partialBundledLanguages) {
@@ -2073,7 +2073,7 @@ class Lr extends Zs {
   }
   reloadResources(e, i, n) {
     const o = hr();
-    return typeof e == "function" && (n = e, e = void 0), typeof i == "function" && (n = i, i = void 0), e || (e = this.languages), i || (i = this.options.ns), n || (n = Kr), this.services.backendConnector.reload(e, i, (a) => {
+    return typeof e == "function" && (n = e, e = void 0), typeof i == "function" && (n = i, i = void 0), e || (e = this.languages), i || (i = this.options.ns), n || (n = ts), this.services.backendConnector.reload(e, i, (a) => {
       o.resolve(), n(a);
     }), o;
   }
@@ -2185,17 +2185,17 @@ class Lr extends Zs {
     return e.toLowerCase().indexOf("-latn") > 1 ? "ltr" : i.indexOf(n.getLanguagePartFromCode(e)) > -1 || e.toLowerCase().indexOf("-arab") > 1 ? "rtl" : "ltr";
   }
   static createInstance(e = {}, i) {
-    const n = new Lr(e, i);
-    return n.createInstance = Lr.createInstance, n;
+    const n = new Fr(e, i);
+    return n.createInstance = Fr.createInstance, n;
   }
-  cloneInstance(e = {}, i = Kr) {
+  cloneInstance(e = {}, i = ts) {
     const n = e.forkResourceStore;
     n && delete e.forkResourceStore;
     const o = {
       ...this.options,
       ...e,
       isClone: !0
-    }, a = new Lr(o);
+    }, a = new Fr(o);
     if ((e.debug !== void 0 || e.prefix !== void 0) && (a.logger = a.logger.clone(e)), ["store", "services", "language"].forEach((h) => {
       a[h] = this[h];
     }), a.services = {
@@ -2237,7 +2237,7 @@ class Lr extends Zs {
     };
   }
 }
-const hi = Lr.createInstance();
+const hi = Fr.createInstance();
 hi.createInstance;
 hi.dir;
 hi.init;
@@ -2327,7 +2327,7 @@ const Ws = {
   "f10",
   "f11",
   "f12"
-]), n3 = (s) => /^[a-z0-9]$/.test(s) || i3.has(s), Kc = (s) => /[\s/]/.test(s), r3 = () => Mr() ? "meta" : "ctrl", ml = (s) => {
+]), n3 = (s) => /^[a-z0-9]$/.test(s) || i3.has(s), Kc = (s) => /[\s/]/.test(s), r3 = () => Tr() ? "meta" : "ctrl", ml = (s) => {
   const e = String(s).toLowerCase().split("+").map((a) => a.trim()).filter(Boolean);
   if (!e.length) return null;
   const i = e.pop(), n = /* @__PURE__ */ new Set();
@@ -2356,17 +2356,17 @@ const Ws = {
   backspace: "Backspace",
   tab: "Tab"
 }, o3 = () => ({
-  meta: Mr() ? "⌘" : "Meta",
+  meta: Tr() ? "⌘" : "Meta",
   ctrl: "Ctrl",
-  alt: Mr() ? "⌥" : "Alt",
-  shift: Mr() ? "⇧" : "Shift"
+  alt: Tr() ? "⌥" : "Alt",
+  shift: Tr() ? "⇧" : "Shift"
 }), Ks = (s) => {
   const e = o3();
   return s.split("+").map((i) => e[i] ? e[i] : p0[i] ? p0[i] : i.length === 1 ? i.toUpperCase() : i.charAt(0).toUpperCase() + i.slice(1)).join(" + ");
 }, Qc = (s) => {
   if (!s) return "";
   const e = Jc(s);
-  return e ? Ks(e).replace(/ \+ /g, Mr() ? "" : "+") : s;
+  return e ? Ks(e).replace(/ \+ /g, Tr() ? "" : "+") : s;
 }, Js = (s, e) => {
   const i = Qc(e);
   return i ? `${s} [${i}]` : s;
@@ -2634,7 +2634,7 @@ class l3 {
    */
   register() {
     this._load(), this._handler && document.removeEventListener("keydown", this._handler), this._handler = (e) => {
-      if (!Ar(this.editor) || !La(this.editor?.$container, e.target)) return;
+      if (!Nr(this.editor) || !La(this.editor?.$container, e.target)) return;
       const i = u0(e);
       if (!i) return;
       const n = this.reverseMap().get(i);
@@ -9714,7 +9714,7 @@ class qf extends HTMLElement {
   }
 }
 customElements.define("se-list-item", qf);
-class Or {
+class Rr {
   /**
      * @param {string|Element|external:jQuery} container
      * @param {"fill"} type
@@ -9724,7 +9724,7 @@ class Or {
       `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
           <rect
             fill="#000000" opacity="1" width="100%" height="100%"/>
-          <defs><linearGradient id="gradbox_${Or.ctr++}"/></defs>
+          <defs><linearGradient id="gradbox_${Rr.ctr++}"/></defs>
         </svg>`,
       "text/xml"
     ).documentElement;
@@ -9804,11 +9804,11 @@ class Or {
       }
     }
     this._paintOpacity *= 100;
-    const o = Or.getPaint(e, this._paintColor, this._paintOpacity, n);
+    const o = Rr.getPaint(e, this._paintColor, this._paintOpacity, n);
     return this.setPaint(o), o;
   }
 }
-Or.ctr = 0;
+Rr.ctr = 0;
 const Hf = (
   /* css */
   `
@@ -12032,7 +12032,7 @@ class u6 extends HTMLElement {
    * @returns {void}
    */
   connectedCallback() {
-    this.paintBox = new Or(this.$block, this.type), wt(this.$picker, () => {
+    this.paintBox = new Rr(this.$block, this.type), wt(this.$picker, () => {
       this.openColorDialog();
     });
   }
@@ -12564,14 +12564,14 @@ class v6 extends HTMLElement {
 }
 customElements.get("se-font-select") || customElements.define("se-font-select", v6);
 const _6 = "svgedit-fonts", vn = "fonts", za = 2, Os = /* @__PURE__ */ new Map();
-let Jr = null;
-const bl = () => Jr || (Jr = new Promise((s, e) => {
+let is = null;
+const bl = () => is || (is = new Promise((s, e) => {
   const i = indexedDB.open(_6, 1);
   i.onupgradeneeded = () => {
     const n = i.result;
     n.objectStoreNames.contains(vn) || n.createObjectStore(vn, { keyPath: "family" });
   }, i.onsuccess = () => s(i.result), i.onerror = () => e(i.error);
-}), Jr), b6 = async (s) => {
+}), is), b6 = async (s) => {
   const e = await bl();
   return new Promise((i, n) => {
     const o = e.transaction(vn, "readwrite");
@@ -12612,20 +12612,20 @@ const bl = () => Jr || (Jr = new Promise((s, e) => {
     o && i.push({ subset: n[1], url: o, block: n[2] });
   }
   return i.length ? (i.find((a) => a.subset === "latin") || i.find((a) => /U\+0000/i.test(a.block)) || i[0]).url : s.match(/url\((https:\/\/[^)]+\.woff2)\)/)?.[1] || null;
-}, Tr = async (s, e, i) => {
+}, Or = async (s, e, i) => {
   if (Os.set(s, e), i?.svgCanvas?.setEncodableFont(s, e), !Array.from(document.fonts).some((o) => o.family === s)) {
     const o = new FontFace(s, `url(data:font/woff2;base64,${e})`);
     await o.load(), document.fonts.add(o);
   }
 }, k6 = async (s, e) => {
   if (Os.has(s)) {
-    await Tr(s, Os.get(s), e);
+    await Or(s, Os.get(s), e);
     return;
   }
   const i = ti();
   if (i) {
     const o = await k0(s);
-    await i.saveFont(s, o), await Tr(s, o, e);
+    await i.saveFont(s, o), await Or(s, o, e);
     return;
   }
   let n = await x6(s);
@@ -12633,7 +12633,7 @@ const bl = () => Jr || (Jr = new Promise((s, e) => {
     const o = await k0(s);
     n = { family: s, woff2Base64: o, v: za }, await b6(n);
   }
-  await Tr(s, n.woff2Base64, e);
+  await Or(s, n.woff2Base64, e);
 }, E6 = async (s) => {
   const e = ti();
   if (e) {
@@ -12644,7 +12644,7 @@ const bl = () => Jr || (Jr = new Promise((s, e) => {
       return wi("fontStore: failed to read host fonts", a, "fontStore"), [];
     }
     return await Promise.all((o || []).map(
-      (a) => Tr(a.family, a.woff2Base64, s).catch((c) => wi(`fontStore: failed to restore "${a.family}"`, c), "fontStore")
+      (a) => Or(a.family, a.woff2Base64, s).catch((c) => wi(`fontStore: failed to restore "${a.family}"`, c), "fontStore")
     )), (o || []).map((a) => a.family);
   }
   let i = [];
@@ -12655,7 +12655,7 @@ const bl = () => Jr || (Jr = new Promise((s, e) => {
   }
   const n = i.filter((o) => o.v === za);
   return await Promise.all(n.map(
-    (o) => Tr(o.family, o.woff2Base64, s).catch((a) => wi(`fontStore: failed to restore "${o.family}"`, a), "fontStore")
+    (o) => Or(o.family, o.woff2Base64, s).catch((a) => wi(`fontStore: failed to restore "${o.family}"`, a), "fontStore")
   )), n.map((o) => o.family);
 }, E0 = (s) => Os.has(s), M6 = ["handwriting", "sans-serif", "serif", "display", "monospace"], A6 = /* @__PURE__ */ JSON.parse('[{"family":"ABeeZee","category":"sans-serif"},{"family":"Abel","category":"sans-serif"},{"family":"Abhaya Libre","category":"serif"},{"family":"Aboreto","category":"display"},{"family":"Abril Fatface","category":"display"},{"family":"Abyssinica SIL","category":"serif"},{"family":"Aclonica","category":"sans-serif"},{"family":"Acme","category":"sans-serif"},{"family":"Actor","category":"sans-serif"},{"family":"Adamina","category":"serif"},{"family":"ADLaM Display","category":"display"},{"family":"Advent Pro","category":"sans-serif"},{"family":"Afacad","category":"sans-serif"},{"family":"Afacad Flux","category":"sans-serif"},{"family":"Agbalumo","category":"display"},{"family":"Agdasima","category":"sans-serif"},{"family":"Agu Display","category":"display"},{"family":"Aguafina Script","category":"handwriting"},{"family":"Akatab","category":"sans-serif"},{"family":"Akaya Kanadaka","category":"display"},{"family":"Akaya Telivigala","category":"display"},{"family":"Akronim","category":"display"},{"family":"Akshar","category":"sans-serif"},{"family":"Akt","category":"sans-serif"},{"family":"Aladin","category":"display"},{"family":"Alan Sans","category":"sans-serif"},{"family":"Alata","category":"sans-serif"},{"family":"Alatsi","category":"sans-serif"},{"family":"Albert Sans","category":"sans-serif"},{"family":"Aldrich","category":"sans-serif"},{"family":"Alef","category":"sans-serif"},{"family":"Alegreya","category":"serif"},{"family":"Alegreya Sans","category":"sans-serif"},{"family":"Alegreya Sans SC","category":"sans-serif"},{"family":"Alegreya SC","category":"serif"},{"family":"Aleo","category":"serif"},{"family":"Alex Brush","category":"handwriting"},{"family":"Alexandria","category":"sans-serif"},{"family":"Alfa Slab One","category":"display"},{"family":"Alice","category":"serif"},{"family":"Alike","category":"serif"},{"family":"Alike Angular","category":"serif"},{"family":"Alkalami","category":"serif"},{"family":"Alkatra","category":"display"},{"family":"Allan","category":"display"},{"family":"Allerta","category":"sans-serif"},{"family":"Allerta Stencil","category":"sans-serif"},{"family":"Allison","category":"handwriting"},{"family":"Allkin","category":"display"},{"family":"Allura","category":"handwriting"},{"family":"Almarai","category":"sans-serif"},{"family":"Almendra","category":"serif"},{"family":"Almendra Display","category":"display"},{"family":"Almendra SC","category":"serif"},{"family":"Alumni Sans","category":"sans-serif"},{"family":"Alumni Sans Collegiate One","category":"sans-serif"},{"family":"Alumni Sans Inline One","category":"display"},{"family":"Alumni Sans Pinstripe","category":"sans-serif"},{"family":"Alumni Sans SC","category":"sans-serif"},{"family":"Alyamama","category":"serif"},{"family":"Amarante","category":"display"},{"family":"Amaranth","category":"sans-serif"},{"family":"Amarna","category":"sans-serif"},{"family":"Amatic SC","category":"handwriting"},{"family":"Amethysta","category":"serif"},{"family":"Amiko","category":"sans-serif"},{"family":"Amiri","category":"serif"},{"family":"Amiri Quran","category":"serif"},{"family":"Amita","category":"handwriting"},{"family":"Anaheim","category":"sans-serif"},{"family":"Ancizar Sans","category":"sans-serif"},{"family":"Ancizar Serif","category":"serif"},{"family":"Andada Pro","category":"serif"},{"family":"Andika","category":"sans-serif"},{"family":"Anek Bangla","category":"sans-serif"},{"family":"Anek Devanagari","category":"sans-serif"},{"family":"Anek Gujarati","category":"sans-serif"},{"family":"Anek Gurmukhi","category":"sans-serif"},{"family":"Anek Kannada","category":"sans-serif"},{"family":"Anek Latin","category":"sans-serif"},{"family":"Anek Malayalam","category":"sans-serif"},{"family":"Anek Odia","category":"sans-serif"},{"family":"Anek Tamil","category":"sans-serif"},{"family":"Anek Telugu","category":"sans-serif"},{"family":"Angkor","category":"display"},{"family":"Annapurna SIL","category":"serif"},{"family":"Annie Use Your Telescope","category":"handwriting"},{"family":"Anonymous Pro","category":"monospace"},{"family":"Anta","category":"sans-serif"},{"family":"Antic","category":"sans-serif"},{"family":"Antic Didone","category":"serif"},{"family":"Antic Slab","category":"serif"},{"family":"Anton","category":"sans-serif"},{"family":"Anton SC","category":"sans-serif"},{"family":"Antonio","category":"sans-serif"},{"family":"Anuphan","category":"sans-serif"},{"family":"Anybody","category":"display"},{"family":"Aoboshi One","category":"serif"},{"family":"AR One Sans","category":"sans-serif"},{"family":"Arapey","category":"serif"},{"family":"Arbutus","category":"serif"},{"family":"Arbutus Slab","category":"serif"},{"family":"Architects Daughter","category":"handwriting"},{"family":"Archivo","category":"sans-serif"},{"family":"Archivo Black","category":"sans-serif"},{"family":"Archivo Narrow","category":"sans-serif"},{"family":"Are You Serious","category":"handwriting"},{"family":"Aref Ruqaa","category":"serif"},{"family":"Aref Ruqaa Ink","category":"serif"},{"family":"Arima","category":"display"},{"family":"Arimo","category":"sans-serif"},{"family":"Arizonia","category":"handwriting"},{"family":"Armata","category":"sans-serif"},{"family":"Arsenal","category":"sans-serif"},{"family":"Arsenal SC","category":"sans-serif"},{"family":"Artifika","category":"serif"},{"family":"Arvo","category":"serif"},{"family":"Arya","category":"sans-serif"},{"family":"Asap","category":"sans-serif"},{"family":"Asap Condensed","category":"sans-serif"},{"family":"Asar","category":"serif"},{"family":"Asimovian","category":"sans-serif"},{"family":"Asset","category":"display"},{"family":"Assistant","category":"sans-serif"},{"family":"Asta Sans","category":"sans-serif"},{"family":"Astloch","category":"display"},{"family":"Asul","category":"serif"},{"family":"Athiti","category":"sans-serif"},{"family":"Atkinson Hyperlegible","category":"sans-serif"},{"family":"Atkinson Hyperlegible Mono","category":"sans-serif"},{"family":"Atkinson Hyperlegible Next","category":"sans-serif"},{"family":"Atma","category":"display"},{"family":"Atomic Age","category":"display"},{"family":"Aubrey","category":"display"},{"family":"Audiowide","category":"display"},{"family":"Autour One","category":"display"},{"family":"Average","category":"serif"},{"family":"Average Sans","category":"sans-serif"},{"family":"Averia Gruesa Libre","category":"display"},{"family":"Averia Libre","category":"display"},{"family":"Averia Sans Libre","category":"display"},{"family":"Averia Serif Libre","category":"display"},{"family":"Azeret Mono","category":"monospace"},{"family":"B612","category":"sans-serif"},{"family":"B612 Mono","category":"monospace"},{"family":"Babylonica","category":"handwriting"},{"family":"Bacasime Antique","category":"serif"},{"family":"Bad Script","category":"handwriting"},{"family":"Badeen Display","category":"display"},{"family":"Bagel Fat One","category":"display"},{"family":"Bahiana","category":"display"},{"family":"Bahianita","category":"display"},{"family":"Bai Jamjuree","category":"sans-serif"},{"family":"Bakbak One","category":"display"},{"family":"Ballet","category":"handwriting"},{"family":"Baloo 2","category":"display"},{"family":"Baloo Bhai 2","category":"display"},{"family":"Baloo Bhaijaan 2","category":"display"},{"family":"Baloo Bhaina 2","category":"display"},{"family":"Baloo Chettan 2","category":"display"},{"family":"Baloo Da 2","category":"display"},{"family":"Baloo Paaji 2","category":"display"},{"family":"Baloo Tamma 2","category":"display"},{"family":"Baloo Tammudu 2","category":"display"},{"family":"Baloo Thambi 2","category":"display"},{"family":"Balsamiq Sans","category":"display"},{"family":"Balthazar","category":"serif"},{"family":"Bangers","category":"display"},{"family":"Barlow","category":"sans-serif"},{"family":"Barlow Condensed","category":"sans-serif"},{"family":"Barlow Semi Condensed","category":"sans-serif"},{"family":"Barriecito","category":"display"},{"family":"Barrio","category":"display"},{"family":"Basic","category":"sans-serif"},{"family":"Baskervville","category":"serif"},{"family":"Baskervville SC","category":"serif"},{"family":"Battambang","category":"display"},{"family":"Baumans","category":"display"},{"family":"Bayon","category":"sans-serif"},{"family":"BBH Bartle","category":"sans-serif"},{"family":"BBH Bogle","category":"sans-serif"},{"family":"BBH Hegarty","category":"sans-serif"},{"family":"Be Vietnam Pro","category":"sans-serif"},{"family":"Beau Rivage","category":"handwriting"},{"family":"Bebas Neue","category":"sans-serif"},{"family":"Beiruti","category":"sans-serif"},{"family":"Belanosima","category":"sans-serif"},{"family":"Belgrano","category":"serif"},{"family":"Bellefair","category":"serif"},{"family":"Belleza","category":"sans-serif"},{"family":"Bellota","category":"display"},{"family":"Bellota Text","category":"display"},{"family":"BenchNine","category":"sans-serif"},{"family":"Benne","category":"serif"},{"family":"Bentham","category":"serif"},{"family":"Berkshire Swash","category":"handwriting"},{"family":"Besley","category":"serif"},{"family":"Betania Patmos","category":"handwriting"},{"family":"Betania Patmos GDL","category":"handwriting"},{"family":"Betania Patmos In","category":"handwriting"},{"family":"Betania Patmos In GDL","category":"handwriting"},{"family":"Beth Ellen","category":"handwriting"},{"family":"Bevan","category":"serif"},{"family":"BhuTuka Expanded One","category":"serif"},{"family":"Big Shoulders","category":"display"},{"family":"Big Shoulders Inline","category":"display"},{"family":"Big Shoulders Stencil","category":"display"},{"family":"Bigelow Rules","category":"display"},{"family":"Bigshot One","category":"display"},{"family":"Bilbo","category":"handwriting"},{"family":"Bilbo Swash Caps","category":"handwriting"},{"family":"BioRhyme","category":"serif"},{"family":"BioRhyme Expanded","category":"serif"},{"family":"Birthstone","category":"handwriting"},{"family":"Birthstone Bounce","category":"handwriting"},{"family":"Biryani","category":"sans-serif"},{"family":"Bitcount","category":"display"},{"family":"Bitcount Grid Double","category":"display"},{"family":"Bitcount Grid Double Ink","category":"display"},{"family":"Bitcount Grid Single","category":"display"},{"family":"Bitcount Grid Single Ink","category":"display"},{"family":"Bitcount Ink","category":"display"},{"family":"Bitcount Prop Double","category":"display"},{"family":"Bitcount Prop Double Ink","category":"display"},{"family":"Bitcount Prop Single","category":"display"},{"family":"Bitcount Prop Single Ink","category":"display"},{"family":"Bitcount Single","category":"display"},{"family":"Bitcount Single Ink","category":"display"},{"family":"Bitter","category":"serif"},{"family":"BIZ UDGothic","category":"sans-serif"},{"family":"BIZ UDMincho","category":"serif"},{"family":"BIZ UDPGothic","category":"sans-serif"},{"family":"BIZ UDPMincho","category":"serif"},{"family":"BJCree","category":"serif"},{"family":"Black And White Picture","category":"display"},{"family":"Black Han Sans","category":"sans-serif"},{"family":"Black Ops One","category":"display"},{"family":"Blaka","category":"display"},{"family":"Blaka Hollow","category":"display"},{"family":"Blaka Ink","category":"display"},{"family":"Blinker","category":"sans-serif"},{"family":"Bodoni Moda","category":"serif"},{"family":"Bodoni Moda SC","category":"serif"},{"family":"Bokor","category":"display"},{"family":"Boldonse","category":"display"},{"family":"Bona Nova","category":"serif"},{"family":"Bona Nova SC","category":"serif"},{"family":"Bonbon","category":"handwriting"},{"family":"Bonheur Royale","category":"handwriting"},{"family":"Boogaloo","category":"display"},{"family":"Borel","category":"handwriting"},{"family":"Bowlby One","category":"display"},{"family":"Bowlby One SC","category":"display"},{"family":"Bpmf Huninn","category":"sans-serif"},{"family":"Bpmf Iansui","category":"handwriting"},{"family":"Bpmf Zihi Kai Std","category":"sans-serif"},{"family":"Braah One","category":"sans-serif"},{"family":"Brawler","category":"serif"},{"family":"Bree Serif","category":"serif"},{"family":"Bricolage Grotesque","category":"sans-serif"},{"family":"Bruno Ace","category":"display"},{"family":"Bruno Ace SC","category":"display"},{"family":"Brygada 1918","category":"serif"},{"family":"Bubblegum Sans","category":"display"},{"family":"Bubbler One","category":"sans-serif"},{"family":"Buda","category":"display"},{"family":"Buenard","category":"serif"},{"family":"Bungee","category":"display"},{"family":"Bungee Hairline","category":"display"},{"family":"Bungee Inline","category":"display"},{"family":"Bungee Outline","category":"display"},{"family":"Bungee Shade","category":"display"},{"family":"Bungee Spice","category":"display"},{"family":"Bungee Tint","category":"display"},{"family":"Butcherman","category":"display"},{"family":"Butterfly Kids","category":"handwriting"},{"family":"Bytesized","category":"sans-serif"},{"family":"Cabin","category":"sans-serif"},{"family":"Cabin Condensed","category":"sans-serif"},{"family":"Cabin Sketch","category":"display"},{"family":"Cactus Classical Serif","category":"serif"},{"family":"Caesar Dressing","category":"display"},{"family":"Cagliostro","category":"sans-serif"},{"family":"Cairo","category":"sans-serif"},{"family":"Cairo Play","category":"sans-serif"},{"family":"Cal Sans","category":"sans-serif"},{"family":"Caladea","category":"serif"},{"family":"Calistoga","category":"display"},{"family":"Calligraffitti","category":"handwriting"},{"family":"Cambay","category":"sans-serif"},{"family":"Cambo","category":"serif"},{"family":"Candal","category":"sans-serif"},{"family":"Cantarell","category":"sans-serif"},{"family":"Cantata One","category":"serif"},{"family":"Cantora One","category":"sans-serif"},{"family":"Caprasimo","category":"display"},{"family":"Capriola","category":"sans-serif"},{"family":"Caramel","category":"handwriting"},{"family":"Carattere","category":"handwriting"},{"family":"Cardo","category":"serif"},{"family":"Carlito","category":"sans-serif"},{"family":"Carme","category":"sans-serif"},{"family":"Carrois Gothic","category":"sans-serif"},{"family":"Carrois Gothic SC","category":"sans-serif"},{"family":"Carter One","category":"display"},{"family":"Cascadia Code","category":"sans-serif"},{"family":"Cascadia Mono","category":"sans-serif"},{"family":"Castoro","category":"serif"},{"family":"Castoro Titling","category":"display"},{"family":"Catamaran","category":"sans-serif"},{"family":"Caudex","category":"serif"},{"family":"Cause","category":"handwriting"},{"family":"Caveat","category":"handwriting"},{"family":"Caveat Brush","category":"handwriting"},{"family":"Cedarville Cursive","category":"handwriting"},{"family":"Ceviche One","category":"display"},{"family":"Chakra Petch","category":"sans-serif"},{"family":"Changa","category":"sans-serif"},{"family":"Changa One","category":"display"},{"family":"Chango","category":"display"},{"family":"Charis SIL","category":"serif"},{"family":"Charm","category":"handwriting"},{"family":"Charmonman","category":"handwriting"},{"family":"Chathura","category":"sans-serif"},{"family":"Chau Philomene One","category":"sans-serif"},{"family":"Chela One","category":"display"},{"family":"Chelsea Market","category":"display"},{"family":"Chenla","category":"display"},{"family":"Cherish","category":"handwriting"},{"family":"Cherry Bomb One","category":"display"},{"family":"Cherry Cream Soda","category":"display"},{"family":"Cherry Swash","category":"display"},{"family":"Chewy","category":"display"},{"family":"Chicle","category":"display"},{"family":"Chilanka","category":"handwriting"},{"family":"Chiron GoRound TC","category":"sans-serif"},{"family":"Chiron Hei HK","category":"sans-serif"},{"family":"Chiron Sung HK","category":"serif"},{"family":"Chivo","category":"sans-serif"},{"family":"Chivo Mono","category":"monospace"},{"family":"Chocolate Classical Sans","category":"sans-serif"},{"family":"Chokokutai","category":"display"},{"family":"Chonburi","category":"display"},{"family":"Cinzel","category":"serif"},{"family":"Cinzel Decorative","category":"display"},{"family":"Clicker Script","category":"handwriting"},{"family":"Climate Crisis","category":"display"},{"family":"Coda","category":"display"},{"family":"Codystar","category":"display"},{"family":"Coiny","category":"display"},{"family":"Combo","category":"display"},{"family":"Comfortaa","category":"display"},{"family":"Comforter","category":"handwriting"},{"family":"Comforter Brush","category":"handwriting"},{"family":"Comic Neue","category":"handwriting"},{"family":"Comic Relief","category":"display"},{"family":"Coming Soon","category":"handwriting"},{"family":"Comme","category":"sans-serif"},{"family":"Commissioner","category":"sans-serif"},{"family":"Concert One","category":"display"},{"family":"Condiment","category":"handwriting"},{"family":"Content","category":"display"},{"family":"Contrail One","category":"display"},{"family":"Convergence","category":"sans-serif"},{"family":"Cookie","category":"handwriting"},{"family":"Copse","category":"serif"},{"family":"Coral Pixels","category":"display"},{"family":"Corben","category":"display"},{"family":"Corinthia","category":"handwriting"},{"family":"Cormorant","category":"serif"},{"family":"Cormorant Garamond","category":"serif"},{"family":"Cormorant Infant","category":"serif"},{"family":"Cormorant SC","category":"serif"},{"family":"Cormorant Unicase","category":"serif"},{"family":"Cormorant Upright","category":"serif"},{"family":"Cossette Texte","category":"sans-serif"},{"family":"Cossette Titre","category":"sans-serif"},{"family":"Courgette","category":"handwriting"},{"family":"Courier Prime","category":"monospace"},{"family":"Cousine","category":"monospace"},{"family":"Coustard","category":"serif"},{"family":"Covered By Your Grace","category":"handwriting"},{"family":"Crafty Girls","category":"handwriting"},{"family":"Creepster","category":"display"},{"family":"Crete Round","category":"serif"},{"family":"Crimson Pro","category":"serif"},{"family":"Crimson Text","category":"serif"},{"family":"Croissant One","category":"display"},{"family":"Crushed","category":"display"},{"family":"Cuprum","category":"sans-serif"},{"family":"Cute Font","category":"display"},{"family":"Cutive","category":"serif"},{"family":"Cutive Mono","category":"monospace"},{"family":"Dai Banna SIL","category":"serif"},{"family":"Damion","category":"handwriting"},{"family":"Dancing Script","category":"handwriting"},{"family":"Danfo","category":"serif"},{"family":"Dangrek","category":"display"},{"family":"Darker Grotesque","category":"sans-serif"},{"family":"Darumadrop One","category":"display"},{"family":"Datatype","category":"monospace"},{"family":"David Libre","category":"serif"},{"family":"Dawning of a New Day","category":"handwriting"},{"family":"Days One","category":"sans-serif"},{"family":"Dekko","category":"handwriting"},{"family":"Dela Gothic One","category":"display"},{"family":"Delicious Handrawn","category":"handwriting"},{"family":"Delius","category":"handwriting"},{"family":"Delius Swash Caps","category":"handwriting"},{"family":"Delius Unicase","category":"handwriting"},{"family":"Della Respira","category":"serif"},{"family":"Denk One","category":"sans-serif"},{"family":"Devonshire","category":"handwriting"},{"family":"Dhurjati","category":"sans-serif"},{"family":"Didact Gothic","category":"sans-serif"},{"family":"Diphylleia","category":"serif"},{"family":"Diplomata","category":"display"},{"family":"Diplomata SC","category":"display"},{"family":"DM Mono","category":"monospace"},{"family":"DM Sans","category":"sans-serif"},{"family":"DM Serif Display","category":"serif"},{"family":"DM Serif Text","category":"serif"},{"family":"Do Hyeon","category":"sans-serif"},{"family":"Dokdo","category":"display"},{"family":"Domine","category":"serif"},{"family":"Donegal One","category":"serif"},{"family":"Dongle","category":"sans-serif"},{"family":"Doppio One","category":"sans-serif"},{"family":"Dorsa","category":"sans-serif"},{"family":"Dosis","category":"sans-serif"},{"family":"DotGothic16","category":"sans-serif"},{"family":"Doto","category":"sans-serif"},{"family":"Dr Sugiyama","category":"handwriting"},{"family":"Duru Sans","category":"sans-serif"},{"family":"Dynalight","category":"display"},{"family":"DynaPuff","category":"display"},{"family":"Eagle Lake","category":"handwriting"},{"family":"East Sea Dokdo","category":"handwriting"},{"family":"Eater","category":"display"},{"family":"EB Garamond","category":"serif"},{"family":"Economica","category":"sans-serif"},{"family":"Eczar","category":"serif"},{"family":"Edu AU VIC WA NT Arrows","category":"handwriting"},{"family":"Edu AU VIC WA NT Dots","category":"handwriting"},{"family":"Edu AU VIC WA NT Guides","category":"handwriting"},{"family":"Edu AU VIC WA NT Hand","category":"handwriting"},{"family":"Edu AU VIC WA NT Pre","category":"handwriting"},{"family":"Edu NSW ACT Cursive","category":"handwriting"},{"family":"Edu NSW ACT Foundation","category":"handwriting"},{"family":"Edu NSW ACT Hand Pre","category":"handwriting"},{"family":"Edu QLD Beginner","category":"handwriting"},{"family":"Edu QLD Hand","category":"handwriting"},{"family":"Edu SA Beginner","category":"handwriting"},{"family":"Edu SA Hand","category":"handwriting"},{"family":"Edu TAS Beginner","category":"handwriting"},{"family":"Edu VIC WA NT Beginner","category":"handwriting"},{"family":"Edu VIC WA NT Hand","category":"handwriting"},{"family":"Edu VIC WA NT Hand Pre","category":"handwriting"},{"family":"El Messiri","category":"sans-serif"},{"family":"Electrolize","category":"sans-serif"},{"family":"Elms Sans","category":"sans-serif"},{"family":"Elsie","category":"display"},{"family":"Elsie Swash Caps","category":"display"},{"family":"Emblema One","category":"display"},{"family":"Emilys Candy","category":"display"},{"family":"Encode Sans","category":"sans-serif"},{"family":"Encode Sans Condensed","category":"sans-serif"},{"family":"Encode Sans Expanded","category":"sans-serif"},{"family":"Encode Sans SC","category":"sans-serif"},{"family":"Encode Sans Semi Condensed","category":"sans-serif"},{"family":"Encode Sans Semi Expanded","category":"sans-serif"},{"family":"Engagement","category":"handwriting"},{"family":"Englebert","category":"sans-serif"},{"family":"Enriqueta","category":"serif"},{"family":"Ephesis","category":"handwriting"},{"family":"Epilogue","category":"sans-serif"},{"family":"Epunda Sans","category":"sans-serif"},{"family":"Epunda Slab","category":"serif"},{"family":"Erica One","category":"display"},{"family":"Esteban","category":"serif"},{"family":"Estedad","category":"sans-serif"},{"family":"Estonia","category":"handwriting"},{"family":"Euphoria Script","category":"handwriting"},{"family":"Ewert","category":"display"},{"family":"Exile","category":"display"},{"family":"Exo","category":"sans-serif"},{"family":"Exo 2","category":"sans-serif"},{"family":"Expletus Sans","category":"display"},{"family":"Explora","category":"handwriting"},{"family":"Faculty Glyphic","category":"sans-serif"},{"family":"Fahkwang","category":"sans-serif"},{"family":"Familjen Grotesk","category":"sans-serif"},{"family":"Fanwood Text","category":"serif"},{"family":"Farro","category":"sans-serif"},{"family":"Farsan","category":"display"},{"family":"Fascinate","category":"display"},{"family":"Fascinate Inline","category":"display"},{"family":"Faster One","category":"display"},{"family":"Fasthand","category":"display"},{"family":"Fauna One","category":"serif"},{"family":"Faustina","category":"serif"},{"family":"Federant","category":"display"},{"family":"Federo","category":"sans-serif"},{"family":"Felipa","category":"handwriting"},{"family":"Fenix","category":"serif"},{"family":"Festive","category":"handwriting"},{"family":"Figtree","category":"sans-serif"},{"family":"Finger Paint","category":"display"},{"family":"Finlandica Headline","category":"sans-serif"},{"family":"Finlandica Text","category":"sans-serif"},{"family":"Fira Code","category":"monospace"},{"family":"Fira Mono","category":"monospace"},{"family":"Fira Sans","category":"sans-serif"},{"family":"Fira Sans Condensed","category":"sans-serif"},{"family":"Fira Sans Extra Condensed","category":"sans-serif"},{"family":"Fjalla One","category":"sans-serif"},{"family":"Fjord One","category":"serif"},{"family":"Flamenco","category":"display"},{"family":"Flavors","category":"display"},{"family":"Fleur De Leah","category":"handwriting"},{"family":"Flow Block","category":"display"},{"family":"Flow Circular","category":"display"},{"family":"Flow Rounded","category":"display"},{"family":"Foldit","category":"display"},{"family":"Fondamento","category":"handwriting"},{"family":"Fontdiner Swanky","category":"display"},{"family":"Forum","category":"display"},{"family":"Fragment Mono","category":"monospace"},{"family":"Francois One","category":"sans-serif"},{"family":"Frank Ruhl Libre","category":"serif"},{"family":"Fraunces","category":"serif"},{"family":"Freckle Face","category":"display"},{"family":"Fredericka the Great","category":"display"},{"family":"Fredoka","category":"sans-serif"},{"family":"Freehand","category":"display"},{"family":"Freeman","category":"display"},{"family":"Fresca","category":"sans-serif"},{"family":"Frijole","category":"display"},{"family":"Fruktur","category":"display"},{"family":"Fugaz One","category":"display"},{"family":"Fuggles","category":"handwriting"},{"family":"Funnel Display","category":"display"},{"family":"Funnel Sans","category":"sans-serif"},{"family":"Fustat","category":"sans-serif"},{"family":"Fuzzy Bubbles","category":"handwriting"},{"family":"Ga Maamli","category":"display"},{"family":"Gabarito","category":"display"},{"family":"Gabriela","category":"serif"},{"family":"Gaegu","category":"handwriting"},{"family":"Gafata","category":"sans-serif"},{"family":"Gajraj One","category":"display"},{"family":"Galada","category":"display"},{"family":"Galdeano","category":"sans-serif"},{"family":"Galindo","category":"display"},{"family":"Gamja Flower","category":"handwriting"},{"family":"Gantari","category":"sans-serif"},{"family":"Gasoek One","category":"sans-serif"},{"family":"Gayathri","category":"sans-serif"},{"family":"Geist","category":"sans-serif"},{"family":"Geist Mono","category":"monospace"},{"family":"Gelasio","category":"serif"},{"family":"Gemunu Libre","category":"sans-serif"},{"family":"Genos","category":"sans-serif"},{"family":"Gentium Book Plus","category":"serif"},{"family":"Gentium Plus","category":"serif"},{"family":"Geo","category":"sans-serif"},{"family":"Geologica","category":"sans-serif"},{"family":"Geom","category":"sans-serif"},{"family":"Georama","category":"sans-serif"},{"family":"Geostar","category":"display"},{"family":"Geostar Fill","category":"display"},{"family":"Germania One","category":"display"},{"family":"GFS Didot","category":"serif"},{"family":"GFS Neohellenic","category":"sans-serif"},{"family":"Gideon Roman","category":"display"},{"family":"Gidole","category":"sans-serif"},{"family":"Gidugu","category":"sans-serif"},{"family":"Gilda Display","category":"serif"},{"family":"Girassol","category":"display"},{"family":"Give You Glory","category":"handwriting"},{"family":"Glass Antiqua","category":"display"},{"family":"Glegoo","category":"serif"},{"family":"Gloock","category":"serif"},{"family":"Gloria Hallelujah","category":"handwriting"},{"family":"Glory","category":"sans-serif"},{"family":"Gluten","category":"display"},{"family":"Goblin One","category":"display"},{"family":"Gochi Hand","category":"handwriting"},{"family":"Goldman","category":"display"},{"family":"Golos Text","category":"sans-serif"},{"family":"Google Sans","category":"sans-serif"},{"family":"Google Sans Code","category":"monospace"},{"family":"Google Sans Flex","category":"sans-serif"},{"family":"Gorditas","category":"display"},{"family":"Gothic A1","category":"sans-serif"},{"family":"Gotu","category":"sans-serif"},{"family":"Goudy Bookletter 1911","category":"serif"},{"family":"Gowun Batang","category":"serif"},{"family":"Gowun Dodum","category":"sans-serif"},{"family":"Graduate","category":"serif"},{"family":"Grand Hotel","category":"handwriting"},{"family":"Grandiflora One","category":"serif"},{"family":"Grandstander","category":"display"},{"family":"Grape Nuts","category":"handwriting"},{"family":"Gravitas One","category":"display"},{"family":"Great Vibes","category":"handwriting"},{"family":"Grechen Fuemen","category":"handwriting"},{"family":"Grenze","category":"serif"},{"family":"Grenze Gotisch","category":"display"},{"family":"Grey Qo","category":"handwriting"},{"family":"Griffy","category":"display"},{"family":"Gruppo","category":"sans-serif"},{"family":"Gudea","category":"sans-serif"},{"family":"Gugi","category":"display"},{"family":"Gulzar","category":"serif"},{"family":"Gupter","category":"serif"},{"family":"Gurajada","category":"sans-serif"},{"family":"Gveret Levin","category":"handwriting"},{"family":"Gwendolyn","category":"handwriting"},{"family":"Habibi","category":"serif"},{"family":"Hachi Maru Pop","category":"handwriting"},{"family":"Hahmlet","category":"serif"},{"family":"Halant","category":"serif"},{"family":"Hammersmith One","category":"sans-serif"},{"family":"Hanalei","category":"display"},{"family":"Hanalei Fill","category":"display"},{"family":"Handjet","category":"display"},{"family":"Handlee","category":"handwriting"},{"family":"Hanken Grotesk","category":"sans-serif"},{"family":"Hanuman","category":"serif"},{"family":"Happy Monkey","category":"display"},{"family":"Harmattan","category":"sans-serif"},{"family":"Headland One","category":"serif"},{"family":"Hedvig Letters Sans","category":"sans-serif"},{"family":"Hedvig Letters Serif","category":"serif"},{"family":"Heebo","category":"sans-serif"},{"family":"Henny Penny","category":"display"},{"family":"Hepta Slab","category":"serif"},{"family":"Herr Von Muellerhoff","category":"handwriting"},{"family":"Hi Melody","category":"handwriting"},{"family":"Hina Mincho","category":"serif"},{"family":"Hind","category":"sans-serif"},{"family":"Hind Guntur","category":"sans-serif"},{"family":"Hind Madurai","category":"sans-serif"},{"family":"Hind Mysuru","category":"sans-serif"},{"family":"Hind Siliguri","category":"sans-serif"},{"family":"Hind Vadodara","category":"sans-serif"},{"family":"Holtwood One SC","category":"serif"},{"family":"Homemade Apple","category":"handwriting"},{"family":"Homenaje","category":"sans-serif"},{"family":"Honk","category":"display"},{"family":"Host Grotesk","category":"sans-serif"},{"family":"Hubballi","category":"sans-serif"},{"family":"Hubot Sans","category":"sans-serif"},{"family":"Huninn","category":"sans-serif"},{"family":"Hurricane","category":"handwriting"},{"family":"Iansui","category":"handwriting"},{"family":"Ibarra Real Nova","category":"serif"},{"family":"IBM Plex Mono","category":"monospace"},{"family":"IBM Plex Sans","category":"sans-serif"},{"family":"IBM Plex Sans Arabic","category":"sans-serif"},{"family":"IBM Plex Sans Condensed","category":"sans-serif"},{"family":"IBM Plex Sans Devanagari","category":"sans-serif"},{"family":"IBM Plex Sans Hebrew","category":"sans-serif"},{"family":"IBM Plex Sans JP","category":"sans-serif"},{"family":"IBM Plex Sans KR","category":"sans-serif"},{"family":"IBM Plex Sans Thai","category":"sans-serif"},{"family":"IBM Plex Sans Thai Looped","category":"sans-serif"},{"family":"IBM Plex Serif","category":"serif"},{"family":"Iceberg","category":"display"},{"family":"Iceland","category":"display"},{"family":"Idiqlat","category":"serif"},{"family":"IM Fell Double Pica","category":"serif"},{"family":"IM Fell Double Pica SC","category":"serif"},{"family":"IM Fell DW Pica","category":"serif"},{"family":"IM Fell DW Pica SC","category":"serif"},{"family":"IM Fell English","category":"serif"},{"family":"IM Fell English SC","category":"serif"},{"family":"IM Fell French Canon","category":"serif"},{"family":"IM Fell French Canon SC","category":"serif"},{"family":"IM Fell Great Primer","category":"serif"},{"family":"IM Fell Great Primer SC","category":"serif"},{"family":"Imbue","category":"serif"},{"family":"Imperial Script","category":"handwriting"},{"family":"Imprima","category":"sans-serif"},{"family":"Inclusive Sans","category":"sans-serif"},{"family":"Inconsolata","category":"monospace"},{"family":"Inder","category":"sans-serif"},{"family":"Indie Flower","category":"handwriting"},{"family":"Ingrid Darling","category":"handwriting"},{"family":"Inika","category":"serif"},{"family":"Inknut Antiqua","category":"serif"},{"family":"Inria Sans","category":"sans-serif"},{"family":"Inria Serif","category":"serif"},{"family":"Inspiration","category":"handwriting"},{"family":"Instrument Sans","category":"sans-serif"},{"family":"Instrument Serif","category":"serif"},{"family":"Intel One Mono","category":"monospace"},{"family":"Inter","category":"sans-serif"},{"family":"Inter Tight","category":"sans-serif"},{"family":"Iosevka Charon","category":"monospace"},{"family":"Iosevka Charon Mono","category":"monospace"},{"family":"Irish Grover","category":"display"},{"family":"Island Moments","category":"handwriting"},{"family":"Istok Web","category":"sans-serif"},{"family":"Italiana","category":"sans-serif"},{"family":"Italianno","category":"handwriting"},{"family":"Itim","category":"handwriting"},{"family":"Jacquard 12","category":"display"},{"family":"Jacquard 12 Charted","category":"display"},{"family":"Jacquard 24","category":"display"},{"family":"Jacquard 24 Charted","category":"display"},{"family":"Jacquarda Bastarda 9","category":"display"},{"family":"Jacquarda Bastarda 9 Charted","category":"display"},{"family":"Jacques Francois","category":"serif"},{"family":"Jacques Francois Shadow","category":"display"},{"family":"Jaini","category":"display"},{"family":"Jaini Purva","category":"display"},{"family":"Jaldi","category":"sans-serif"},{"family":"Jaro","category":"sans-serif"},{"family":"Jersey 10","category":"display"},{"family":"Jersey 10 Charted","category":"display"},{"family":"Jersey 15","category":"display"},{"family":"Jersey 15 Charted","category":"display"},{"family":"Jersey 20","category":"display"},{"family":"Jersey 20 Charted","category":"display"},{"family":"Jersey 25","category":"display"},{"family":"Jersey 25 Charted","category":"display"},{"family":"JetBrains Mono","category":"monospace"},{"family":"Jim Nightshade","category":"handwriting"},{"family":"Joan","category":"serif"},{"family":"Jockey One","category":"sans-serif"},{"family":"Jolly Lodger","category":"display"},{"family":"Jomhuria","category":"display"},{"family":"Jomolhari","category":"serif"},{"family":"Josefin Sans","category":"sans-serif"},{"family":"Josefin Slab","category":"serif"},{"family":"Jost","category":"sans-serif"},{"family":"Joti One","category":"display"},{"family":"Jua","category":"sans-serif"},{"family":"Judson","category":"serif"},{"family":"Julee","category":"handwriting"},{"family":"Julius Sans One","category":"sans-serif"},{"family":"Junge","category":"serif"},{"family":"Jura","category":"sans-serif"},{"family":"Just Another Hand","category":"handwriting"},{"family":"Just Me Again Down Here","category":"handwriting"},{"family":"K2D","category":"sans-serif"},{"family":"Kablammo","category":"display"},{"family":"Kadwa","category":"serif"},{"family":"Kaisei Decol","category":"serif"},{"family":"Kaisei HarunoUmi","category":"serif"},{"family":"Kaisei Opti","category":"serif"},{"family":"Kaisei Tokumin","category":"serif"},{"family":"Kalam","category":"handwriting"},{"family":"Kalnia","category":"serif"},{"family":"Kalnia Glaze","category":"display"},{"family":"Kameron","category":"serif"},{"family":"Kanchenjunga","category":"sans-serif"},{"family":"Kanit","category":"sans-serif"},{"family":"Kantumruy Pro","category":"sans-serif"},{"family":"Kapakana","category":"handwriting"},{"family":"Karantina","category":"display"},{"family":"Karla","category":"sans-serif"},{"family":"Karla Tamil Inclined","category":"sans-serif"},{"family":"Karla Tamil Upright","category":"sans-serif"},{"family":"Karma","category":"serif"},{"family":"Katibeh","category":"display"},{"family":"Kaushan Script","category":"handwriting"},{"family":"Kavivanar","category":"handwriting"},{"family":"Kavoon","category":"display"},{"family":"Kay Pho Du","category":"serif"},{"family":"Kdam Thmor Pro","category":"sans-serif"},{"family":"Keania One","category":"display"},{"family":"Kedebideri","category":"sans-serif"},{"family":"Kelly Slab","category":"display"},{"family":"Kenia","category":"display"},{"family":"Khand","category":"sans-serif"},{"family":"Khmer","category":"sans-serif"},{"family":"Khula","category":"sans-serif"},{"family":"Kings","category":"handwriting"},{"family":"Kirang Haerang","category":"display"},{"family":"Kite One","category":"sans-serif"},{"family":"Kiwi Maru","category":"serif"},{"family":"Klee One","category":"handwriting"},{"family":"Knewave","category":"display"},{"family":"Kodchasan","category":"sans-serif"},{"family":"Kode Mono","category":"monospace"},{"family":"Koh Santepheap","category":"serif"},{"family":"KoHo","category":"sans-serif"},{"family":"Kolker Brush","category":"handwriting"},{"family":"Konkhmer Sleokchher","category":"display"},{"family":"Kosugi","category":"sans-serif"},{"family":"Kosugi Maru","category":"sans-serif"},{"family":"Kotta One","category":"serif"},{"family":"Koulen","category":"display"},{"family":"Kranky","category":"display"},{"family":"Kreon","category":"serif"},{"family":"Kristi","category":"handwriting"},{"family":"Krona One","category":"sans-serif"},{"family":"Krub","category":"sans-serif"},{"family":"Kufam","category":"sans-serif"},{"family":"Kulim Park","category":"sans-serif"},{"family":"Kumar One","category":"display"},{"family":"Kumar One Outline","category":"display"},{"family":"Kumbh Sans","category":"sans-serif"},{"family":"Kurale","category":"serif"},{"family":"La Belle Aurore","category":"handwriting"},{"family":"Labrada","category":"serif"},{"family":"Lacquer","category":"display"},{"family":"Laila","category":"serif"},{"family":"Lakki Reddy","category":"handwriting"},{"family":"Lalezar","category":"sans-serif"},{"family":"Lancelot","category":"display"},{"family":"Langar","category":"display"},{"family":"Lateef","category":"serif"},{"family":"Lato","category":"sans-serif"},{"family":"Lavishly Yours","category":"handwriting"},{"family":"League Gothic","category":"sans-serif"},{"family":"League Script","category":"handwriting"},{"family":"League Spartan","category":"sans-serif"},{"family":"Leckerli One","category":"handwriting"},{"family":"Ledger","category":"serif"},{"family":"Lekton","category":"monospace"},{"family":"Lemon","category":"display"},{"family":"Lemonada","category":"display"},{"family":"Lexend","category":"sans-serif"},{"family":"Lexend Deca","category":"sans-serif"},{"family":"Lexend Exa","category":"sans-serif"},{"family":"Lexend Giga","category":"sans-serif"},{"family":"Lexend Mega","category":"sans-serif"},{"family":"Lexend Peta","category":"sans-serif"},{"family":"Lexend Tera","category":"sans-serif"},{"family":"Lexend Zetta","category":"sans-serif"},{"family":"Libertinus Keyboard","category":"display"},{"family":"Libertinus Math","category":"display"},{"family":"Libertinus Mono","category":"monospace"},{"family":"Libertinus Sans","category":"sans-serif"},{"family":"Libertinus Serif","category":"serif"},{"family":"Libertinus Serif Display","category":"display"},{"family":"Libre Barcode 128","category":"display"},{"family":"Libre Barcode 128 Text","category":"display"},{"family":"Libre Barcode 39","category":"display"},{"family":"Libre Barcode 39 Extended","category":"display"},{"family":"Libre Barcode 39 Extended Text","category":"display"},{"family":"Libre Barcode 39 Text","category":"display"},{"family":"Libre Barcode EAN13 Text","category":"display"},{"family":"Libre Baskerville","category":"serif"},{"family":"Libre Bodoni","category":"serif"},{"family":"Libre Caslon Display","category":"serif"},{"family":"Libre Caslon Text","category":"serif"},{"family":"Libre Franklin","category":"sans-serif"},{"family":"Licorice","category":"handwriting"},{"family":"Life Savers","category":"display"},{"family":"Lilex","category":"monospace"},{"family":"Lilita One","category":"display"},{"family":"Lily Script One","category":"display"},{"family":"Limelight","category":"display"},{"family":"Linden Hill","category":"serif"},{"family":"LINE Seed JP","category":"sans-serif"},{"family":"Linefont","category":"display"},{"family":"Lisu Bosa","category":"serif"},{"family":"Liter","category":"sans-serif"},{"family":"Literata","category":"serif"},{"family":"Liu Jian Mao Cao","category":"handwriting"},{"family":"Livvic","category":"sans-serif"},{"family":"Lobster","category":"display"},{"family":"Lobster Two","category":"display"},{"family":"Londrina Outline","category":"display"},{"family":"Londrina Shadow","category":"display"},{"family":"Londrina Sketch","category":"display"},{"family":"Londrina Solid","category":"display"},{"family":"Long Cang","category":"handwriting"},{"family":"Lora","category":"serif"},{"family":"Love Light","category":"handwriting"},{"family":"Love Ya Like A Sister","category":"display"},{"family":"Loved by the King","category":"handwriting"},{"family":"Lovers Quarrel","category":"handwriting"},{"family":"Luckiest Guy","category":"display"},{"family":"Lugrasimo","category":"handwriting"},{"family":"Lumanosimo","category":"handwriting"},{"family":"Lunasima","category":"sans-serif"},{"family":"Lusitana","category":"serif"},{"family":"Lustria","category":"serif"},{"family":"Luxurious Roman","category":"display"},{"family":"Luxurious Script","category":"handwriting"},{"family":"LXGW Marker Gothic","category":"sans-serif"},{"family":"LXGW WenKai Mono TC","category":"monospace"},{"family":"LXGW WenKai TC","category":"handwriting"},{"family":"M PLUS 1","category":"sans-serif"},{"family":"M PLUS 1 Code","category":"monospace"},{"family":"M PLUS 1p","category":"sans-serif"},{"family":"M PLUS 2","category":"sans-serif"},{"family":"M PLUS Code Latin","category":"sans-serif"},{"family":"M PLUS Rounded 1c","category":"sans-serif"},{"family":"M PLUS U","category":"sans-serif"},{"family":"Ma Shan Zheng","category":"handwriting"},{"family":"Macondo","category":"display"},{"family":"Macondo Swash Caps","category":"display"},{"family":"Mada","category":"sans-serif"},{"family":"Madimi One","category":"sans-serif"},{"family":"Magra","category":"sans-serif"},{"family":"Maiden Orange","category":"serif"},{"family":"Maitree","category":"serif"},{"family":"Major Mono Display","category":"monospace"},{"family":"Mako","category":"sans-serif"},{"family":"Mali","category":"handwriting"},{"family":"Mallanna","category":"sans-serif"},{"family":"Maname","category":"serif"},{"family":"Mandali","category":"sans-serif"},{"family":"Manjari","category":"sans-serif"},{"family":"Manrope","category":"sans-serif"},{"family":"Mansalva","category":"handwriting"},{"family":"Manuale","category":"serif"},{"family":"Manufacturing Consent","category":"display"},{"family":"Marcellus","category":"serif"},{"family":"Marcellus SC","category":"serif"},{"family":"Marck Script","category":"handwriting"},{"family":"Margarine","category":"display"},{"family":"Marhey","category":"display"},{"family":"Markazi Text","category":"serif"},{"family":"Marko One","category":"serif"},{"family":"Marmelad","category":"sans-serif"},{"family":"Martel","category":"serif"},{"family":"Martel Sans","category":"sans-serif"},{"family":"Martian Mono","category":"monospace"},{"family":"Marvel","category":"sans-serif"},{"family":"Matangi","category":"sans-serif"},{"family":"Mate","category":"serif"},{"family":"Mate SC","category":"serif"},{"family":"Matemasie","category":"sans-serif"},{"family":"Maven Pro","category":"sans-serif"},{"family":"McLaren","category":"display"},{"family":"Mea Culpa","category":"handwriting"},{"family":"Meddon","category":"handwriting"},{"family":"MedievalSharp","category":"display"},{"family":"Medula One","category":"display"},{"family":"Meera Inimai","category":"sans-serif"},{"family":"Megrim","category":"display"},{"family":"Meie Script","category":"handwriting"},{"family":"Menbere","category":"sans-serif"},{"family":"Meow Script","category":"handwriting"},{"family":"Merienda","category":"handwriting"},{"family":"Merriweather","category":"serif"},{"family":"Merriweather Sans","category":"sans-serif"},{"family":"Metal","category":"display"},{"family":"Metal Mania","category":"display"},{"family":"Metamorphous","category":"display"},{"family":"Metrophobic","category":"sans-serif"},{"family":"Michroma","category":"sans-serif"},{"family":"Micro 5","category":"display"},{"family":"Micro 5 Charted","category":"display"},{"family":"Milonga","category":"display"},{"family":"Miltonian","category":"display"},{"family":"Miltonian Tattoo","category":"display"},{"family":"Mina","category":"sans-serif"},{"family":"Mingzat","category":"sans-serif"},{"family":"Miniver","category":"display"},{"family":"Miranda Sans","category":"sans-serif"},{"family":"Miriam Libre","category":"sans-serif"},{"family":"Mirza","category":"serif"},{"family":"Miss Fajardose","category":"handwriting"},{"family":"Mitr","category":"sans-serif"},{"family":"Mochiy Pop One","category":"sans-serif"},{"family":"Mochiy Pop P One","category":"sans-serif"},{"family":"Modak","category":"display"},{"family":"Modern Antiqua","category":"display"},{"family":"Moderustic","category":"sans-serif"},{"family":"Mogra","category":"display"},{"family":"Mohave","category":"sans-serif"},{"family":"Moirai One","category":"display"},{"family":"Molengo","category":"sans-serif"},{"family":"Molle","category":"handwriting"},{"family":"Momo Signature","category":"sans-serif"},{"family":"Momo Trust Display","category":"sans-serif"},{"family":"Momo Trust Sans","category":"sans-serif"},{"family":"Mona Sans","category":"sans-serif"},{"family":"Monda","category":"sans-serif"},{"family":"Monofett","category":"monospace"},{"family":"Monomakh","category":"display"},{"family":"Monomaniac One","category":"sans-serif"},{"family":"Monoton","category":"display"},{"family":"Monsieur La Doulaise","category":"handwriting"},{"family":"Montaga","category":"serif"},{"family":"Montagu Slab","category":"serif"},{"family":"MonteCarlo","category":"handwriting"},{"family":"Montez","category":"handwriting"},{"family":"Montserrat","category":"sans-serif"},{"family":"Montserrat Alternates","category":"sans-serif"},{"family":"Montserrat Underline","category":"sans-serif"},{"family":"Moo Lah Lah","category":"display"},{"family":"Mooli","category":"sans-serif"},{"family":"Moon Dance","category":"handwriting"},{"family":"Moul","category":"display"},{"family":"Moulpali","category":"sans-serif"},{"family":"Mountains of Christmas","category":"display"},{"family":"Mouse Memoirs","category":"sans-serif"},{"family":"Mozilla Headline","category":"sans-serif"},{"family":"Mozilla Text","category":"sans-serif"},{"family":"Mr Bedfort","category":"handwriting"},{"family":"Mr Dafoe","category":"handwriting"},{"family":"Mr De Haviland","category":"handwriting"},{"family":"Mrs Saint Delafield","category":"handwriting"},{"family":"Mrs Sheppards","category":"handwriting"},{"family":"Ms Madi","category":"handwriting"},{"family":"Mukta","category":"sans-serif"},{"family":"Mukta Mahee","category":"sans-serif"},{"family":"Mukta Malar","category":"sans-serif"},{"family":"Mukta Vaani","category":"sans-serif"},{"family":"Mulish","category":"sans-serif"},{"family":"Murecho","category":"sans-serif"},{"family":"MuseoModerno","category":"display"},{"family":"My Soul","category":"handwriting"},{"family":"Mynerve","category":"handwriting"},{"family":"Mystery Quest","category":"display"},{"family":"Nabla","category":"display"},{"family":"Namdhinggo","category":"serif"},{"family":"Nanum Brush Script","category":"handwriting"},{"family":"Nanum Gothic","category":"sans-serif"},{"family":"Nanum Gothic Coding","category":"handwriting"},{"family":"Nanum Myeongjo","category":"serif"},{"family":"Nanum Pen Script","category":"handwriting"},{"family":"Narnoor","category":"sans-serif"},{"family":"Nata Sans","category":"sans-serif"},{"family":"National Park","category":"sans-serif"},{"family":"Neonderthaw","category":"handwriting"},{"family":"Nerko One","category":"handwriting"},{"family":"Neucha","category":"handwriting"},{"family":"Neuton","category":"serif"},{"family":"New Amsterdam","category":"sans-serif"},{"family":"New Rocker","category":"display"},{"family":"New Tegomin","category":"serif"},{"family":"News Cycle","category":"sans-serif"},{"family":"Newsreader","category":"serif"},{"family":"Niconne","category":"handwriting"},{"family":"Niramit","category":"sans-serif"},{"family":"Nixie One","category":"display"},{"family":"Nobile","category":"sans-serif"},{"family":"Nokora","category":"sans-serif"},{"family":"Norican","category":"handwriting"},{"family":"Nosifer","category":"display"},{"family":"Notable","category":"sans-serif"},{"family":"Nothing You Could Do","category":"handwriting"},{"family":"Noticia Text","category":"serif"},{"family":"Noto Color Emoji","category":"sans-serif"},{"family":"Noto Emoji","category":"sans-serif"},{"family":"Noto Kufi Arabic","category":"sans-serif"},{"family":"Noto Music","category":"sans-serif"},{"family":"Noto Naskh Arabic","category":"serif"},{"family":"Noto Nastaliq Urdu","category":"serif"},{"family":"Noto Rashi Hebrew","category":"serif"},{"family":"Noto Sans","category":"sans-serif"},{"family":"Noto Sans Adlam","category":"sans-serif"},{"family":"Noto Sans Adlam Unjoined","category":"sans-serif"},{"family":"Noto Sans Anatolian Hieroglyphs","category":"sans-serif"},{"family":"Noto Sans Arabic","category":"sans-serif"},{"family":"Noto Sans Armenian","category":"sans-serif"},{"family":"Noto Sans Avestan","category":"sans-serif"},{"family":"Noto Sans Balinese","category":"sans-serif"},{"family":"Noto Sans Bamum","category":"sans-serif"},{"family":"Noto Sans Bassa Vah","category":"sans-serif"},{"family":"Noto Sans Batak","category":"sans-serif"},{"family":"Noto Sans Bengali","category":"sans-serif"},{"family":"Noto Sans Bhaiksuki","category":"sans-serif"},{"family":"Noto Sans Brahmi","category":"sans-serif"},{"family":"Noto Sans Buginese","category":"sans-serif"},{"family":"Noto Sans Buhid","category":"sans-serif"},{"family":"Noto Sans Canadian Aboriginal","category":"sans-serif"},{"family":"Noto Sans Carian","category":"sans-serif"},{"family":"Noto Sans Caucasian Albanian","category":"sans-serif"},{"family":"Noto Sans Chakma","category":"sans-serif"},{"family":"Noto Sans Cham","category":"sans-serif"},{"family":"Noto Sans Cherokee","category":"sans-serif"},{"family":"Noto Sans Chorasmian","category":"sans-serif"},{"family":"Noto Sans Coptic","category":"sans-serif"},{"family":"Noto Sans Cuneiform","category":"sans-serif"},{"family":"Noto Sans Cypriot","category":"sans-serif"},{"family":"Noto Sans Cypro Minoan","category":"sans-serif"},{"family":"Noto Sans Deseret","category":"sans-serif"},{"family":"Noto Sans Devanagari","category":"sans-serif"},{"family":"Noto Sans Display","category":"sans-serif"},{"family":"Noto Sans Duployan","category":"sans-serif"},{"family":"Noto Sans Egyptian Hieroglyphs","category":"sans-serif"},{"family":"Noto Sans Elbasan","category":"sans-serif"},{"family":"Noto Sans Elymaic","category":"sans-serif"},{"family":"Noto Sans Ethiopic","category":"sans-serif"},{"family":"Noto Sans Georgian","category":"sans-serif"},{"family":"Noto Sans Glagolitic","category":"sans-serif"},{"family":"Noto Sans Gothic","category":"sans-serif"},{"family":"Noto Sans Grantha","category":"sans-serif"},{"family":"Noto Sans Gujarati","category":"sans-serif"},{"family":"Noto Sans Gunjala Gondi","category":"sans-serif"},{"family":"Noto Sans Gurmukhi","category":"sans-serif"},{"family":"Noto Sans Hanifi Rohingya","category":"sans-serif"},{"family":"Noto Sans Hanunoo","category":"sans-serif"},{"family":"Noto Sans Hatran","category":"sans-serif"},{"family":"Noto Sans Hebrew","category":"sans-serif"},{"family":"Noto Sans HK","category":"sans-serif"},{"family":"Noto Sans Imperial Aramaic","category":"sans-serif"},{"family":"Noto Sans Indic Siyaq Numbers","category":"sans-serif"},{"family":"Noto Sans Inscriptional Pahlavi","category":"sans-serif"},{"family":"Noto Sans Inscriptional Parthian","category":"sans-serif"},{"family":"Noto Sans Javanese","category":"sans-serif"},{"family":"Noto Sans JP","category":"sans-serif"},{"family":"Noto Sans Kaithi","category":"sans-serif"},{"family":"Noto Sans Kannada","category":"sans-serif"},{"family":"Noto Sans Kawi","category":"sans-serif"},{"family":"Noto Sans Kayah Li","category":"sans-serif"},{"family":"Noto Sans Kharoshthi","category":"sans-serif"},{"family":"Noto Sans Khmer","category":"sans-serif"},{"family":"Noto Sans Khojki","category":"sans-serif"},{"family":"Noto Sans Khudawadi","category":"sans-serif"},{"family":"Noto Sans KR","category":"sans-serif"},{"family":"Noto Sans Lao","category":"sans-serif"},{"family":"Noto Sans Lao Looped","category":"sans-serif"},{"family":"Noto Sans Lepcha","category":"sans-serif"},{"family":"Noto Sans Limbu","category":"sans-serif"},{"family":"Noto Sans Linear A","category":"sans-serif"},{"family":"Noto Sans Linear B","category":"sans-serif"},{"family":"Noto Sans Lisu","category":"sans-serif"},{"family":"Noto Sans Lycian","category":"sans-serif"},{"family":"Noto Sans Lydian","category":"sans-serif"},{"family":"Noto Sans Mahajani","category":"sans-serif"},{"family":"Noto Sans Malayalam","category":"sans-serif"},{"family":"Noto Sans Mandaic","category":"sans-serif"},{"family":"Noto Sans Manichaean","category":"sans-serif"},{"family":"Noto Sans Marchen","category":"sans-serif"},{"family":"Noto Sans Masaram Gondi","category":"sans-serif"},{"family":"Noto Sans Math","category":"sans-serif"},{"family":"Noto Sans Mayan Numerals","category":"sans-serif"},{"family":"Noto Sans Medefaidrin","category":"sans-serif"},{"family":"Noto Sans Meetei Mayek","category":"sans-serif"},{"family":"Noto Sans Mende Kikakui","category":"sans-serif"},{"family":"Noto Sans Meroitic","category":"sans-serif"},{"family":"Noto Sans Miao","category":"sans-serif"},{"family":"Noto Sans Modi","category":"sans-serif"},{"family":"Noto Sans Mongolian","category":"sans-serif"},{"family":"Noto Sans Mono","category":"sans-serif"},{"family":"Noto Sans Mro","category":"sans-serif"},{"family":"Noto Sans Multani","category":"sans-serif"},{"family":"Noto Sans Myanmar","category":"sans-serif"},{"family":"Noto Sans Nabataean","category":"sans-serif"},{"family":"Noto Sans Nag Mundari","category":"sans-serif"},{"family":"Noto Sans Nandinagari","category":"sans-serif"},{"family":"Noto Sans New Tai Lue","category":"sans-serif"},{"family":"Noto Sans Newa","category":"sans-serif"},{"family":"Noto Sans NKo","category":"sans-serif"},{"family":"Noto Sans NKo Unjoined","category":"sans-serif"},{"family":"Noto Sans Nushu","category":"sans-serif"},{"family":"Noto Sans Ogham","category":"sans-serif"},{"family":"Noto Sans Ol Chiki","category":"sans-serif"},{"family":"Noto Sans Old Hungarian","category":"sans-serif"},{"family":"Noto Sans Old Italic","category":"sans-serif"},{"family":"Noto Sans Old North Arabian","category":"sans-serif"},{"family":"Noto Sans Old Permic","category":"sans-serif"},{"family":"Noto Sans Old Persian","category":"sans-serif"},{"family":"Noto Sans Old Sogdian","category":"sans-serif"},{"family":"Noto Sans Old South Arabian","category":"sans-serif"},{"family":"Noto Sans Old Turkic","category":"sans-serif"},{"family":"Noto Sans Oriya","category":"sans-serif"},{"family":"Noto Sans Osage","category":"sans-serif"},{"family":"Noto Sans Osmanya","category":"sans-serif"},{"family":"Noto Sans Pahawh Hmong","category":"sans-serif"},{"family":"Noto Sans Palmyrene","category":"sans-serif"},{"family":"Noto Sans Pau Cin Hau","category":"sans-serif"},{"family":"Noto Sans PhagsPa","category":"sans-serif"},{"family":"Noto Sans Phoenician","category":"sans-serif"},{"family":"Noto Sans Psalter Pahlavi","category":"sans-serif"},{"family":"Noto Sans Rejang","category":"sans-serif"},{"family":"Noto Sans Runic","category":"sans-serif"},{"family":"Noto Sans Samaritan","category":"sans-serif"},{"family":"Noto Sans Saurashtra","category":"sans-serif"},{"family":"Noto Sans SC","category":"sans-serif"},{"family":"Noto Sans Sharada","category":"sans-serif"},{"family":"Noto Sans Shavian","category":"sans-serif"},{"family":"Noto Sans Siddham","category":"sans-serif"},{"family":"Noto Sans SignWriting","category":"sans-serif"},{"family":"Noto Sans Sinhala","category":"sans-serif"},{"family":"Noto Sans Sogdian","category":"sans-serif"},{"family":"Noto Sans Sora Sompeng","category":"sans-serif"},{"family":"Noto Sans Soyombo","category":"sans-serif"},{"family":"Noto Sans Sundanese","category":"sans-serif"},{"family":"Noto Sans Sunuwar","category":"sans-serif"},{"family":"Noto Sans Syloti Nagri","category":"sans-serif"},{"family":"Noto Sans Symbols","category":"sans-serif"},{"family":"Noto Sans Symbols 2","category":"sans-serif"},{"family":"Noto Sans Syriac","category":"sans-serif"},{"family":"Noto Sans Syriac Eastern","category":"sans-serif"},{"family":"Noto Sans Syriac Western","category":"sans-serif"},{"family":"Noto Sans Tagalog","category":"sans-serif"},{"family":"Noto Sans Tagbanwa","category":"sans-serif"},{"family":"Noto Sans Tai Le","category":"sans-serif"},{"family":"Noto Sans Tai Tham","category":"sans-serif"},{"family":"Noto Sans Tai Viet","category":"sans-serif"},{"family":"Noto Sans Takri","category":"sans-serif"},{"family":"Noto Sans Tamil","category":"sans-serif"},{"family":"Noto Sans Tamil Supplement","category":"sans-serif"},{"family":"Noto Sans Tangsa","category":"sans-serif"},{"family":"Noto Sans TC","category":"sans-serif"},{"family":"Noto Sans Telugu","category":"sans-serif"},{"family":"Noto Sans Thaana","category":"sans-serif"},{"family":"Noto Sans Thai","category":"sans-serif"},{"family":"Noto Sans Thai Looped","category":"sans-serif"},{"family":"Noto Sans Tifinagh","category":"sans-serif"},{"family":"Noto Sans Tirhuta","category":"sans-serif"},{"family":"Noto Sans Ugaritic","category":"sans-serif"},{"family":"Noto Sans Vai","category":"sans-serif"},{"family":"Noto Sans Vithkuqi","category":"sans-serif"},{"family":"Noto Sans Wancho","category":"sans-serif"},{"family":"Noto Sans Warang Citi","category":"sans-serif"},{"family":"Noto Sans Yi","category":"sans-serif"},{"family":"Noto Sans Zanabazar Square","category":"sans-serif"},{"family":"Noto Serif","category":"serif"},{"family":"Noto Serif Ahom","category":"serif"},{"family":"Noto Serif Armenian","category":"serif"},{"family":"Noto Serif Balinese","category":"serif"},{"family":"Noto Serif Bengali","category":"serif"},{"family":"Noto Serif Devanagari","category":"serif"},{"family":"Noto Serif Display","category":"serif"},{"family":"Noto Serif Dives Akuru","category":"serif"},{"family":"Noto Serif Dogra","category":"serif"},{"family":"Noto Serif Ethiopic","category":"serif"},{"family":"Noto Serif Georgian","category":"serif"},{"family":"Noto Serif Grantha","category":"serif"},{"family":"Noto Serif Gujarati","category":"serif"},{"family":"Noto Serif Gurmukhi","category":"serif"},{"family":"Noto Serif Hebrew","category":"serif"},{"family":"Noto Serif Hentaigana","category":"serif"},{"family":"Noto Serif HK","category":"serif"},{"family":"Noto Serif JP","category":"serif"},{"family":"Noto Serif Kannada","category":"serif"},{"family":"Noto Serif Khitan Small Script","category":"serif"},{"family":"Noto Serif Khmer","category":"serif"},{"family":"Noto Serif Khojki","category":"serif"},{"family":"Noto Serif KR","category":"serif"},{"family":"Noto Serif Lao","category":"serif"},{"family":"Noto Serif Makasar","category":"serif"},{"family":"Noto Serif Malayalam","category":"serif"},{"family":"Noto Serif Myanmar","category":"serif"},{"family":"Noto Serif NP Hmong","category":"serif"},{"family":"Noto Serif Old Uyghur","category":"serif"},{"family":"Noto Serif Oriya","category":"serif"},{"family":"Noto Serif Ottoman Siyaq","category":"serif"},{"family":"Noto Serif SC","category":"serif"},{"family":"Noto Serif Sinhala","category":"serif"},{"family":"Noto Serif Tamil","category":"serif"},{"family":"Noto Serif Tangut","category":"serif"},{"family":"Noto Serif TC","category":"serif"},{"family":"Noto Serif Telugu","category":"serif"},{"family":"Noto Serif Thai","category":"serif"},{"family":"Noto Serif Tibetan","category":"serif"},{"family":"Noto Serif Todhri","category":"serif"},{"family":"Noto Serif Toto","category":"serif"},{"family":"Noto Serif Vithkuqi","category":"serif"},{"family":"Noto Serif Yezidi","category":"serif"},{"family":"Noto Traditional Nushu","category":"sans-serif"},{"family":"Noto Znamenny Musical Notation","category":"sans-serif"},{"family":"Nova Cut","category":"display"},{"family":"Nova Flat","category":"display"},{"family":"Nova Mono","category":"monospace"},{"family":"Nova Oval","category":"display"},{"family":"Nova Round","category":"display"},{"family":"Nova Script","category":"display"},{"family":"Nova Slim","category":"display"},{"family":"Nova Square","category":"display"},{"family":"NTR","category":"sans-serif"},{"family":"Numans","category":"sans-serif"},{"family":"Nunito","category":"sans-serif"},{"family":"Nunito Sans","category":"sans-serif"},{"family":"Nuosu SIL","category":"sans-serif"},{"family":"Odibee Sans","category":"display"},{"family":"Odor Mean Chey","category":"serif"},{"family":"Offside","category":"display"},{"family":"Oi","category":"display"},{"family":"Ojuju","category":"sans-serif"},{"family":"Old Standard TT","category":"serif"},{"family":"Oldenburg","category":"display"},{"family":"Ole","category":"handwriting"},{"family":"Oleo Script","category":"display"},{"family":"Oleo Script Swash Caps","category":"display"},{"family":"Onest","category":"sans-serif"},{"family":"Oooh Baby","category":"handwriting"},{"family":"Open Sans","category":"sans-serif"},{"family":"Oranienbaum","category":"serif"},{"family":"Orbit","category":"sans-serif"},{"family":"Orbitron","category":"sans-serif"},{"family":"Oregano","category":"display"},{"family":"Orelega One","category":"display"},{"family":"Orienta","category":"sans-serif"},{"family":"Original Surfer","category":"display"},{"family":"Oswald","category":"sans-serif"},{"family":"Outfit","category":"sans-serif"},{"family":"Over the Rainbow","category":"handwriting"},{"family":"Overlock","category":"display"},{"family":"Overlock SC","category":"display"},{"family":"Overpass","category":"sans-serif"},{"family":"Overpass Mono","category":"monospace"},{"family":"Ovo","category":"serif"},{"family":"Oxanium","category":"display"},{"family":"Oxygen","category":"sans-serif"},{"family":"Oxygen Mono","category":"monospace"},{"family":"Pacifico","category":"handwriting"},{"family":"Padauk","category":"sans-serif"},{"family":"Padyakke Expanded One","category":"serif"},{"family":"Palanquin","category":"sans-serif"},{"family":"Palanquin Dark","category":"sans-serif"},{"family":"Palette Mosaic","category":"display"},{"family":"Pangolin","category":"handwriting"},{"family":"Paprika","category":"display"},{"family":"Parastoo","category":"serif"},{"family":"Parisienne","category":"handwriting"},{"family":"Parkinsans","category":"sans-serif"},{"family":"Passero One","category":"display"},{"family":"Passion One","category":"display"},{"family":"Passions Conflict","category":"handwriting"},{"family":"Pathway Extreme","category":"sans-serif"},{"family":"Pathway Gothic One","category":"sans-serif"},{"family":"Patrick Hand","category":"handwriting"},{"family":"Patrick Hand SC","category":"handwriting"},{"family":"Pattaya","category":"sans-serif"},{"family":"Patua One","category":"display"},{"family":"Pavanam","category":"sans-serif"},{"family":"Paytone One","category":"sans-serif"},{"family":"Peddana","category":"serif"},{"family":"Peralta","category":"serif"},{"family":"Permanent Marker","category":"handwriting"},{"family":"Petemoss","category":"handwriting"},{"family":"Petit Formal Script","category":"handwriting"},{"family":"Petrona","category":"serif"},{"family":"Phetsarath","category":"sans-serif"},{"family":"Philosopher","category":"sans-serif"},{"family":"Phudu","category":"display"},{"family":"Piazzolla","category":"serif"},{"family":"Piedra","category":"display"},{"family":"Pinyon Script","category":"handwriting"},{"family":"Pirata One","category":"display"},{"family":"Pixelify Sans","category":"display"},{"family":"Plaster","category":"display"},{"family":"Platypi","category":"serif"},{"family":"Play","category":"sans-serif"},{"family":"Playball","category":"display"},{"family":"Playfair","category":"serif"},{"family":"Playfair Display","category":"serif"},{"family":"Playfair Display SC","category":"serif"},{"family":"Playpen Sans","category":"handwriting"},{"family":"Playpen Sans Arabic","category":"handwriting"},{"family":"Playpen Sans Deva","category":"handwriting"},{"family":"Playpen Sans Hebrew","category":"handwriting"},{"family":"Playpen Sans Thai","category":"handwriting"},{"family":"Playwrite AR","category":"handwriting"},{"family":"Playwrite AR Guides","category":"handwriting"},{"family":"Playwrite AT","category":"handwriting"},{"family":"Playwrite AT Guides","category":"handwriting"},{"family":"Playwrite AU NSW","category":"handwriting"},{"family":"Playwrite AU NSW Guides","category":"handwriting"},{"family":"Playwrite AU QLD","category":"handwriting"},{"family":"Playwrite AU QLD Guides","category":"handwriting"},{"family":"Playwrite AU SA","category":"handwriting"},{"family":"Playwrite AU SA Guides","category":"handwriting"},{"family":"Playwrite AU TAS","category":"handwriting"},{"family":"Playwrite AU TAS Guides","category":"handwriting"},{"family":"Playwrite AU VIC","category":"handwriting"},{"family":"Playwrite AU VIC Guides","category":"handwriting"},{"family":"Playwrite BE VLG","category":"handwriting"},{"family":"Playwrite BE VLG Guides","category":"handwriting"},{"family":"Playwrite BE WAL","category":"handwriting"},{"family":"Playwrite BE WAL Guides","category":"handwriting"},{"family":"Playwrite BR","category":"handwriting"},{"family":"Playwrite BR Guides","category":"handwriting"},{"family":"Playwrite CA","category":"handwriting"},{"family":"Playwrite CA Guides","category":"handwriting"},{"family":"Playwrite CL","category":"handwriting"},{"family":"Playwrite CL Guides","category":"handwriting"},{"family":"Playwrite CO","category":"handwriting"},{"family":"Playwrite CO Guides","category":"handwriting"},{"family":"Playwrite CU","category":"handwriting"},{"family":"Playwrite CU Guides","category":"handwriting"},{"family":"Playwrite CZ","category":"handwriting"},{"family":"Playwrite CZ Guides","category":"handwriting"},{"family":"Playwrite DE Grund","category":"handwriting"},{"family":"Playwrite DE Grund Guides","category":"handwriting"},{"family":"Playwrite DE LA","category":"handwriting"},{"family":"Playwrite DE LA Guides","category":"handwriting"},{"family":"Playwrite DE SAS","category":"handwriting"},{"family":"Playwrite DE SAS Guides","category":"handwriting"},{"family":"Playwrite DE VA","category":"handwriting"},{"family":"Playwrite DE VA Guides","category":"handwriting"},{"family":"Playwrite DK Loopet","category":"handwriting"},{"family":"Playwrite DK Loopet Guides","category":"handwriting"},{"family":"Playwrite DK Uloopet","category":"handwriting"},{"family":"Playwrite DK Uloopet Guides","category":"handwriting"},{"family":"Playwrite ES","category":"handwriting"},{"family":"Playwrite ES Deco","category":"handwriting"},{"family":"Playwrite ES Deco Guides","category":"handwriting"},{"family":"Playwrite ES Guides","category":"handwriting"},{"family":"Playwrite FR Moderne","category":"handwriting"},{"family":"Playwrite FR Moderne Guides","category":"handwriting"},{"family":"Playwrite FR Trad","category":"handwriting"},{"family":"Playwrite FR Trad Guides","category":"handwriting"},{"family":"Playwrite GB J","category":"handwriting"},{"family":"Playwrite GB J Guides","category":"handwriting"},{"family":"Playwrite GB S","category":"handwriting"},{"family":"Playwrite GB S Guides","category":"handwriting"},{"family":"Playwrite HR","category":"handwriting"},{"family":"Playwrite HR Guides","category":"handwriting"},{"family":"Playwrite HR Lijeva","category":"handwriting"},{"family":"Playwrite HR Lijeva Guides","category":"handwriting"},{"family":"Playwrite HU","category":"handwriting"},{"family":"Playwrite HU Guides","category":"handwriting"},{"family":"Playwrite ID","category":"handwriting"},{"family":"Playwrite ID Guides","category":"handwriting"},{"family":"Playwrite IE","category":"handwriting"},{"family":"Playwrite IE Guides","category":"handwriting"},{"family":"Playwrite IN","category":"handwriting"},{"family":"Playwrite IN Guides","category":"handwriting"},{"family":"Playwrite IS","category":"handwriting"},{"family":"Playwrite IS Guides","category":"handwriting"},{"family":"Playwrite IT Moderna","category":"handwriting"},{"family":"Playwrite IT Moderna Guides","category":"handwriting"},{"family":"Playwrite IT Trad","category":"handwriting"},{"family":"Playwrite IT Trad Guides","category":"handwriting"},{"family":"Playwrite MX","category":"handwriting"},{"family":"Playwrite MX Guides","category":"handwriting"},{"family":"Playwrite NG Modern","category":"handwriting"},{"family":"Playwrite NG Modern Guides","category":"handwriting"},{"family":"Playwrite NL","category":"handwriting"},{"family":"Playwrite NL Guides","category":"handwriting"},{"family":"Playwrite NO","category":"handwriting"},{"family":"Playwrite NO Guides","category":"handwriting"},{"family":"Playwrite NZ","category":"handwriting"},{"family":"Playwrite NZ Basic","category":"handwriting"},{"family":"Playwrite NZ Basic Guides","category":"handwriting"},{"family":"Playwrite NZ Guides","category":"handwriting"},{"family":"Playwrite PE","category":"handwriting"},{"family":"Playwrite PE Guides","category":"handwriting"},{"family":"Playwrite PL","category":"handwriting"},{"family":"Playwrite PL Guides","category":"handwriting"},{"family":"Playwrite PT","category":"handwriting"},{"family":"Playwrite PT Guides","category":"handwriting"},{"family":"Playwrite RO","category":"handwriting"},{"family":"Playwrite RO Guides","category":"handwriting"},{"family":"Playwrite SK","category":"handwriting"},{"family":"Playwrite SK Guides","category":"handwriting"},{"family":"Playwrite TZ","category":"handwriting"},{"family":"Playwrite TZ Guides","category":"handwriting"},{"family":"Playwrite US Modern","category":"handwriting"},{"family":"Playwrite US Modern Guides","category":"handwriting"},{"family":"Playwrite US Trad","category":"handwriting"},{"family":"Playwrite US Trad Guides","category":"handwriting"},{"family":"Playwrite VN","category":"handwriting"},{"family":"Playwrite VN Guides","category":"handwriting"},{"family":"Playwrite ZA","category":"handwriting"},{"family":"Playwrite ZA Guides","category":"handwriting"},{"family":"Plus Jakarta Sans","category":"sans-serif"},{"family":"Pochaevsk","category":"display"},{"family":"Podkova","category":"serif"},{"family":"Poetsen One","category":"display"},{"family":"Poiret One","category":"display"},{"family":"Poller One","category":"display"},{"family":"Poltawski Nowy","category":"serif"},{"family":"Poly","category":"serif"},{"family":"Pompiere","category":"display"},{"family":"Ponnala","category":"display"},{"family":"Ponomar","category":"display"},{"family":"Pontano Sans","category":"sans-serif"},{"family":"Poor Story","category":"display"},{"family":"Poppins","category":"sans-serif"},{"family":"Port Lligat Sans","category":"sans-serif"},{"family":"Port Lligat Slab","category":"serif"},{"family":"Potta One","category":"display"},{"family":"Pragati Narrow","category":"sans-serif"},{"family":"Praise","category":"handwriting"},{"family":"Prata","category":"serif"},{"family":"Preahvihear","category":"sans-serif"},{"family":"Press Start 2P","category":"display"},{"family":"Pridi","category":"serif"},{"family":"Princess Sofia","category":"handwriting"},{"family":"Prociono","category":"serif"},{"family":"Prompt","category":"sans-serif"},{"family":"Prosto One","category":"display"},{"family":"Protest Guerrilla","category":"display"},{"family":"Protest Revolution","category":"display"},{"family":"Protest Riot","category":"display"},{"family":"Protest Strike","category":"display"},{"family":"Proza Libre","category":"sans-serif"},{"family":"PT Mono","category":"monospace"},{"family":"PT Sans","category":"sans-serif"},{"family":"PT Sans Caption","category":"sans-serif"},{"family":"PT Sans Narrow","category":"sans-serif"},{"family":"PT Serif","category":"serif"},{"family":"PT Serif Caption","category":"serif"},{"family":"Public Sans","category":"sans-serif"},{"family":"Puppies Play","category":"handwriting"},{"family":"Puritan","category":"sans-serif"},{"family":"Purple Purse","category":"display"},{"family":"Qahiri","category":"sans-serif"},{"family":"Quando","category":"serif"},{"family":"Quantico","category":"sans-serif"},{"family":"Quattrocento","category":"serif"},{"family":"Quattrocento Sans","category":"sans-serif"},{"family":"Questrial","category":"sans-serif"},{"family":"Quicksand","category":"sans-serif"},{"family":"Quintessential","category":"handwriting"},{"family":"Qwigley","category":"handwriting"},{"family":"Qwitcher Grypen","category":"handwriting"},{"family":"Racing Sans One","category":"display"},{"family":"Radio Canada","category":"sans-serif"},{"family":"Radio Canada Big","category":"sans-serif"},{"family":"Radley","category":"serif"},{"family":"Rajdhani","category":"sans-serif"},{"family":"Rakkas","category":"display"},{"family":"Raleway","category":"sans-serif"},{"family":"Raleway Dots","category":"display"},{"family":"Ramabhadra","category":"sans-serif"},{"family":"Ramaraja","category":"serif"},{"family":"Rambla","category":"sans-serif"},{"family":"Rammetto One","category":"display"},{"family":"Rampart One","category":"display"},{"family":"Ramsina","category":"serif"},{"family":"Ranchers","category":"display"},{"family":"Rancho","category":"handwriting"},{"family":"Ranga","category":"display"},{"family":"Rasa","category":"serif"},{"family":"Rationale","category":"sans-serif"},{"family":"Ravi Prakash","category":"display"},{"family":"Readex Pro","category":"sans-serif"},{"family":"Recursive","category":"sans-serif"},{"family":"Red Hat Display","category":"sans-serif"},{"family":"Red Hat Mono","category":"monospace"},{"family":"Red Hat Text","category":"sans-serif"},{"family":"Red Rose","category":"display"},{"family":"Redacted","category":"display"},{"family":"Redacted Script","category":"display"},{"family":"Reddit Mono","category":"monospace"},{"family":"Reddit Sans","category":"sans-serif"},{"family":"Reddit Sans Condensed","category":"sans-serif"},{"family":"Redressed","category":"handwriting"},{"family":"Reem Kufi","category":"sans-serif"},{"family":"Reem Kufi Fun","category":"sans-serif"},{"family":"Reem Kufi Ink","category":"sans-serif"},{"family":"Reenie Beanie","category":"handwriting"},{"family":"Reggae One","category":"display"},{"family":"REM","category":"sans-serif"},{"family":"Rethink Sans","category":"sans-serif"},{"family":"Revalia","category":"display"},{"family":"Rhodium Libre","category":"serif"},{"family":"Ribeye","category":"display"},{"family":"Ribeye Marrow","category":"display"},{"family":"Righteous","category":"display"},{"family":"Risque","category":"display"},{"family":"Road Rage","category":"display"},{"family":"Roboto","category":"sans-serif"},{"family":"Roboto Condensed","category":"sans-serif"},{"family":"Roboto Flex","category":"sans-serif"},{"family":"Roboto Mono","category":"monospace"},{"family":"Roboto Serif","category":"serif"},{"family":"Roboto Slab","category":"serif"},{"family":"Rochester","category":"handwriting"},{"family":"Rock 3D","category":"display"},{"family":"Rock Salt","category":"handwriting"},{"family":"RocknRoll One","category":"sans-serif"},{"family":"Rokkitt","category":"serif"},{"family":"Romanesco","category":"handwriting"},{"family":"Ropa Sans","category":"sans-serif"},{"family":"Rosario","category":"sans-serif"},{"family":"Rosarivo","category":"serif"},{"family":"Rouge Script","category":"handwriting"},{"family":"Rowdies","category":"display"},{"family":"Rozha One","category":"serif"},{"family":"Rubik","category":"sans-serif"},{"family":"Rubik 80s Fade","category":"display"},{"family":"Rubik Beastly","category":"display"},{"family":"Rubik Broken Fax","category":"display"},{"family":"Rubik Bubbles","category":"display"},{"family":"Rubik Burned","category":"display"},{"family":"Rubik Dirt","category":"display"},{"family":"Rubik Distressed","category":"display"},{"family":"Rubik Doodle Shadow","category":"display"},{"family":"Rubik Doodle Triangles","category":"display"},{"family":"Rubik Gemstones","category":"display"},{"family":"Rubik Glitch","category":"display"},{"family":"Rubik Glitch Pop","category":"display"},{"family":"Rubik Iso","category":"display"},{"family":"Rubik Lines","category":"display"},{"family":"Rubik Maps","category":"display"},{"family":"Rubik Marker Hatch","category":"display"},{"family":"Rubik Maze","category":"display"},{"family":"Rubik Microbe","category":"display"},{"family":"Rubik Mono One","category":"sans-serif"},{"family":"Rubik Moonrocks","category":"display"},{"family":"Rubik Pixels","category":"display"},{"family":"Rubik Puddles","category":"display"},{"family":"Rubik Scribble","category":"display"},{"family":"Rubik Spray Paint","category":"display"},{"family":"Rubik Storm","category":"display"},{"family":"Rubik Vinyl","category":"display"},{"family":"Rubik Wet Paint","category":"display"},{"family":"Ruda","category":"sans-serif"},{"family":"Rufina","category":"serif"},{"family":"Ruge Boogie","category":"handwriting"},{"family":"Ruluko","category":"sans-serif"},{"family":"Rum Raisin","category":"sans-serif"},{"family":"Ruslan Display","category":"display"},{"family":"Russo One","category":"sans-serif"},{"family":"Ruthie","category":"handwriting"},{"family":"Ruwudu","category":"serif"},{"family":"Rye","category":"display"},{"family":"Sacramento","category":"handwriting"},{"family":"Sahitya","category":"serif"},{"family":"Sail","category":"display"},{"family":"Saira","category":"sans-serif"},{"family":"Saira Condensed","category":"sans-serif"},{"family":"Saira Extra Condensed","category":"sans-serif"},{"family":"Saira Semi Condensed","category":"sans-serif"},{"family":"Saira Stencil","category":"display"},{"family":"Salsa","category":"display"},{"family":"Sanchez","category":"serif"},{"family":"Sancreek","category":"display"},{"family":"Sankofa Display","category":"sans-serif"},{"family":"Sansation","category":"sans-serif"},{"family":"Sansita","category":"sans-serif"},{"family":"Sansita Swashed","category":"display"},{"family":"Sarabun","category":"sans-serif"},{"family":"Sarala","category":"sans-serif"},{"family":"Sarina","category":"display"},{"family":"Sarpanch","category":"sans-serif"},{"family":"Sassy Frass","category":"handwriting"},{"family":"Satisfy","category":"handwriting"},{"family":"Savate","category":"sans-serif"},{"family":"Sawarabi Gothic","category":"sans-serif"},{"family":"Sawarabi Mincho","category":"serif"},{"family":"Scada","category":"sans-serif"},{"family":"Scheherazade New","category":"serif"},{"family":"Schibsted Grotesk","category":"sans-serif"},{"family":"Schoolbell","category":"handwriting"},{"family":"Science Gothic","category":"sans-serif"},{"family":"Scope One","category":"serif"},{"family":"Seaweed Script","category":"display"},{"family":"Secular One","category":"sans-serif"},{"family":"Sedan","category":"serif"},{"family":"Sedan SC","category":"serif"},{"family":"Sedgwick Ave","category":"handwriting"},{"family":"Sedgwick Ave Display","category":"handwriting"},{"family":"Sekuya","category":"display"},{"family":"Sen","category":"sans-serif"},{"family":"Send Flowers","category":"handwriting"},{"family":"Sevillana","category":"display"},{"family":"Seymour One","category":"sans-serif"},{"family":"Shadows Into Light","category":"handwriting"},{"family":"Shadows Into Light Two","category":"handwriting"},{"family":"Shafarik","category":"display"},{"family":"Shalimar","category":"handwriting"},{"family":"Shantell Sans","category":"display"},{"family":"Shanti","category":"sans-serif"},{"family":"Share","category":"sans-serif"},{"family":"Share Tech","category":"sans-serif"},{"family":"Share Tech Mono","category":"monospace"},{"family":"Shippori Antique","category":"sans-serif"},{"family":"Shippori Antique B1","category":"sans-serif"},{"family":"Shippori Mincho","category":"serif"},{"family":"Shippori Mincho B1","category":"serif"},{"family":"Shizuru","category":"display"},{"family":"Shojumaru","category":"display"},{"family":"Short Stack","category":"handwriting"},{"family":"Shrikhand","category":"display"},{"family":"Siemreap","category":"sans-serif"},{"family":"Sigmar","category":"display"},{"family":"Sigmar One","category":"display"},{"family":"Signika","category":"sans-serif"},{"family":"Signika Negative","category":"sans-serif"},{"family":"Silkscreen","category":"display"},{"family":"Simonetta","category":"display"},{"family":"Single Day","category":"display"},{"family":"Sintony","category":"sans-serif"},{"family":"Sirin Stencil","category":"display"},{"family":"Sirivennela","category":"sans-serif"},{"family":"Six Caps","category":"sans-serif"},{"family":"Sixtyfour","category":"monospace"},{"family":"Sixtyfour Convergence","category":"monospace"},{"family":"Skranji","category":"display"},{"family":"Slabo 13px","category":"serif"},{"family":"Slabo 27px","category":"serif"},{"family":"Slackey","category":"display"},{"family":"Slackside One","category":"handwriting"},{"family":"Smokum","category":"display"},{"family":"Smooch","category":"handwriting"},{"family":"Smooch Sans","category":"sans-serif"},{"family":"Smythe","category":"display"},{"family":"SN Pro","category":"sans-serif"},{"family":"Sniglet","category":"display"},{"family":"Snippet","category":"sans-serif"},{"family":"Snowburst One","category":"display"},{"family":"Sofadi One","category":"display"},{"family":"Sofia","category":"handwriting"},{"family":"Sofia Sans","category":"sans-serif"},{"family":"Sofia Sans Condensed","category":"sans-serif"},{"family":"Sofia Sans Extra Condensed","category":"sans-serif"},{"family":"Sofia Sans Semi Condensed","category":"sans-serif"},{"family":"Solitreo","category":"handwriting"},{"family":"Solway","category":"serif"},{"family":"Sometype Mono","category":"monospace"},{"family":"Song Myung","category":"serif"},{"family":"Sono","category":"sans-serif"},{"family":"Sonsie One","category":"display"},{"family":"Sora","category":"sans-serif"},{"family":"Sorts Mill Goudy","category":"serif"},{"family":"Sour Gummy","category":"sans-serif"},{"family":"Source Code Pro","category":"monospace"},{"family":"Source Sans 3","category":"sans-serif"},{"family":"Source Serif 4","category":"serif"},{"family":"Space Grotesk","category":"sans-serif"},{"family":"Space Mono","category":"monospace"},{"family":"Special Elite","category":"display"},{"family":"Special Gothic","category":"sans-serif"},{"family":"Special Gothic Condensed One","category":"sans-serif"},{"family":"Special Gothic Expanded One","category":"sans-serif"},{"family":"Spectral","category":"serif"},{"family":"Spectral SC","category":"serif"},{"family":"Spicy Rice","category":"display"},{"family":"Spinnaker","category":"sans-serif"},{"family":"Spirax","category":"display"},{"family":"Splash","category":"handwriting"},{"family":"Spline Sans","category":"sans-serif"},{"family":"Spline Sans Mono","category":"monospace"},{"family":"Squada One","category":"display"},{"family":"Square Peg","category":"handwriting"},{"family":"Sree Krushnadevaraya","category":"serif"},{"family":"Sriracha","category":"handwriting"},{"family":"Srisakdi","category":"display"},{"family":"Staatliches","category":"display"},{"family":"Stack Sans Headline","category":"sans-serif"},{"family":"Stack Sans Notch","category":"sans-serif"},{"family":"Stack Sans Text","category":"sans-serif"},{"family":"Stalemate","category":"handwriting"},{"family":"Stalinist One","category":"display"},{"family":"Stardos Stencil","category":"display"},{"family":"Stick","category":"sans-serif"},{"family":"Stick No Bills","category":"sans-serif"},{"family":"Stint Ultra Condensed","category":"serif"},{"family":"Stint Ultra Expanded","category":"serif"},{"family":"STIX Two Math","category":"serif"},{"family":"STIX Two Text","category":"serif"},{"family":"Stoke","category":"serif"},{"family":"Story Script","category":"sans-serif"},{"family":"Strait","category":"sans-serif"},{"family":"Strichpunkt Sans","category":"sans-serif"},{"family":"Style Script","category":"handwriting"},{"family":"Stylish","category":"sans-serif"},{"family":"Sue Ellen Francisco","category":"handwriting"},{"family":"Suez One","category":"serif"},{"family":"Sulphur Point","category":"sans-serif"},{"family":"Sumana","category":"serif"},{"family":"Sunflower","category":"sans-serif"},{"family":"Sunshiney","category":"handwriting"},{"family":"Supermercado One","category":"display"},{"family":"Sura","category":"serif"},{"family":"Suranna","category":"serif"},{"family":"Suravaram","category":"serif"},{"family":"SUSE","category":"sans-serif"},{"family":"SUSE Mono","category":"sans-serif"},{"family":"Suwannaphum","category":"serif"},{"family":"Swanky and Moo Moo","category":"handwriting"},{"family":"Syncopate","category":"sans-serif"},{"family":"Syne","category":"sans-serif"},{"family":"Syne Mono","category":"monospace"},{"family":"Syne Tactile","category":"display"},{"family":"Tac One","category":"sans-serif"},{"family":"Tagesschrift","category":"display"},{"family":"Tai Heritage Pro","category":"serif"},{"family":"Tajawal","category":"sans-serif"},{"family":"Tangerine","category":"handwriting"},{"family":"Tapestry","category":"handwriting"},{"family":"Taprom","category":"display"},{"family":"TASA Explorer","category":"sans-serif"},{"family":"TASA Orbiter","category":"sans-serif"},{"family":"Tauri","category":"sans-serif"},{"family":"Taviraj","category":"serif"},{"family":"Teachers","category":"sans-serif"},{"family":"Teko","category":"sans-serif"},{"family":"Tektur","category":"display"},{"family":"Telex","category":"sans-serif"},{"family":"Tenali Ramakrishna","category":"sans-serif"},{"family":"Tenor Sans","category":"sans-serif"},{"family":"Text Me One","category":"sans-serif"},{"family":"Texturina","category":"serif"},{"family":"Thasadith","category":"sans-serif"},{"family":"The Girl Next Door","category":"handwriting"},{"family":"The Nautigal","category":"handwriting"},{"family":"Tienne","category":"serif"},{"family":"TikTok Sans","category":"sans-serif"},{"family":"Tillana","category":"display"},{"family":"Tilt Neon","category":"display"},{"family":"Tilt Prism","category":"display"},{"family":"Tilt Warp","category":"display"},{"family":"Timmana","category":"sans-serif"},{"family":"Tinos","category":"serif"},{"family":"Tiny5","category":"sans-serif"},{"family":"Tiro Bangla","category":"serif"},{"family":"Tiro Devanagari Hindi","category":"serif"},{"family":"Tiro Devanagari Marathi","category":"serif"},{"family":"Tiro Devanagari Sanskrit","category":"serif"},{"family":"Tiro Gurmukhi","category":"serif"},{"family":"Tiro Kannada","category":"serif"},{"family":"Tiro Tamil","category":"serif"},{"family":"Tiro Telugu","category":"serif"},{"family":"Tirra","category":"sans-serif"},{"family":"Titan One","category":"display"},{"family":"Titillium Web","category":"sans-serif"},{"family":"Tomorrow","category":"sans-serif"},{"family":"Tourney","category":"display"},{"family":"Trade Winds","category":"display"},{"family":"Train One","category":"display"},{"family":"Triodion","category":"display"},{"family":"Trirong","category":"serif"},{"family":"Trispace","category":"sans-serif"},{"family":"Trocchi","category":"serif"},{"family":"Trochut","category":"display"},{"family":"Truculenta","category":"sans-serif"},{"family":"Trykker","category":"serif"},{"family":"Tsukimi Rounded","category":"sans-serif"},{"family":"Tuffy","category":"sans-serif"},{"family":"Tulpen One","category":"display"},{"family":"Turret Road","category":"display"},{"family":"Twinkle Star","category":"handwriting"},{"family":"Ubuntu","category":"sans-serif"},{"family":"Ubuntu Condensed","category":"sans-serif"},{"family":"Ubuntu Mono","category":"monospace"},{"family":"Ubuntu Sans","category":"sans-serif"},{"family":"Ubuntu Sans Mono","category":"monospace"},{"family":"Uchen","category":"serif"},{"family":"Ultra","category":"serif"},{"family":"Unbounded","category":"sans-serif"},{"family":"Uncial Antiqua","category":"display"},{"family":"Underdog","category":"display"},{"family":"Unica One","category":"display"},{"family":"UnifrakturCook","category":"display"},{"family":"UnifrakturMaguntia","category":"display"},{"family":"Unkempt","category":"display"},{"family":"Unlock","category":"display"},{"family":"Unna","category":"serif"},{"family":"UoqMunThenKhung","category":"serif"},{"family":"Updock","category":"handwriting"},{"family":"Urbanist","category":"sans-serif"},{"family":"Vampiro One","category":"display"},{"family":"Varela","category":"sans-serif"},{"family":"Varela Round","category":"sans-serif"},{"family":"Varta","category":"sans-serif"},{"family":"Vast Shadow","category":"serif"},{"family":"Vazirmatn","category":"sans-serif"},{"family":"Vend Sans","category":"sans-serif"},{"family":"Vesper Libre","category":"serif"},{"family":"Viaoda Libre","category":"display"},{"family":"Vibes","category":"display"},{"family":"Vibur","category":"handwriting"},{"family":"Victor Mono","category":"monospace"},{"family":"Vidaloka","category":"serif"},{"family":"Viga","category":"sans-serif"},{"family":"Vina Sans","category":"display"},{"family":"Voces","category":"sans-serif"},{"family":"Volkhov","category":"serif"},{"family":"Vollkorn","category":"serif"},{"family":"Vollkorn SC","category":"serif"},{"family":"Voltaire","category":"sans-serif"},{"family":"VT323","category":"monospace"},{"family":"Vujahday Script","category":"handwriting"},{"family":"Waiting for the Sunrise","category":"handwriting"},{"family":"Wallpoet","category":"display"},{"family":"Walter Turncoat","category":"handwriting"},{"family":"Warnes","category":"display"},{"family":"Water Brush","category":"handwriting"},{"family":"Waterfall","category":"handwriting"},{"family":"Wavefont","category":"display"},{"family":"WDXL Lubrifont JP N","category":"sans-serif"},{"family":"WDXL Lubrifont SC","category":"sans-serif"},{"family":"WDXL Lubrifont TC","category":"sans-serif"},{"family":"Wellfleet","category":"serif"},{"family":"Wendy One","category":"sans-serif"},{"family":"Whisper","category":"handwriting"},{"family":"WindSong","category":"handwriting"},{"family":"Winky Rough","category":"sans-serif"},{"family":"Winky Sans","category":"sans-serif"},{"family":"Wire One","category":"sans-serif"},{"family":"Wittgenstein","category":"serif"},{"family":"Wix Madefor Display","category":"sans-serif"},{"family":"Wix Madefor Text","category":"sans-serif"},{"family":"Work Sans","category":"sans-serif"},{"family":"Workbench","category":"monospace"},{"family":"Xanh Mono","category":"monospace"},{"family":"Yaldevi","category":"sans-serif"},{"family":"Yanone Kaffeesatz","category":"sans-serif"},{"family":"Yantramanav","category":"sans-serif"},{"family":"Yarndings 12","category":"display"},{"family":"Yarndings 12 Charted","category":"display"},{"family":"Yarndings 20","category":"display"},{"family":"Yarndings 20 Charted","category":"display"},{"family":"Yatra One","category":"display"},{"family":"Yellowtail","category":"handwriting"},{"family":"Yeon Sung","category":"display"},{"family":"Yeseva One","category":"display"},{"family":"Yesteryear","category":"handwriting"},{"family":"Yomogi","category":"handwriting"},{"family":"Young Serif","category":"serif"},{"family":"Yrsa","category":"serif"},{"family":"Ysabeau","category":"sans-serif"},{"family":"Ysabeau Infant","category":"sans-serif"},{"family":"Ysabeau Office","category":"sans-serif"},{"family":"Ysabeau SC","category":"sans-serif"},{"family":"Yuji Boku","category":"serif"},{"family":"Yuji Hentaigana Akari","category":"handwriting"},{"family":"Yuji Hentaigana Akebono","category":"handwriting"},{"family":"Yuji Mai","category":"serif"},{"family":"Yuji Syuku","category":"serif"},{"family":"Yusei Magic","category":"sans-serif"},{"family":"Zain","category":"sans-serif"},{"family":"Zalando Sans","category":"sans-serif"},{"family":"Zalando Sans Expanded","category":"sans-serif"},{"family":"Zalando Sans SemiExpanded","category":"sans-serif"},{"family":"ZCOOL KuaiLe","category":"sans-serif"},{"family":"ZCOOL QingKe HuangYou","category":"sans-serif"},{"family":"ZCOOL XiaoWei","category":"sans-serif"},{"family":"Zen Antique","category":"serif"},{"family":"Zen Antique Soft","category":"serif"},{"family":"Zen Dots","category":"display"},{"family":"Zen Kaku Gothic Antique","category":"sans-serif"},{"family":"Zen Kaku Gothic New","category":"sans-serif"},{"family":"Zen Kurenaido","category":"sans-serif"},{"family":"Zen Loop","category":"display"},{"family":"Zen Maru Gothic","category":"sans-serif"},{"family":"Zen Old Mincho","category":"serif"},{"family":"Zen Tokyo Zoo","category":"display"},{"family":"Zeyada","category":"handwriting"},{"family":"Zhi Mang Xing","category":"handwriting"},{"family":"Zilla Slab","category":"serif"},{"family":"Zilla Slab Highlight","category":"serif"}]'), P6 = {
   categories: M6,
@@ -13530,7 +13530,7 @@ display: block;margin: .5em;}</style><dialog id="svg_docprops" aria-label="Sampl
 }, bi = (s) => {
   const e = !!V6(s)?.classList.contains("theme-dark");
   s.classList.toggle("theme-dark", e), s.classList.toggle("theme-light", !e);
-}, Gr = (s) => (
+}, Vr = (s) => (
   /* css */
   `
   dialog {
@@ -13602,7 +13602,7 @@ display: block;margin: .5em;}</style><dialog id="svg_docprops" aria-label="Sampl
   :host(.theme-dark) button.dlg-primary { color: #1B1F24; }
 `
 ), L2 = document.createElement("template");
-L2.innerHTML = `<style>${Gr("#svg_docprops_container")}</style>${H6}`;
+L2.innerHTML = `<style>${Vr("#svg_docprops_container")}</style>${H6}`;
 class X6 extends HTMLElement {
   /**
     * @function constructor
@@ -13848,7 +13848,7 @@ width: 340px;max-width: calc(100vw-32px);z-index: 20001;}
 margin: 0 0 14px;font-size: 15px;font-weight: 600;}.pref-row{display: flex;align-items: center;justify-content: space-between;gap: 12px;margin: 0 0 12px;}.pref-row>span{flex: 1 1 auto;}.pref-row>select{flex: 0 0 150px;}
 #tool_prefs_back {
 display: flex;justify-content: flex-end;gap: 8px;margin-top: 16px;}</style><dialog id="svg_prefs" aria-label="Editor Preferences"><div id="svg_prefs_container"><h2 id="svginfo_editor_prefs"></h2><label class="pref-row"><span id="svginfo_rulers_onoff"></span><input id="show_rulers" type="checkbox" value="show_rulers" checked="checked"/></label><label class="pref-row"><span id="svginfo_unit"></span><select id="base_unit"><option value="px">Pixels</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option><option value="in">Inches</option><option value="pt">Points</option><option value="pc">Picas</option><option value="em">Ems</option><option value="ex">Exs</option></select></label><label class="pref-row"><span id="svginfo_theme"></span><select id="theme_select"><option value="light">Light</option><option value="dark">Dark</option></select></label><div id="tool_prefs_back" class="toolbar_button"><button id="tool_prefs_cancel"></button><button id="tool_prefs_save" class="dlg-primary"></button></div></div></dialog>`, T2 = document.createElement("template");
-T2.innerHTML = `<style>${Gr("#svg_prefs_container")}</style>${Y6}`;
+T2.innerHTML = `<style>${Vr("#svg_prefs_container")}</style>${Y6}`;
 class U6 extends HTMLElement {
   /**
     * @function constructor
@@ -14001,7 +14001,7 @@ padding: 8px;font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;f
 display: flex;justify-content: flex-start;gap: 8px;margin-bottom: 10px;}
 #tool_source_dynamic {
 cursor: pointer;}.tool_label{cursor: pointer;margin: 8px 0 0;display: inline-block;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}</style><dialog id="svg_source_editor" aria-label="SVG Source Editor"><div id="svg_source_container"><div id="tool_source_back" class="toolbar_button"><button id="tool_source_save" class="dlg-primary"></button><button id="tool_source_cancel"></button></div><div id="save_output_btns"><p id="copy_save_note"></p><button id="copy_save_done"></button></div><form><textarea id="svg_source_textarea" spellcheck="false" rows="5" cols="80"></textarea></form><label class="tool_label" for="tool_source_dynamic"><input type="checkbox" id="tool_source_dynamic" checked>Toggle dynamic size</label></div></dialog>`, N2 = document.createElement("template");
-N2.innerHTML = `<style>${Gr("#svg_source_container")}</style>${Z6}`;
+N2.innerHTML = `<style>${Vr("#svg_source_container")}</style>${Z6}`;
 class W6 extends HTMLElement {
   /**
     * @function constructor
@@ -14178,7 +14178,7 @@ const K6 = '<style>.contextMenu{position: fixed;z-index: 99999;min-width: 200px;
     St("Failed to load favorites", s, "favorites");
   }
   return [];
-}, ms = () => {
+}, bs = () => {
   const s = O2();
   return s.length ? s : [...F2];
 }, z2 = (s) => {
@@ -14337,7 +14337,7 @@ class e8 extends HTMLElement {
     this.$dialog.replaceChildren();
     const i = !!(e.selectedElement || e.multiselected);
     let n = 0;
-    if (ms().forEach((o) => {
+    if (bs().forEach((o) => {
       const a = Ba(e, o);
       if (!a) return;
       const c = !i && !Q6.has(o), h = $2(o) ? this._valueRow(e, o, a, c) : this._triggerRow(e, o, a, c);
@@ -14508,7 +14508,7 @@ customElements.define("se-cmenu-layers", i8);
 const j2 = document.createElement("template");
 j2.innerHTML = `
   <style>
-    ${Gr("dialog")}
+    ${Vr("dialog")}
     dialog {
       width: 340px;
       max-width: 92vw;
@@ -14534,7 +14534,7 @@ j2.innerHTML = `
     <div id="choiceButtonContainer"></div>
   </dialog>
 `;
-class jr extends HTMLElement {
+class Xr extends HTMLElement {
   constructor() {
     super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this._shadowRoot.append(j2.content.cloneNode(!0)), this.$dialog = this._shadowRoot.querySelector("dialog"), this.$buttonContainer = this._shadowRoot.querySelector("#choiceButtonContainer"), this._choices = ["OK"], this.keyChoice = null, this._pendingResult = void 0, this._autoAttached = !1, this._closeResolvers = [], this.$dialog.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
@@ -14593,14 +14593,14 @@ class jr extends HTMLElement {
     return this.$dialog.open ? new Promise((e) => this._closeResolvers.push(e)) : Promise.resolve(this._pendingResult ?? {});
   }
 }
-customElements.define("se-plain-alert-dialog", jr);
+customElements.define("se-plain-alert-dialog", Xr);
 const n8 = async (s, e) => {
-  const i = new jr();
+  const i = new Xr();
   return i.textContent = s, i.choices = e, i.open(), (await i.whenClosed()).choice;
 };
 window.seSelect = n8;
 const r8 = async (s, e) => {
-  const i = new jr();
+  const i = new Xr();
   i.textContent = s, i.choices = e === void 0 ? ["Ok", "Cancel"] : e, i.open();
   const n = await i.whenClosed();
   return i.keyChoice ?? n.choice;
@@ -14611,7 +14611,7 @@ class s8 extends HTMLElement {
     * @function constructor
     */
   constructor() {
-    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this.dialog = new jr();
+    super(), this._shadowRoot = this.attachShadow({ mode: "open" }), this.dialog = new Xr();
   }
   /**
    * @function observedAttributes
@@ -14767,7 +14767,7 @@ const l8 = (s, e = "", i = {}, n) => {
 };
 window.sePrompt = l8;
 const c8 = (s) => {
-  const e = new jr();
+  const e = new Xr();
   e.textContent = s, e.choices = ["Ok"], e.open();
 };
 window.seAlert = c8;
@@ -14780,7 +14780,7 @@ margin: 0 0 14px;font-size: 15px;font-weight: 600;}.exp-row{display: flex;align-
 margin: 4px 0 0;color: var(--muted,#6B7280);font-size: 12px;}
 #dialog_buttons {
 display: flex;justify-content: flex-end;gap: 8px;margin-top: 16px;}</style><dialog id="export_box" aria-label="export svg"><div class="overlay"></div><div id="dialog_container"><h2 id="export_title">Export image</h2><div id="dialog_content"><div class="exp-row"><span class="exp-label" id="export_region_label">Region</span><se-select id="se-export-region" label=""></se-select></div><div class="exp-row"><span class="exp-label" id="export_select">Format</span><se-select id="se-storage-pref" label="" options="PNG,JPEG,BMP,WEBP" values="PNG::JPEG::BMP::WEBP"></se-select></div><div class="exp-row"><span class="exp-label" id="export_scale_label">Scale</span><se-select id="se-scale" label="" options="1×,2×,3×,4×" values="1::2::3::4"></se-select></div><div class="exp-row" id="se-quality-row" hidden><span class="exp-label" id="export_quality_label">Quality</span><se-spin-input id="se-quality" label="" size="3" min="0" max="100" value="100" step="5"/></div><label id="se-include-bg-label" class="exp-row" style="justify-content:flex-start;"><input type="checkbox" id="se-include-bg"/><span id="export_include_bg_label">Include background color</span></label><p id="export_summary"></p></div><div id="dialog_buttons"><button id="export_cancel"></button><button id="export_ok" class="dlg-primary"></button></div></div></dialog>`, H2 = document.createElement("template");
-H2.innerHTML = `<style>${Gr("#dialog_container")}</style>${d8}`;
+H2.innerHTML = `<style>${Vr("#dialog_container")}</style>${d8}`;
 class h8 extends HTMLElement {
   /**
     * @function constructor
@@ -15500,7 +15500,7 @@ class _8 extends HTMLElement {
     const i = this._query.trim().toLowerCase();
     if (this._favOnly) {
       this.$reorderHint.hidden = !1;
-      const c = ms().filter((h) => {
+      const c = bs().filter((h) => {
         if (!i) return !0;
         const g = Ba(e, h);
         return g && g.label.toLowerCase().includes(i);
@@ -15516,7 +15516,7 @@ class _8 extends HTMLElement {
       return;
     }
     this.$reorderHint.hidden = !0;
-    const n = new Set(ms()), o = B2(e).map((a) => ({
+    const n = new Set(bs()), o = B2(e).map((a) => ({
       group: a.group,
       actions: a.actions.filter((c) => !(i && !c.label.toLowerCase().includes(i)))
     })).filter((a) => a.actions.length);
@@ -15561,7 +15561,7 @@ class _8 extends HTMLElement {
     e.preventDefault();
     const i = e.target.closest(".fav-row[draggable]");
     if (!i || !this._dragId || i.dataset.id === this._dragId) return;
-    const n = i.dataset.id, a = ms().filter((f) => f !== this._dragId), c = a.indexOf(n), h = i.getBoundingClientRect(), g = e.clientY < h.top + h.height / 2 ? c : c + 1;
+    const n = i.dataset.id, a = bs().filter((f) => f !== this._dragId), c = a.indexOf(n), h = i.getBoundingClientRect(), g = e.clientY < h.top + h.height / 2 ? c : c + 1;
     a.splice(g, 0, this._dragId), z2(a), this._render();
   }
   _onDragEnd() {
@@ -16667,7 +16667,7 @@ const Ze = {
     }), i = o;
   }
   return e(i);
-}, qr = (s) => {
+}, Yr = (s) => {
   if (!s) return !1;
   for (let e = 0; e < s.numberOfItems; e++) {
     const i = s.getItem(e);
@@ -16990,13 +16990,13 @@ const sd = [
     while (n);
   }
   return { left: e, top: i };
-}, Do = (s) => s && typeof s == "object" && !Array.isArray(s), Hr = (s, e) => {
+}, Do = (s) => s && typeof s == "object" && !Array.isArray(s), Ur = (s, e) => {
   const i = { ...s };
   if (Do(s) && Do(e))
     for (const n of Object.keys(e))
-      Do(e[n]) ? i[n] = n in s ? Hr(s[n], e[n]) : e[n] : i[n] = e[n];
+      Do(e[n]) ? i[n] = n in s ? Ur(s[n], e[n]) : e[n] : i[n] = e[n];
   return i;
-}, Vr = (s, e) => {
+}, Zr = (s, e) => {
   if (s?.closest)
     try {
       return s.closest(e);
@@ -17014,7 +17014,7 @@ const sd = [
   for (let a = s; a && a !== document && a.nodeType === 1; a = a.parentNode)
     if (o(a, e)) return a;
   return null;
-}, Xr = (s, e) => {
+}, Wr = (s, e) => {
   const i = [], n = {
     ".": (c, h) => c.classList?.contains(h.slice(1)),
     "#": (c, h) => c.id === h.slice(1),
@@ -17044,7 +17044,7 @@ const sd = [
   for (let o = 0; o < i.length; o += 2)
     n.push(`${i[o]},${i[o + 1]}`);
   return e + n.join(" ");
-}).join(" "), zr = (s) => {
+}).join(" "), Dr = (s) => {
   let e = 1.81, i, n, o;
   switch (s.tagName) {
     case "ellipse":
@@ -17116,7 +17116,7 @@ const sd = [
   return n && (e[i] = n), e;
 }, {}), J8 = (s, e, i) => {
   const n = new i.history.BatchCommand("Convert element to Path");
-  e = Hr(e, pd(s));
+  e = Ur(e, pd(s));
   const o = i.addSVGElementsFromJson({
     element: "path",
     attr: e
@@ -17124,11 +17124,11 @@ const sd = [
   a && o.setAttribute("transform", a);
   const { id: c } = s, { parentNode: h } = s;
   s.nextSibling ? s.before(o) : h.append(o);
-  const g = zr(s);
+  const g = Dr(s);
   if (g) {
     if (o.setAttribute("d", g), a) {
       const v = Et(o);
-      qr(v) && i.pathActions.resetOrientation(o);
+      Yr(v) && i.pathActions.resetOrientation(o);
     }
     const { nextSibling: f } = s;
     return n.addSubCommand(
@@ -17199,7 +17199,7 @@ const sd = [
             };
           }
         else {
-          const o = Vr(e.parentNode, "foreignObject");
+          const o = Zr(e.parentNode, "foreignObject");
           o.length && o[0].getBBox && (n = o[0].getBBox());
         }
   }
@@ -17249,7 +17249,7 @@ const sd = [
   o && n.setAttribute("transform", o);
   const { parentNode: a } = s;
   s.nextSibling ? s.before(n) : a.append(n);
-  const c = zr(s);
+  const c = Dr(s);
   c ? n.setAttribute("d", c) : n.remove(), i.resetOrientation(n);
   let h = !1;
   try {
@@ -17315,7 +17315,7 @@ const sd = [
       return L !== "path" && W && typeof e == "function" && e({ element: "path", attr: {} }), G;
     }
   }
-  const c = Et(s), h = rd(c), g = qr(c), { matrix: f } = kt(c);
+  const c = Et(s), h = rd(c), g = Yr(c), { matrix: f } = kt(c);
   if (h || g || !Ei(f)) {
     let v = !1;
     if (n9(h, g)) {
@@ -17548,7 +17548,7 @@ let or = class {
       this.parent.insertBefore(this.elem, e);
     });
   }
-}, Yr = class extends or {
+}, Kr = class extends or {
   /**
   * @param {Element} elem - The DOM element that was changed
   * @param {module:history.CommandAttributes} attrs - Attributes to be changed with the values they had *before* the change
@@ -17678,13 +17678,13 @@ let or = class {
     this.undoStack = [], this.undoStackPointer = 0;
   }
   /**
-  * @returns {Integer} Current size of the undo history stack
+  * @returns {number} Current size of the undo history stack
   */
   getUndoStackSize() {
     return this.undoStackPointer;
   }
   /**
-  * @returns {Integer} Current size of the redo history stack
+  * @returns {number} Current size of the redo history stack
   */
   getRedoStackSize() {
     return this.undoStack.length - this.undoStackPointer;
@@ -17761,7 +17761,7 @@ let or = class {
       if (!a)
         continue;
       const c = {};
-      c[i] = e.oldValues[o], c[i] !== a.getAttribute(i) && n.addSubCommand(new Yr(a, c, i));
+      c[i] = e.oldValues[o], c[i] !== a.getAttribute(i) && n.addSubCommand(new Kr(a, c, i));
     }
     return this.undoableChangeStack[s] = null, n;
   }
@@ -17770,7 +17770,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   BBOX_AFFECTING_ATTRS: Tl,
   BatchCommand: no,
-  ChangeElementCommand: Yr,
+  ChangeElementCommand: Kr,
   Command: or,
   HistoryEventTypes: kr,
   InsertElementCommand: md,
@@ -17935,7 +17935,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   };
   class M {
     /**
-    * @param {Integer} index
+    * @param {number} index
     * @param {SVGPathSeg} item
     * @todo Is `item` be more constrained here?
     */
@@ -18009,8 +18009,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       }
     }
     /**
-    * @param {Integer} dx
-    * @param {Integer} dy
+    * @param {number} dx
+    * @param {number} dy
     * @returns {void}
     */
     move($, B) {
@@ -18028,7 +18028,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       this.update(!0), this.next && this.next.update(!0);
     }
     /**
-    * @param {Integer} num
+    * @param {number} num
     * @returns {void}
     */
     setLinked($) {
@@ -18055,9 +18055,9 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       C(B.type, B.index, K), B.update(!0);
     }
     /**
-    * @param {Integer} num
-    * @param {Integer} dx
-    * @param {Integer} dy
+    * @param {number} num
+    * @param {number} dx
+    * @param {number} dy
     * @returns {void}
     */
     moveCtrl($, B, z) {
@@ -18074,7 +18074,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       C(this.type, this.index, G), this.update(!0);
     }
     /**
-    * @param {Integer} newType Possible values set during {@link module:path.init}
+    * @param {number} newType Possible values set during {@link module:path.init}
     * @param {ArgumentsArray} pts
     * @returns {void}
     */
@@ -18152,7 +18152,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     /**
     * @callback module:path.PathEachSegCallback
     * @this module:path.Segment
-    * @param {Integer} i The index of the seg being iterated
+    * @param {number} i The index of the seg being iterated
     * @returns {boolean|void} Will stop execution of `eachSeg` if returns `false`
     */
     /**
@@ -18165,7 +18165,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
         ;
     }
     /**
-    * @param {Integer} index
+    * @param {number} index
     * @returns {void}
     */
     addSeg($) {
@@ -18192,7 +18192,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       this.elem.pathSegList.insertItemBefore(H, $);
     }
     /**
-    * @param {Integer} index
+    * @param {number} index
     * @returns {void}
     */
     removePtFromSelection($) {
@@ -18229,7 +18229,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       this.last_d = this.elem.getAttribute("d");
     }
     /**
-    * @param {Integer} y
+    * @param {number} y
     * @returns {Path}
     */
     show($) {
@@ -18239,8 +18239,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     }
     /**
     * Move selected points.
-    * @param {Integer} dx
-    * @param {Integer} dy
+    * @param {number} dx
+    * @param {number} dy
     * @returns {void}
     */
     movePts($, B) {
@@ -18249,8 +18249,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
         this.segs[this.selected_pts[z]].move($, B);
     }
     /**
-    * @param {Integer} dx
-    * @param {Integer} dy
+    * @param {number} dx
+    * @param {number} dy
     * @returns {void}
     */
     moveCtrl($, B) {
@@ -18258,7 +18258,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       z.moveCtrl(this.dragctrl, $, B), e.getLinkControlPts() && z.setLinked(this.dragctrl);
     }
     /**
-    * @param {?Integer} newType See {@link https://www.w3.org/TR/SVG/single-page.html#paths-InterfaceSVGPathSeg}
+    * @param {?number} newType See {@link https://www.w3.org/TR/SVG/single-page.html#paths-InterfaceSVGPathSeg}
     * @returns {void}
     */
     setSegType($) {
@@ -18322,8 +18322,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       this.endChanges("Smooth path node(s)");
     }
     /**
-    * @param {Integer} pt
-    * @param {Integer} ctrlNum
+    * @param {number} pt
+    * @param {number} ctrlNum
     * @returns {void}
     */
     selectPt($, B) {
@@ -18353,7 +18353,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     * @returns {void}
     */
     endChanges($, B) {
-      const z = this.last_d, H = new Yr(this.elem, { d: z }, $);
+      const z = this.last_d, H = new Kr(this.elem, { d: z }, $);
       e.logDebugEvent?.("path-commit", {
         elemId: this.elem.id,
         action: H.getText(),
@@ -18363,7 +18363,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       }), e.endChanges({ cmd: H, elem: this.elem });
     }
     /**
-    * @param {Integer|Integer[]} indexes
+    * @param {number|number[]} indexes
     * @returns {void}
     */
     addPtsToSelection($) {
@@ -18381,7 +18381,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     }
     // STATIC
     /**
-    * @param {Integer} index
+    * @param {number} index
     * @returns {boolean}
     */
     static subpathIsClosed($) {
@@ -18561,8 +18561,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     /**
     * @param {MouseEvent} evt
     * @param {Element} mouseTarget
-    * @param {Float} startX
-    * @param {Float} startY
+    * @param {number} startX
+    * @param {number} startY
     * @returns {boolean|void}
     */
     mouseDown(f, v, w, C) {
@@ -18701,8 +18701,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       }
     }
     /**
-    * @param {Float} mouseX
-    * @param {Float} mouseY
+    * @param {number} mouseX
+    * @param {number} mouseY
     * @returns {void}
     */
     mouseMove(f, v) {
@@ -18795,8 +18795,8 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     /**
     * @param {Event} evt
     * @param {Element} element
-    * @param {Float} mouseX
-    * @param {Float} mouseY
+    * @param {number} mouseX
+    * @param {number} mouseY
     * @returns {module:path.keepElement|void}
     */
     mouseUp(f, v, w, C) {
@@ -18942,9 +18942,9 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     }
     /**
     * @typedef {PlainObject} module:path.NodePoint
-    * @property {Float} x
-    * @property {Float} y
-    * @property {Integer} type
+    * @property {number} x
+    * @property {number} y
+    * @property {number} type
     */
     /**
     * @returns {module:path.NodePoint}
@@ -19068,7 +19068,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     }
     /* eslint-enable  */
     /**
-    * @param {?Integer} v See {@link https://www.w3.org/TR/SVG/single-page.html#paths-InterfaceSVGPathSeg}
+    * @param {?number} v See {@link https://www.w3.org/TR/SVG/single-page.html#paths-InterfaceSVGPathSeg}
     * @returns {void}
     */
     setSegType(f) {
@@ -19084,7 +19084,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     }
     /**
     * @param {string} attr
-    * @param {Float} newValue
+    * @param {number} newValue
     * @returns {void}
     */
     moveNode(f, v) {
@@ -19260,7 +19260,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   ].forEach((H) => {
     o.push(H + "Abs"), o.push(H + "Rel");
   }), l9(e), s9(e);
-}, Nr = (s) => {
+}, zr = (s) => {
   const e = {
     "&": "&amp;",
     "<": "&lt;",
@@ -19289,7 +19289,7 @@ const sn = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     { type: "text/html" }
   );
   return p9(s);
-})(), ys = (s) => {
+})(), xs = (s) => {
   let e = s;
   e.includes("<svg:svg") && (e = e.replace(/<(\/?)svg:/g, "<$1").replace("xmlns:svg", "xmlns"));
   let i;
@@ -19409,7 +19409,7 @@ class di {
   }
   /**
    * Get layer opacity.
-   * @returns {Float} Opacity value.
+   * @returns {number} Opacity value.
    */
   getOpacity() {
     const e = this.group_.getAttribute("opacity");
@@ -19418,7 +19418,7 @@ class di {
   /**
    * Sets the opacity of this layer. If opacity is not a value between 0.0 and 1.0,
    * nothing happens.
-   * @param {Float} opacity - A float value in the range 0.0-1.0
+   * @param {number} opacity - A float value in the range 0.0-1.0
    * @returns {void}
    */
   setOpacity(e) {
@@ -19453,7 +19453,7 @@ class di {
    */
   setName(e, i) {
     const n = this.name_;
-    e = Nr(e);
+    e = zr(e);
     const o = this.getTitleElement();
     if (o) {
       for (; o.firstChild; )
@@ -19558,7 +19558,7 @@ class ja {
    * @returns {module:history.HistoryRecordingService}
    */
   changeElement(e, i, n) {
-    return this.undoManager_ ? (this.addCommand_(new Yr(e, i, n)), this) : this;
+    return this.undoManager_ ? (this.addCommand_(new Kr(e, i, n)), this) : this;
   }
   /**
    * Private function to add a command to the history or current batch command.
@@ -19599,7 +19599,7 @@ const gr = (s, e) => e || new ja(s.undoMgr), m9 = (s) => {
     }
     return !1;
   }, h = (z) => {
-    const H = e.getCurrentDrawing().setCurrentLayer(Nr(z));
+    const H = e.getCurrentDrawing().setCurrentLayer(zr(z));
     return H && e.clearSelection(), H;
   }, g = (z) => {
     const H = e.getCurrentDrawing(), G = H.getCurrentLayer();
@@ -19655,7 +19655,6 @@ class y9 {
    * Checks if the provided element is a valid WeakMap key.
    * @param {any} element - The element to validate
    * @returns {boolean} True if the element can be used as a WeakMap key
-   * @private
    */
   #e = (e) => e !== null && (typeof e == "object" || typeof e == "function");
   /**
@@ -19713,7 +19712,11 @@ const Ui = new y9(), bd = (s, e) => {
   }), n.removeAttribute("id"), n.id = e(s), s.childNodes.forEach((o) => {
     switch (o.nodeType) {
       case 1:
-        n.append(bd(o, e));
+        n.append(bd(
+          /** @type {Element} */
+          o,
+          e
+        ));
         break;
       case 3:
       // text node
@@ -19785,7 +19788,7 @@ class qa {
     return this.svgElem_;
   }
   /**
-   * @returns {!(string|Integer)} The previously set nonce
+   * @returns {!(string|number)} The previously set nonce
    */
   getNonce() {
     return this.nonce_;
@@ -19812,7 +19815,7 @@ class qa {
     return this.nonce_ ? `${e}_${this.nonce_}` : e;
   }
   /**
-   * @param {!(string|Integer)} n The nonce to set
+   * @param {!(string|number)} n The nonce to set
    * @returns {void}
    */
   setNonce(e) {
@@ -19895,7 +19898,7 @@ class qa {
   }
   /**
    * Returns the number of layers in the current drawing.
-   * @returns {Integer} The number of layers in the current drawing.
+   * @returns {number} The number of layers in the current drawing.
    */
   getNumLayers() {
     return this.all_layers.length;
@@ -19910,7 +19913,7 @@ class qa {
   }
   /**
    * Returns the name of the ith layer. If the index is out of range, an empty string is returned.
-   * @param {Integer} i - The zero-based index of the layer you are querying.
+   * @param {number} i - The zero-based index of the layer you are querying.
    * @returns {string} The name of the ith layer (or the empty string if none found)
    */
   getLayerName(e) {
@@ -19955,7 +19958,7 @@ class qa {
   }
   /**
    * Set the current layer's position.
-   * @param {Integer} newpos - The zero-based index of the new position of the layer. Range should be 0 to layers-1
+   * @param {number} newpos - The zero-based index of the new position of the layer. Range should be 0 to layers-1
    * @returns {{title: SVGGElement, previousName: string}|null} If the name was changed, returns {title:SVGGElement, previousName:string}; otherwise null.
    */
   setCurrentLayerPosition(e) {
@@ -20240,7 +20243,7 @@ class qa {
   /**
    * Returns the opacity of the given layer.  If the input name is not a layer, `null` is returned.
    * @param {string} layerName - name of the layer on which to get the opacity
-   * @returns {?Float} The opacity value of the given layer.  This will be a value between 0.0 and 1.0, or `null`
+   * @returns {?number} The opacity value of the given layer.  This will be a value between 0.0 and 1.0, or `null`
    * if `layerName` is not a valid layer
    */
   getLayerOpacity(e) {
@@ -20256,7 +20259,7 @@ class qa {
    * of a layer, we will need to allow this function to produce an undo-able
    * action.
    * @param {string} layerName - Name of the layer on which to set the opacity
-   * @param {Float} opacity - A float value in the range 0.0-1.0
+   * @param {number} opacity - A float value in the range 0.0-1.0
    * @returns {void}
    */
   setLayerOpacity(e, i) {
@@ -20520,9 +20523,12 @@ const Q0 = (s, e) => {
     h.length < 2 && g.target.dispatchEvent(M);
   };
   s.svgroot.addEventListener("touchstart", a, { passive: !1 }), s.svgroot.addEventListener("touchmove", a, { passive: !1 }), s.svgroot.addEventListener("touchend", a), s.svgroot.addEventListener("touchcancel", a);
-}, E9 = (s, e) => s.importNode(
-  ys(
-    `<svg id="svgroot" xmlns="${Ze.SVG}" xlinkns="${Ze.XLINK}" width="${e[0]}" 
+}, E9 = (s, e) => (
+  /** @type {SVGSVGElement} */
+  /** @type {unknown} */
+  s.importNode(
+    xs(
+      `<svg id="svgroot" xmlns="${Ze.SVG}" xlinkns="${Ze.XLINK}" width="${e[0]}" 
         height="${e[1]}" x="${e[0]}" y="${e[1]}" overflow="visible">
         <defs>
           <filter id="canvashadow" filterUnits="objectBoundingBox">
@@ -20535,8 +20541,9 @@ const Q0 = (s, e) => {
           </filter>
         </defs>
       </svg>`
-  ).documentElement,
-  !0
+    ).documentElement,
+    !0
+  )
 ), jo = "http://www.w3.org/2000/svg";
 class M9 {
   #t = navigator.userAgent;
@@ -20582,7 +20589,7 @@ class M9 {
    */
   #i() {
     const e = document.createElementNS(jo, "svg"), i = document.createElementNS(jo, "svg");
-    document.documentElement.append(e), i.setAttribute("x", 5), e.append(i);
+    document.documentElement.append(e), i.setAttribute("x", "5"), e.append(i);
     const n = document.createElementNS(jo, "text");
     n.textContent = "a", i.append(n);
     try {
@@ -20770,7 +20777,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     const P = e.getCurrentDrawing().getCurrentLayer(), L = e.getCurrentGroup(), $ = e.getSvgRoot(), B = e.getDOMContainer(), z = e.getSvgContent(), H = e.getAllLayersMode() && !L;
     if ([$, B, z, P].includes(E) || H && di.isLayer(E))
       return e.getSvgRoot();
-    if (Vr(E.parentNode, "#selectorParentGroup"))
+    if (Zr(E.parentNode, "#selectorParentGroup"))
       return e.selectorManager.selectorParentGroup;
     for (; !E?.parentNode?.isSameNode(L || P) && /* eslint-disable-next-line no-unmodified-loop-condition */
     !(H && di.isLayer(E?.parentNode)); )
@@ -20921,7 +20928,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Integer} index
+    * @param {number} index
     * @returns {void}
     * @private
     */
@@ -20956,8 +20963,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Integer} start
-    * @param {Integer} end
+    * @param {number} start
+    * @param {number} end
     * @param {boolean} skipInput
     * @returns {void}
     * @private
@@ -20990,9 +20997,9 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Float} mouseX
-    * @param {Float} mouseY
-    * @returns {Integer}
+    * @param {number} mouseX
+    * @param {number} mouseY
+    * @returns {number}
     * @private
     */
     #f = (o, a) => {
@@ -21011,8 +21018,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Float} mouseX
-    * @param {Float} mouseY
+    * @param {number} mouseX
+    * @param {number} mouseY
     * @returns {void}
     * @private
     */
@@ -21021,8 +21028,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Float} x
-    * @param {Float} y
+    * @param {number} x
+    * @param {number} y
     * @param {boolean} apply
     * @returns {void}
     * @private
@@ -21033,8 +21040,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Float} xIn
-    * @param {Float} yIn
+    * @param {number} xIn
+    * @param {number} yIn
     * @returns {module:math.XYObject}
     * @private
     */
@@ -21051,8 +21058,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     *
-    * @param {Float} xIn
-    * @param {Float} yIn
+    * @param {number} xIn
+    * @param {number} yIn
     * @returns {module:math.XYObject}
     * @private
     */
@@ -21079,8 +21086,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     };
     /**
     * @param {Element} target
-    * @param {Float} x
-    * @param {Float} y
+    * @param {number} x
+    * @param {number} y
     * @returns {void}
     */
     select(o, a, c) {
@@ -21096,8 +21103,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     /**
     * @param {external:MouseEvent} evt
     * @param {Element} mouseTarget
-    * @param {Float} startX
-    * @param {Float} startY
+    * @param {number} startX
+    * @param {number} startY
     * @returns {void}
     */
     mouseDown(o, a, c, h) {
@@ -21105,8 +21112,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       this.#e.focus(), this.#m(g.x, g.y), this.#h = c, this.#u = h;
     }
     /**
-    * @param {Float} mouseX
-    * @param {Float} mouseY
+    * @param {number} mouseX
+    * @param {number} mouseY
     * @returns {void}
     */
     mouseMove(o, a) {
@@ -21115,8 +21122,8 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     }
     /**
     * @param {external:MouseEvent} evt
-    * @param {Float} mouseX
-    * @param {Float} mouseY
+    * @param {number} mouseX
+    * @param {number} mouseY
     * @returns {void}
     */
     mouseUp(o, a, c) {
@@ -21124,15 +21131,15 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       this.#y(h.x, h.y, !0), o.target !== this.#t && a < this.#h + 2 && a > this.#h - 2 && c < this.#u + 2 && c > this.#u - 2 && e.textActions.toSelectMode(!0);
     }
     /**
-    * @param {Integer} index
+    * @param {number} index
     * @returns {void}
     */
     setCursor(o) {
       this.#c(o);
     }
     /**
-    * @param {Float} x
-    * @param {Float} y
+    * @param {number} x
+    * @param {number} y
     * @returns {void}
     */
     toEditMode(o, a) {
@@ -21642,7 +21649,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     const f = Et(o);
     if (!f)
       return;
-    const v = qr(f);
+    const v = Yr(f);
     if (!e.hasResizeStartTransform) {
       const ee = vi(o) ? 1 : 0;
       v ? (f.insertItemBefore(h.createSVGTransform(), ee), f.insertItemBefore(h.createSVGTransform(), ee), f.insertItemBefore(h.createSVGTransform(), ee)) : (f.appendItem(h.createSVGTransform()), f.appendItem(h.createSVGTransform()), f.appendItem(h.createSVGTransform())), e.hasResizeStartTransform = !0;
@@ -22784,7 +22791,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     if (!he)
       return;
     if (he.tagName !== "a") {
-      const be = Xr(he.parentNode, "a");
+      const be = Wr(he.parentNode, "a");
       if (be?.length)
         he = be[0];
       else
@@ -22931,17 +22938,17 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
 }, {
   Command: qo,
   MoveElementCommand: l1,
-  BatchCommand: Qr,
+  BatchCommand: ns,
   InsertElementCommand: c1,
-  RemoveElementCommand: es,
-  ChangeElementCommand: ts
+  RemoveElementCommand: rs,
+  ChangeElementCommand: ss
 } = sn, o7 = (s) => {
   const e = s, i = (c, h) => {
     const g = e.getSelectedElements();
     c || (c = "g");
     let f = "", v;
     c === "a" ? (f = "Make hyperlink", v = h || "") : (c = "g", f = "Group Elements");
-    const w = new Qr(f), C = e.addSVGElementsFromJson({
+    const w = new ns(f), C = e.addSVGElementsFromJson({
       element: c,
       attr: {
         id: e.getNextId(c)
@@ -22961,7 +22968,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     }
     w.isEmpty() || e.addCommandToHistory(w), e.selectOnly([C], !0);
   }, n = (c, h) => {
-    const g = c.childNodes, f = g.length, v = c.getAttribute("transform"), w = Et(c), C = kt(w).matrix, y = new Qr("Push group properties"), M = vi(c), E = {
+    const g = c.childNodes, f = g.length, v = c.getAttribute("transform"), w = Et(c), C = kt(w).matrix, y = new ns("Push group properties"), M = vi(c), E = {
       filter: c.getAttribute("filter"),
       opacity: c.getAttribute("opacity")
     };
@@ -23014,21 +23021,21 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
             ce.setTranslate(Q.e, Q.f), G.numberOfItems ? G.insertItemBefore(ce, 0) : G.appendItem(ce);
           }
           h && y.addSubCommand(
-            new ts(H, { transform: K })
+            new ss(H, { transform: K })
           );
         } else {
           const K = H.getAttribute("transform");
           $ = {}, $.transform = K || "";
           const W = e.getSvgRoot().createSVGTransform();
-          W.setMatrix(C), G.numberOfItems ? G.insertItemBefore(W, 0) : G.appendItem(W), h && y.addSubCommand(new ts(H, $));
+          W.setMatrix(C), G.numberOfItems ? G.insertItemBefore(W, 0) : G.appendItem(W), h && y.addSubCommand(new ss(H, $));
         }
     }
-    if (v && ($ = {}, $.transform = v, c.setAttribute("transform", ""), c.removeAttribute("transform"), y.addSubCommand(new ts(c, $))), h && !y.isEmpty())
+    if (v && ($ = {}, $.transform = v, c.setAttribute("transform", ""), c.removeAttribute("transform"), y.addSubCommand(new ss(c, $))), h && !y.isEmpty())
       return y;
   }, o = (c) => {
     const h = e.getSelectedElements();
     c || (c = h[0]);
-    const g = c, f = new Qr();
+    const g = c, f = new ns();
     let v;
     const w = e.getDataStorage();
     if (w.has(g, "gsvg")) {
@@ -23056,7 +23063,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       }
       w.remove(c, "gsvg");
       const E = c.getAttribute("transform") || "", P = Et(c), L = e.getSvgRoot().createSVGTransform();
-      L.setTranslate(y.x, y.y), P.appendItem(L), (c.getAttribute("transform") || "") !== E && f.addSubCommand(new ts(c, { transform: E })), e.recalculateDimensions(c), e.call("selected", [c]), f.isEmpty() || e.addCommandToHistory(f);
+      L.setTranslate(y.x, y.y), P.appendItem(L), (c.getAttribute("transform") || "") !== E && f.addSubCommand(new ss(c, { transform: E })), e.recalculateDimensions(c), e.call("selected", [c]), f.isEmpty() || e.addCommandToHistory(f);
     } else if (w.has(g, "symbol")) {
       if (c = w.get(g, "symbol"), !c) {
         ut("Unable to convert <use>: missing symbol reference", null, "selected-elem");
@@ -23074,7 +23081,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       v += " translate(" + (C.x || 0) + "," + (C.y || 0) + ")";
       const M = g.parentNode, E = g.nextSibling;
       f.addSubCommand(
-        new es(
+        new rs(
           g,
           E,
           M
@@ -23104,7 +23111,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
         if (!P) {
           const { nextSibling: K } = c;
           c.remove(), f.addSubCommand(
-            new es(c, K, z)
+            new rs(c, K, z)
           );
         }
         f.addSubCommand(new c1(L));
@@ -23147,9 +23154,9 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       h.put(g, "symbol", w), h.put(g, "ref", w), o(g);
       return;
     }
-    const f = Xr(g.parentNode, "a");
+    const f = Wr(g.parentNode, "a");
     if (f?.length && (g = f[0]), g.tagName === "g" || g.tagName === "a") {
-      const v = new Qr("Ungroup Elements"), w = n(g, !0);
+      const v = new ns("Ungroup Elements"), w = n(g, !0);
       w && v.addSubCommand(w);
       const C = g.parentNode, y = g.nextSibling, M = new Array(g.childNodes.length);
       let E = 0;
@@ -23158,7 +23165,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
         if (L.tagName === "title") {
           const { nextSibling: z } = L;
           v.addSubCommand(
-            new es(L, z, B)
+            new rs(L, z, B)
           ), L.remove();
           continue;
         }
@@ -23168,7 +23175,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
       }
       e.clearSelection();
       const P = g.nextSibling;
-      g.remove(), v.addSubCommand(new es(g, P, C)), v.isEmpty() || e.addCommandToHistory(v), e.addToSelection(M);
+      g.remove(), v.addSubCommand(new rs(g, P, C)), v.isEmpty() || e.addCommandToHistory(v), e.addToSelection(M);
     }
   };
   e.groupSelectedElements = i, e.pushGroupProperties = n, e.ungroupSelectedElement = a;
@@ -23682,7 +23689,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
     e.undoMgr.beginUndoableChange("stdDeviation", [$]), g && (e.setBlurNoUndo(h), o());
   };
   e.setBlurNoUndo = n, e.setBlurOffsets = a, e.setBlur = c;
-}, d7 = K2(), is = ["font-family", "font-size", "font-stretch", "font-style", "font-weight"], h7 = ["class", "id", "display", "transform", "style", "paint-order"], Rs = {
+}, d7 = K2(), os = ["font-family", "font-size", "font-stretch", "font-style", "font-weight"], h7 = ["class", "id", "display", "transform", "style", "paint-order"], Rs = {
   // SVG Elements
   a: ["clip-path", "clip-rule", "fill", "fill-opacity", "fill-rule", "filter", "href", "mask", "opacity", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "xlink:href", "xlink:title"],
   circle: ["clip-path", "clip-rule", "cx", "cy", "enable-background", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "r", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage"],
@@ -23702,7 +23709,7 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
   feOffset: ["dx", "in", "dy", "result"],
   filter: ["color-interpolation-filters", "filterRes", "filterUnits", "height", "href", "primitiveUnits", "requiredFeatures", "width", "x", "xlink:href", "y"],
   foreignObject: ["font-size", "height", "opacity", "requiredFeatures", "width", "x", "y"],
-  g: [...is, "clip-path", "clip-rule", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor"],
+  g: [...os, "clip-path", "clip-rule", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor"],
   image: [
     "clip-path",
     "clip-rule",
@@ -23736,11 +23743,11 @@ const Nl = new M9(), Cd = () => Nl.isWebkit, Fn = () => Nl.isGecko, A9 = () => N
   style: ["type"],
   svg: ["clip-path", "clip-rule", "enable-background", "filter", "height", "mask", "preserveAspectRatio", "requiredFeatures", "systemLanguage", "version", "viewBox", "width", "x", "xmlns", "xmlns:se", "xmlns:xlink", "xmlns:oi", "oi:animations", "y", "stroke-linejoin", "fill-rule", "aria-label", "stroke-width", "fill-rule", "xml:space"],
   switch: ["requiredFeatures", "systemLanguage"],
-  symbol: [...is, "fill", "fill-opacity", "fill-rule", "filter", "opacity", "overflow", "preserveAspectRatio", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "viewBox", "width", "height"],
-  text: [...is, "clip-path", "clip-rule", "dominant-baseline", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor", "letter-spacing", "word-spacing", "text-decoration", "textLength", "lengthAdjust", "x", "xml:space", "y"],
+  symbol: [...os, "fill", "fill-opacity", "fill-rule", "filter", "opacity", "overflow", "preserveAspectRatio", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "viewBox", "width", "height"],
+  text: [...os, "clip-path", "clip-rule", "dominant-baseline", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor", "letter-spacing", "word-spacing", "text-decoration", "textLength", "lengthAdjust", "x", "xml:space", "y"],
   textPath: ["dominant-baseline", "href", "method", "requiredFeatures", "spacing", "startOffset", "systemLanguage", "xlink:href"],
   title: [],
-  tspan: [...is, "clip-path", "clip-rule", "dx", "dy", "dominant-baseline", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "rotate", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor", "textLength", "x", "xml:space", "y"],
+  tspan: [...os, "clip-path", "clip-rule", "dx", "dy", "dominant-baseline", "fill", "fill-opacity", "fill-rule", "filter", "mask", "opacity", "requiredFeatures", "rotate", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "systemLanguage", "text-anchor", "textLength", "x", "xml:space", "y"],
   use: ["clip-path", "clip-rule", "fill", "fill-opacity", "fill-rule", "filter", "height", "href", "mask", "stroke", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width", "width", "x", "xlink:href", "y", "overflow"],
   // Filter Primitives
   feComponentTransfer: ["in", "result"],
@@ -23921,14 +23928,17 @@ const u7 = (s) => {
       if (a - o > 1) {
         for (let f = a - 1; f >= o; f--)
           n.removeItem(f);
-        const g = s.createSVGTransform();
+        const g = (
+          /** @type {SVGSVGElement} */
+          s.createSVGTransform()
+        );
         g.setTranslate(c, h), n.insertItemBefore(g, o);
       }
       o++;
     }
   });
 }, {
-  InsertElementCommand: ns,
+  InsertElementCommand: as,
   RemoveElementCommand: f7,
   ChangeElementCommand: m7,
   BatchCommand: Vo
@@ -24020,7 +24030,7 @@ const u7 = (s) => {
           "overflow"
         ];
         for (; Y--; ) {
-          const Q = K[Y], ce = Nr(Q.value);
+          const Q = K[Y], ce = zr(Q.value);
           Q.nodeName.startsWith("xmlns:") || ce !== "" && !oe.includes(Q.localName) && (!Q.namespaceURI || B[Q.namespaceURI]) && (z.push(" "), z.push(Q.nodeName), z.push('="'), z.push(ce), z.push('"'));
         }
       } else {
@@ -24029,7 +24039,7 @@ const u7 = (s) => {
         const J = ["-moz-math-font-style", "_moz-math-font-style"];
         for (let ee = K.length - 1; ee >= 0; ee--) {
           const ne = K[ee];
-          let ie = Nr(ne.value);
+          let ie = zr(ne.value);
           if (!J.includes(ne.localName)) {
             if (ie === "null") {
               const ae = ne.localName.replace(
@@ -24063,7 +24073,7 @@ const u7 = (s) => {
               break;
             case 3: {
               const ie = ne.nodeValue.replace(/^\s+|\s+$/g, "");
-              ie !== "" && (J = !0, z.push(String(Nr(ie))));
+              ie !== "" && (J = !0, z.push(String(zr(ie))));
               break;
             }
             case 4:
@@ -24098,7 +24108,7 @@ const u7 = (s) => {
     const $ = e.getCurConfig(), B = e.getDataStorage();
     let z = null;
     try {
-      const H = ys(g7(P));
+      const H = xs(g7(P));
       if (H.firstElementChild && H.firstElementChild.namespaceURI !== Ze.SVG)
         return !1;
       e.prepareSvg(H);
@@ -24157,7 +24167,7 @@ const u7 = (s) => {
       });
       const oe = J.querySelectorAll("svg");
       if (Array.prototype.forEach.call(oe, (pe) => {
-        if (Vr(pe.parentNode, "defs"))
+        if (Zr(pe.parentNode, "defs"))
           return;
         e.uniquifyElems(pe);
         const we = pe.parentNode;
@@ -24199,7 +24209,7 @@ const u7 = (s) => {
       (!Number.isFinite(Q.width) || Q.width <= 0) && (Q.width = 100), (!Number.isFinite(Q.height) || Q.height <= 0) && (Q.height = 100);
       for (const [pe, we] of Object.entries(Q))
         J.setAttribute(pe, we);
-      e.contentW = Q.width, e.contentH = Q.height, G.addSubCommand(new ns(e.getSvgContent()));
+      e.contentW = Q.width, e.contentH = Q.height, G.addSubCommand(new as(e.getSvgContent()));
       const ge = J.getAttribute("width"), me = J.getAttribute("height"), be = { width: ge, height: me };
       G.addSubCommand(
         new m7(e.getSvgRoot(), be)
@@ -24214,13 +24224,13 @@ const u7 = (s) => {
     try {
       const G = d9(P);
       let K = !1;
-      e.getImportIds(G) && e.getImportIds(G).symbol && Xr(e.getImportIds(G).symbol, "#svgroot")?.length && (K = !0);
+      e.getImportIds(G) && e.getImportIds(G).symbol && Wr(e.getImportIds(G).symbol, "#svgroot")?.length && (K = !0);
       const W = new Vo("Import Image");
       let J;
       if (K)
         J = e.getImportIds(G).symbol, z = e.getImportIds(G).xform;
       else {
-        const ee = ys(P);
+        const ee = xs(P);
         e.prepareSvg(ee);
         const ne = e.getDOMDocument().adoptNode ? e.getDOMDocument().adoptNode(ee.documentElement) : e.getDOMDocument().importNode(ee.documentElement, !0);
         e.uniquifyElems(ne);
@@ -24248,16 +24258,16 @@ const u7 = (s) => {
         J.id = e.getNextId(), e.setImportIds(G, {
           symbol: J,
           xform: z
-        }), e.findDefs().append(J), W.addSubCommand(new ns(J));
+        }), e.findDefs().append(J), W.addSubCommand(new as(J));
       }
-      H = e.getDOMDocument().createElementNS(Ze.SVG, "use"), H.id = e.getNextId(), e.setHref(H, "#" + J.id), (e.getCurrentGroup() || e.getCurrentDrawing().getCurrentLayer()).append(H), W.addSubCommand(new ns(H)), e.clearSelection(), L || (H.setAttribute("transform", z), e.recalculateDimensions(H)), $.put(H, "symbol", J), $.put(H, "ref", J), e.addToSelection([H]), e.addCommandToHistory(W), e.call("changed", [e.getSvgContent()]);
+      H = e.getDOMDocument().createElementNS(Ze.SVG, "use"), H.id = e.getNextId(), e.setHref(H, "#" + J.id), (e.getCurrentGroup() || e.getCurrentDrawing().getCurrentLayer()).append(H), W.addSubCommand(new as(H)), e.clearSelection(), L || (H.setAttribute("transform", z), e.recalculateDimensions(H)), $.put(H, "symbol", J), $.put(H, "ref", J), e.addToSelection([H]), e.addCommandToHistory(W), e.call("changed", [e.getSvgContent()]);
     } catch (G) {
       return Fi("Error importing SVG string", G, "svg-exec"), null;
     }
     return H;
   }, w = (P) => {
     try {
-      const L = ys(
+      const L = xs(
         `<svg xmlns="${Ze.SVG}" xmlns:xlink="${Ze.XLINK}">${P}</svg>`
       );
       if (L.getElementsByTagName("parsererror").length)
@@ -24267,7 +24277,7 @@ const u7 = (s) => {
       e.uniquifyElems($);
       const B = e.getCurrentGroup() || e.getCurrentDrawing().getCurrentLayer(), z = new Vo("Insert Elements"), H = [];
       for (const G of [...$.children])
-        G.id = G.id || e.getNextId(), B.append(G), z.addSubCommand(new ns(G)), H.push(G);
+        G.id = G.id || e.getNextId(), B.append(G), z.addSubCommand(new as(G)), H.push(G);
       return H.length && (e.clearSelection(), e.addToSelection(H), e.addCommandToHistory(z), e.call("changed", H)), H;
     } catch (L) {
       return Fi("Error inserting SVG fragment", L, "svg-exec"), null;
@@ -24979,7 +24989,7 @@ const u7 = (s) => {
       x: Number(v.getAttribute("x")) || 0,
       y: Number(v.getAttribute("y")) || 0
     }), !C) {
-      C = Hr({}, w);
+      C = Ur({}, w);
       for (const [G, K] of Object.entries(C))
         C[G] = i(G, K);
     }
@@ -25054,7 +25064,7 @@ const u7 = (s) => {
       } else
         e.remapElement(a, w, L);
       if (z) {
-        qr(g) || (E = {
+        Yr(g) || (E = {
           x: M.x + L.e,
           y: M.y + L.f
         });
@@ -25078,14 +25088,14 @@ const u7 = (s) => {
       }
       return g.numberOfItems === 0 && a.removeAttribute("transform"), null;
     }
-    return g.numberOfItems === 0 && a.removeAttribute("transform"), f.addSubCommand(new Yr(a, C)), f;
+    return g.numberOfItems === 0 && a.removeAttribute("transform"), f.addSubCommand(new Kr(a, C)), f;
   };
   e.updateClipPath = n, e.recalculateDimensions = o;
 }, Vn = window.ontouchstart || window.matchMedia?.("(pointer: coarse)").matches ? 10 : 4, C7 = (s) => {
   const e = s;
   class i {
     /**
-    * @param {Integer} id - Internally identify the selector
+    * @param {number} id - Internally identify the selector
     * @param {Element} elem - DOM element associated with this selector
     * @param {module:utilities.BBoxObject} [bbox] - Optional bbox to use for initialization (prevents duplicate `getBBox` call).
     */
@@ -25189,7 +25199,7 @@ const u7 = (s) => {
     // STATIC methods
     /**
     * Updates cursors for corner grips on rotation so arrows point the right way.
-    * @param {Float} angle - Current rotation angle in degrees
+    * @param {number} angle - Current rotation angle in degrees
     * @returns {void}
     */
     static updateGripCursors(c) {
@@ -25356,7 +25366,7 @@ const u7 = (s) => {
     * Shows a single dashed box, the 8 resize grips and the rotate grip around a
     * multi-element selection (uniform group-scale + group-rotate mode).
     * @param {module:utilities.BBoxObject} contentBBox - Union bbox of the selection in content/user coords
-    * @param {Float} [angle] - Live group-rotation angle in degrees; rotates the box + grips rigidly about the union center
+    * @param {number} [angle] - Live group-rotation angle in degrees; rotates the box + grips rigidly about the union center
     * @returns {void}
     */
     showGroupSelector(c, h = 0) {
@@ -34917,8 +34927,8 @@ function A7() {
 }
 var P7 = A7();
 const L7 = /* @__PURE__ */ kl(P7), T7 = /* @__PURE__ */ new Set(["text", "tspan", "image", "use", "symbol", "g", "defs"]);
-let rs = null;
-const ki = () => (rs || (rs = new L7.PaperScope(), rs.setup(document.createElement("canvas"))), rs), N7 = ["fill", "fill-opacity", "fill-rule", "stroke", "stroke-width", "stroke-opacity", "opacity", "paint-order"], Bn = (s, e = []) => {
+let ls = null;
+const ki = () => (ls || (ls = new L7.PaperScope(), ls.setup(document.createElement("canvas"))), ls), N7 = ["fill", "fill-opacity", "fill-rule", "stroke", "stroke-width", "stroke-opacity", "opacity", "paint-order"], Bn = (s, e = []) => {
   const i = {};
   for (const n of [...N7, ...e]) {
     const o = s.getAttribute(n);
@@ -34928,10 +34938,10 @@ const ki = () => (rs || (rs = new L7.PaperScope(), rs.setup(document.createEleme
 }, Md = (s) => Math.sqrt(Math.abs(s.a * s.d - s.b * s.c)), ir = (s) => Md(Ml(s)), ro = (s, e) => {
   !s["stroke-width"] || !(e > 0) || e === 1 || (s["stroke-width"] = String(parseFloat(s["stroke-width"]) * e));
 };
-let ss = null;
-const nn = (s, e) => (ss || (ss = document.createElementNS("http://www.w3.org/2000/svg", "path")), ss.setAttribute("d", s), e.pathActions.convertPath(ss, !1)), nr = (s, e, i = {}) => {
+let cs = null;
+const nn = (s, e) => (cs || (cs = document.createElementNS("http://www.w3.org/2000/svg", "path")), cs.setAttribute("d", s), e.pathActions.convertPath(cs, !1)), nr = (s, e, i = {}) => {
   if (T7.has(s.tagName)) return null;
-  const n = zr(s);
+  const n = Dr(s);
   if (!n) return null;
   const o = i.asCompoundPath ? new e.CompoundPath(n) : new e.Path(n), a = Et(s);
   if (a && a.numberOfItems > 0) {
@@ -34946,22 +34956,22 @@ const nn = (s, e) => (ss || (ss = document.createElementNS("http://www.w3.org/20
     ));
   }
   return i.flatten && o.flatten(i.flatten), o;
-}, I7 = /* @__PURE__ */ new Set(["text", "tspan", "image", "use", "symbol", "defs"]), $r = /* @__PURE__ */ new Set(["g", "a"]), Ol = (s) => {
-  if (!$r.has(s.tagName)) return [s];
+}, I7 = /* @__PURE__ */ new Set(["text", "tspan", "image", "use", "symbol", "defs"]), Gr = /* @__PURE__ */ new Set(["g", "a"]), Ol = (s) => {
+  if (!Gr.has(s.tagName)) return [s];
   const e = [];
   for (const i of s.children)
-    i.tagName !== "title" && ($r.has(i.tagName) ? e.push(...Ol(i)) : I7.has(i.tagName) ? ut(`Boolean ops: cannot convert <${i.tagName}> to path — skipped`, null, "boolean-ops") : e.push(i));
+    i.tagName !== "title" && (Gr.has(i.tagName) ? e.push(...Ol(i)) : I7.has(i.tagName) ? ut(`Boolean ops: cannot convert <${i.tagName}> to path — skipped`, null, "boolean-ops") : e.push(i));
   return e;
 }, Ad = (s, e) => {
   let i = Qt(), n = s;
   for (; n && n !== e && n.tagName !== "svg"; )
     (n.tagName === "g" || n.tagName === "a") && n.transform?.baseVal?.numberOfItems && (i = Qt(kt(Et(n)).matrix, i)), n = n.parentNode;
   return i;
-}, F7 = (s) => $r.has(s.tagName) && Ol(s)[0] || s, O7 = (s, e) => {
+}, F7 = (s) => Gr.has(s.tagName) && Ol(s)[0] || s, O7 = (s, e) => {
   let i = ir(s);
-  return $r.has(e.tagName) && (i *= Md(Ad(s, e)), i *= ir(e)), i;
+  return Gr.has(e.tagName) && (i *= Md(Ad(s, e)), i *= ir(e)), i;
 }, y1 = (s, e) => {
-  if (!$r.has(s.tagName)) return nr(s, e);
+  if (!Gr.has(s.tagName)) return nr(s, e);
   const i = Ol(s).map((a) => {
     const c = nr(a, e);
     if (!c) return null;
@@ -37779,7 +37789,10 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
 }, D7 = 0.25, G7 = 2.5, w1 = 1, j7 = 25, q7 = 0.4, H7 = (s) => w1 + Math.max(0, Math.min(1, s)) * (j7 - w1), V7 = (s) => {
   const e = s, i = (C, y = G7) => {
     try {
-      const { points: M } = C, E = M.numberOfItems;
+      const { points: M } = (
+        /** @type {SVGPolylineElement} */
+        C
+      ), E = M.numberOfItems;
       if (E < 2) return C;
       const P = ki(), L = new P.Path();
       for (let B = 0; B < E; B++) {
@@ -37876,7 +37889,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
       Math.abs(C.x - y.x) < 1e-9 && Math.abs(C.y - y.y) < 1e-9 && w.pts.pop();
     }
   return a;
-}, Br = (s) => s.map(({ closed: e, pts: i }) => i.map((n, o) => `${o === 0 ? "M" : "L"}${Dt(n.x)},${Dt(n.y)}`).join(" ") + (e ? " Z" : "")).join(" "), Dt = (s) => Math.round(s * 1e6) / 1e6, Yo = (s, e, i, n) => {
+}, jr = (s) => s.map(({ closed: e, pts: i }) => i.map((n, o) => `${o === 0 ? "M" : "L"}${Dt(n.x)},${Dt(n.y)}`).join(" ") + (e ? " Z" : "")).join(" "), Dt = (s) => Math.round(s * 1e6) / 1e6, Yo = (s, e, i, n) => {
   const o = s.x - e.x, a = s.y - e.y, c = i.x - e.x, h = i.y - e.y, g = Math.hypot(o, a), f = Math.hypot(c, h);
   if (g < 1e-9 || f < 1e-9) return null;
   const v = o * h - a * c, w = o * c + a * h, C = Math.atan2(Math.abs(v), w);
@@ -37887,7 +37900,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
   return { ex: P, ey: L, xx: $, xy: B, r: E, sweep: z };
 }, Pd = (s, e) => s.map(({ closed: i, pts: n }) => {
   const o = n.length;
-  if (o < 3) return Br([{ closed: i, pts: n }]);
+  if (o < 3) return jr([{ closed: i, pts: n }]);
   const a = [];
   if (i) {
     const c = Yo(n[o - 1], n[0], n[1], e);
@@ -37914,7 +37927,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
   for (const g of a)
     g.pts = g.pts.map((f) => e(f.x, f.y));
   const c = Math.sqrt(Math.abs(i(1) * n(1))), h = (parseFloat(s.getAttribute(Kn)) || 0) * c;
-  s.setAttribute(Ki, Br(a)), s.setAttribute(Kn, String(Dt(h))), s.setAttribute("d", h > 0 ? Pd(a, h) : Br(a));
+  s.setAttribute(Ki, jr(a)), s.setAttribute(Kn, String(Dt(h))), s.setAttribute("d", h > 0 ? Pd(a, h) : jr(a));
 }, Y7 = (s) => {
   const e = s;
   Fl(Ki, X7);
@@ -37940,7 +37953,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
       [Kn]: a.getAttribute(Kn),
       [Ki]: a.getAttribute(Ki)
     }, y = a.getAttribute(Ki) || a.getAttribute("d"), M = Va(y, w);
-    return M ? (o > 0 ? (a.setAttribute(Ki, Br(M)), a.setAttribute(Kn, String(o)), a.setAttribute("d", Pd(M, o))) : (a.setAttribute("d", Br(M)), a.removeAttribute(Kn), a.removeAttribute(Ki)), v.addSubCommand(new h(a, C)), e.addCommandToHistory(v), e.selectOnly([a], !0), e.call("changed", [a]), a) : null;
+    return M ? (o > 0 ? (a.setAttribute(Ki, jr(M)), a.setAttribute(Kn, String(o)), a.setAttribute("d", Pd(M, o))) : (a.setAttribute("d", jr(M)), a.removeAttribute(Kn), a.removeAttribute(Ki)), v.addSubCommand(new h(a, C)), e.addCommandToHistory(v), e.selectOnly([a], !0), e.call("changed", [a]), a) : null;
   };
   e.applyCornerRadius = n, e.canRoundCorners = i;
 }, pn = "se:taper", Ni = "se:taper-d", Ji = "se:taper-style", Uo = (s, e, i) => (1 - s) * (1 - s) * e + 2 * s * (1 - s) + s * s * i, C1 = [30, 60, 90, 120, 150], Ld = (s, e, i, n) => {
@@ -38048,7 +38061,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
     const g = e.getSelectedElements().filter(Boolean);
     if (g.length !== 2) return null;
     const f = g.find((w) => w.tagName === "text"), v = g.find((w) => w !== f);
-    return !f || !v || f.querySelector("textPath") || v.tagName !== "path" && !zr(v) || ["text", "image", "g", "use"].includes(v.tagName) ? null : { text: f, rail: v };
+    return !f || !v || f.querySelector("textPath") || v.tagName !== "path" && !Dr(v) || ["text", "image", "g", "use"].includes(v.tagName) ? null : { text: f, rail: v };
   }, n = () => !!i(), o = () => {
     const [g] = e.getSelectedElements().filter(Boolean);
     return g?.tagName === "text" ? g.querySelector("textPath") : null;
@@ -38059,7 +38072,7 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
     let { text: f, rail: v } = g;
     const { BatchCommand: w, InsertElementCommand: C, RemoveElementCommand: y } = e.history, M = new w("Text on path"), E = f.ownerDocument;
     if (v.tagName !== "path") {
-      const z = zr(v), H = E.createElementNS(Ze.SVG, "path");
+      const z = Dr(v), H = E.createElementNS(Ze.SVG, "path");
       for (const G of v.attributes)
         W7.includes(G.name) || H.setAttribute(G.name, G.value);
       H.setAttribute("d", z), H.id = e.getNextId(), v.before(H), M.addSubCommand(new C(H)), M.addSubCommand(new y(v, v.nextSibling, v.parentNode)), v.remove(), v = H;
@@ -38433,7 +38446,8 @@ const ii = /* @__PURE__ */ kl(B7), cn = 1e3, Xo = 0.25, x1 = (s) => {
     axis: n.axis === "horizontal" ? "horizontal" : "vertical"
   } : null;
 }, Nd = (s, e) => {
-  if (!(s.transform?.baseVal?.numberOfItems > 0) && (s.tagName === "circle" || s.tagName === "ellipse"))
+  if (!/** @type {SVGGraphicsElement} */
+  (s.transform?.baseVal?.numberOfItems > 0) && (s.tagName === "circle" || s.tagName === "ellipse"))
     return { cx: parseFloat(s.getAttribute("cx")) || 0, cy: parseFloat(s.getAttribute("cy")) || 0 };
   const i = e.getStrokedBBox([s]);
   return { cx: i.x + i.width / 2, cy: i.y + i.height / 2 };
@@ -39631,7 +39645,7 @@ EventTarget {
    * Sets the current fill/stroke opacity.
    * @function module:svgcanvas.SvgCanvas#setPaintOpacity
    * @param {string} type - String with "fill" or "stroke"
-   * @param {number} val - Float with the new opacity value
+   * @param {number} val - number with the new opacity value
    * @param {boolean} preventUndo - Indicates whether or not this should be an undoable action
    * @returns {void}
    */
@@ -39746,7 +39760,7 @@ EventTarget {
     this.copySelectedElements(), this.deleteSelectedElements();
   }
   initializeSvgCanvasMethods() {
-    this.stringToHTML = od, this.insertChildAtIndex = Z8, this.getClosest = Vr, this.getParents = Xr, this.isLayer = di.isLayer, this.matrixMultiply = Qt, this.hasMatrixTransform = qr, this.transformListToTransform = kt, this.convertToNum = this.units.convertToNum, this.convertUnit = this.units.convertUnit, this.isValidUnit = this.units.isValidUnit, this.remapElementIdsAndRefs = U8, this.getUrlFromAttr = _n, this.getHref = Oi, this.setHref = yi, this.assignAttributes = Bt, this.cleanupElement = io, this.getTypeMap = this.units.getTypeMap, this.history = sn, this.NS = Ze, this.$id = ad, this.$qq = ld, this.$qa = cd, this.$click = Bs, this.encode64 = vd, this.decode64 = _d, this.mergeDeep = Hr;
+    this.stringToHTML = od, this.insertChildAtIndex = Z8, this.getClosest = Zr, this.getParents = Wr, this.isLayer = di.isLayer, this.matrixMultiply = Qt, this.hasMatrixTransform = Yr, this.transformListToTransform = kt, this.convertToNum = this.units.convertToNum, this.convertUnit = this.units.convertUnit, this.isValidUnit = this.units.isValidUnit, this.remapElementIdsAndRefs = U8, this.getUrlFromAttr = _n, this.getHref = Oi, this.setHref = yi, this.assignAttributes = Bt, this.cleanupElement = io, this.getTypeMap = this.units.getTypeMap, this.history = sn, this.NS = Ze, this.$id = ad, this.$qq = ld, this.$qa = cd, this.$click = Bs, this.encode64 = vd, this.decode64 = _d, this.mergeDeep = Ur;
   }
   /**
    * Creates modeChange event, adds it as an svgCanvas property
@@ -39765,9 +39779,9 @@ Vt.scopedQa = ud;
 Vt.$click = Bs;
 Vt.encode64 = vd;
 Vt.decode64 = _d;
-Vt.mergeDeep = Hr;
-Vt.getClosest = Vr;
-Vt.getParents = Xr;
+Vt.mergeDeep = Ur;
+Vt.getClosest = Zr;
+Vt.getParents = Wr;
 Vt.blankPageObjectURL = g9;
 Vt.Paint = Ii;
 Vt.getTypeMap = Ln;
@@ -39866,7 +39880,7 @@ const Wo = (s) => s.map(([e, i]) => {
   }
   return i;
 };
-const os = {
+const ds = {
   BEFORE_APPLY: "before_apply",
   AFTER_APPLY: "after_apply",
   BEFORE_UNAPPLY: "before_unapply",
@@ -39885,7 +39899,7 @@ class Ko {
    * @returns {void}
   */
   apply(e, i) {
-    e && e.handleHistoryEvent(os.BEFORE_APPLY, this), i(e), e && e.handleHistoryEvent(os.AFTER_APPLY, this);
+    e && e.handleHistoryEvent(ds.BEFORE_APPLY, this), i(e), e && e.handleHistoryEvent(ds.AFTER_APPLY, this);
   }
   /**
    * @param {module:history.HistoryEventHandler} handler
@@ -39893,7 +39907,7 @@ class Ko {
    * @returns {void}
   */
   unapply(e, i) {
-    e && e.handleHistoryEvent(os.BEFORE_UNAPPLY, this), i(), e && e.handleHistoryEvent(os.AFTER_UNAPPLY, this);
+    e && e.handleHistoryEvent(ds.BEFORE_UNAPPLY, this), i(), e && e.handleHistoryEvent(ds.AFTER_UNAPPLY, this);
   }
   /**
    * @returns {Element[]} Array with element associated with this command
@@ -40640,7 +40654,7 @@ const $d = (s, e) => {
     Object.keys(s).length === 0 ? window.localStorage.removeItem(Ua) : window.localStorage.setItem(Ua, JSON.stringify(s));
   } catch {
   }
-}, as = (s) => so()[s] ?? null, cy = (s, e) => {
+}, hs = (s) => so()[s] ?? null, cy = (s, e) => {
   const i = so();
   i[s] = { ...e }, zl(i);
 }, dy = (s, e) => {
@@ -40843,12 +40857,12 @@ class py extends wn {
   _refreshSlots() {
     const e = et(this).svgCanvas.getBrushParams?.();
     this.$slots.querySelectorAll(".slot").forEach((i, n) => {
-      const o = as(n), a = i.querySelector(".slot-btn");
+      const o = hs(n), a = i.querySelector(".slot-btn");
       a.classList.toggle("filled", !!o), a.classList.toggle("active", this._paramsEqual(o, e)), a.textContent = o?.name || String(n + 1), a.title = o ? `${o.name || `Brush ${n + 1}`} — double-click to rename` : `Load brush ${n + 1}`;
     });
   }
   _loadSlot(e) {
-    const i = as(e);
+    const i = hs(e);
     if (!i) return;
     const n = {};
     for (const [o] of yr) i[o] !== void 0 && (n[o] = i[o]);
@@ -40857,14 +40871,14 @@ class py extends wn {
   _saveSlot(e) {
     const i = {};
     for (const [o, a, c] of yr) i[o] = this._readField(a, c);
-    const n = as(e)?.name;
+    const n = hs(e)?.name;
     n && (i.name = n), cy(e, i), this._refreshSlots();
   }
   _deleteSlot(e) {
     hy(e), this._refreshSlots();
   }
   async _renameSlot(e) {
-    const i = as(e);
+    const i = hs(e);
     if (!i) return;
     const n = await sePrompt(`Name for brush ${e + 1}`, i.name ?? "", {}, this);
     n !== null && (dy(e, n.trim()), this._refreshSlots());
@@ -40901,12 +40915,12 @@ function Dd(s) {
     });
   }), i;
 }
-var vs = { exports: {} };
+var ws = { exports: {} };
 const gy = {}, fy = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: gy
 }, Symbol.toStringTag, { value: "Module" })), z1 = /* @__PURE__ */ Dd(fy);
-var my = vs.exports, $1;
+var my = ws.exports, $1;
 function yy() {
   return $1 || ($1 = 1, (function(s) {
     (function(e, i) {
@@ -50396,22 +50410,22 @@ function yy() {
       }))();
       return Qe.agent.node && z1(Qe), typeof i == "function" && i.amd ? i("paper", Qe) : s && (s.exports = Qe), Qe;
     }).call(my, typeof self == "object" ? self : null);
-  })(vs)), vs.exports;
+  })(ws)), ws.exports;
 }
 var vy = yy();
 const _y = /* @__PURE__ */ Rd(vy);
-let ls = null;
-const $l = () => (ls || (ls = new _y.PaperScope(), ls.setup(document.createElement("canvas"))), ls);
-let cs = null;
-const by = (s, e) => (cs || (cs = document.createElementNS("http://www.w3.org/2000/svg", "path")), cs.setAttribute("d", s), e.pathActions.convertPath(cs, !1));
+let us = null;
+const $l = () => (us || (us = new _y.PaperScope(), us.setup(document.createElement("canvas"))), us);
+let ps = null;
+const by = (s, e) => (ps || (ps = document.createElementNS("http://www.w3.org/2000/svg", "path")), ps.setAttribute("d", s), e.pathActions.convertPath(ps, !1));
 const xy = (s, e, i) => (1 - s) * (1 - s) * e + 2 * s * (1 - s) + s * s * i;
-const Gd = 0.08, wy = 50, B1 = 0.35, Cy = [30, 60, 90, 120, 150], Jo = (s, e) => ({ x: s.x - e.x, y: s.y - e.y }), Rr = (s, e) => ({ x: s.x + e.x, y: s.y + e.y }), On = (s, e) => ({ x: s.x * e, y: s.y * e }), Za = (s) => Math.hypot(s.x, s.y), Sy = (s) => {
+const Gd = 0.08, wy = 50, B1 = 0.35, Cy = [30, 60, 90, 120, 150], Jo = (s, e) => ({ x: s.x - e.x, y: s.y - e.y }), qr = (s, e) => ({ x: s.x + e.x, y: s.y + e.y }), On = (s, e) => ({ x: s.x * e, y: s.y * e }), Za = (s) => Math.hypot(s.x, s.y), Sy = (s) => {
   const e = Za(s);
   return e > 1e-6 ? On(s, 1 / e) : { x: 1, y: 0 };
 }, Qn = (s, e) => {
   const i = e * Math.PI / 180, n = Math.cos(i), o = Math.sin(i);
   return { x: s.x * n - s.y * o, y: s.x * o + s.y * n };
-}, R1 = (s, e, i) => Cy.map((n) => Rr(s, Qn(On(e, i), -n))), ky = (s, e, i) => {
+}, R1 = (s, e, i) => Cy.map((n) => qr(s, Qn(On(e, i), -n))), ky = (s, e, i) => {
   const n = Math.max(Gd, Math.abs(Math.sin(s - e)));
   return n + (1 - n) * i;
 }, jd = (s = 1) => B1 + (1 - B1) * Math.max(0, Math.min(1, s)), qd = (s) => {
@@ -50423,7 +50437,7 @@ const Gd = 0.08, wy = 50, B1 = 0.35, Cy = [30, 60, 90, 120, 150], Jo = (s, e) =>
   const a = Math.max(0, Math.min(100, n)) / 100, c = e / 2 * jd(o), h = Qn({ x: 1, y: 0 }, i), g = Qn(h, 90), f = 16, v = [];
   for (let w = 0; w < f; w++) {
     const C = w / f * Math.PI * 2, y = c, M = Math.max(Gd, a) * c;
-    v.push(Rr(s, Rr(On(h, Math.cos(C) * y), On(g, Math.sin(C) * M))));
+    v.push(qr(s, qr(On(h, Math.cos(C) * y), On(g, Math.sin(C) * M))));
   }
   return qd(v);
 }, My = (s, e) => {
@@ -50446,7 +50460,7 @@ const Gd = 0.08, wy = 50, B1 = 0.35, Cy = [30, 60, 90, 120, 150], Jo = (s, e) =>
     );
     L[K] = ne;
     const ie = Qn(M[K], 90);
-    E[K] = Rr(s[K], On(ie, ne)), P[K] = Rr(s[K], On(ie, -ne));
+    E[K] = qr(s[K], On(ie, ne)), P[K] = qr(s[K], On(ie, -ne));
   }
   const $ = o >= wy, B = Qn(M[w - 1], 90), z = Qn(M[0], 90), H = $ ? R1(s[w - 1], B, L[w - 1]) : [], G = $ ? R1(s[0], On(z, -1), L[0]) : [];
   return qd([...E, ...H, ...P.slice().reverse(), ...G]);
@@ -51169,7 +51183,7 @@ const Oy = (s) => {
   __proto__: null,
   default: Hy
 }, Symbol.toStringTag, { value: "Module" }));
-const ds = "se:corner-radius", ea = "se:orig-d", Xy = (s, e) => {
+const gs = "se:corner-radius", ea = "se:orig-d", Xy = (s, e) => {
   const i = e.createElementNS(i2.SVG, "path");
   i.setAttribute("d", s);
   const n = i.pathSegList, o = n.numberOfItems, a = [];
@@ -51247,11 +51261,11 @@ const ds = "se:corner-radius", ea = "se:orig-d", Xy = (s, e) => {
     const { svgCanvas: e } = s, { $id: i } = e, n = (c) => {
       const h = c.getAttribute(ea);
       if (!h) return !1;
-      const g = parseFloat(c.getAttribute(ds)) || 0, f = Xy(h, c.ownerDocument);
-      return (f ? g > 0 ? Yy(f, g) : Hd(f) : null) !== c.getAttribute("d") ? (c.removeAttribute(ea), c.removeAttribute(ds), !1) : !0;
+      const g = parseFloat(c.getAttribute(gs)) || 0, f = Xy(h, c.ownerDocument);
+      return (f ? g > 0 ? Yy(f, g) : Hd(f) : null) !== c.getAttribute("d") ? (c.removeAttribute(ea), c.removeAttribute(gs), !1) : !0;
     }, o = (c, h) => {
       const g = i("corner_panel");
-      g && (g.style.display = c ? "block" : "none", c && h && (i("corner_radius_value").value = parseFloat(h.getAttribute(ds)) || 0));
+      g && (g.style.display = c ? "block" : "none", c && h && (i("corner_radius_value").value = parseFloat(h.getAttribute(gs)) || 0));
     }, a = (c) => {
       const h = c.elems.filter(Boolean), g = h[0];
       if (!g || h.length > 1 || e.getMode() === "pathedit") {
@@ -51284,7 +51298,7 @@ const ds = "se:corner-radius", ea = "se:orig-d", Xy = (s, e) => {
       },
       elementChanged(c) {
         const h = c.elems.filter(Boolean)[0], g = i("corner_panel");
-        h && g && g.style.display !== "none" && (i("corner_radius_value").value = parseFloat(h.getAttribute(ds)) || 0);
+        h && g && g.style.display !== "none" && (i("corner_radius_value").value = parseFloat(h.getAttribute(gs)) || 0);
       }
     };
   }
@@ -52178,9 +52192,9 @@ function sv() {
   })(ia)), ia;
 }
 var ov = sv();
-const _s = "curvature", av = function(s) {
+const Cs = "curvature", av = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": Jy }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, _s, n.default);
+  n && s.i18next.addResourceBundle(e, Cs, n.default);
 }, Kt = (s) => Math.round(s * 100) / 100;
 function K1(s, e) {
   let i = `M ${Kt(s[0].x)},${Kt(s[0].y)}`;
@@ -52253,7 +52267,7 @@ function Q1(s, e = null, i = !1) {
   }), i && (c += " Z"), c;
 }
 const hv = {
-  name: _s,
+  name: Cs,
   async init() {
     const s = this, { svgCanvas: e } = s, { $id: i, $click: n } = e;
     await av(s);
@@ -52309,9 +52323,9 @@ const hv = {
       J(), a.forEach((ne, ie) => W(ie));
     };
     return {
-      name: s.i18next.t(`${_s}:name`),
+      name: s.i18next.t(`${Cs}:name`),
       callback() {
-        const ne = `${_s}:buttons.0.title`;
+        const ne = `${Cs}:buttons.0.title`;
         e.insertChildAtIndex(
           i("tools_left"),
           `<se-button id="tool_curvature" title="${ne}" src="curvature.svg" shortcut="Y"></se-button>`,
@@ -52373,11 +52387,11 @@ const hv = {
 }, gv = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: pv
-}, Symbol.toStringTag, { value: "Module" })), bs = "cutter", ec = 2, fv = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), Ss = "cutter", ec = 2, fv = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": gv }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, bs, n.default);
+  n && s.i18next.addResourceBundle(e, Ss, n.default);
 }, mv = {
-  name: bs,
+  name: Ss,
   async init() {
     const s = this, { svgCanvas: e } = s, { $id: i, $click: n } = e;
     await fv(s);
@@ -52414,12 +52428,12 @@ const hv = {
     return e.setMode = (z) => {
       o && z !== "cutter" && P(), B(z);
     }, {
-      name: s.i18next.t(`${bs}:name`),
+      name: s.i18next.t(`${Ss}:name`),
       /**
        * Inject the toolbar button into the left panel.
        */
       callback() {
-        const z = `${bs}:buttons.0.title`;
+        const z = `${Ss}:buttons.0.title`;
         e.insertChildAtIndex(
           i("tools_left"),
           `<se-button id="tool_cutter" title="${z}" src="cutter.svg" shortcut="C"></se-button>`,
@@ -52953,10 +52967,10 @@ const wv = (
 }, Sv = (s) => vh(Cv[s.toLowerCase()], 6), kv = /^#?([0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})$/i, Ev = (s) => {
   let e;
   return (e = s.match(kv)) ? vh(parseInt(e[1], 16), e[1].length) : void 0;
-}, mn = "([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)", Ir = `${mn}%`, Rl = `(?:${mn}%|${mn})`, Mv = `(?:${mn}(deg|grad|rad|turn)|${mn})`, sr = "\\s*,\\s*", Av = new RegExp(
+}, mn = "([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)", $r = `${mn}%`, Rl = `(?:${mn}%|${mn})`, Mv = `(?:${mn}(deg|grad|rad|turn)|${mn})`, sr = "\\s*,\\s*", Av = new RegExp(
   `^rgba?\\(\\s*${mn}${sr}${mn}${sr}${mn}\\s*(?:,\\s*${Rl}\\s*)?\\)$`
 ), Pv = new RegExp(
-  `^rgba?\\(\\s*${Ir}${sr}${Ir}${sr}${Ir}\\s*(?:,\\s*${Rl}\\s*)?\\)$`
+  `^rgba?\\(\\s*${$r}${sr}${$r}${sr}${$r}\\s*(?:,\\s*${Rl}\\s*)?\\)$`
 ), Lv = (s) => {
   let e = { mode: "rgb" }, i;
   if (i = s.match(Av))
@@ -53019,7 +53033,7 @@ const wv = (
   Alpha: "alpha"
 };
 let _t = 0;
-function hs(s) {
+function fs(s) {
   let e = s[_t], i = s[_t + 1];
   return e === "-" || e === "+" ? /\d/.test(i) || i === "." && /\d/.test(s[_t + 2]) : e === "." ? /\d/.test(i) : /\d/.test(e);
 }
@@ -53045,13 +53059,13 @@ const Fv = {
 };
 function _r(s) {
   let e = "";
-  if ((s[_t] === "-" || s[_t] === "+") && (e += s[_t++]), e += us(s), s[_t] === "." && /\d/.test(s[_t + 1]) && (e += s[_t++] + us(s)), (s[_t] === "e" || s[_t] === "E") && ((s[_t + 1] === "-" || s[_t + 1] === "+") && /\d/.test(s[_t + 2]) ? e += s[_t++] + s[_t++] + us(s) : /\d/.test(s[_t + 1]) && (e += s[_t++] + us(s))), nl(s)) {
+  if ((s[_t] === "-" || s[_t] === "+") && (e += s[_t++]), e += ms(s), s[_t] === "." && /\d/.test(s[_t + 1]) && (e += s[_t++] + ms(s)), (s[_t] === "e" || s[_t] === "E") && ((s[_t + 1] === "-" || s[_t + 1] === "+") && /\d/.test(s[_t + 2]) ? e += s[_t++] + s[_t++] + ms(s) : /\d/.test(s[_t + 1]) && (e += s[_t++] + ms(s))), nl(s)) {
     let i = Hs(s);
     return i === "deg" || i === "rad" || i === "turn" || i === "grad" ? { type: Je.Hue, value: e * Fv[i] } : void 0;
   }
   return s[_t] === "%" ? (_t++, { type: Je.Percentage, value: +e }) : { type: Je.Number, value: +e };
 }
-function us(s) {
+function ms(s) {
   let e = "";
   for (; /\d/.test(s[_t]); )
     e += s[_t++];
@@ -53084,14 +53098,14 @@ function zv(s = "") {
       continue;
     }
     if (n === "+") {
-      if (_t--, hs(e)) {
+      if (_t--, fs(e)) {
         i.push(_r(e));
         continue;
       }
       return;
     }
     if (n === "-") {
-      if (_t--, hs(e)) {
+      if (_t--, fs(e)) {
         i.push(_r(e));
         continue;
       }
@@ -53102,7 +53116,7 @@ function zv(s = "") {
       return;
     }
     if (n === ".") {
-      if (_t--, hs(e)) {
+      if (_t--, fs(e)) {
         i.push(_r(e));
         continue;
       }
@@ -53113,7 +53127,7 @@ function zv(s = "") {
 ` || e[_t] === "	" || e[_t] === " "); )
         _t++;
       let o;
-      if (hs(e) && (o = _r(e), o.type !== Je.Hue)) {
+      if (fs(e) && (o = _r(e), o.type !== Je.Hue)) {
         i.push({ type: Je.Alpha, value: o });
         continue;
       }
@@ -53446,12 +53460,12 @@ const Sh = ({ l: s, a: e, b: i, alpha: n }) => {
 }, uo = (s) => {
   let e = kh(Dn(s));
   return s.r === s.b && s.b === s.g && (e.a = e.b = 0), e;
-}, Vs = 1, Eh = 1, Dr = 26 / 180 * Math.PI, Xs = Math.cos(Dr), Ys = Math.sin(Dr), Mh = 100 / Math.log(139 / 100), rl = ({ l: s, c: e, h: i, alpha: n }) => {
+}, Vs = 1, Eh = 1, Hr = 26 / 180 * Math.PI, Xs = Math.cos(Hr), Ys = Math.sin(Hr), Mh = 100 / Math.log(139 / 100), rl = ({ l: s, c: e, h: i, alpha: n }) => {
   s === void 0 && (s = 0), e === void 0 && (e = 0), i === void 0 && (i = 0);
   let o = {
     mode: "lab65",
     l: (Math.exp(s * Vs / Mh) - 1) / 39e-4
-  }, a = (Math.exp(0.0435 * e * Eh * Vs) - 1) / 0.075, c = a * Math.cos(i / 180 * Math.PI - Dr), h = a * Math.sin(i / 180 * Math.PI - Dr);
+  }, a = (Math.exp(0.0435 * e * Eh * Vs) - 1) / 0.075, c = a * Math.cos(i / 180 * Math.PI - Hr), h = a * Math.sin(i / 180 * Math.PI - Hr);
   return o.a = c * Xs - h / 0.83 * Ys, o.b = c * Ys + h / 0.83 * Xs, n !== void 0 && (o.alpha = n), o;
 }, sl = ({ l: s, a: e, b: i, alpha: n }) => {
   s === void 0 && (s = 0), e === void 0 && (e = 0), i === void 0 && (i = 0);
@@ -53460,7 +53474,7 @@ const Sh = ({ l: s, a: e, b: i, alpha: n }) => {
     l: Mh / Vs * Math.log(1 + 39e-4 * s),
     c: Math.log(1 + 0.075 * c) / (0.0435 * Eh * Vs)
   };
-  return h.c && (h.h = ui((Math.atan2(a, o) + Dr) / Math.PI * 180)), n !== void 0 && (h.alpha = n), h;
+  return h.c && (h.h = ui((Math.atan2(a, o) + Hr) / Math.PI * 180)), n !== void 0 && (h.alpha = n), h;
 }, ac = (s) => rl(bn(s, "dlch")), lc = (s) => xn(sl(s), "dlab"), Qv = {
   mode: "dlab",
   parse: ["--din99o-lab"],
@@ -53663,7 +53677,7 @@ const o_ = (s, e) => {
       return s * 360;
   }
 }, a_ = new RegExp(
-  `^hsla?\\(\\s*${Mv}${sr}${Ir}${sr}${Ir}\\s*(?:,\\s*${Rl}\\s*)?\\)$`
+  `^hsla?\\(\\s*${Mv}${sr}${$r}${sr}${$r}\\s*(?:,\\s*${Rl}\\s*)?\\)$`
 ), l_ = (s) => {
   let e = s.match(a_);
   if (!e) return;
@@ -54045,7 +54059,7 @@ const Gl = ({ l: s, a: e, b: i, alpha: n }) => {
     z: va(c) * ni.Z
   };
   return n !== void 0 && (h.alpha = n), h;
-}, Ur = ({ x: s, y: e, z: i, alpha: n }) => {
+}, Jr = ({ x: s, y: e, z: i, alpha: n }) => {
   s === void 0 && (s = 0), e === void 0 && (e = 0), i === void 0 && (i = 0);
   let o = cr({
     r: s * 3.1341359569958707 - e * 1.6173863321612538 - 0.4906619460083532 * i,
@@ -54053,7 +54067,7 @@ const Gl = ({ l: s, a: e, b: i, alpha: n }) => {
     b: s * 0.07195537988411677 - e * 0.2289768264158322 + 1.405386058324125 * i
   });
   return n !== void 0 && (o.alpha = n), o;
-}, Bh = (s) => Ur(Gl(s)), Zr = (s) => {
+}, Bh = (s) => Jr(Gl(s)), Qr = (s) => {
   let { r: e, g: i, b: n, alpha: o } = lr(s), a = {
     mode: "xyz50",
     x: 0.436065742824811 * e + 0.3851514688337912 * i + 0.14307845442264197 * n,
@@ -54071,7 +54085,7 @@ const Gl = ({ l: s, a: e, b: i, alpha: n }) => {
   };
   return n !== void 0 && (h.alpha = n), h;
 }, Rh = (s) => {
-  let e = jl(Zr(s));
+  let e = jl(Qr(s));
   return s.r === s.b && s.b === s.g && (e.a = e.b = 0), e;
 };
 function b_(s, e) {
@@ -54237,7 +54251,7 @@ const Hl = {
   e === void 0 && (e = 0), i === void 0 && (i = 0);
   let o = e / (13 * s) + P_, a = i / (13 * s) + L_, c = ni.Y * (s <= 8 ? s / yo : Math.pow((s + 16) / 116, 3)), h = c * (9 * o) / (4 * a), g = c * (12 - 3 * o - 20 * a) / (4 * a), f = { mode: "xyz50", x: h, y: c, z: g };
   return n !== void 0 && (f.alpha = n), f;
-}, T_ = (s) => Dh(ol(Zr(s))), N_ = (s) => Ur(al(Gh(s))), I_ = {
+}, T_ = (s) => Dh(ol(Qr(s))), N_ = (s) => Jr(al(Gh(s))), I_ = {
   mode: "lchuv",
   toMode: {
     luv: Gh,
@@ -54282,11 +54296,11 @@ const Hl = {
   mode: "luv",
   toMode: {
     xyz50: al,
-    rgb: (s) => Ur(al(s))
+    rgb: (s) => Jr(al(s))
   },
   fromMode: {
     xyz50: ol,
-    rgb: (s) => ol(Zr(s))
+    rgb: (s) => ol(Qr(s))
   },
   channels: ["l", "u", "v", "alpha"],
   parse: ["--luv"],
@@ -54320,7 +54334,7 @@ const Hl = {
 }, vo = (s) => {
   let e = Hh(lr(s));
   return s.r === s.b && s.b === s.g && (e.a = e.b = 0), e;
-}, Wr = ({ l: s, a: e, b: i, alpha: n }) => {
+}, es = ({ l: s, a: e, b: i, alpha: n }) => {
   s === void 0 && (s = 0), e === void 0 && (e = 0), i === void 0 && (i = 0);
   let o = Math.pow(s + 0.3963377773761749 * e + 0.2158037573099136 * i, 3), a = Math.pow(s - 0.1055613458156586 * e - 0.0638541728258133 * i, 3), c = Math.pow(s - 0.0894841775298119 * e - 1.2914855480194092 * i, 3), h = {
     mode: "lrgb",
@@ -54329,7 +54343,7 @@ const Hl = {
     b: -0.0041960761386756 * o - 0.7034186179359362 * a + 1.7076146940746117 * c
   };
   return n !== void 0 && (h.alpha = n), h;
-}, _o = (s) => cr(Wr(s));
+}, _o = (s) => cr(es(s));
 function ll(s) {
   const n = 1.170873786407767;
   return 0.5 * (n * s - 0.206 + Math.sqrt((n * s - 0.206) * (n * s - 0.206) + 4 * 0.03 * n * s));
@@ -54348,7 +54362,7 @@ function z_(s, e) {
   return v;
 }
 function Vl(s, e) {
-  let i = z_(s, e), n = Wr({ l: 1, a: i * s, b: i * e }), o = Math.cbrt(1 / Math.max(n.r, n.g, n.b)), a = o * i;
+  let i = z_(s, e), n = es({ l: 1, a: i * s, b: i * e }), o = Math.cbrt(1 / Math.max(n.r, n.g, n.b)), a = o * i;
   return [o, a];
 }
 function $_(s, e, i, n, o, a = null) {
@@ -54423,7 +54437,7 @@ const B_ = {
   }
 };
 function mc(s) {
-  let e = s.l !== void 0 ? s.l : 0, i = s.a !== void 0 ? s.a : 0, n = s.b !== void 0 ? s.b : 0, o = Math.sqrt(i * i + n * n), a = o ? i / o : 1, c = o ? n / o : 1, [h, g] = Xl(a, c), f = 0.5, v = 1 - f / h, w = g / (o + e * g), C = w * e, y = w * o, M = Us(C), E = y * M / C, P = Wr({ l: M, a: a * E, b: c * E }), L = Math.cbrt(
+  let e = s.l !== void 0 ? s.l : 0, i = s.a !== void 0 ? s.a : 0, n = s.b !== void 0 ? s.b : 0, o = Math.sqrt(i * i + n * n), a = o ? i / o : 1, c = o ? n / o : 1, [h, g] = Xl(a, c), f = 0.5, v = 1 - f / h, w = g / (o + e * g), C = w * e, y = w * o, M = Us(C), E = y * M / C, P = es({ l: M, a: a * E, b: c * E }), L = Math.cbrt(
     1 / Math.max(P.r, P.g, P.b, 0)
   );
   e = e / L, o = o / L * ll(e) / e, e = ll(e);
@@ -54437,7 +54451,7 @@ function mc(s) {
 function yc(s) {
   const e = { mode: "oklab" };
   s.alpha !== void 0 && (e.alpha = s.alpha);
-  const i = s.h !== void 0 ? s.h : 0, n = s.s !== void 0 ? s.s : 0, o = s.v !== void 0 ? s.v : 0, a = Math.cos(i / 180 * Math.PI), c = Math.sin(i / 180 * Math.PI), [h, g] = Xl(a, c), f = 0.5, v = 1 - f / h, w = 1 - n * f / (f + g - g * v * n), C = n * g * f / (f + g - g * v * n), y = Us(w), M = C * y / w, E = Wr({
+  const i = s.h !== void 0 ? s.h : 0, n = s.s !== void 0 ? s.s : 0, o = s.v !== void 0 ? s.v : 0, a = Math.cos(i / 180 * Math.PI), c = Math.sin(i / 180 * Math.PI), [h, g] = Xl(a, c), f = 0.5, v = 1 - f / h, w = 1 - n * f / (f + g - g * v * n), C = n * g * f / (f + g - g * v * n), y = Us(w), M = C * y / w, E = es({
     l: y,
     a: a * M,
     b: c * M
@@ -54481,7 +54495,7 @@ const G_ = {
   ...ql,
   mode: "oklab",
   toMode: {
-    lrgb: Wr,
+    lrgb: es,
     rgb: _o
   },
   fromMode: {
@@ -54608,11 +54622,11 @@ const q_ = {
   serialize: "prophoto-rgb",
   fromMode: {
     xyz50: bc,
-    rgb: (s) => bc(Zr(s))
+    rgb: (s) => bc(Qr(s))
   },
   toMode: {
     xyz50: xc,
-    rgb: (s) => Ur(xc(s))
+    rgb: (s) => Jr(xc(s))
   }
 }, wc = 1.09929682680944, X_ = 0.018053968510807, wa = (s) => {
   const e = Math.abs(s);
@@ -54702,11 +54716,11 @@ const q_ = {
   parse: ["xyz-d50"],
   serialize: "xyz-d50",
   toMode: {
-    rgb: Ur,
+    rgb: Jr,
     lab: jl
   },
   fromMode: {
-    rgb: Zr,
+    rgb: Qr,
     lab: Gl
   },
   channels: ["x", "y", "z", "alpha"],
@@ -54935,7 +54949,7 @@ const bb = [
   { name: "blue", h: 258 },
   { name: "purple", h: 306 },
   { name: "pink", h: 340 }
-], Jh = 0.15, xb = /* @__PURE__ */ new Set(["red", "yellow", "green", "blue"]), ps = {
+], Jh = 0.15, xb = /* @__PURE__ */ new Set(["red", "yellow", "green", "blue"]), ys = {
   icons: { wChroma: 0.65, wContrast: 0.35 },
   buttons: { wChroma: 0.6, wContrast: 0.4 },
   text: { wChroma: 1, wContrast: 0 },
@@ -54944,7 +54958,7 @@ const bb = [
   notifications_other: { wChroma: 0.65, wContrast: 0.35 }
 }, wb = 12, Cb = 4, Sb = 6, kb = 0.01;
 function Qh(s, e) {
-  return s === "notifications" ? xb.has(e) ? ps.notifications_semantic : ps.notifications_other : ps[s] || ps.icons;
+  return s === "notifications" ? xb.has(e) ? ys.notifications_semantic : ys.notifications_other : ys[s] || ys.icons;
 }
 function Eb(s, e) {
   return e <= 0 ? 1 : Math.min(1, Math.max(0, (s - e) / e));
@@ -55413,11 +55427,11 @@ const Ma = "frame-labels", Kb = {
 }, ex = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Qb
-}, Symbol.toStringTag, { value: "Module" })), xs = "grid", tx = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), ks = "grid", tx = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": ex }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, xs, n.default);
+  n && s.i18next.addResourceBundle(e, ks, n.default);
 }, ix = {
-  name: xs,
+  name: ks,
   async init() {
     const s = this;
     await tx(s);
@@ -55569,12 +55583,12 @@ const Ma = "frame-labels", Kb = {
       ee && W(e.getZoom()), i("canvasGrid").style.display = ee ? "block" : "none";
     };
     return s.updateGrid = J, {
-      name: s.i18next.t(`${xs}:name`),
+      name: s.i18next.t(`${ks}:name`),
       zoomChanged(ee) {
         v.showGrid && W(ee);
       },
       callback() {
-        const ee = document.createElement("template"), ne = s.i18next.t(`${xs}:buttons.0.title`);
+        const ee = document.createElement("template"), ne = s.i18next.t(`${ks}:buttons.0.title`);
         ee.innerHTML = `
           <se-grid-settings id="grid_settings" title="${ne}" src="grid.svg"></se-grid-settings>
         `, i("editor_panel").append(ee.content.cloneNode(!0)), i("grid_settings").addEventListener("change", () => {
@@ -55696,7 +55710,7 @@ const Ma = "frame-labels", Kb = {
       const ee = J?.nodeName;
       return ee === "INPUT" || ee === "TEXTAREA" || ee === "SELECT" || J?.isContentEditable === !0;
     }, G = (J) => {
-      if (!(!Ar(e) || H() || g === "all") && !(J.metaKey || J.ctrlKey || J.altKey)) {
+      if (!(!Nr(e) || H() || g === "all") && !(J.metaKey || J.ctrlKey || J.altKey)) {
         switch (J.key) {
           case "]":
             B(1);
@@ -55895,15 +55909,16 @@ const dx = {
   default: dx
 }, Symbol.toStringTag, { value: "Module" })), ux = {
   name: "Mirror drawing",
+  caption: "Mirror",
   mirrorSelection: "Mirror-copy selection across the canvas axis"
 }, px = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ux
-}, Symbol.toStringTag, { value: "Module" })), ws = "mirror", kn = "se:mirror-of", gs = "se:mirror-axis", gx = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), Er = "mirror", kn = "se:mirror-of", vs = "se:mirror-axis", gx = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": px }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, ws, n.default);
+  n && s.i18next.addResourceBundle(e, Er, n.default);
 }, fx = {
-  name: ws,
+  name: Er,
   async init() {
     const s = this;
     await gx(s);
@@ -55934,7 +55949,7 @@ const dx = {
       }), f.replaceChildren(W), f.style.display = "block";
     }, w = (z, H) => {
       const G = e.getResolution(), K = z.cloneNode(!0);
-      e.remapElementIdsAndRefs([K], () => e.getNextId()), K.setAttributeNS(n.SE, kn, z.id), K.setAttributeNS(n.SE, gs, H);
+      e.remapElementIdsAndRefs([K], () => e.getNextId()), K.setAttributeNS(n.SE, kn, z.id), K.setAttributeNS(n.SE, vs, H);
       const W = K.getAttribute("transform");
       let J;
       if (K.tagName === "text") {
@@ -55958,12 +55973,12 @@ const dx = {
       const H = z.getAttribute(kn);
       return H ? i(H) : C(z);
     }, M = (z, H) => {
-      const G = H.getAttribute(gs) === "h" ? "h" : "v";
+      const G = H.getAttribute(vs) === "h" ? "h" : "v";
       g = !0;
       try {
         const K = w(z, G);
         if (!K) return;
-        const W = /* @__PURE__ */ new Set([kn, gs, "id"]);
+        const W = /* @__PURE__ */ new Set([kn, vs, "id"]);
         for (const J of Array.from(H.attributes))
           !W.has(J.name) && !K.hasAttribute(J.name) && H.removeAttribute(J.name);
         for (const J of Array.from(K.attributes))
@@ -55977,7 +55992,7 @@ const dx = {
         for (const G of z) {
           if (!G || G.nodeType !== 1 || G.tagName === "svg") continue;
           if (G.hasAttribute(kn)) {
-            H && (G.removeAttribute(kn), G.removeAttribute(gs));
+            H && (G.removeAttribute(kn), G.removeAttribute(vs));
             continue;
           }
           const K = C(G);
@@ -56034,7 +56049,7 @@ const dx = {
       K.isEmpty() || (P(K), e.call("changed", z));
     };
     return e.setMirrorAxis = $, e.getMirrorAxis = () => h, e.mirrorSelection = B, {
-      name: s.i18next.t(`${ws}:name`),
+      name: s.i18next.t(`${Er}:name`),
       zoomChanged() {
         v();
       },
@@ -56045,10 +56060,10 @@ const dx = {
         E(z.elems, !0);
       },
       callback() {
-        const z = s.i18next.t(`${ws}:mirrorSelection`), H = (G, K, W) => {
+        const z = s.i18next.t(`${Er}:mirrorSelection`), H = (G, K, W) => {
           if (!K) return;
           const J = document.createElement("se-button");
-          J.id = G, J.setAttribute("size", "small"), J.setAttribute("title", z), J.setAttribute("src", "mirror_copy.svg"), W ? K.after(J) : K.append(J), J.addEventListener("click", B);
+          J.id = G, J.setAttribute("size", "small"), J.setAttribute("title", z), J.setAttribute("src", "mirror_copy.svg"), W && J.setAttribute("data-caption", s.i18next.t(`${Er}:caption`)), W ? K.after(J) : K.append(J), J.addEventListener("click", B);
         };
         H("tool_mirror_copy", i("tool_repeat") || i("tool_path_offset"), !0), H("tool_mirror_copy_multi", i("tool_repeat_multi")?.parentElement || i("tool_clip_set")?.parentElement, !1);
       }
@@ -56111,7 +56126,7 @@ var Cx = async (s = [{}]) => {
   const i = await window.showOpenFilePicker({ id: s[0].id, startIn: s[0].startIn, types: e, multiple: s[0].multiple || !1, excludeAcceptAllOption: s[0].excludeAcceptAllOption || !1 }), n = await Promise.all(i.map(wx));
   return s[0].multiple ? n : n[0];
 }, Sx = { __proto__: null, default: Cx };
-function Cs(s) {
+function Es(s) {
   function e(i) {
     if (Object(i) !== i) return Promise.reject(new TypeError(i + " is not an object."));
     var n = i.done;
@@ -56119,9 +56134,9 @@ function Cs(s) {
       return { value: o, done: n };
     });
   }
-  return Cs = function(i) {
+  return Es = function(i) {
     this.s = i, this.n = i.next;
-  }, Cs.prototype = { s: null, n: null, next: function() {
+  }, Es.prototype = { s: null, n: null, next: function() {
     return e(this.n.apply(this.s, arguments));
   }, return: function(i) {
     var n = this.s.return;
@@ -56129,7 +56144,7 @@ function Cs(s) {
   }, throw: function(i) {
     var n = this.s.return;
     return n === void 0 ? Promise.reject(i) : e(n.apply(this.s, arguments));
-  } }, new Cs(s);
+  } }, new Es(s);
 }
 const eu = async (s, e, i = s.name, n) => {
   const o = [], a = [];
@@ -56139,7 +56154,7 @@ const eu = async (s, e, i = s.name, n) => {
       var C, y, M, E = 2;
       for (typeof Symbol < "u" && (y = Symbol.asyncIterator, M = Symbol.iterator); E--; ) {
         if (y && (C = w[y]) != null) return C.call(w);
-        if (M && (C = w[M]) != null) return new Cs(C.call(w));
+        if (M && (C = w[M]) != null) return new Es(C.call(w));
         y = "@@asyncIterator", M = "@@iterator";
       }
       throw new TypeError("Object is not async iterable");
@@ -56620,11 +56635,11 @@ const nu = (s) => {
 }, Yx = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Xx
-}, Symbol.toStringTag, { value: "Module" })), Er = "panning", Ux = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), Mr = "panning", Ux = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": Yx }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, Er, n.default);
+  n && s.i18next.addResourceBundle(e, Mr, n.default);
 }, Zx = {
-  name: Er,
+  name: Mr,
   async init() {
     const s = this;
     await Ux(s);
@@ -56634,9 +56649,9 @@ const nu = (s) => {
       a.parentNode.insertBefore(c, a.nextSibling);
     };
     return {
-      name: s.i18next.t(`${Er}:name`),
+      name: s.i18next.t(`${Mr}:name`),
       callback() {
-        const a = `${s.i18next.t(`${Er}:buttons.0.title`)} ${s.i18next.t(`${Er}:buttons.0.key`)}`, c = document.createElement("template");
+        const a = `${s.i18next.t(`${Mr}:buttons.0.title`)} ${s.i18next.t(`${Mr}:buttons.0.key`)}`, c = document.createElement("template");
         c.innerHTML = `
         <se-button id="ext-panning" title="${a}" src="panning.svg"></se-button>
         `, o(i("tool_select"), c.content.cloneNode(!0)), n(i("ext-panning"), () => {
@@ -57274,13 +57289,14 @@ const Ic = 1e-8, cw = (s, e, i = 1) => {
   warpSubpaths: Wl
 }, Symbol.toStringTag, { value: "Module" })), pw = {
   name: "Repeat / array",
+  caption: "Repeat",
   title: "Repeat (radial / grid array)"
 }, gw = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: pw
-}, Symbol.toStringTag, { value: "Module" })), Ss = "repeat", En = "se:repeat-source", Aa = "se:repeat-copy", Un = "se:repeat", fw = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), Ar = "repeat", En = "se:repeat-source", Aa = "se:repeat-copy", Un = "se:repeat", fw = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": gw }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, Ss, n.default);
+  n && s.i18next.addResourceBundle(e, Ar, n.default);
 }, mw = (s) => s.mode === "radial" ? `radial;count=${s.count};sweep=${s.sweep};center=${s.center}` + (s.center === "custom" ? `;centerX=${s.centerX};centerY=${s.centerY}` : "") : s.mode === "grid" ? `grid;rows=${s.rows};cols=${s.cols};gapX=${s.gapX};gapY=${s.gapY}` : `path;count=${s.count};offset=${s.offset};span=${s.span};follow=${s.follow ? 1 : 0};rail=${s.rail || ""}`, zc = (s) => {
   if (!s) return null;
   const [e, ...i] = s.split(";"), n = Object.fromEntries(i.map((o) => o.split("=")));
@@ -57306,7 +57322,7 @@ const Ic = 1e-8, cw = (s, e, i = 1) => {
     rail: n.rail || null
   } : null;
 }, yw = {
-  name: Ss,
+  name: Ar,
   async init() {
     const s = this;
     await fw(s);
@@ -57395,12 +57411,12 @@ const Ic = 1e-8, cw = (s, e, i = 1) => {
     return e.armRepeatCenterPick = (f) => {
       g = f, e.setMode("repeat-pick-center");
     }, {
-      name: s.i18next.t(`${Ss}:name`),
+      name: s.i18next.t(`${Ar}:name`),
       callback() {
-        const f = s.i18next.t(`${Ss}:title`);
+        const f = s.i18next.t(`${Ar}:title`);
         if (i("tool_path_offset")?.parentElement) {
           const C = document.createElement("se-repeat-settings");
-          C.id = "tool_repeat", C.setAttribute("title", f), C.setAttribute("src", "repeat.svg"), i("tool_path_offset").after(C);
+          C.id = "tool_repeat", C.setAttribute("title", f), C.setAttribute("src", "repeat.svg"), C.setAttribute("data-caption", s.i18next.t(`${Ar}:caption`)), i("tool_path_offset").after(C);
         }
         const w = i("tool_clip_set")?.parentElement;
         if (w) {
@@ -57424,6 +57440,7 @@ const Ic = 1e-8, cw = (s, e, i = 1) => {
   default: yw
 }, Symbol.toStringTag, { value: "Module" })), _w = {
   name: "Segment",
+  caption: "Segment",
   title: "Segment shape (radial / grid dividing lines)"
 }, bw = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -57604,11 +57621,11 @@ class ww extends wn {
   }
 }
 customElements.define("se-segment-settings", ww);
-const ks = "segment", Cw = function(s) {
+const Pr = "segment", Cw = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": bw }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, ks, n.default);
+  n && s.i18next.addResourceBundle(e, Pr, n.default);
 }, Sw = {
-  name: ks,
+  name: Pr,
   async init() {
     const s = this;
     await Cw(s);
@@ -57619,7 +57636,7 @@ const ks = "segment", Cw = function(s) {
       a.style.display = c && e.canSegment?.(c) ? "" : "none";
     };
     return {
-      name: s.i18next.t(`${ks}:name`),
+      name: s.i18next.t(`${Pr}:name`),
       selectedChanged(o) {
         n(o.elems?.filter(Boolean));
       },
@@ -57627,10 +57644,10 @@ const ks = "segment", Cw = function(s) {
         n(e.getSelectedElements().filter(Boolean));
       },
       callback() {
-        const o = s.i18next.t(`${ks}:title`), a = i("tool_repeat") || i("tool_path_offset");
+        const o = s.i18next.t(`${Pr}:title`), a = i("tool_repeat") || i("tool_path_offset");
         if (!a) return;
         const c = document.createElement("se-segment-settings");
-        c.id = "tool_segment", c.setAttribute("title", o), c.setAttribute("src", "segment.svg"), c.style.display = "none", a.after(c);
+        c.id = "tool_segment", c.setAttribute("title", o), c.setAttribute("src", "segment.svg"), c.setAttribute("data-caption", s.i18next.t(`${Pr}:caption`)), c.style.display = "none", a.after(c);
       }
     };
   }
@@ -58081,11 +58098,11 @@ const ks = "segment", Cw = function(s) {
 }, Vw = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Hw
-}, Symbol.toStringTag, { value: "Module" })), Es = "smart-guides", $c = "#e11d48", hn = 4, Xw = function(s) {
+}, Symbol.toStringTag, { value: "Module" })), Ms = "smart-guides", $c = "#e11d48", hn = 4, Xw = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": Vw }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, Es, n.default);
+  n && s.i18next.addResourceBundle(e, Ms, n.default);
 }, Yw = {
-  name: Es,
+  name: Ms,
   async init() {
     const s = this;
     await Xw(s);
@@ -58169,9 +58186,9 @@ const ks = "segment", Cw = function(s) {
       }
       h.replaceChildren(M);
     }, {
-      name: s.i18next.t(`${Es}:name`),
+      name: s.i18next.t(`${Ms}:name`),
       callback() {
-        const w = document.createElement("template"), C = `${Es}:buttons.0.title`;
+        const w = document.createElement("template"), C = `${Ms}:buttons.0.title`;
         w.innerHTML = `
           <se-button id="tool_smart_snap" title="${C}" src="smart_snap.svg"></se-button>
         `, i("editor_panel").append(w.content.cloneNode(!0));
@@ -58188,6 +58205,7 @@ const ks = "segment", Cw = function(s) {
   default: Yw
 }, Symbol.toStringTag, { value: "Module" })), Zw = {
   name: "Taper stroke",
+  caption: "Taper",
   title: "Taper stroke (variable-width outline)"
 }, Ww = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -58330,11 +58348,11 @@ class Jw extends wn {
   }
 }
 customElements.define("se-taper-settings", Jw);
-const Ms = "taper", Qw = function(s) {
+const Lr = "taper", Qw = function(s) {
   const e = s.configObj.pref("lang"), i = /* @__PURE__ */ Object.assign({ "./locale/en.js": Ww }), n = i[`./locale/${e}.js`] || i["./locale/en.js"];
-  n && s.i18next.addResourceBundle(e, Ms, n.default);
+  n && s.i18next.addResourceBundle(e, Lr, n.default);
 }, eC = {
-  name: Ms,
+  name: Lr,
   async init() {
     const s = this;
     await Qw(s);
@@ -58345,7 +58363,7 @@ const Ms = "taper", Qw = function(s) {
       a.style.display = c && e.canTaperStroke?.(c) ? "" : "none";
     };
     return {
-      name: s.i18next.t(`${Ms}:name`),
+      name: s.i18next.t(`${Lr}:name`),
       selectedChanged(o) {
         n(o.elems?.filter(Boolean));
       },
@@ -58353,10 +58371,10 @@ const Ms = "taper", Qw = function(s) {
         n(e.getSelectedElements().filter(Boolean));
       },
       callback() {
-        const o = s.i18next.t(`${Ms}:title`), a = i("tool_stroke_to_path") || i("tool_path_offset");
+        const o = s.i18next.t(`${Lr}:title`), a = i("tool_stroke_to_path") || i("tool_path_offset");
         if (!a) return;
         const c = document.createElement("se-taper-settings");
-        c.id = "tool_taper", c.setAttribute("title", o), c.setAttribute("src", "taper.svg"), c.style.display = "none", a.after(c);
+        c.id = "tool_taper", c.setAttribute("title", o), c.setAttribute("src", "taper.svg"), c.setAttribute("data-caption", s.i18next.t(`${Lr}:caption`)), c.style.display = "none", a.after(c);
       }
     };
   }
@@ -59459,7 +59477,7 @@ class kC {
     o && (o.innerHTML = "", o.appendChild(v(f)));
   }
 }
-const EC = '.svg_editor.ui-tablet{--hit: 56px;--hit-sm: 46px;--r-md: 16px;--r-lg: 22px;--r-pill: 999px;grid-template-rows:0 0 1fr 0;grid-template-columns:0 0 0 1fr 0}.svg_editor.ui-tablet #tools_top,.svg_editor.ui-tablet #tools_left,.svg_editor.ui-tablet #sidepanels,.svg_editor.ui-tablet #tools_bottom,.svg_editor.ui-tablet #ruler_corner,.svg_editor.ui-tablet #ruler_x,.svg_editor.ui-tablet #ruler_y{display:none!important}.svg_editor:not(.ui-tablet) .tablet-shell{display:none}.svg_editor.ui-tablet #workarea{padding:84px 32px 32px;touch-action:none}.svg_editor.ui-tablet #main_button{position:absolute;top:11px;left:12px;z-index:60;border:none;padding:0;background:transparent}.svg_editor.ui-tablet .tablet-shell{position:absolute;inset:0;z-index:40;pointer-events:none}.svg_editor.ui-tablet .tablet-shell>*{pointer-events:auto}.svg_editor.ui-tablet .ts-topbar{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;gap:12px;padding:0 16px 0 150px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border)}.svg_editor.ui-tablet .ts-grow{flex:1}.svg_editor.ui-tablet .ts-toolgroup{display:flex;align-items:center;gap:2px;background:var(--app-bg, var(--canvas-bg));border:1px solid var(--chrome-border);border-radius:var(--r-pill);padding:5px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:46px;height:46px;border-radius:99px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:26px!important;height:26px!important}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 46px;--sl-tool-icon-size: 26px;--sl-tool-radius: 99px;display:inline-flex;align-items:center;justify-content:center}.svg_editor.ui-tablet .tablet-shell{container-type:inline-size}@container (max-width: 1160px){.svg_editor.ui-tablet .ts-topbar{gap:6px;padding-right:10px}.svg_editor.ui-tablet #ts_zoom,.svg_editor.ui-tablet .ts-sep{display:none}}@container (max-width: 900px){.svg_editor.ui-tablet .ts-topbar{padding-left:130px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:38px;height:38px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:22px!important;height:22px!important}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 38px;--sl-tool-icon-size: 22px}}@container (max-width: 840px){.svg_editor.ui-tablet .ts-done{display:none}}.svg_editor.ui-tablet .ts-tool-select svg{transform:translate(2px,1px)}.svg_editor.ui-tablet .ts-zlabel{font-size:13px;font-weight:600;min-width:46px;text-align:center;font-variant-numeric:tabular-nums;color:var(--fg)}.svg_editor.ui-tablet .ts-stylechip{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid var(--field-border);border-radius:50%;background:var(--field-bg);cursor:pointer;flex:0 0 auto}.svg_editor.ui-tablet .ts-stylechip .dot{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px #0000002e}.svg_editor.ui-tablet .ts-done{height:44px;padding:0 20px;border-radius:var(--r-pill);border:none;cursor:pointer;background:var(--accent);color:#fff;font-size:14px;font-weight:600;font-family:inherit}.svg_editor.ui-tablet .tbtn{appearance:none;border:none;background:transparent;color:var(--icon);width:var(--hit);height:var(--hit);border-radius:var(--r-md);display:grid;place-items:center;cursor:pointer;position:relative;transition:background .14s ease,color .14s ease,transform .08s ease;flex:0 0 auto}.svg_editor.ui-tablet .tbtn svg{width:26px!important;height:26px!important;display:block}.svg_editor.ui-tablet .tbtn:active{transform:scale(.92)}.svg_editor.ui-tablet .tbtn.is-active{background:var(--accent);color:#fff}.svg_editor.ui-tablet .tbtn:not(.is-active):hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.ui-tablet .tbtn[disabled]{opacity:.32;pointer-events:none}.svg_editor.ui-tablet .tbtn.sm{width:var(--hit-sm);height:var(--hit-sm);border-radius:10px}.svg_editor.ui-tablet .tbtn.sm svg{width:22px!important;height:22px!important}.svg_editor.ui-tablet .tbtn.has-caret:after{content:"";position:absolute;right:6px;bottom:6px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55}.svg_editor.ui-tablet .ts-sep{width:1px;align-self:stretch;margin:10px 4px;background:var(--chrome-border);flex:0 0 auto}.svg_editor.ui-tablet .ts-row{display:flex;align-items:center;gap:4px}.svg_editor.ui-tablet .ts-row.gap8{gap:8px}.svg_editor.ui-tablet .swatch{width:40px;height:40px;border-radius:var(--r-pill);cursor:pointer;position:relative;flex:0 0 auto;box-shadow:inset 0 0 0 1px #00000024,0 1px 2px #14192314;transition:transform .1s ease}.svg_editor.ui-tablet .swatch:active{transform:scale(.9)}.svg_editor.ui-tablet .swatch.is-on{box-shadow:inset 0 0 0 1px #00000024,0 0 0 3px var(--accent)}.svg_editor.ui-tablet .swatch.none{background:linear-gradient(45deg,transparent 45%,#E11D48 45%,#E11D48 55%,transparent 55%),#fff}.svg_editor.ui-tablet .slider-row{display:flex;align-items:center;gap:12px}.svg_editor.ui-tablet .slider-row .lab{font-size:13px;font-weight:600;color:var(--muted);min-width:50px}.svg_editor.ui-tablet .slider-row .val{font-size:13px;font-weight:600;color:var(--fg);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}.svg_editor.ui-tablet input[type=range].te-range{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:var(--icon-hover-bg);outline:none}.svg_editor.ui-tablet input[type=range].te-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:1.5px solid var(--accent-border);box-shadow:0 2px 6px #14192333;cursor:pointer}.svg_editor.ui-tablet .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}.svg_editor.ui-tablet .ts-pop{position:absolute;z-index:50;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-md);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:16px}.svg_editor.ui-tablet .swrow{display:flex;gap:9px;flex-wrap:wrap;max-width:232px}.svg_editor.ui-tablet .menu{display:flex;flex-direction:column;min-width:188px}.svg_editor.ui-tablet .menu-item{appearance:none;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;color:var(--fg);text-align:left}.svg_editor.ui-tablet .menu-item:hover{background:var(--icon-hover-bg)}.svg_editor.ui-tablet .menu-item .mi-ic{width:22px;height:22px;display:grid;place-items:center;color:var(--icon);flex:0 0 auto}.svg_editor.ui-tablet .menu-item .mi-ic svg{width:21px!important;height:21px!important}.svg_editor.ui-tablet .lib-grid{display:grid;grid-template-columns:repeat(5,56px);gap:8px}.svg_editor.ui-tablet .lib-cell{width:56px;height:56px;border-radius:12px;border:1px solid var(--field-border);background:var(--field-bg);cursor:pointer;display:grid;place-items:center;color:var(--fg)}.svg_editor.ui-tablet .lib-cell:hover{background:var(--icon-hover-bg);border-color:var(--accent-border)}.svg_editor.ui-tablet .lib-cell svg{width:30px!important;height:30px!important;display:block}.svg_editor.ui-tablet .ts-sheet{position:absolute;left:16px;right:16px;bottom:16px;z-index:30;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-lg);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:12px 22px 20px;transform:translateY(calc(100% + 28px));transition:transform .28s cubic-bezier(.2,.8,.25,1)}.svg_editor.ui-tablet .ts-sheet.show{transform:translateY(0)}.svg_editor.ui-tablet .ts-sheet-handle{width:44px;height:5px;border-radius:99px;background:var(--chrome-border);margin:0 auto 12px}.svg_editor.ui-tablet .ts-sheet .kind{font-size:13px;font-weight:700;color:var(--accent);text-transform:capitalize;position:absolute;top:16px;left:22px}.svg_editor.ui-tablet .ts-sheet .closeb{position:absolute;top:12px;right:16px}.svg_editor.ui-tablet .ts-sheet-row{display:flex;align-items:flex-end;gap:22px}.svg_editor.ui-tablet .sheet-col{display:flex;flex-direction:column;gap:9px}.svg_editor.ui-tablet .sheet-sep{width:1px;align-self:stretch;background:var(--chrome-border);margin:2px}.svg_editor.ui-tablet .slider-mini{width:170px}.svg_editor.ui-tablet .ts-actions{display:flex;gap:6px}:root,.svg_editor,.svg_editor.theme-light,se-color-dialog,se-palette-dialog,se-text-prompt-dialog,se-image-import-dialog,se-trace-dialog,se-edit-prefs-dialog,se-export-dialog,se-svg-source-editor-dialog,se-img-prop-dialog,se-plain-alert-dialog,se-cmenu_canvas-dialog,se-cmenu-layers,se-hotkey-dialog,se-favorites-dialog,se-command-search-dialog{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #F4F5F7;--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--canvas-bg: #F8F9FB;--ruler-bg: #FFFFFF;--paper-bg: #FFFFFF;--paper-border: #DCDFE5;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(20,25,35,.05), 0 12px 28px -10px rgba(20,25,35,.18), 0 30px 60px -30px rgba(20,25,35,.25);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(20,25,35,.1)) drop-shadow(0 12px 24px rgba(20,25,35,.16));--fg: #1B1F24;--muted: #6B7280;--icon: #4B5563;--icon-hover: #0F172A;--icon-hover-bg: #EEF1F5;--icon-active-bg: #E2E6EC;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-border: #C7D7FF;--active-shadow: 0 1px 2px rgba(41,98,255,.18);--brand-bg: #F6F7F9;--brand-bg-hover: #EEF1F5;--brand-border: #E6E8EC;--brand-fg: #1B1F24;--file-bg: #F4F5F7;--file-border: #E6E8EC;--group-bg: #F6F7F9;--group-border: #E6E8EC;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--accent-ring: rgba(41,98,255,.16);--section-rule: #EEF0F3;--swatch-bg: #FFFFFF;--swatch-border: #C3C8D1;--swatch-border-hover: #2962FF;--swatch-inset: rgba(0,0,0,.18);--swatch-shadow: 0 1px 2px rgba(20,25,35,.08);--checker: rgba(0,0,0,.07);--cp-modal-bg: #FFFFFF;--cp-head-bg: #FAFBFC;--cp-stage-bg: #ECEEF2;--cp-backdrop: rgba(20, 24, 35, .06);--cp-field-hover: #B6BFCE;--cp-focus-ring: rgba(41, 98, 255, .18);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--cp-stop-ring: rgba(20, 24, 35, .3);--cp-danger: #E11D48;--cp-danger-bg: #FEE9EE;--cp-btn-primary-fg: #FFFFFF;--cp-btn-primary-shadow: rgba(41, 98, 255, .28);--cp-dial-bg: #F4F5F7;--cp-dial-border: #DDE1E7;--cp-dial-tick: #B6BFCE;--cp-swatch-bg: #FFFFFF;--cp-swatch-border: #C3C8D1;--cp-swatch-inset: rgba(0, 0, 0, .18);--cp-checker: rgba(0, 0, 0, .07);--sl-modal-bg: #FFFFFF;--sl-head-bg: #FAFBFC;--sl-side-bg: #F6F7F9;--sl-field-hover: #B6BFCE;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--sl-tile-shadow: 0 2px 6px rgba(41,98,255,.12);--sl-btn-primary-fg: #FFFFFF;--sl-btn-primary-shadow: rgba(41,98,255,.28);--sl-shape: #4B5563;--sl-shape-hover: #0F172A;--ruler-tick: #B5BAC3;--ruler-text: #8A8F99;--icon-bg-color: transparent;--main-menu-shadow: rgba(0,0,0,.12);--scrollbar-thumb: rgba(80,80,80,.3);--global-se-spin-input-width: 82px;--top-toolbar-min-height: 56px}.svg_editor.theme-dark,se-color-dialog.theme-dark,se-palette-dialog.theme-dark,se-text-prompt-dialog.theme-dark,se-image-import-dialog.theme-dark,se-trace-dialog.theme-dark,se-edit-prefs-dialog.theme-dark,se-export-dialog.theme-dark,se-svg-source-editor-dialog.theme-dark,se-img-prop-dialog.theme-dark,se-plain-alert-dialog.theme-dark,se-cmenu_canvas-dialog.theme-dark,se-cmenu-layers.theme-dark,se-hotkey-dialog.theme-dark,se-favorites-dialog.theme-dark,se-command-search-dialog.theme-dark{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #16181D;--chrome-bg: #1E2026;--chrome-border: #2C2F37;--canvas-bg: #0F1115;--ruler-bg: #1A1C22;--paper-bg: #FAFAF8;--paper-border: #1A1C22;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -10px rgba(0,0,0,.5), 0 40px 80px -30px rgba(0,0,0,.65);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 14px 30px rgba(0,0,0,.5));--fg: #ECEEF2;--muted: #9098A5;--icon: #B7BDC8;--icon-hover: #FFFFFF;--icon-hover-bg: #2A2D35;--icon-active-bg: #353944;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-border: #5A4422;--active-shadow: 0 1px 0 rgba(246,178,58,.15), 0 0 0 1px rgba(246,178,58,.18) inset;--brand-bg: #25282F;--brand-bg-hover: #2C2F37;--brand-border: #353944;--brand-fg: #ECEEF2;--file-bg: #16181D;--file-border: #2C2F37;--group-bg: #181A20;--group-border: #2C2F37;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--accent-ring: rgba(246,178,58,.2);--section-rule: #23262E;--swatch-bg: #2F333C;--swatch-border: #6A7180;--swatch-border-hover: #F6B23A;--swatch-inset: rgba(255,255,255,.22);--swatch-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 2px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.35);--checker: rgba(255,255,255,.06);--cp-modal-bg: #22252C;--cp-head-bg: #1E2026;--cp-stage-bg: #0F1115;--cp-backdrop: rgba(0, 0, 0, .5);--cp-field-hover: #4B5160;--cp-focus-ring: rgba(246, 178, 58, .22);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--cp-stop-ring: rgba(0, 0, 0, .6);--cp-danger: #FB7185;--cp-danger-bg: #3A1A22;--cp-btn-primary-fg: #1A1208;--cp-btn-primary-shadow: rgba(246, 178, 58, .3);--cp-dial-bg: #1A1C22;--cp-dial-border: #353944;--cp-dial-tick: #4B5160;--cp-swatch-bg: #2F333C;--cp-swatch-border: #6A7180;--cp-swatch-inset: rgba(255, 255, 255, .22);--cp-checker: rgba(255, 255, 255, .06);--sl-modal-bg: #22252C;--sl-head-bg: #1E2026;--sl-side-bg: #1A1C22;--sl-field-hover: #4B5160;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--sl-tile-shadow: 0 2px 8px rgba(246,178,58,.18);--sl-btn-primary-fg: #1A1208;--sl-btn-primary-shadow: rgba(246,178,58,.3);--sl-shape: #B7BDC8;--sl-shape-hover: #FFFFFF;--ruler-tick: #4A4F5A;--ruler-text: #7A8190;--icon-bg-color: transparent;--main-menu-shadow: rgba(0,0,0,.5);--scrollbar-thumb: rgba(180,180,180,.25)}.svg_editor *{transform-origin:0 0}.svg_editor{display:grid;grid-template-rows:minmax(var(--top-toolbar-min-height),auto) 15px 1fr 56px;grid-template-columns:56px 15px 50px 1fr 15px;grid-template-areas:"main main   main top top" "left corner rulerX rulerX side" "left rulerY workarea workarea side" "left bottom bottom bottom bottom";font-size:8pt;background:var(--app-bg);font-family:var(--ui-font, "Inter", -apple-system, system-ui, sans-serif);color:var(--fg);-webkit-user-select:text;user-select:text;width:100%;height:100%}[data-svgedit-root]:focus{outline:none}#title_panel>p{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;background:var(--file-bg);border:1px solid var(--file-border);color:var(--fg);font-size:13px;font-weight:500;letter-spacing:-.003em;cursor:text;margin:0}.svg_editor.open{grid-template-columns:56px 15px 50px 1fr 280px}#svgroot{-webkit-user-select:none;user-select:none;position:absolute;top:0;left:0}#workarea{grid-area:workarea;background-color:var(--canvas-bg);border:none;overflow:auto;text-align:center;padding:56px 80px 80px 56px}#layer_focus_badge{grid-area:workarea;align-self:start;justify-self:center;margin-top:10px;z-index:6;display:none;align-items:center;gap:6px;padding:4px 6px 4px 12px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.01em;color:var(--fg);background:var(--accent-soft);border:1px solid var(--accent-border)}#layer_focus_badge.visible{display:inline-flex}#layer_focus_badge_switch{display:inline-flex;gap:2px;padding:2px;border-radius:999px;background:var(--group-bg);border:1px solid var(--group-border)}#layer_focus_badge_switch button{font:inherit;font-weight:600;color:var(--muted);background:transparent;border:none;border-radius:999px;padding:2px 8px;cursor:pointer}#layer_focus_badge_switch button:hover{color:var(--fg)}#layer_focus_badge_switch button.active{color:var(--fg);background:var(--chrome-bg)}#shape_builder_hint{grid-area:workarea;align-self:start;justify-self:center;margin-top:10px;z-index:6;display:none;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:999px;font-size:12px;color:var(--fg);background:var(--chrome-bg);border:1px solid var(--chrome-border);box-shadow:0 2px 8px #00000026}#shape_builder_hint.visible{display:inline-flex}#shape_builder_hint .sb-hint-count{color:var(--accent);font-weight:600}#shape_builder_hint .sb-hint-done{font:inherit;font-weight:600;color:var(--fg);background:var(--group-bg);border:1px solid var(--group-border);border-radius:999px;padding:3px 10px;cursor:pointer}#shape_builder_hint .sb-hint-done:hover{background:var(--icon-hover-bg)}#svgcanvas{line-height:normal;display:inline-block;background:transparent;text-align:center;vertical-align:middle;position:relative}#canvas_watermark{position:absolute;inset:0;z-index:1;display:none;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:160px 160px;opacity:.07}#canvas_watermark.visible{display:block}#canvasBackground{filter:var(--paper-shadow-filter)}#canvasBackground>rect{stroke:var(--paper-border);stroke-width:1px;vector-effect:non-scaling-stroke}#sidepanels{grid-area:side;position:relative;min-height:0}#sidepanel_content{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-gutter:stable}#sidepanel_handle{writing-mode:vertical-rl;text-orientation:mixed;color:var(--muted);position:absolute;right:0;top:50%;margin-top:-60px;cursor:pointer;height:120px;width:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-right:none;border-top-left-radius:10px;border-bottom-left-radius:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .12s,color .12s;z-index:4}#sidepanel_handle:hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.open #sidepanel_handle{right:100%}.svg_editor:not(.open) #sidepanel_content{display:none}a{color:var(--accent)}hr{border:none;border-bottom:1px solid var(--chrome-border)}#linkLabel>svg{height:20px;padding-top:4px}#sidepanel_tabs{display:flex;gap:2px;padding:6px 8px 0;position:sticky;top:0;background:var(--chrome-bg);border-bottom:1px solid var(--section-rule, #EEF0F3);z-index:1}.sidepanel_tab{flex:1;appearance:none;border:none;background:transparent;color:var(--muted);font:600 12.5px var(--ui-font);padding:9px 4px 11px;cursor:pointer;position:relative;border-radius:7px 7px 0 0;transition:color .12s,background .12s}.sidepanel_tab:hover{color:var(--fg);background:var(--icon-hover-bg)}.sidepanel_tab.active{color:var(--accent)}.sidepanel_tab.active:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}.sidepanel_tabpanel{display:none;padding:2px 0 10px}.sidepanel_tabpanel.active{display:block}.sidepanel_section,#color_shift_panel,#shadow_panel{padding:14px 16px;margin:0;border-top:1px solid var(--section-rule, #EEF0F3);color:var(--fg);-webkit-user-select:none;user-select:none}.sidepanel_advanced>summary{cursor:pointer;margin:0}.sidepanel_advanced[open]>summary{margin-bottom:12px}.sidepanel_hint{display:none;margin:0;padding:14px 16px;font-size:12.5px;color:var(--muted)}.text_panel[style*=none]~#sidepanel_text[style*=none]~.sidepanel_hint{display:block}.sidepanel_tabpanel>.sidepanel_section:first-child{border-top:none}.sidepanel_section_label,#color_shift_label{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;white-space:nowrap}.sidepanel_section_grid,.color_shift_grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;align-items:start}.sidepanel_section_grid .span2,.sidepanel_section_grid se-input[size="15"],.sidepanel_section_grid .image_url_field{grid-column:1 / -1}.arc_field{display:flex;flex-direction:column;gap:5px;min-width:0}.arc_presets{display:flex;gap:4px}.arc_preset{flex:1;min-width:0;height:22px;padding:0;font:600 10px var(--ui-font);font-variant-numeric:tabular-nums;color:var(--muted);background:var(--field-bg);border:1px solid var(--field-border);border-radius:6px;cursor:pointer}.arc_preset:hover{color:var(--accent);background:var(--icon-hover-bg);border-color:var(--accent-border)}.sub_label{font:600 10px var(--ui-font);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 5px 2px}.sidepanel_subsection{margin-top:12px}.sidepanel_btn_group+.sidepanel_btn_group{margin-top:12px;padding-top:12px;border-top:1px solid var(--section-rule, #EEF0F3)}.sidepanel_btn_row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.sidepanel_btn_row>[data-caption]{display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-width:44px}.sidepanel_btn_row>[data-caption]:after{content:attr(data-caption);font-size:10px;line-height:1.1;color:var(--muted);white-space:nowrap}.sidepanel_seg{display:inline-flex;align-items:center;background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;overflow:hidden;height:34px}.sidepanel_seg se-list,.sidepanel_seg se-button{--seg: 1}.sidepanel_text_font{display:flex;align-items:center;gap:8px}.sidepanel_text_font se-font-select{flex:1;min-width:0}.shadow_panel_footer,.clipmask_panel_footer{display:flex;align-items:center;gap:10px;margin-top:12px}.shadow_panel_footer input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--field-border);border-radius:8px;background:var(--field-bg);cursor:pointer}.shadow_panel_footer_label{font-size:12.5px;color:var(--muted)}.shadow_panel_header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.shadow_panel_header .sidepanel_section_label{margin:0}.shadow_toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer}#shadow_panel[data-off] .sidepanel_section_grid,#shadow_panel[data-off] .shadow_panel_footer{opacity:.45}.color_shift_toggles{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:4px}.color_shift_toggles label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer}.color_shift_toggles input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;margin:0}#color_shift_reset{margin-left:auto;height:32px;padding:0 14px;font:600 12.5px var(--ui-font);color:var(--fg);background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;cursor:pointer}#color_shift_reset:hover{background:var(--icon-hover-bg);border-color:var(--field-border-h, #C8CDD6)}#color_shift_hint{font-size:12px;color:var(--muted);line-height:1.45}#layerpanel{-webkit-user-select:none;user-select:none;padding:14px 16px}#layersLabel{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}#layerbuttons{margin:0 0 12px;padding:0;width:100%;height:auto;border:0;display:flex;gap:4px;align-items:center;justify-content:flex-start}#layerlist{margin:0;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--field-border);border-radius:9px;overflow:hidden;background:var(--field-bg)}#layerlist tr.layer{background:transparent}#layerlist tr.layer+tr.layer td{border-top:1px solid var(--section-rule, #EEF0F3)}#layerlist tr.layersel{background:var(--accent-soft)}#layerlist td{padding:9px 6px;cursor:pointer}#layerlist td.layervis{width:30px;padding-left:11px;text-align:center}#layerlist td.layervis *{display:block}#layerlist td.layerinvis *{display:none}#layerlist td.layerlock{width:22px;padding-left:4px;text-align:center}#layerlist td.layerlock *{display:block;color:var(--muted)}#layerlist td.layerlock:hover *{color:var(--icon-hover, var(--fg))}#layerlist td.layerlock.locked *{color:var(--accent)}#layerlist td.layercomment{width:22px;padding-left:4px;text-align:center}#layerlist td.layercomment *{display:block;color:var(--muted)}#layerlist td.layercomment:hover *{color:var(--icon-hover, var(--fg))}#layerlist td.layercomment.commented *{color:var(--accent)}#layerlist td.layerpreview{width:30px;padding-left:0;padding-right:0;cursor:default}#layerlist .layerpreview-thumb{display:block;width:28px;height:20px;overflow:hidden;border:1px solid var(--field-border);border-radius:4px;background:var(--canvas-bg)}#layerlist td.layername{font-size:13px;font-weight:500;color:var(--fg)}#layerlist td.layername:hover{color:var(--accent)}#layerlist tr.layersel td.layername{font-weight:600}#selLayerLabel{white-space:nowrap}#selLayerNames{display:block;position:static;top:0;margin-top:12px}#objects_panel{border-top:1px solid var(--chrome-border);padding:10px 16px 12px}#objects_panel_header{display:flex;align-items:center;gap:8px;margin-bottom:6px}#objects_panel_label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}#group_name_input{flex:1;font-size:12px;padding:2px 6px;border:1px solid var(--field-border);border-radius:4px;background:var(--field-bg);color:var(--fg);min-width:0}#group_name_input:focus{outline:none;border-color:var(--accent)}.object-list{list-style:none;margin:0;padding:0}.object-list li{padding-left:14px}.object-list>li{padding-left:0}.object-list-item{display:block;padding:3px 6px;font-size:12px;cursor:pointer;border-radius:4px;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.object-list-item:hover{background:var(--accent-soft);color:var(--accent)}#main_button{grid-area:main;display:inline-flex;align-items:center;padding:0 10px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border)}#main_icon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 8px;border-radius:10px;background:var(--brand-bg);border:1px solid var(--brand-border);color:var(--brand-fg);cursor:pointer;transition:background .12s;white-space:nowrap;height:36px}#main_icon:hover{background:var(--brand-bg-hover)!important}#main_icon.buttondown{background:var(--brand-bg-hover)!important;box-shadow:none!important;border-radius:10px}#logo{display:inline-flex;align-items:center;justify-content:center}#logo svg,#logo img{width:22px;height:22px;display:block}#logo img{filter:none}#main_icon>div{display:inline-flex;align-items:center}#main_button .dropdown{opacity:.55;display:inline-flex;align-items:center;margin-left:2px}#main_icon span{font-weight:600;font-size:13px;letter-spacing:-.005em;color:var(--brand-fg);font-family:var(--ui-font, inherit);display:inline;position:static;padding:0;line-height:normal}#main_menu{z-index:12;background:var(--chrome-bg);color:var(--fg);position:relative;width:230px;padding:6px;box-shadow:0 4px 16px -2px var(--main-menu-shadow);border:1px solid var(--chrome-border);border-radius:10px;font-size:1.1em;display:none;overflow:hidden;clear:both;top:4px}#main_menu ul,#main_menu li{list-style:none;margin:0;padding:0}#main_menu li{line-height:22px;padding:7px 10px;overflow:auto;cursor:pointer;border-radius:7px;color:var(--fg)}#main_menu li:hover{background:var(--icon-hover-bg)}#main_menu li>div{float:left;padding-right:5px}#main_menu p{margin-top:5px}#tools_top{grid-area:top;display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);min-height:var(--top-toolbar-min-height);padding:0 10px;gap:6px;position:relative;z-index:5;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}#tools_top::-webkit-scrollbar{height:3px}#tools_top>*{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:2px;flex-shrink:0}#editor_panel,#history_panel,#zoom_panel,.quick_tray{display:inline-flex;align-items:center;gap:2px;padding:4px;background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px}.path_node_panel se-spin-input,.path_node_panel se-select{flex-direction:row;align-items:center;gap:6px}#star_panel se-spin-input,#polygon_panel se-spin-input{width:58px}#tools_top.tt-compact #title_panel,#tools_top.tt-compact #theme_panel{display:none}#top_more{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;color:var(--icon);background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px;cursor:pointer}#top_more[hidden]{display:none}#top_more:hover,#tools_top.tt-more-open #top_more{color:var(--icon-hover);background:var(--icon-hover-bg)}#top_more_pop{display:none;position:fixed;top:calc(var(--top-toolbar-min-height, 56px) + 6px);right:10px;max-width:calc(100vw - 20px);flex-wrap:wrap;gap:6px;padding:8px;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:12px;box-shadow:0 8px 24px #0000002e;z-index:30}#tools_top.tt-more-open #top_more_pop{display:flex}#top_end{margin-left:auto;position:sticky;right:0;padding-left:6px;background:var(--chrome-bg);z-index:1}#title_panel{display:inline-flex;align-items:center}#tools_bottom{grid-area:bottom;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--chrome-bg);border-top:1px solid var(--chrome-border);height:56px;box-sizing:border-box;scrollbar-width:thin}#tools_bottom::-webkit-scrollbar{width:3px;height:3px}#tools_left{grid-area:left;border-right:1px solid var(--chrome-border);background:var(--chrome-bg);margin-left:auto;margin-right:auto;overflow-y:scroll;scrollbar-width:none;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px}#tools_left>.tool-group-start{position:relative;margin-top:8px}#tools_left>.tool-group-start:before{content:"";position:absolute;top:-6px;left:50%;width:22px;margin-left:-11px;height:1px;background:var(--chrome-border)}#tools_left>#tools_overflow{position:sticky;bottom:-10px;margin-top:auto;background:var(--chrome-bg);z-index:1}#tools_left::-webkit-scrollbar{width:3px}#tools_left::-webkit-scrollbar-track,#tools_bottom::-webkit-scrollbar-track{background:transparent}#tools_left::-webkit-scrollbar-thumb,#tools_bottom::-webkit-scrollbar-thumb{background-color:var(--scrollbar-thumb)}#tools_left>[draggable]:hover{cursor:grab}#tools_left .se-dragging{opacity:.4;cursor:grabbing}#tools_left .se-drop-before{box-shadow:0 -2px 0 0 var(--accent)}#tools_left .se-drop-after{box-shadow:0 2px 0 0 var(--accent)}#tools_left .se-grabbed{box-shadow:0 0 0 2px var(--accent) inset}#tools_left [tabindex]:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-border, rgba(41, 98, 255, .18))}#svgcontent [fill=none]{pointer-events:stroke}#workarea.wireframe #svgcontent *{fill:none;stroke:#000;stroke-width:1px;stroke-opacity:1;stroke-dasharray:0;opacity:1;pointer-events:stroke;filter:none}#workarea.wireframe #svgcontent text{fill:#000;stroke:none}#workarea.wireframe #canvasBackground>rect{fill:#fff!important}#cur_context_panel{grid-area:rulerX;line-height:22px;overflow:auto;padding-left:5px;font-size:12px;background:#000c;color:#ccc}#cur_context_panel a{float:none;text-decoration:none}#cur_context_panel a:hover{text-decoration:underline}input[type=text]{padding:2px}.dropdown{position:relative}.dropdown button{width:15px;height:21px;margin:6px 0 0 1px;padding:0;border-left:1px solid var(--chrome-border);border-top:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border);border-bottom:1px solid var(--chrome-border);background-color:var(--chrome-bg)}.dropdown button.down{border-left:1px solid var(--chrome-border);border-top:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border);border-bottom:1px solid var(--chrome-border);background-color:var(--icon-hover-bg)}.dropdown ul{list-style:none;position:absolute;margin:0;padding:0;left:-85px;top:26px;z-index:4;display:none}.dropup ul{top:auto;bottom:24px}.dropdown li{display:block;width:120px;padding:4px;background:var(--chrome-bg);border:1px solid var(--icon-hover-bg);margin:0 0 -1px;line-height:16px}.dropdown li:hover{background-color:var(--icon-hover-bg)}.dropdown li.special{padding:10px 4px}.dropdown li.special:hover{background:var(--icon-hover-bg)}#font_family_dropdown-list li{font-size:1.4em}#font_family{margin-left:5px;margin-right:0}#main_menu li#tool_open,#main_menu li#tool_import{position:relative;overflow:hidden}#tool_open input,#tool_import input{position:absolute;opacity:0;font-size:10em;top:-5px;right:-5px;margin:0;cursor:pointer}.disabled{opacity:.5;cursor:default}.tool_sep{width:1px;height:22px;background:var(--chrome-border);border:none;margin:0 4px;flex-shrink:0}.width_label{padding-right:5px}#text{position:absolute;left:-9999px;white-space:pre;resize:none}.bottom-icon{width:22px}#palette{margin-left:auto;display:flex;align-items:center;flex:1;min-width:0}#stroke_expand{width:0;overflow:hidden}#toggle_stroke_tools{position:absolute;right:0;top:0;bottom:0;width:25px;text-align:center;border-radius:0 3px 3px 0;margin:0}#toggle_stroke_tools:before{content:">>";letter-spacing:-3px;font-weight:700;color:var(--fg)}.expanded #toggle_stroke_tools:before{content:"<<"}#toggle_stroke_tools:hover{background:var(--icon-hover-bg)}#tool_opacity{right:0}#tool_opacity{overflow:visible}ul li.current{background-color:var(--icon-hover-bg)}#copyright{text-align:right;padding-right:.3em}.overlay{position:absolute;inset:0;background-color:#000;opacity:.6;z-index:5}#save_output_btns{display:none;text-align:left}#save_output_btns p{margin:.5em 1.5em;display:inline-block}#bg_blocks{overflow:auto;margin-left:30px}.dropdown li.tool_button{width:24px}#svgcontent{color:unset}#zoom{color:var(--fg);background-color:var(--chrome-bg);border:none}#stroke_width,#opacity{color:var(--fg)}@keyframes cmdSearchFlash{0%,to{box-shadow:none}30%{box-shadow:0 0 0 3px var(--accent-ring, rgba(41, 98, 255, .16))}}.cmd-search-flash{animation:cmdSearchFlash .9s ease-out}#frameLabels{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible}#frameLabels .frame-label{position:absolute;transform:translateY(-100%);padding:1px 6px;font-size:11px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted, #6b7280);background:var(--chrome-bg, #fff);border:1px solid var(--chrome-border, #d1d5db);border-radius:4px 4px 0 0;-webkit-user-select:none;user-select:none}#frameLabels.interactive .frame-label{pointer-events:auto;cursor:default}#frameLabels .frame-label.selected{color:var(--accent, #2563eb);background:var(--accent-soft, #eff6ff);border-color:var(--accent-border, #93c5fd)}#frameLabels .frame-label-input{width:9em;padding:0;font:inherit;color:var(--fg, #111);background:var(--field-bg, #fff);border:0;outline:1px solid var(--accent, #2563eb)}#selectorParentGroup [id^=selectedBox],#selectorParentGroup #groupSelectedBox,#selectorParentGroup #selectorGrip_rotateconnector{stroke:var(--accent)}#selectorParentGroup [id^=selectorGrip_resize_],#selectorParentGroup #selectorGrip_rotate{fill:#fff;stroke:var(--accent);stroke-width:1.5}#selectorParentGroup #selectorRubberBand{fill:var(--accent);stroke:var(--accent)}', MC = () => {
+const EC = '.svg_editor.ui-tablet{--hit: 56px;--hit-sm: 46px;--r-md: 16px;--r-lg: 22px;--r-pill: 999px;grid-template-rows:0 0 1fr 0;grid-template-columns:0 0 0 1fr 0}.svg_editor.ui-tablet #tools_top,.svg_editor.ui-tablet #tools_left,.svg_editor.ui-tablet #sidepanels,.svg_editor.ui-tablet #tools_bottom,.svg_editor.ui-tablet #ruler_corner,.svg_editor.ui-tablet #ruler_x,.svg_editor.ui-tablet #ruler_y{display:none!important}.svg_editor:not(.ui-tablet) .tablet-shell{display:none}.svg_editor.ui-tablet #workarea{padding:84px 32px 32px;touch-action:none}.svg_editor.ui-tablet #main_button{position:absolute;top:11px;left:12px;z-index:60;border:none;padding:0;background:transparent}.svg_editor.ui-tablet .tablet-shell{position:absolute;inset:0;z-index:40;pointer-events:none}.svg_editor.ui-tablet .tablet-shell>*{pointer-events:auto}.svg_editor.ui-tablet .ts-topbar{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;gap:12px;padding:0 16px 0 150px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border)}.svg_editor.ui-tablet .ts-grow{flex:1}.svg_editor.ui-tablet .ts-toolgroup{display:flex;align-items:center;gap:2px;background:var(--app-bg, var(--canvas-bg));border:1px solid var(--chrome-border);border-radius:var(--r-pill);padding:5px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:46px;height:46px;border-radius:99px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:26px!important;height:26px!important}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 46px;--sl-tool-icon-size: 26px;--sl-tool-radius: 99px;display:inline-flex;align-items:center;justify-content:center}.svg_editor.ui-tablet .tablet-shell{container-type:inline-size}@container (max-width: 1160px){.svg_editor.ui-tablet .ts-topbar{gap:6px;padding-right:10px}.svg_editor.ui-tablet #ts_zoom,.svg_editor.ui-tablet .ts-sep{display:none}}@container (max-width: 900px){.svg_editor.ui-tablet .ts-topbar{padding-left:130px}.svg_editor.ui-tablet .ts-toolgroup .tbtn{width:38px;height:38px}.svg_editor.ui-tablet .ts-toolgroup .tbtn svg{width:22px!important;height:22px!important}.svg_editor.ui-tablet .ts-toolgroup se-shape-library{--sl-tool-size: 38px;--sl-tool-icon-size: 22px}}@container (max-width: 840px){.svg_editor.ui-tablet .ts-done{display:none}}.svg_editor.ui-tablet .ts-tool-select svg{transform:translate(2px,1px)}.svg_editor.ui-tablet .ts-zlabel{font-size:13px;font-weight:600;min-width:46px;text-align:center;font-variant-numeric:tabular-nums;color:var(--fg)}.svg_editor.ui-tablet .ts-stylechip{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid var(--field-border);border-radius:50%;background:var(--field-bg);cursor:pointer;flex:0 0 auto}.svg_editor.ui-tablet .ts-stylechip .dot{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px #0000002e}.svg_editor.ui-tablet .ts-done{height:44px;padding:0 20px;border-radius:var(--r-pill);border:none;cursor:pointer;background:var(--accent);color:#fff;font-size:14px;font-weight:600;font-family:inherit}.svg_editor.ui-tablet .tbtn{appearance:none;border:none;background:transparent;color:var(--icon);width:var(--hit);height:var(--hit);border-radius:var(--r-md);display:grid;place-items:center;cursor:pointer;position:relative;transition:background .14s ease,color .14s ease,transform .08s ease;flex:0 0 auto}.svg_editor.ui-tablet .tbtn svg{width:26px!important;height:26px!important;display:block}.svg_editor.ui-tablet .tbtn:active{transform:scale(.92)}.svg_editor.ui-tablet .tbtn.is-active{background:var(--accent);color:#fff}.svg_editor.ui-tablet .tbtn:not(.is-active):hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.ui-tablet .tbtn[disabled]{opacity:.32;pointer-events:none}.svg_editor.ui-tablet .tbtn.sm{width:var(--hit-sm);height:var(--hit-sm);border-radius:10px}.svg_editor.ui-tablet .tbtn.sm svg{width:22px!important;height:22px!important}.svg_editor.ui-tablet .tbtn.has-caret:after{content:"";position:absolute;right:6px;bottom:6px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:.55}.svg_editor.ui-tablet .ts-sep{width:1px;align-self:stretch;margin:10px 4px;background:var(--chrome-border);flex:0 0 auto}.svg_editor.ui-tablet .ts-row{display:flex;align-items:center;gap:4px}.svg_editor.ui-tablet .ts-row.gap8{gap:8px}.svg_editor.ui-tablet .swatch{width:40px;height:40px;border-radius:var(--r-pill);cursor:pointer;position:relative;flex:0 0 auto;box-shadow:inset 0 0 0 1px #00000024,0 1px 2px #14192314;transition:transform .1s ease}.svg_editor.ui-tablet .swatch:active{transform:scale(.9)}.svg_editor.ui-tablet .swatch.is-on{box-shadow:inset 0 0 0 1px #00000024,0 0 0 3px var(--accent)}.svg_editor.ui-tablet .swatch.none{background:linear-gradient(45deg,transparent 45%,#E11D48 45%,#E11D48 55%,transparent 55%),#fff}.svg_editor.ui-tablet .slider-row{display:flex;align-items:center;gap:12px}.svg_editor.ui-tablet .slider-row .lab{font-size:13px;font-weight:600;color:var(--muted);min-width:50px}.svg_editor.ui-tablet .slider-row .val{font-size:13px;font-weight:600;color:var(--fg);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}.svg_editor.ui-tablet input[type=range].te-range{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:var(--icon-hover-bg);outline:none}.svg_editor.ui-tablet input[type=range].te-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:1.5px solid var(--accent-border);box-shadow:0 2px 6px #14192333;cursor:pointer}.svg_editor.ui-tablet .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}.svg_editor.ui-tablet .ts-pop{position:absolute;z-index:50;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-md);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:16px}.svg_editor.ui-tablet .swrow{display:flex;gap:9px;flex-wrap:wrap;max-width:232px}.svg_editor.ui-tablet .menu{display:flex;flex-direction:column;min-width:188px}.svg_editor.ui-tablet .menu-item{appearance:none;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;color:var(--fg);text-align:left}.svg_editor.ui-tablet .menu-item:hover{background:var(--icon-hover-bg)}.svg_editor.ui-tablet .menu-item .mi-ic{width:22px;height:22px;display:grid;place-items:center;color:var(--icon);flex:0 0 auto}.svg_editor.ui-tablet .menu-item .mi-ic svg{width:21px!important;height:21px!important}.svg_editor.ui-tablet .lib-grid{display:grid;grid-template-columns:repeat(5,56px);gap:8px}.svg_editor.ui-tablet .lib-cell{width:56px;height:56px;border-radius:12px;border:1px solid var(--field-border);background:var(--field-bg);cursor:pointer;display:grid;place-items:center;color:var(--fg)}.svg_editor.ui-tablet .lib-cell:hover{background:var(--icon-hover-bg);border-color:var(--accent-border)}.svg_editor.ui-tablet .lib-cell svg{width:30px!important;height:30px!important;display:block}.svg_editor.ui-tablet .ts-sheet{position:absolute;left:16px;right:16px;bottom:16px;z-index:30;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:var(--r-lg);box-shadow:0 18px 50px #14192333,0 2px 8px #1419231a;padding:12px 22px 20px;transform:translateY(calc(100% + 28px));transition:transform .28s cubic-bezier(.2,.8,.25,1)}.svg_editor.ui-tablet .ts-sheet.show{transform:translateY(0)}.svg_editor.ui-tablet .ts-sheet-handle{width:44px;height:5px;border-radius:99px;background:var(--chrome-border);margin:0 auto 12px}.svg_editor.ui-tablet .ts-sheet .kind{font-size:13px;font-weight:700;color:var(--accent);text-transform:capitalize;position:absolute;top:16px;left:22px}.svg_editor.ui-tablet .ts-sheet .closeb{position:absolute;top:12px;right:16px}.svg_editor.ui-tablet .ts-sheet-row{display:flex;align-items:flex-end;gap:22px}.svg_editor.ui-tablet .sheet-col{display:flex;flex-direction:column;gap:9px}.svg_editor.ui-tablet .sheet-sep{width:1px;align-self:stretch;background:var(--chrome-border);margin:2px}.svg_editor.ui-tablet .slider-mini{width:170px}.svg_editor.ui-tablet .ts-actions{display:flex;gap:6px}:root,.svg_editor,.svg_editor.theme-light,se-color-dialog,se-palette-dialog,se-text-prompt-dialog,se-image-import-dialog,se-trace-dialog,se-edit-prefs-dialog,se-export-dialog,se-svg-source-editor-dialog,se-img-prop-dialog,se-plain-alert-dialog,se-cmenu_canvas-dialog,se-cmenu-layers,se-hotkey-dialog,se-favorites-dialog,se-command-search-dialog{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #F4F5F7;--chrome-bg: #FFFFFF;--chrome-border: #E6E8EC;--canvas-bg: #F8F9FB;--ruler-bg: #FFFFFF;--paper-bg: #FFFFFF;--paper-border: #DCDFE5;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(20,25,35,.05), 0 12px 28px -10px rgba(20,25,35,.18), 0 30px 60px -30px rgba(20,25,35,.25);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(20,25,35,.1)) drop-shadow(0 12px 24px rgba(20,25,35,.16));--fg: #1B1F24;--muted: #6B7280;--icon: #4B5563;--icon-hover: #0F172A;--icon-hover-bg: #EEF1F5;--icon-active-bg: #E2E6EC;--accent: #2962FF;--accent-soft: #E8EFFF;--accent-border: #C7D7FF;--active-shadow: 0 1px 2px rgba(41,98,255,.18);--brand-bg: #F6F7F9;--brand-bg-hover: #EEF1F5;--brand-border: #E6E8EC;--brand-fg: #1B1F24;--file-bg: #F4F5F7;--file-border: #E6E8EC;--group-bg: #F6F7F9;--group-border: #E6E8EC;--field-bg: #FFFFFF;--field-border: #DDE1E7;--field-border-h: #C8CDD6;--accent-ring: rgba(41,98,255,.16);--section-rule: #EEF0F3;--swatch-bg: #FFFFFF;--swatch-border: #C3C8D1;--swatch-border-hover: #2962FF;--swatch-inset: rgba(0,0,0,.18);--swatch-shadow: 0 1px 2px rgba(20,25,35,.08);--checker: rgba(0,0,0,.07);--cp-modal-bg: #FFFFFF;--cp-head-bg: #FAFBFC;--cp-stage-bg: #ECEEF2;--cp-backdrop: rgba(20, 24, 35, .06);--cp-field-hover: #B6BFCE;--cp-focus-ring: rgba(41, 98, 255, .18);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--cp-stop-ring: rgba(20, 24, 35, .3);--cp-danger: #E11D48;--cp-danger-bg: #FEE9EE;--cp-btn-primary-fg: #FFFFFF;--cp-btn-primary-shadow: rgba(41, 98, 255, .28);--cp-dial-bg: #F4F5F7;--cp-dial-border: #DDE1E7;--cp-dial-tick: #B6BFCE;--cp-swatch-bg: #FFFFFF;--cp-swatch-border: #C3C8D1;--cp-swatch-inset: rgba(0, 0, 0, .18);--cp-checker: rgba(0, 0, 0, .07);--sl-modal-bg: #FFFFFF;--sl-head-bg: #FAFBFC;--sl-side-bg: #F6F7F9;--sl-field-hover: #B6BFCE;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px rgba(20,24,35,.04);--sl-tile-shadow: 0 2px 6px rgba(41,98,255,.12);--sl-btn-primary-fg: #FFFFFF;--sl-btn-primary-shadow: rgba(41,98,255,.28);--sl-shape: #4B5563;--sl-shape-hover: #0F172A;--ruler-tick: #B5BAC3;--ruler-text: #8A8F99;--icon-bg-color: transparent;--main-menu-shadow: rgba(0,0,0,.12);--scrollbar-thumb: rgba(80,80,80,.3);--global-se-spin-input-width: 82px;--top-toolbar-min-height: 56px}.svg_editor.theme-dark,se-color-dialog.theme-dark,se-palette-dialog.theme-dark,se-text-prompt-dialog.theme-dark,se-image-import-dialog.theme-dark,se-trace-dialog.theme-dark,se-edit-prefs-dialog.theme-dark,se-export-dialog.theme-dark,se-svg-source-editor-dialog.theme-dark,se-img-prop-dialog.theme-dark,se-plain-alert-dialog.theme-dark,se-cmenu_canvas-dialog.theme-dark,se-cmenu-layers.theme-dark,se-hotkey-dialog.theme-dark,se-favorites-dialog.theme-dark,se-command-search-dialog.theme-dark{--ui-font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;--app-bg: #16181D;--chrome-bg: #1E2026;--chrome-border: #2C2F37;--canvas-bg: #0F1115;--ruler-bg: #1A1C22;--paper-bg: #FAFAF8;--paper-border: #1A1C22;--paper-radius: 4px;--paper-shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -10px rgba(0,0,0,.5), 0 40px 80px -30px rgba(0,0,0,.65);--paper-shadow-filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 14px 30px rgba(0,0,0,.5));--fg: #ECEEF2;--muted: #9098A5;--icon: #B7BDC8;--icon-hover: #FFFFFF;--icon-hover-bg: #2A2D35;--icon-active-bg: #353944;--accent: #F6B23A;--accent-soft: #3A2E18;--accent-border: #5A4422;--active-shadow: 0 1px 0 rgba(246,178,58,.15), 0 0 0 1px rgba(246,178,58,.18) inset;--brand-bg: #25282F;--brand-bg-hover: #2C2F37;--brand-border: #353944;--brand-fg: #ECEEF2;--file-bg: #16181D;--file-border: #2C2F37;--group-bg: #181A20;--group-border: #2C2F37;--field-bg: #14161A;--field-border: #2C2F37;--field-border-h: #3C4150;--accent-ring: rgba(246,178,58,.2);--section-rule: #23262E;--swatch-bg: #2F333C;--swatch-border: #6A7180;--swatch-border-hover: #F6B23A;--swatch-inset: rgba(255,255,255,.22);--swatch-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 2px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.35);--checker: rgba(255,255,255,.06);--cp-modal-bg: #22252C;--cp-head-bg: #1E2026;--cp-stage-bg: #0F1115;--cp-backdrop: rgba(0, 0, 0, .5);--cp-field-hover: #4B5160;--cp-focus-ring: rgba(246, 178, 58, .22);--cp-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--cp-stop-ring: rgba(0, 0, 0, .6);--cp-danger: #FB7185;--cp-danger-bg: #3A1A22;--cp-btn-primary-fg: #1A1208;--cp-btn-primary-shadow: rgba(246, 178, 58, .3);--cp-dial-bg: #1A1C22;--cp-dial-border: #353944;--cp-dial-tick: #4B5160;--cp-swatch-bg: #2F333C;--cp-swatch-border: #6A7180;--cp-swatch-inset: rgba(255, 255, 255, .22);--cp-checker: rgba(255, 255, 255, .06);--sl-modal-bg: #22252C;--sl-head-bg: #1E2026;--sl-side-bg: #1A1C22;--sl-field-hover: #4B5160;--sl-tab-shadow: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);--sl-tile-shadow: 0 2px 8px rgba(246,178,58,.18);--sl-btn-primary-fg: #1A1208;--sl-btn-primary-shadow: rgba(246,178,58,.3);--sl-shape: #B7BDC8;--sl-shape-hover: #FFFFFF;--ruler-tick: #4A4F5A;--ruler-text: #7A8190;--icon-bg-color: transparent;--main-menu-shadow: rgba(0,0,0,.5);--scrollbar-thumb: rgba(180,180,180,.25)}.svg_editor *{transform-origin:0 0}.svg_editor{display:grid;grid-template-rows:minmax(var(--top-toolbar-min-height),auto) 15px 1fr 56px;grid-template-columns:56px 15px 50px 1fr 15px;grid-template-areas:"main main   main top top" "left corner rulerX rulerX side" "left rulerY workarea workarea side" "left bottom bottom bottom bottom";font-size:8pt;background:var(--app-bg);font-family:var(--ui-font, "Inter", -apple-system, system-ui, sans-serif);color:var(--fg);-webkit-user-select:text;user-select:text;width:100%;height:100%}[data-svgedit-root]:focus{outline:none}#title_panel>p{display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;background:var(--file-bg);border:1px solid var(--file-border);color:var(--fg);font-size:13px;font-weight:500;letter-spacing:-.003em;cursor:text;margin:0}.svg_editor.open{grid-template-columns:56px 15px 50px 1fr 280px}#svgroot{-webkit-user-select:none;user-select:none;position:absolute;top:0;left:0}#workarea{grid-area:workarea;background-color:var(--canvas-bg);border:none;overflow:auto;text-align:center;padding:56px 80px 80px 56px}#layer_focus_badge{grid-area:workarea;align-self:start;justify-self:center;margin-top:10px;z-index:6;display:none;align-items:center;gap:6px;padding:4px 6px 4px 12px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.01em;color:var(--fg);background:var(--accent-soft);border:1px solid var(--accent-border)}#layer_focus_badge.visible{display:inline-flex}#layer_focus_badge_switch{display:inline-flex;gap:2px;padding:2px;border-radius:999px;background:var(--group-bg);border:1px solid var(--group-border)}#layer_focus_badge_switch button{font:inherit;font-weight:600;color:var(--muted);background:transparent;border:none;border-radius:999px;padding:2px 8px;cursor:pointer}#layer_focus_badge_switch button:hover{color:var(--fg)}#layer_focus_badge_switch button.active{color:var(--fg);background:var(--chrome-bg)}#shape_builder_hint{grid-area:workarea;align-self:start;justify-self:center;margin-top:10px;z-index:6;display:none;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:999px;font-size:12px;color:var(--fg);background:var(--chrome-bg);border:1px solid var(--chrome-border);box-shadow:0 2px 8px #00000026}#shape_builder_hint.visible{display:inline-flex}#shape_builder_hint .sb-hint-count{color:var(--accent);font-weight:600}#shape_builder_hint .sb-hint-done{font:inherit;font-weight:600;color:var(--fg);background:var(--group-bg);border:1px solid var(--group-border);border-radius:999px;padding:3px 10px;cursor:pointer}#shape_builder_hint .sb-hint-done:hover{background:var(--icon-hover-bg)}#svgcanvas{line-height:normal;display:inline-block;background:transparent;text-align:center;vertical-align:middle;position:relative}#canvas_watermark{position:absolute;inset:0;z-index:1;display:none;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:160px 160px;opacity:.07}#canvas_watermark.visible{display:block}#canvasBackground{filter:var(--paper-shadow-filter)}#canvasBackground>rect{stroke:var(--paper-border);stroke-width:1px;vector-effect:non-scaling-stroke}#sidepanels{grid-area:side;position:relative;min-height:0}#sidepanel_content{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-gutter:stable}#sidepanel_handle{writing-mode:vertical-rl;text-orientation:mixed;color:var(--muted);position:absolute;right:0;top:50%;margin-top:-60px;cursor:pointer;height:120px;width:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-right:none;border-top-left-radius:10px;border-bottom-left-radius:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .12s,color .12s;z-index:4}#sidepanel_handle:hover{background:var(--icon-hover-bg);color:var(--icon-hover)}.svg_editor.open #sidepanel_handle{right:100%}.svg_editor:not(.open) #sidepanel_content{display:none}a{color:var(--accent)}hr{border:none;border-bottom:1px solid var(--chrome-border)}#linkLabel>svg{height:20px;padding-top:4px}#sidepanel_tabs{display:flex;gap:2px;padding:6px 8px 0;position:sticky;top:0;background:var(--chrome-bg);border-bottom:1px solid var(--section-rule, #EEF0F3);z-index:1}.sidepanel_tab{flex:1;appearance:none;border:none;background:transparent;color:var(--muted);font:600 12.5px var(--ui-font);padding:9px 4px 11px;cursor:pointer;position:relative;border-radius:7px 7px 0 0;transition:color .12s,background .12s}.sidepanel_tab:hover{color:var(--fg);background:var(--icon-hover-bg)}.sidepanel_tab.active{color:var(--accent)}.sidepanel_tab.active:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}.sidepanel_tabpanel{display:none;padding:2px 0 10px}.sidepanel_tabpanel.active{display:block}.sidepanel_section,#color_shift_panel,#shadow_panel{padding:14px 16px;margin:0;border-top:1px solid var(--section-rule, #EEF0F3);color:var(--fg);-webkit-user-select:none;user-select:none}.sidepanel_advanced>summary{cursor:pointer;margin:0}.sidepanel_advanced[open]>summary{margin-bottom:12px}.sidepanel_hint{display:none;margin:0;padding:14px 16px;font-size:12.5px;color:var(--muted)}.text_panel[style*=none]~#sidepanel_text[style*=none]~.sidepanel_hint{display:block}.sidepanel_tabpanel>.sidepanel_section:first-child{border-top:none}.sidepanel_section_label,#color_shift_label{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;white-space:nowrap}.sidepanel_section_grid,.color_shift_grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;align-items:start}.sidepanel_section_grid .span2,.sidepanel_section_grid se-input[size="15"],.sidepanel_section_grid .image_url_field{grid-column:1 / -1}.arc_field{display:flex;flex-direction:column;gap:5px;min-width:0}.arc_presets{display:flex;gap:4px}.arc_preset{flex:1;min-width:0;height:22px;padding:0;font:600 10px var(--ui-font);font-variant-numeric:tabular-nums;color:var(--muted);background:var(--field-bg);border:1px solid var(--field-border);border-radius:6px;cursor:pointer}.arc_preset:hover{color:var(--accent);background:var(--icon-hover-bg);border-color:var(--accent-border)}.sub_label{font:600 10px var(--ui-font);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 5px 2px}.sidepanel_subsection{margin-top:12px}.sidepanel_btn_group+.sidepanel_btn_group{margin-top:12px;padding-top:12px;border-top:1px solid var(--section-rule, #EEF0F3)}.sidepanel_btn_row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.sidepanel_btn_row>[data-caption]{position:relative;min-width:44px;padding-bottom:14px;box-sizing:border-box}.sidepanel_btn_row>[data-caption]:after{content:attr(data-caption);position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:10px;line-height:12px;color:var(--muted);white-space:nowrap;pointer-events:none}.sidepanel_seg{display:inline-flex;align-items:center;background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;overflow:hidden;height:34px}.sidepanel_seg se-list,.sidepanel_seg se-button{--seg: 1}.sidepanel_text_font{display:flex;align-items:center;gap:8px}.sidepanel_text_font se-font-select{flex:1;min-width:0}.shadow_panel_footer,.clipmask_panel_footer{display:flex;align-items:center;gap:10px;margin-top:12px}.shadow_panel_footer input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--field-border);border-radius:8px;background:var(--field-bg);cursor:pointer}.shadow_panel_footer_label{font-size:12.5px;color:var(--muted)}.shadow_panel_header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.shadow_panel_header .sidepanel_section_label{margin:0}.shadow_toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer}#shadow_panel[data-off] .sidepanel_section_grid,#shadow_panel[data-off] .shadow_panel_footer{opacity:.45}.color_shift_toggles{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:4px}.color_shift_toggles label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer}.color_shift_toggles input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;margin:0}#color_shift_reset{margin-left:auto;height:32px;padding:0 14px;font:600 12.5px var(--ui-font);color:var(--fg);background:var(--field-bg);border:1px solid var(--field-border);border-radius:8px;cursor:pointer}#color_shift_reset:hover{background:var(--icon-hover-bg);border-color:var(--field-border-h, #C8CDD6)}#color_shift_hint{font-size:12px;color:var(--muted);line-height:1.45}#layerpanel{-webkit-user-select:none;user-select:none;padding:14px 16px}#layersLabel{font:700 11px var(--ui-font);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}#layerbuttons{margin:0 0 12px;padding:0;width:100%;height:auto;border:0;display:flex;gap:4px;align-items:center;justify-content:flex-start}#layerlist{margin:0;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--field-border);border-radius:9px;overflow:hidden;background:var(--field-bg)}#layerlist tr.layer{background:transparent}#layerlist tr.layer+tr.layer td{border-top:1px solid var(--section-rule, #EEF0F3)}#layerlist tr.layersel{background:var(--accent-soft)}#layerlist td{padding:9px 6px;cursor:pointer}#layerlist td.layervis{width:30px;padding-left:11px;text-align:center}#layerlist td.layervis *{display:block}#layerlist td.layerinvis *{display:none}#layerlist td.layerlock{width:22px;padding-left:4px;text-align:center}#layerlist td.layerlock *{display:block;color:var(--muted)}#layerlist td.layerlock:hover *{color:var(--icon-hover, var(--fg))}#layerlist td.layerlock.locked *{color:var(--accent)}#layerlist td.layercomment{width:22px;padding-left:4px;text-align:center}#layerlist td.layercomment *{display:block;color:var(--muted)}#layerlist td.layercomment:hover *{color:var(--icon-hover, var(--fg))}#layerlist td.layercomment.commented *{color:var(--accent)}#layerlist td.layerpreview{width:30px;padding-left:0;padding-right:0;cursor:default}#layerlist .layerpreview-thumb{display:block;width:28px;height:20px;overflow:hidden;border:1px solid var(--field-border);border-radius:4px;background:var(--canvas-bg)}#layerlist td.layername{font-size:13px;font-weight:500;color:var(--fg)}#layerlist td.layername:hover{color:var(--accent)}#layerlist tr.layersel td.layername{font-weight:600}#selLayerLabel{white-space:nowrap}#selLayerNames{display:block;position:static;top:0;margin-top:12px}#objects_panel{border-top:1px solid var(--chrome-border);padding:10px 16px 12px}#objects_panel_header{display:flex;align-items:center;gap:8px;margin-bottom:6px}#objects_panel_label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}#group_name_input{flex:1;font-size:12px;padding:2px 6px;border:1px solid var(--field-border);border-radius:4px;background:var(--field-bg);color:var(--fg);min-width:0}#group_name_input:focus{outline:none;border-color:var(--accent)}.object-list{list-style:none;margin:0;padding:0}.object-list li{padding-left:14px}.object-list>li{padding-left:0}.object-list-item{display:block;padding:3px 6px;font-size:12px;cursor:pointer;border-radius:4px;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.object-list-item:hover{background:var(--accent-soft);color:var(--accent)}#main_button{grid-area:main;display:inline-flex;align-items:center;padding:0 10px;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border)}#main_icon{display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 8px;border-radius:10px;background:var(--brand-bg);border:1px solid var(--brand-border);color:var(--brand-fg);cursor:pointer;transition:background .12s;white-space:nowrap;height:36px}#main_icon:hover{background:var(--brand-bg-hover)!important}#main_icon.buttondown{background:var(--brand-bg-hover)!important;box-shadow:none!important;border-radius:10px}#logo{display:inline-flex;align-items:center;justify-content:center}#logo svg,#logo img{width:22px;height:22px;display:block}#logo img{filter:none}#main_icon>div{display:inline-flex;align-items:center}#main_button .dropdown{opacity:.55;display:inline-flex;align-items:center;margin-left:2px}#main_icon span{font-weight:600;font-size:13px;letter-spacing:-.005em;color:var(--brand-fg);font-family:var(--ui-font, inherit);display:inline;position:static;padding:0;line-height:normal}#main_menu{z-index:12;background:var(--chrome-bg);color:var(--fg);position:relative;width:230px;padding:6px;box-shadow:0 4px 16px -2px var(--main-menu-shadow);border:1px solid var(--chrome-border);border-radius:10px;font-size:1.1em;display:none;overflow:hidden;clear:both;top:4px}#main_menu ul,#main_menu li{list-style:none;margin:0;padding:0}#main_menu li{line-height:22px;padding:7px 10px;overflow:auto;cursor:pointer;border-radius:7px;color:var(--fg)}#main_menu li:hover{background:var(--icon-hover-bg)}#main_menu li>div{float:left;padding-right:5px}#main_menu p{margin-top:5px}#tools_top{grid-area:top;display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;background:var(--chrome-bg);border-bottom:1px solid var(--chrome-border);min-height:var(--top-toolbar-min-height);padding:0 10px;gap:6px;position:relative;z-index:5;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}#tools_top::-webkit-scrollbar{height:3px}#tools_top>*{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:2px;flex-shrink:0}#editor_panel,#history_panel,#zoom_panel,.quick_tray{display:inline-flex;align-items:center;gap:2px;padding:4px;background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px}.path_node_panel se-spin-input,.path_node_panel se-select{flex-direction:row;align-items:center;gap:6px}#star_panel se-spin-input,#polygon_panel se-spin-input{width:58px}#tools_top.tt-compact #title_panel,#tools_top.tt-compact #theme_panel{display:none}#top_more{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;color:var(--icon);background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px;cursor:pointer}#top_more[hidden]{display:none}#top_more:hover,#tools_top.tt-more-open #top_more{color:var(--icon-hover);background:var(--icon-hover-bg)}#top_more_pop{display:none;position:fixed;top:calc(var(--top-toolbar-min-height, 56px) + 6px);right:10px;max-width:calc(100vw - 20px);flex-wrap:wrap;gap:6px;padding:8px;background:var(--chrome-bg);border:1px solid var(--chrome-border);border-radius:12px;box-shadow:0 8px 24px #0000002e;z-index:30}#tools_top.tt-more-open #top_more_pop{display:flex}#top_end{margin-left:auto;position:sticky;right:0;padding-left:6px;background:var(--chrome-bg);z-index:1}#title_panel{display:inline-flex;align-items:center}#tools_bottom{grid-area:bottom;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--chrome-bg);border-top:1px solid var(--chrome-border);height:56px;box-sizing:border-box;scrollbar-width:thin}#tools_bottom::-webkit-scrollbar{width:3px;height:3px}#tools_left{grid-area:left;border-right:1px solid var(--chrome-border);background:var(--chrome-bg);margin-left:auto;margin-right:auto;overflow-y:scroll;scrollbar-width:none;-webkit-user-select:none;user-select:none;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px}#tools_left>.tool-group-start{position:relative;margin-top:8px}#tools_left>.tool-group-start:before{content:"";position:absolute;top:-6px;left:50%;width:22px;margin-left:-11px;height:1px;background:var(--chrome-border)}#tools_left>#tools_overflow{position:sticky;bottom:-10px;margin-top:auto;background:var(--chrome-bg);z-index:1}#tools_left::-webkit-scrollbar{width:3px}#tools_left::-webkit-scrollbar-track,#tools_bottom::-webkit-scrollbar-track{background:transparent}#tools_left::-webkit-scrollbar-thumb,#tools_bottom::-webkit-scrollbar-thumb{background-color:var(--scrollbar-thumb)}#tools_left>[draggable]:hover{cursor:grab}#tools_left .se-dragging{opacity:.4;cursor:grabbing}#tools_left .se-drop-before{box-shadow:0 -2px 0 0 var(--accent)}#tools_left .se-drop-after{box-shadow:0 2px 0 0 var(--accent)}#tools_left .se-grabbed{box-shadow:0 0 0 2px var(--accent) inset}#tools_left [tabindex]:focus-visible{outline:none;box-shadow:0 0 0 3px var(--accent-border, rgba(41, 98, 255, .18))}#svgcontent [fill=none]{pointer-events:stroke}#workarea.wireframe #svgcontent *{fill:none;stroke:#000;stroke-width:1px;stroke-opacity:1;stroke-dasharray:0;opacity:1;pointer-events:stroke;filter:none}#workarea.wireframe #svgcontent text{fill:#000;stroke:none}#workarea.wireframe #canvasBackground>rect{fill:#fff!important}#cur_context_panel{grid-area:rulerX;line-height:22px;overflow:auto;padding-left:5px;font-size:12px;background:#000c;color:#ccc}#cur_context_panel a{float:none;text-decoration:none}#cur_context_panel a:hover{text-decoration:underline}input[type=text]{padding:2px}.dropdown{position:relative}.dropdown button{width:15px;height:21px;margin:6px 0 0 1px;padding:0;border-left:1px solid var(--chrome-border);border-top:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border);border-bottom:1px solid var(--chrome-border);background-color:var(--chrome-bg)}.dropdown button.down{border-left:1px solid var(--chrome-border);border-top:1px solid var(--chrome-border);border-right:1px solid var(--chrome-border);border-bottom:1px solid var(--chrome-border);background-color:var(--icon-hover-bg)}.dropdown ul{list-style:none;position:absolute;margin:0;padding:0;left:-85px;top:26px;z-index:4;display:none}.dropup ul{top:auto;bottom:24px}.dropdown li{display:block;width:120px;padding:4px;background:var(--chrome-bg);border:1px solid var(--icon-hover-bg);margin:0 0 -1px;line-height:16px}.dropdown li:hover{background-color:var(--icon-hover-bg)}.dropdown li.special{padding:10px 4px}.dropdown li.special:hover{background:var(--icon-hover-bg)}#font_family_dropdown-list li{font-size:1.4em}#font_family{margin-left:5px;margin-right:0}#main_menu li#tool_open,#main_menu li#tool_import{position:relative;overflow:hidden}#tool_open input,#tool_import input{position:absolute;opacity:0;font-size:10em;top:-5px;right:-5px;margin:0;cursor:pointer}.disabled{opacity:.5;cursor:default}.tool_sep{width:1px;height:22px;background:var(--chrome-border);border:none;margin:0 4px;flex-shrink:0}.width_label{padding-right:5px}#text{position:absolute;left:-9999px;white-space:pre;resize:none}.bottom-icon{width:22px}#palette{margin-left:auto;display:flex;align-items:center;flex:1;min-width:0}#stroke_expand{width:0;overflow:hidden}#toggle_stroke_tools{position:absolute;right:0;top:0;bottom:0;width:25px;text-align:center;border-radius:0 3px 3px 0;margin:0}#toggle_stroke_tools:before{content:">>";letter-spacing:-3px;font-weight:700;color:var(--fg)}.expanded #toggle_stroke_tools:before{content:"<<"}#toggle_stroke_tools:hover{background:var(--icon-hover-bg)}#tool_opacity{right:0}#tool_opacity{overflow:visible}ul li.current{background-color:var(--icon-hover-bg)}#copyright{text-align:right;padding-right:.3em}.overlay{position:absolute;inset:0;background-color:#000;opacity:.6;z-index:5}#save_output_btns{display:none;text-align:left}#save_output_btns p{margin:.5em 1.5em;display:inline-block}#bg_blocks{overflow:auto;margin-left:30px}.dropdown li.tool_button{width:24px}#svgcontent{color:unset}#zoom{color:var(--fg);background-color:var(--chrome-bg);border:none}#stroke_width,#opacity{color:var(--fg)}@keyframes cmdSearchFlash{0%,to{box-shadow:none}30%{box-shadow:0 0 0 3px var(--accent-ring, rgba(41, 98, 255, .16))}}.cmd-search-flash{animation:cmdSearchFlash .9s ease-out}#frameLabels{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible}#frameLabels .frame-label{position:absolute;transform:translateY(-100%);padding:1px 6px;font-size:11px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted, #6b7280);background:var(--chrome-bg, #fff);border:1px solid var(--chrome-border, #d1d5db);border-radius:4px 4px 0 0;-webkit-user-select:none;user-select:none}#frameLabels.interactive .frame-label{pointer-events:auto;cursor:default}#frameLabels .frame-label.selected{color:var(--accent, #2563eb);background:var(--accent-soft, #eff6ff);border-color:var(--accent-border, #93c5fd)}#frameLabels .frame-label-input{width:9em;padding:0;font:inherit;color:var(--fg, #111);background:var(--field-bg, #fff);border:0;outline:1px solid var(--accent, #2563eb)}#selectorParentGroup [id^=selectedBox],#selectorParentGroup #groupSelectedBox,#selectorParentGroup #selectorGrip_rotateconnector{stroke:var(--accent)}#selectorParentGroup [id^=selectorGrip_resize_],#selectorParentGroup #selectorGrip_rotate{fill:#fff;stroke:var(--accent);stroke-width:1.5}#selectorParentGroup #selectorRubberBand{fill:var(--accent);stroke:var(--accent)}', MC = () => {
   const s = window.opener || window.parent;
   if (s)
     try {
@@ -59636,7 +59654,7 @@ class IC {
     }, { signal: this.listenerAbort.signal }), this.workarea.addEventListener("dblclick", (Y) => {
       this.svgCanvas.getMode() === "ext-panning" && this.leftPanel.clickSelect();
     }), document.addEventListener("keydown", (Y) => {
-      if (La(this.$container, Y.target) && Ar(this)) {
+      if (La(this.$container, Y.target) && Nr(this)) {
         if (this.svgCanvas.runExtensions("keyDown", { event: Y })?.preventDefault) {
           Y.preventDefault();
           return;
@@ -59658,7 +59676,7 @@ class IC {
       }
       this.svgCanvas.pasteElements();
     })), this.pasteHandler = (Y) => {
-      if (!Ar(this)) return;
+      if (!Nr(this)) return;
       this.pasteFallbackArmer.disarm();
       const oe = Y.target;
       if (oe && (oe.isContentEditable || oe.nodeName === "INPUT" || oe.nodeName === "TEXTAREA")) return;
@@ -59667,7 +59685,7 @@ class IC {
     }, document.addEventListener("paste", this.pasteHandler), this.workarea.addEventListener("wheel", (Y) => {
       Y.shiftKey && !Y.ctrlKey && !Y.metaKey && (Y.preventDefault(), this.workarea.scrollLeft += Y.deltaY || Y.deltaX);
     }, { passive: !1 }), document.addEventListener("keyup", (Y) => {
-      La(this.$container, Y.target) && Ar(this) && (Y.code.toLowerCase() === "space" ? (this.svgCanvas.spaceKey = L = !1, this.svgCanvas.setMode($ === "ext-panning" ? "select" : $ ?? "select"), Y.preventDefault()) : Y.key.toLowerCase() === "shift" && this.svgCanvas.getMode() === "zoom" && (this.workarea.style.cursor = a, Y.preventDefault()));
+      La(this.$container, Y.target) && Nr(this) && (Y.code.toLowerCase() === "space" ? (this.svgCanvas.spaceKey = L = !1, this.svgCanvas.setMode($ === "ext-panning" ? "select" : $ ?? "select"), Y.preventDefault()) : Y.key.toLowerCase() === "shift" && this.svgCanvas.getMode() === "zoom" && (this.workarea.style.cursor = a, Y.preventDefault()));
     }, { signal: this.listenerAbort.signal }), this.setPanning = (Y) => {
       this.svgCanvas.spaceKey = L = Y;
     };
@@ -59965,7 +59983,7 @@ const FC = '<div id="tools_left"><se-button id="tool_select" title="tools.mode_s
   });
 };
 let Xi = null;
-const fs = (s) => {
+const _s = (s) => {
   (!Xi || !document.body.contains(Xi)) && (Xi = document.createElement("div"), Xi.setAttribute("aria-live", "polite"), Xi.setAttribute("role", "status"), Xi.style.cssText = "position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;", document.body.appendChild(Xi)), Xi.textContent = "", setTimeout(() => {
     Xi.textContent = s;
   }, 0);
@@ -60003,17 +60021,17 @@ const fs = (s) => {
       ae.tabIndex = ae === ie ? 0 : -1;
     });
   }, M = (ee) => {
-    o = ee, a = { main: c(), overflow: h() }, ee.classList.add("se-grabbed"), ee.setAttribute("aria-grabbed", "true"), fs(`${br(ee)} grabbed. Use arrow keys to move, Space to drop, Escape to cancel.`);
+    o = ee, a = { main: c(), overflow: h() }, ee.classList.add("se-grabbed"), ee.setAttribute("aria-grabbed", "true"), _s(`${br(ee)} grabbed. Use arrow keys to move, Space to drop, Escape to cancel.`);
   }, E = () => {
     o?.classList.remove("se-grabbed"), o?.removeAttribute("aria-grabbed"), o = null, a = null;
   }, P = () => {
     const ee = o;
-    E(), y(ee), ee.focus(), fs(`${br(ee)} placed.`);
+    E(), y(ee), ee.focus(), _s(`${br(ee)} placed.`);
   }, L = () => {
     const ee = o, ne = a;
-    E(), ne.main.forEach((ie) => s.insertBefore(ie, e)), ne.overflow.forEach((ie) => e.appendChild(ie)), v(), C(), y(ee), ee.focus(), i(f()), fs("Move canceled.");
+    E(), ne.main.forEach((ie) => s.insertBefore(ie, e)), ne.overflow.forEach((ie) => e.appendChild(ie)), v(), C(), y(ee), ee.focus(), i(f()), _s("Move canceled.");
   }, $ = (ee, ne) => {
-    v(), C(), y(ee), ee.focus(), i(f()), fs(ne);
+    v(), C(), y(ee), ee.focus(), i(f()), _s(ne);
   }, B = (ee, ne) => {
     const ie = ee.parentElement === e, ae = ie ? h() : c(), Y = ae.indexOf(ee);
     if (ie && ne < 0 && Y === 0) {
@@ -61788,6 +61806,10 @@ class oS {
         <div role="separator"></div>
         <se-menu-item id="tool_editor_prefs" label="config.editor_prefs" src="editPref.svg"></se-menu-item>
     </se-menu>`, this.editor.$svgEditor.append(o.content.cloneNode(!0)), xr(e("tool_export"), function() {
+      if (typeof window.svgEditHost?.exportDrawing == "function") {
+        window.svgEditHost.exportDrawing();
+        return;
+      }
       e("se-export-dialog").setAttribute("dialog", "open");
     }), e("se-export-dialog").addEventListener(
       "change",

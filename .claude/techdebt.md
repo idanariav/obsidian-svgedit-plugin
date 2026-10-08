@@ -11,15 +11,4 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-The entries below came out of a UI/UX review (2026-10-07), run from the
-svgedit repo. Findings about the editor itself, are in
-`../svgedit/.claude/techdebt.md`.
-
-## Two different export flows
-
-The editor's main menu still has "Export", which opens svgedit's own dialog and
-downloads the file the way a browser would. The plugin has "Export drawing…"
-(`ExportModal`), which supports frames, vault folders and PNG scale. The two
-behave differently. Either route the editor's menu item to `ExportModal` (a
-host hook in the fork, like `svgEditHost`) or hide it. Small to medium; needs
-changes in both repos.
+_No open entries._
