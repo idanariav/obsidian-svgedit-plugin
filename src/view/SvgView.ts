@@ -210,6 +210,8 @@ export class SvgView extends TextFileView {
       // Touch-first tablet shell vs. standard desktop layout, chosen per platform
       // (PC vs. mobile) in the plugin settings.
       tabletMode: this.resolveTabletMode(),
+      // The plugin settings own the UI mode, so hide the menu's own toggle.
+      hideTabletToggle: true,
       // Route the editor's custom palette + saved shape library through the
       // plugin's data store (data.json) instead of svgedit's own localStorage,
       // so these customizations persist across plugin updates and sync with the

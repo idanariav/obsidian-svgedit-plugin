@@ -15,13 +15,6 @@ The entries below came out of a UI/UX review (2026-10-07), run from the
 svgedit repo. Findings about the editor itself, are in
 `../svgedit/.claude/techdebt.md`.
 
-## Editor's "Tablet mode" menu toggle conflicts with the UI-mode settings
-
-UI mode is set both by the "Editor UI mode (desktop/mobile)" settings and by
-"Tablet mode" in the editor's main menu, so users can't tell which one wins.
-Hide the menu's tablet toggle when the host manages UI mode; needs a small
-config flag in the fork. Small.
-
 ## Two different export flows
 
 The editor's main menu still has "Export", which opens svgedit's own dialog and
