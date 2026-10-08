@@ -52,8 +52,7 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Editor theme")
       .setDesc(
-        "Default theme for the SVG editor. \"Match Obsidian\" follows Obsidian's light/dark mode; "
-        + "toggling the theme inside the editor updates this setting.",
+        "Theme for the SVG editor. \"Match Obsidian\" (default) follows Obsidian's light/dark mode.",
       )
       .addDropdown((d) =>
         d

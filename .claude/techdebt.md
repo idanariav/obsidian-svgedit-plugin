@@ -15,15 +15,12 @@ The entries below came out of a UI/UX review (2026-10-07), run from the
 svgedit repo. Findings about the editor itself, are in
 `../svgedit/.claude/techdebt.md`.
 
-## Theme is set in three places, UI mode in two
+## Editor's "Tablet mode" menu toggle conflicts with the UI-mode settings
 
-The theme comes from Obsidian's own theme, the plugin's "Editor theme" setting,
-and the editor's moon button (`ext-theme-toggle`, in `SvgView`'s extension
-list). UI mode is set both by the "Editor UI mode (desktop/mobile)" settings
-and by "Tablet mode" in the editor's main menu. Users can't tell which one
-wins. Suggestion: follow Obsidian by default, drop `ext-theme-toggle` from the
-plugin's extensions, and hide the menu's tablet toggle when the host manages
-UI mode. That last part needs a small config flag in the fork. Small.
+UI mode is set both by the "Editor UI mode (desktop/mobile)" settings and by
+"Tablet mode" in the editor's main menu, so users can't tell which one wins.
+Hide the menu's tablet toggle when the host manages UI mode; needs a small
+config flag in the fork. Small.
 
 ## Two different export flows
 

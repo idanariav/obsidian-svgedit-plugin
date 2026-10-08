@@ -298,7 +298,6 @@ export class SvgView extends TextFileView {
         "ext-curvature",
         "ext-puppet-warp",
         "ext-layer_view",
-        "ext-theme-toggle",
         "ext-shadow",
         "ext-outline",
         "ext-color-shift",

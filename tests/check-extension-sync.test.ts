@@ -1,10 +1,10 @@
 /**
  * Guards against the extensions list in SvgView.ts drifting from svgedit's
  * defaultExtensions (ConfigObj.js). That list is a hand-maintained mirror
- * (see the comment above `extensions:` in SvgView.ts) with three deliberate
+ * (see the comment above `extensions:` in SvgView.ts) with four deliberate
  * omissions: ext-opensave and ext-storage (need browser file-system /
  * localStorage APIs unavailable in Obsidian) and ext-overview_window
- * (disabled upstream for performance). Anything else missing, or any addition
+ * (disabled upstream for performance), and ext-theme-toggle (the plugin owns the theme). Anything else missing, or any addition
  * not in svgedit's defaults, means the two have drifted and someone should
  * look at why.
  *
@@ -25,6 +25,7 @@ const KNOWN_OMISSIONS = new Set([
   "ext-opensave",
   "ext-storage",
   "ext-overview_window",
+  "ext-theme-toggle", // theme follows Obsidian / the plugin's "Editor theme" setting
 ]);
 
 function extractArray(source: string, arrayStartRegex: RegExp): string[] | null {
