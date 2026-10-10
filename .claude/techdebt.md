@@ -11,4 +11,14 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-_No open entries._
+## Expose the editor's command registry in Obsidian's command palette
+
+svgedit now has a command registry (`editor.commands`, added 2026-10-10 in the svgedit repo; part of the
+`EditorHostApi` in `hostApi.d.ts`): `commands.list()` returns every editing action (id, translated label,
+group, effective keys, `enabled` + `disabledReason`, params, `interactive`) and `commands.run(id, params?)`
+runs one (throws `CommandError`, `code`: `unknown` | `disabled` | `badParams` | `internal`). The plugin's
+Obsidian commands in `src/commands.ts` are all file-level (new, export, versions); none of the ~150 editing
+actions reach the palette. Idea: register a palette entry per non-`interactive` command for the active view's
+editor (ids are stable and persisted, safe to use as Obsidian command ids), optionally let users bind
+Obsidian hotkeys to them, and skip entries whose `enabled` is false. Needs `npm run sync-svgedit` first so the
+plugin picks up the new `hostApi.d.ts`. Medium.
