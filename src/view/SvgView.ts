@@ -26,6 +26,7 @@ import type {
   CanvasLayout,
 } from "../settings/defaults";
 import { listFonts, saveFont } from "../data/fontVault";
+import type { EditorCommands } from "../editorCommands/items";
 
 /** svgedit's host API (vendored from the fork's release as svgedit-dist/hostApi.d.ts,
  *  and checked there against the real Editor). The four lifecycle/diagnostic hooks
@@ -311,6 +312,16 @@ export class SvgView extends TextFileView {
         "ext-color-shift",
         "ext-fonts",
         "ext-eyedropper",
+        "ext-smooth-tool",
+        "ext-width-tool",
+        "ext-distort-tool",
+        "ext-gradient-tool",
+        "ext-corner-tool",
+        "ext-art-brush",
+        "ext-blend",
+        "ext-recolor",
+        "ext-layout-ops",
+        "ext-measure",
       ],
     });
 
@@ -919,6 +930,17 @@ export class SvgView extends TextFileView {
 
   getSvgString(): string | null {
     return this.svgEditor?.svgCanvas.getSvgString() ?? null;
+  }
+
+  /** The editor's command registry (list / run) once the editor is ready, else null.
+   *  Callers get closures, not the registry, so they can't reach past list/run. */
+  editorCommands(): EditorCommands | null {
+    const editor = this.svgEditor;
+    if (!editor || !this.editorReady || !editor.commands) return null;
+    return {
+      list: () => editor.commands.list(),
+      run: (id, params) => editor.commands.run(id, params),
+    };
   }
 
   /** Serialize the drawing as a self-contained SVG for export. svgedit's plain

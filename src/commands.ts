@@ -7,6 +7,7 @@ import { exportDrawing } from "./export/exporter";
 import { listFrames } from "./export/frames";
 import { ExportModal } from "./modals/ExportModal";
 import { VersionsModal } from "./modals/VersionsModal";
+import { EditorCommandModal } from "./modals/EditorCommandModal";
 import { extractSvg, replaceSvg, createDrawingTemplate } from "./data/SvgData";
 import { uniqueVaultPath } from "./data/uniqueName";
 import { stripTemplaterSyntax, applyTemplateFrontmatter } from "./data/templateFrontmatter";
@@ -223,6 +224,19 @@ export function registerCommands(plugin: SvgPlugin): void {
       const view = getActiveSvgView(plugin);
       if (!view) return false;
       if (!checking) plugin.openInsertFileModal(view);
+      return true;
+    },
+  });
+
+  // One entry that reaches every editor command of the open drawing (align, boolean ops,
+  // tools, …) — registering each one in Obsidian's palette would bury it (see techdebt.md).
+  plugin.addCommand({
+    id: "run-editor-command",
+    name: "Run editor command…",
+    checkCallback: (checking) => {
+      const commands = plugin.editorCommands();
+      if (!commands) return false;
+      if (!checking) new EditorCommandModal(plugin.app, commands).open();
       return true;
     },
   });

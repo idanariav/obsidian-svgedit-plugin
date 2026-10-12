@@ -11,24 +11,16 @@ how big/risky it is. When an item is finally addressed, delete its entry
 
 ---
 
-## Editor commands reach Obsidian through one picker, not ~150 palette entries
+## Editor command picker: commands that need parameters, and the outside bridge
 
-svgedit has a command registry (`editor.commands`, added 2026-10-10 in the svgedit repo; part of the
-`EditorHostApi` in `hostApi.d.ts`): `commands.list()` returns every editing action (id, translated label,
-group, effective keys, `enabled` + `disabledReason`, params, `interactive`) and `commands.run(id, params?)`
-runs one (throws `CommandError`, `code`: `unknown` | `disabled` | `badParams` | `internal`). The plugin's
-Obsidian commands in `src/commands.ts` are all file-level (new, export, versions); none of the ~150 editing
-actions reach the palette.
+Built 2026-10-12 (1.0.48): the palette entry "Run editor command…" (`src/modals/EditorCommandModal.ts`, logic in
+`src/editorCommands/items.ts`) lists every non-`interactive` command of the active drawing — greyed with
+`disabledReason` when unavailable, sorted after the ones that work — and `plugin.editorCommands(view?)` /
+`SvgView.editorCommands()` expose `{ list, run }`. Decision kept: no palette entry per command (~150 would bury the
+plugin's own), no Obsidian hotkeys per command (the editor has its own Hotkey Manager).
 
-**Decision (2026-10-12): do not register one palette entry per editor command.** ~150 entries would bury the
-plugin's own commands in Obsidian's palette. The registry stays reachable another way:
-- **One palette entry, "SVG: run editor command…"**, only offered while a drawing is open: a fuzzy picker
-  (`SuggestModal`) over `commands.list()` for the active view's editor, showing label, group and key, greyed
-  with `disabledReason` when `enabled` is false, skipping `interactive` commands (they need a pointer);
-  choosing one calls `commands.run(id)`. A command that needs `params` is not offered until the picker can ask for them.
-- **Expose the registry on the plugin object** (`plugin.editorCommands(view)` returning `{ list, run }` for a
-  view) so another plugin, or a future CLI / MCP bridge that lets an LLM drive a drawing, can call them without
-  Obsidian's palette. The bridge itself is not planned until someone wants to attach an LLM.
-- Obsidian hotkeys for single commands stay out unless asked; the editor has its own Hotkey Manager.
-
-Needs `npm run sync-svgedit` first so the plugin picks up the new `hostApi.d.ts`. Medium.
+Left open:
+- A command with `params` is run with none; one with a `required` param fails with a `badParams` notice rather than
+  asking. The picker should prompt for the params it lists (`HostCommandInfo.params`) — or hide those commands.
+- No LLM / CLI / MCP bridge yet; `plugin.editorCommands()` is the seam for one. Not planned until someone wants to attach an LLM.
+- Verified by unit tests against a fake editor only; the picker has not been driven inside Obsidian.

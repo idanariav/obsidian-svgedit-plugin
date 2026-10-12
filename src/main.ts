@@ -10,6 +10,7 @@ import { markdownPostProcessor } from "./postprocessor/markdownPostProcessor";
 import { installViewStatePatch } from "./postprocessor/setViewStatePatch";
 import { InsertFileModal } from "./modals/InsertFileModal";
 import { ExportModal } from "./modals/ExportModal";
+import type { EditorCommands } from "./editorCommands/items";
 import {
   fileToDataUri,
   fileToResourceUrl,
@@ -296,6 +297,13 @@ export default class SvgPlugin extends Plugin {
       const view = leaf.view;
       if (view instanceof SvgView) view.reloadUserData();
     }
+  }
+
+  /** The editor commands (list / run) of a drawing — the active one by default —
+   *  or null when none is open or its editor is still starting. The seam for
+   *  anything that drives the editor from outside (the command picker today). */
+  editorCommands(view: SvgView | null = this.app.workspace.getActiveViewOfType(SvgView)): EditorCommands | null {
+    return view?.editorCommands() ?? null;
   }
 
   /** Open the "insert file from vault" picker for the given SvgView. */

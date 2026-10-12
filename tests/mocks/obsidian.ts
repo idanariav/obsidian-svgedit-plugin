@@ -113,7 +113,21 @@ export class Setting {
 }
 
 export class Notice {
-  constructor(_message: string) {}
+  /** Every message shown so far, so a test can assert on what the user saw. */
+  static shown: string[] = [];
+  constructor(message: string) {
+    Notice.shown.push(message);
+  }
+}
+
+export abstract class SuggestModal<T> extends Modal {
+  placeholder = "";
+  setPlaceholder(text: string): void {
+    this.placeholder = text;
+  }
+  abstract getSuggestions(query: string): T[];
+  abstract renderSuggestion(item: T, el: HTMLElement): void;
+  abstract onChooseSuggestion(item: T, evt?: unknown): void;
 }
 
 export class TextFileView {

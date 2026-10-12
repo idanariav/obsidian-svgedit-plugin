@@ -20,6 +20,21 @@ Use this whenever you want to start drawing from scratch.
 
 ---
 
+## Run editor command…
+
+Opens a searchable list of every editing action the editor offers for the **open
+drawing** — align, distribute, boolean path operations, tools, and so on — so you can
+run one without hunting for its button. This command only appears while a drawing is
+open.
+
+Type any words from a command's name or group (`align left`, `path union`). Each line
+shows the command's group and its shortcut. Commands that cannot run right now (for
+example *Union* with nothing selected) are greyed out, listed last, and say why;
+choosing one shows that reason instead of running it. Commands that open a dialog or
+file picker are not listed — use the editor's own buttons for those.
+
+---
+
 ## Convert note to SVG drawing
 
 Turns the **currently open Markdown note** into an SVG drawing. This command only

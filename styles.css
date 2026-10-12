@@ -179,3 +179,7 @@
 .svg-hover-preview-next {
   right: 8px;
 }
+
+/* "Run editor command…" picker: unavailable commands stay listed, greyed, with their reason underneath. */
+.suggestion-item.svg-plugin-command-disabled { opacity: 0.5; }
+.svg-plugin-command-hint { display: block; color: var(--text-muted); }
