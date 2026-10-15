@@ -322,6 +322,7 @@ export class SvgView extends TextFileView {
         "ext-recolor",
         "ext-layout-ops",
         "ext-measure",
+        "ext-magic-wand",
       ],
     });
 
@@ -938,7 +939,7 @@ export class SvgView extends TextFileView {
     const editor = this.svgEditor;
     if (!editor || !this.editorReady || !editor.commands) return null;
     return {
-      list: () => editor.commands.list(),
+      list: () => editor.commands.list() as ReturnType<EditorCommands["list"]>,
       run: (id, params) => editor.commands.run(id, params),
     };
   }

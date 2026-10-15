@@ -1,6 +1,8 @@
 import { App, Notice, SuggestModal } from "obsidian";
+import { EditorCommandParamsModal } from "./EditorCommandParamsModal";
 import {
   describe,
+  needsParams,
   pickableCommands,
   searchText,
   type EditorCommandInfo,
@@ -42,8 +44,17 @@ export class EditorCommandModal extends SuggestModal<EditorCommandInfo> {
       new Notice(`${c.label}: ${c.disabledReason ?? "not available right now"}`);
       return;
     }
+    if (needsParams(c)) {
+      new EditorCommandParamsModal(this.app, c, (params) => this.run(c, params)).open();
+      return;
+    }
+    this.run(c);
+  }
+
+  private run(c: EditorCommandInfo, params?: Record<string, unknown>): void {
     try {
-      this.commands.run(c.id);
+      if (params) this.commands.run(c.id, params);
+      else this.commands.run(c.id);
     } catch (e) {
       new Notice(`${c.label}: ${(e as Error).message}`);
     }

@@ -41,6 +41,13 @@ describe("EditorCommandModal", () => {
     expect(Notice.shown).toEqual([]);
   });
 
+  it("asks for parameters instead of running a command that declares them", () => {
+    const { modal, run } = open();
+    modal.onChooseSuggestion(cmd({ id: "grid", label: "Grid", params: { n: { type: "number", required: true } } }));
+    expect(run).not.toHaveBeenCalled();
+    expect(Notice.shown).toEqual([]);
+  });
+
   it("says why instead of running an unavailable command", () => {
     const { modal, run } = open();
     modal.onChooseSuggestion(LIST[1]);

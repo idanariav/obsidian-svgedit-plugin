@@ -20,7 +20,7 @@ Built 2026-10-12 (1.0.48): the palette entry "Run editor command…" (`src/modal
 plugin's own), no Obsidian hotkeys per command (the editor has its own Hotkey Manager).
 
 Left open:
-- A command with `params` is run with none; one with a `required` param fails with a `badParams` notice rather than
-  asking. The picker should prompt for the params it lists (`HostCommandInfo.params`) — or hide those commands.
+- Parameter prompt (`EditorCommandParamsModal`, 2026-10-15): a command with `params` opens a form (text / toggle / dropdown) before
+  running. No editor command declares `params` yet, so it is covered by unit tests with fake commands only.
 - No LLM / CLI / MCP bridge yet; `plugin.editorCommands()` is the seam for one. Not planned until someone wants to attach an LLM.
 - Verified by unit tests against a fake editor only; the picker has not been driven inside Obsidian.

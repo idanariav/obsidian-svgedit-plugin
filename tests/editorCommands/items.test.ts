@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { describe as describeCommand, pickableCommands, type EditorCommandInfo } from "../../src/editorCommands/items";
+import { describe as describeCommand, needsParams, pickableCommands, readParams, type EditorCommandInfo } from "../../src/editorCommands/items";
 
 const cmd = (over: Partial<EditorCommandInfo>): EditorCommandInfo => ({
   id: "x", label: "X", group: "Tools", keys: [], enabled: true, interactive: false, ...over,
@@ -32,5 +32,28 @@ describe("describe", () => {
   it("shows group and effective keys for an available one", () => {
     expect(describeCommand(cmd({ group: "Align", keys: ["meta+d", "ctrl+d"] }))).toBe("Align · meta+d, ctrl+d");
     expect(describeCommand(cmd({ group: "Align" }))).toBe("Align");
+  });
+});
+
+describe("needsParams / readParams", () => {
+  const specs = {
+    n: { type: "number" as const, required: true },
+    label: { type: "string" as const },
+    on: { type: "boolean" as const },
+  };
+
+  it("asks only for commands that declare params", () => {
+    expect(needsParams(cmd({}))).toBe(false);
+    expect(needsParams(cmd({ params: {} }))).toBe(false);
+    expect(needsParams(cmd({ params: specs }))).toBe(true);
+  });
+
+  it("types the values and leaves blank optional ones for the editor's defaults", () => {
+    expect(readParams(specs, { n: " 12.5 ", label: "", on: true })).toEqual({ params: { n: 12.5, on: true } });
+  });
+
+  it("reports a missing required value or a non-number", () => {
+    expect(readParams(specs, { n: "", on: false })).toEqual({ error: '"n" is required' });
+    expect(readParams(specs, { n: "abc", on: false })).toEqual({ error: '"n" must be a number' });
   });
 });

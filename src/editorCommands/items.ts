@@ -3,6 +3,16 @@
  * `obsidian` import so it is unit-testable.
  */
 
+/** svgedit's `ParamSpec` (src/editor/commands.js): one typed parameter of a command. */
+export interface ParamSpec {
+  type: "number" | "string" | "boolean" | "enum";
+  default?: unknown;
+  min?: number;
+  max?: number;
+  values?: string[];
+  required?: boolean;
+}
+
 /** One entry of svgedit's `editor.commands.list()` (see svgedit-dist/hostApi.d.ts). */
 export interface EditorCommandInfo {
   id: string;
@@ -11,6 +21,7 @@ export interface EditorCommandInfo {
   keys: string[];
   enabled: boolean;
   disabledReason?: string;
+  params?: Record<string, ParamSpec>;
   interactive: boolean;
 }
 
@@ -42,4 +53,41 @@ export function searchText(c: EditorCommandInfo): string {
 export function describe(c: EditorCommandInfo): string {
   if (!c.enabled) return c.disabledReason ?? "Not available right now";
   return c.keys.length ? `${c.group} · ${c.keys.join(", ")}` : c.group;
+}
+
+/** Whether choosing the command must first ask for values. */
+export function needsParams(c: EditorCommandInfo): boolean {
+  return !!c.params && Object.keys(c.params).length > 0;
+}
+
+/**
+ * Turn what the user typed into the `params` object for `run`. Blank optional
+ * fields are left out (the editor applies the spec's default); the editor
+ * validates and clamps the rest. Returns the first problem as `error`.
+ */
+export function readParams(
+  specs: Record<string, ParamSpec>,
+  raw: Record<string, string | boolean>,
+): { params: Record<string, unknown> } | { error: string } {
+  const params: Record<string, unknown> = {};
+  for (const [name, spec] of Object.entries(specs)) {
+    const v = raw[name];
+    if (spec.type === "boolean") {
+      params[name] = v === true;
+      continue;
+    }
+    const text = typeof v === "string" ? v.trim() : "";
+    if (text === "") {
+      if (spec.required) return { error: `"${name}" is required` };
+      continue;
+    }
+    if (spec.type === "number") {
+      const n = Number(text);
+      if (!Number.isFinite(n)) return { error: `"${name}" must be a number` };
+      params[name] = n;
+    } else {
+      params[name] = text;
+    }
+  }
+  return { params };
 }
