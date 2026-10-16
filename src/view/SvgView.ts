@@ -273,57 +273,10 @@ export class SvgView extends TextFileView {
       // Leave the side panel closed by default (a "PANEL" handle on the right
       // edge), matching the native svgedit UI; the handle toggles it open.
       showlayers: false,
-      noDefaultExtensions: true,
-      // Mirror svgedit's full default extension set so the Obsidian editor has
-      // the same tools and right-hand panels as the native UI. The only ones we
-      // omit are the file-I/O extensions (ext-opensave, ext-storage), which need
-      // browser file-system / localStorage APIs unavailable in Obsidian's
-      // context, and ext-overview_window (disabled upstream for performance).
-      extensions: [
-        "ext-connector",
-        "ext-grid",
-        "ext-proportion-markers",
-        "ext-frame-labels",
-        "ext-smart-guides",
-        "ext-ruler-guides",
-        "ext-corner-radius",
-        "ext-repeat",
-        "ext-mirror",
-        "ext-taper",
-        "ext-segment",
-        "ext-text-path",
-        "ext-shape-builder",
-        "ext-markers",
-        "ext-panning",
-        "ext-brush",
-        "ext-shapes",
-        "ext-polystar",
-        "ext-shape-family",
-        "ext-cutter",
-        "ext-shaper",
-        "ext-curvature",
-        "ext-puppet-warp",
-        "ext-layer_view",
-        "ext-shadow",
-        "ext-live-effects",
-        "ext-outline",
-        "ext-glow",
-        "ext-path-edit",
-        "ext-color-shift",
-        "ext-fonts",
-        "ext-eyedropper",
-        "ext-smooth-tool",
-        "ext-width-tool",
-        "ext-distort-tool",
-        "ext-gradient-tool",
-        "ext-corner-tool",
-        "ext-art-brush",
-        "ext-blend",
-        "ext-recolor",
-        "ext-layout-ops",
-        "ext-measure",
-        "ext-magic-wand",
-      ],
+      // Every built-in svgedit feature is on (the same tools and right-hand panels as
+      // the native UI, including ones added later) except ext-opensave, which needs
+      // the browser's file-system access that Obsidian's context does not have.
+      disabledFeatures: ["opensave"],
     });
 
     await this.svgEditor.init();
