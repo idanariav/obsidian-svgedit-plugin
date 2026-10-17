@@ -55,6 +55,7 @@ describe("SvgView userDataAdapter", () => {
         favorites: [],
         classLibrary: [],
         defaultClasses: { rect: "card" } as Record<string, string>,
+        brushSlots: { 0: { thickness: 9 } } as Record<string, Record<string, unknown>>,
         canvasPresets: [],
         canvasLayouts: [],
         fontsFolder: "",
@@ -86,5 +87,35 @@ describe("SvgView userDataAdapter", () => {
     expect(plugin.settings.defaultClasses).toEqual({ text: "title" });
     expect(plugin.saveSettings).toHaveBeenCalled();
     expect(adapter.getDefaultClasses()).toEqual({ text: "title" });
+  });
+
+  it("persists the brush tool's saved slots through plugin settings", async () => {
+    hoisted.configs.length = 0;
+    const plugin = {
+      manifest: { version: "1.0.0" },
+      settings: {
+        editorTheme: "light", uiModeMobile: "standard", uiModeDesktop: "standard", autosaveSeconds: 0,
+        compressDrawingData: false, paletteOverrides: {}, userShapes: {}, hotkeyOverrides: {}, favorites: [],
+        classLibrary: [], defaultClasses: {}, canvasPresets: [], canvasLayouts: [], fontsFolder: "",
+        brushSlots: { 0: { thickness: 9 } } as Record<string, Record<string, unknown>>,
+      },
+      saveSettings: vi.fn(async () => {}),
+      reloadUserDataInAllViews: vi.fn(),
+    };
+    const app = {
+      workspace: { on: vi.fn(() => ({})), getActiveViewOfType: vi.fn(() => null) },
+      scope: undefined, vault: {}, metadataCache: {},
+    };
+    const view = new SvgView({ app } as any, plugin as any);
+    await view.onload();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const adapter = hoisted.configs.map((c) => c.userDataAdapter).find(Boolean);
+    expect(typeof adapter.getBrushes).toBe("function");
+    expect(typeof adapter.setBrushes).toBe("function");
+    expect(adapter.getBrushes()).toEqual({ 0: { thickness: 9 } });
+    adapter.setBrushes({ 1: { thickness: 20, name: "Ink" } });
+    expect(plugin.settings.brushSlots).toEqual({ 1: { thickness: 20, name: "Ink" } });
+    expect(plugin.saveSettings).toHaveBeenCalled();
   });
 });

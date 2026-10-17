@@ -168,6 +168,8 @@ export interface SvgPluginSettings {
   /** Per-object-type default class (`{ text: "title" }`): a new object of that tag gets the preset applied.
    *  Backs the userDataAdapter's get/setDefaultClasses; without it the editor drops every write. */
   defaultClasses: Record<string, string>;
+  /** The Brush tool's saved brushes, sparse by slot (`{ 0: {...} }`). Backs the userDataAdapter's get/setBrushes. */
+  brushSlots: Record<string, Record<string, unknown>>;
   /** User-curated canvas-size presets shown in the editor's Canvas settings
    *  popover. Backs the svgedit userDataAdapter so presets live in data.json and
    *  sync across vaults instead of the editor's per-device localStorage. Empty =
@@ -236,6 +238,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   favorites: [],
   classLibrary: [],
   defaultClasses: {},
+  brushSlots: {},
   canvasPresets: [],
   canvasLayouts: [],
   fontsFolder: "svgedit-fonts",

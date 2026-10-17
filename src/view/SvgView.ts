@@ -252,6 +252,11 @@ export class SvgView extends TextFileView {
           this.plugin.settings.defaultClasses = defaults;
           void this.plugin.saveSettings();
         },
+        getBrushes: () => this.plugin.settings.brushSlots,
+        setBrushes: (slots: Record<string, Record<string, unknown>>) => {
+          this.plugin.settings.brushSlots = slots;
+          void this.plugin.saveSettings();
+        },
         getCanvasPresets: () => this.plugin.settings.canvasPresets,
         setCanvasPresets: (presets: CanvasPreset[]) => {
           this.plugin.settings.canvasPresets = presets;

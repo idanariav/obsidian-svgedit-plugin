@@ -83,6 +83,7 @@ function makeFakePlugin() {
       favorites: [],
       classLibrary: [],
       defaultClasses: {},
+      brushSlots: {},
       canvasPresets: [],
       canvasLayouts: [],
       fontsFolder: "",
