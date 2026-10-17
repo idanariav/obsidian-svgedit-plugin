@@ -60065,7 +60065,7 @@ const Sh = "shapes", uD = function(n) {
             /** @type {Required<Pick<ShapeInsertDetail, 'svgContent'|'bbox'>>} */
             w
           ), k = [...new DOMParser().parseFromString(
-            `<svg xmlns="http://www.w3.org/2000/svg">${A}</svg>`,
+            `<svg xmlns="http://www.w3.org/2000/svg" xmlns:se="http://svg-edit.googlecode.com">${A}</svg>`,
             "image/svg+xml"
           ).documentElement.children], M = k.find((z) => z.tagName === "defs"), T = k.find((z) => z.tagName !== "defs"), P = t.getDOMDocument(), $ = (
             /** @type {SVGGraphicsElement} */
