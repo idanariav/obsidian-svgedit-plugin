@@ -82,6 +82,7 @@ function makeFakePlugin() {
       hotkeyOverrides: {},
       favorites: [],
       classLibrary: [],
+      defaultClasses: {},
       canvasPresets: [],
       canvasLayouts: [],
       fontsFolder: "",

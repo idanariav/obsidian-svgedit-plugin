@@ -165,6 +165,9 @@ export interface SvgPluginSettings {
    *  presets live in data.json and sync across vaults instead of the editor's
    *  per-device localStorage. */
   classLibrary: ClassLibraryEntry[];
+  /** Per-object-type default class (`{ text: "title" }`): a new object of that tag gets the preset applied.
+   *  Backs the userDataAdapter's get/setDefaultClasses; without it the editor drops every write. */
+  defaultClasses: Record<string, string>;
   /** User-curated canvas-size presets shown in the editor's Canvas settings
    *  popover. Backs the svgedit userDataAdapter so presets live in data.json and
    *  sync across vaults instead of the editor's per-device localStorage. Empty =
@@ -232,6 +235,7 @@ export const DEFAULT_SETTINGS: SvgPluginSettings = {
   hotkeyOverrides: {},
   favorites: [],
   classLibrary: [],
+  defaultClasses: {},
   canvasPresets: [],
   canvasLayouts: [],
   fontsFolder: "svgedit-fonts",
