@@ -2,7 +2,7 @@
  * SvgView.ts turns svgedit's built-in features *off* by name (`disabledFeatures`) instead of listing every one it
  * wants, so new svgedit tools reach the plugin without a change here. The one way that goes wrong is a name that no
  * longer matches a built-in (a rename), which would silently leave the feature on. This checks every disabled name
- * against svgedit's `defaultExtensions` (ConfigObj.js).
+ * against svgedit's `defaultExtensions` (ConfigObj.ts).
  *
  * Requires the sibling ../svgedit checkout (same convention as scripts/fetch-svgedit-dist.mjs); skips if it isn't
  * present, since there's nothing to diff against.
@@ -13,7 +13,7 @@ import { resolve } from "path";
 import { describe, it, expect } from "vitest";
 
 const ROOT = resolve(__dirname, "..");
-const SVGEDIT_CONFIG = resolve(ROOT, "../svgedit/src/editor/ConfigObj.js");
+const SVGEDIT_CONFIG = resolve(ROOT, "../svgedit/src/editor/ConfigObj.ts");
 const SVG_VIEW = resolve(ROOT, "src/view/SvgView.ts");
 
 const namesIn = (source: string, start: RegExp): string[] | null => {
