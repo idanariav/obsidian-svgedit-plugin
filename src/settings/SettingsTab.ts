@@ -1,6 +1,6 @@
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type SvgPlugin from "../main";
-import type { ExportFolderMapping } from "./defaults";
+import type { ExportFolderMapping, UiMode } from "./defaults";
 import { FolderSuggest } from "./FolderSuggest";
 import { FileSuggest } from "./FileSuggest";
 
@@ -73,17 +73,19 @@ export class SvgSettingsTab extends PluginSettingTab {
       .setName("Editor UI mode (desktop)")
       .setDesc(
         "Layout used when Obsidian runs on a computer. \"Tablet\" enables svgedit's "
-        + "touch-first shell; \"Desktop\" uses the standard layout. Takes effect on the next drawing opened.",
+        + "touch-first shell; \"Mobile\" opens drawings view-only, with Pencil and Text after tapping Edit; "
+        + "\"Desktop\" uses the standard layout. Takes effect on the next drawing opened.",
       )
       .addDropdown((d) =>
         d
           .addOptions({
             desktop: "Desktop",
             tablet: "Tablet",
+            mobile: "Mobile (view first)",
           })
           .setValue(this.plugin.settings.uiModeDesktop)
           .onChange(async (v) => {
-            this.plugin.settings.uiModeDesktop = v as "desktop" | "tablet";
+            this.plugin.settings.uiModeDesktop = v as UiMode;
             await this.plugin.saveSettings();
           }),
       );
@@ -91,17 +93,19 @@ export class SvgSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Editor UI mode (mobile)")
       .setDesc(
-        "Layout used when Obsidian runs on a phone or tablet. Takes effect on the next drawing opened.",
+        "Layout used when Obsidian runs on a phone or tablet. \"Mobile\" suits phones: drawings open "
+        + "view-only (pan and zoom), and Edit gives Pencil and Text. Takes effect on the next drawing opened.",
       )
       .addDropdown((d) =>
         d
           .addOptions({
             desktop: "Desktop",
             tablet: "Tablet",
+            mobile: "Mobile (view first)",
           })
           .setValue(this.plugin.settings.uiModeMobile)
           .onChange(async (v) => {
-            this.plugin.settings.uiModeMobile = v as "desktop" | "tablet";
+            this.plugin.settings.uiModeMobile = v as UiMode;
             await this.plugin.saveSettings();
           }),
       );

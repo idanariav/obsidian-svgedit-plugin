@@ -1,3 +1,6 @@
+/** svgedit's UI shell, passed to the editor as its `uiMode` pref. */
+export type UiMode = "desktop" | "tablet" | "mobile";
+
 /** Maps drawings in a source folder to a different export destination folder. */
 export interface ExportFolderMapping {
   sourceFolder: string; // e.g., "Content/Concepts"
@@ -131,10 +134,11 @@ export interface SvgPluginSettings {
    *  files and sessions. */
   editorTheme: "auto" | "light" | "dark";
   /** svgedit UI mode used when Obsidian runs on a desktop/PC. "tablet" enables
-   *  svgedit's touch-first shell; "desktop" uses the standard layout. */
-  uiModeDesktop: "desktop" | "tablet";
+   *  svgedit's touch-first shell; "mobile" its minimal view-first shell (pan /
+   *  zoom until Edit, then Pencil and Text); "desktop" uses the standard layout. */
+  uiModeDesktop: UiMode;
   /** svgedit UI mode used when Obsidian runs on a mobile device. */
-  uiModeMobile: "desktop" | "tablet";
+  uiModeMobile: UiMode;
   /** When true, the drawing SVG is stored LZString-compressed in the note to
    *  keep files slim. When false it is stored as readable SVG (better git diffs
    *  and plain-text search). Existing files migrate to the chosen format on the

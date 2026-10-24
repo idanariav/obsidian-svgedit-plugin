@@ -44,6 +44,22 @@ not change the colors in your actual drawing. Toggling the theme from inside the
 editor updates this setting too, and the choice is remembered across files and
 sessions.
 
+### Editor UI mode (desktop) / Editor UI mode (mobile)
+
+- **Values:** Desktop / Tablet / Mobile (view first); defaults **Desktop** on a
+  computer and **Tablet** on a phone or tablet
+- **Desktop** is the full editor with its toolbars and side panels.
+- **Tablet** is a touch-first shell: a command bar with the drawing tools and a sheet
+  of style controls that rises when something is selected.
+- **Mobile (view first)** is for reading drawings and rough sketching on a phone.
+  Every drawing opens **view-only**: one finger pans, two fingers pinch to zoom, and
+  nothing in the drawing can change. Tap **Edit** for a bottom bar with Pan, Pencil
+  and Text, a choice of colours and stroke widths, and Undo / Redo; **Done** goes
+  back to viewing. With the Text tool, tap an existing text to edit it.
+
+The first setting applies when Obsidian runs on a computer, the second on a phone or
+tablet. Each takes effect on the next drawing opened.
+
 ---
 
 ## Auto-export

@@ -24,6 +24,7 @@ import type {
   ClassLibraryEntry,
   CanvasPreset,
   CanvasLayout,
+  UiMode,
 } from "../settings/defaults";
 import { listFonts, saveFont } from "../data/fontVault";
 import type { EditorCommands } from "../editorCommands/items";
@@ -208,9 +209,9 @@ export class SvgView extends TextFileView {
       // than toggling the class after init — keeps svgedit's stored `theme` pref
       // in sync with the applied class, so the ext-theme-toggle works first-click.
       theme: this.resolveInitialTheme(),
-      // Touch-first tablet shell vs. standard desktop layout, chosen per platform
-      // (PC vs. mobile) in the plugin settings.
-      tabletMode: this.resolveTabletMode(),
+      // Desktop layout, touch-first tablet shell or view-first mobile shell,
+      // chosen per platform (PC vs. mobile) in the plugin settings.
+      uiMode: this.resolveUiMode(),
       // The plugin settings own the UI mode, so hide the menu's own toggle.
       hideTabletToggle: true,
       // Route the editor's custom palette + saved shape library through the
@@ -469,13 +470,11 @@ export class SvgView extends TextFileView {
     return document.body.classList.contains("theme-dark") ? "dark" : "light";
   }
 
-  /** Whether svgedit's touch-first tablet shell should be on, per the platform's
-   *  configured UI mode (PC vs. mobile). */
-  private resolveTabletMode(): boolean {
-    const mode = Platform.isMobile
+  /** svgedit's UI shell for this platform's configured UI mode (PC vs. mobile). */
+  private resolveUiMode(): UiMode {
+    return Platform.isMobile
       ? this.plugin.settings.uiModeMobile
       : this.plugin.settings.uiModeDesktop;
-    return mode === "tablet";
   }
 
   /** svgedit's root element, which carries the theme-light / theme-dark class. */
