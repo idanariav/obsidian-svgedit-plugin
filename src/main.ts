@@ -31,6 +31,7 @@ import { registerFileSyncHandlers } from "./fileSync";
 import { isSvgDrawingFile, resolveEffectiveSettings } from "./data/frontmatter";
 import { VIEW_TYPE_SVG } from "./constants";
 import { DebugLog } from "./debug/debugLog";
+import { createApi, type SketchEditorApi } from "./api";
 
 const RIBBON_ICON = "pencil";
 
@@ -49,11 +50,14 @@ export default class SvgPlugin extends Plugin {
   markdownModeLeaves = new Map<string, string>();
   /** Paths of all currently known SVG drawing files (used by fileSync handlers). */
   svgDrawingPaths = new Set<string>();
+  /** Headless drawing read/write/export for scripts (see api.ts). */
+  api!: SketchEditorApi;
 
   private uninstallPatch: (() => void) | null = null;
 
   async onload(): Promise<void> {
     await this.loadSettings();
+    this.api = createApi(this);
 
     this.debugLog = new DebugLog(
       this.app,

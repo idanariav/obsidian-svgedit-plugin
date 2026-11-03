@@ -144,6 +144,8 @@ You can always drop back to the plain Markdown with the
   values.
 - **[Frontmatter fields](docs/frontmatter.md)** — per-file overrides you can add to a
   single drawing.
+- **[Scripting API](docs/api.md)** — read, write and export drawings from scripts
+  (e.g. via `obsidian eval`), without opening them.
 
 Tip: most behavior can be set at three levels — **globally**, **per-folder**, or
 **per-file** — with the more specific level winning. See
