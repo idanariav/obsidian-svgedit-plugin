@@ -38,6 +38,8 @@ vi.mock("svgedit-editor", () => ({ default: hoisted.FakeSvgEditor }));
 
 const { SvgView } = await import("../../src/view/SvgView");
 
+let lastView: any;
+
 const uiModeFor = async (uiModeDesktop: string, uiModeMobile: string): Promise<unknown> => {
   hoisted.configs.length = 0;
   const plugin = {
@@ -54,7 +56,7 @@ const uiModeFor = async (uiModeDesktop: string, uiModeMobile: string): Promise<u
     workspace: { on: vi.fn(() => ({})), getActiveViewOfType: vi.fn(() => null) },
     scope: undefined, vault: {}, metadataCache: {},
   };
-  const view = new SvgView({ app } as any, plugin as any);
+  const view = lastView = new SvgView({ app } as any, plugin as any);
   await view.onload();
   await new Promise((resolve) => setTimeout(resolve, 0));
   const config = hoisted.configs.find((c) => "uiMode" in c);
@@ -74,5 +76,11 @@ describe("SvgView UI mode", () => {
   it("uses the mobile setting on a phone or tablet, including the mobile shell", async () => {
     Platform.isMobile = true;
     expect(await uiModeFor("desktop", "mobile")).toBe("mobile");
+  });
+
+  it("keeps Obsidian's drawer swipe out of the editor (sliders, strokes)", async () => {
+    Platform.isMobile = true;
+    await uiModeFor("desktop", "tablet");
+    expect(lastView.editorContainer.dataset.ignoreSwipe).toBe("true");
   });
 });

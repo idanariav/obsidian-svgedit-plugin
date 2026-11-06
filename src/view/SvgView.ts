@@ -139,6 +139,11 @@ export class SvgView extends TextFileView {
     this.addAction("code", "Edit as Markdown", () => this.switchToMarkdown());
 
     this.editorContainer = this.contentEl.createDiv("svg-plugin-editor-container");
+    // Obsidian mobile opens the side drawers on a horizontal swipe anywhere in a view,
+    // so dragging a slider or drawing a stroke left/right opened a drawer. Its
+    // swipe detector skips touches that start under `data-ignore-swipe`, the attribute
+    // Obsidian's own Canvas view sets on its wrapper.
+    this.editorContainer.dataset.ignoreSwipe = "true";
 
     // Obsidian's built-in "Save current file" (Mod+S) command does not route
     // through a custom TextFileView's save() override, so the keyboard shortcut
