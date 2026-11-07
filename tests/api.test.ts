@@ -57,4 +57,18 @@ describe("SketchEditorApi", () => {
     for (let i = 0; i < 5; i++) await env.api.writeDrawing("d/obj.md", svg(`<g id="v${i}"/>`), { snapshot: `v${i}` });
     await expect(env.api.writeDrawing("d/obj.md", svg("<line/>"), { snapshot: "v5" })).rejects.toThrow(/versions/);
   });
+
+  it("saves a version without touching the live drawing or exporting", async () => {
+    const env = setup(createDrawingTemplate(true, svg("<rect/>")));
+    autoExport.mockClear();
+    await env.api.saveVersion("d/obj.md", "Feedback r1", svg("<circle/>"));
+    expect(await env.api.readDrawing("d/obj.md")).toContain("<rect/>");
+    const snaps = extractSnapshots(env.content);
+    expect(snaps.map((s) => s.name)).toEqual(["Feedback r1"]);
+    expect(snaps[0].svg).toContain("<circle/>");
+    expect(getDrawingVersion(snaps[0].svg)).toBe("9.9.9");
+    expect(autoExport).not.toHaveBeenCalled();
+    await env.api.saveVersion("d/obj.md", "Feedback r1", svg("<line/>"));
+    expect(extractSnapshots(env.content)).toHaveLength(1);
+  });
 });
