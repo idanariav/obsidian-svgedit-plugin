@@ -75,7 +75,10 @@ export class VersionsModal extends Modal {
       return;
     }
 
+    // Six actions don't fit beside the name, so the row stacks: name on top,
+    // buttons wrapping below (styles.css .svg-plugin-version-row).
     new Setting(contentEl)
+      .setClass("svg-plugin-version-row")
       .setName(snapshot.name)
       .setDesc(`Saved ${formatRelativeTime(snapshot.createdAt)}`)
       .addButton((b) =>

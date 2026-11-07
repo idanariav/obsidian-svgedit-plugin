@@ -184,6 +184,23 @@
 .suggestion-item.svg-plugin-command-disabled { opacity: 0.5; }
 .svg-plugin-command-hint { display: block; color: var(--text-muted); }
 
+/* ── Drawing versions list (VersionsModal) ───────────────────────────────── */
+
+.setting-item.svg-plugin-version-row {
+  flex-wrap: wrap;
+  row-gap: var(--size-4-2);
+}
+
+.svg-plugin-version-row .setting-item-info {
+  flex: 1 0 100%;
+}
+
+.svg-plugin-version-row .setting-item-control {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: var(--size-4-2);
+}
+
 /* ── Version comparison (CompareModal) ──────────────────────────────────── */
 
 .modal.svg-plugin-compare-modal {
