@@ -138,6 +138,13 @@ a "final" version. Also reachable via the history-icon button in the drawing's t
   current** (overwrite that slot with what's on the canvas now), **Export** (export
   that version directly, without restoring it first), and **Delete**. There's also a
   button to save the current canvas as a brand-new version.
+- **Compare** (on each version) opens a comparison window, with the current drawing on
+  one side and that version on the other; either side can be switched to any saved
+  version. **Side by side** shows them next to each other (stacked on a phone);
+  **Overlay** puts B on top of A at one scale, with a B-opacity slider or **Blink**
+  to flip between them, which shows small moves and size changes side by side hides.
+  **Comments** shows or hides comment layers (always left out of exports). Each saved
+  version has a **Restore** button there too.
 - **Save drawing version** is a quick, one-click way to save a new version without
   opening the dialog — it auto-names it ("Version 1", "Version 2", …). If all 5 slots
   are already full, it opens the manager instead so you can pick a version to replace.

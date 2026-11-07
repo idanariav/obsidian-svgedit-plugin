@@ -183,3 +183,74 @@
 /* "Run editor command…" picker: unavailable commands stay listed, greyed, with their reason underneath. */
 .suggestion-item.svg-plugin-command-disabled { opacity: 0.5; }
 .svg-plugin-command-hint { display: block; color: var(--text-muted); }
+
+/* ── Version comparison (CompareModal) ──────────────────────────────────── */
+
+.modal.svg-plugin-compare-modal {
+  width: min(1200px, 95vw);
+}
+
+.svg-plugin-compare-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-4-2) var(--size-4-5);
+  margin-bottom: var(--size-4-3);
+}
+
+.svg-plugin-compare-field {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4-2);
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+.svg-plugin-compare-stage.is-side {
+  display: flex;
+  gap: var(--size-4-4);
+}
+
+.svg-plugin-compare-pane {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.svg-plugin-compare-pane img,
+.svg-plugin-compare-overlay img {
+  display: block;
+  max-width: 100%;
+  max-height: 66vh;
+  margin: 0 auto;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.svg-plugin-compare-overlay {
+  position: relative;
+  width: min(100%, 66vh * 0.8);
+  margin: 0 auto;
+}
+
+.svg-plugin-compare-overlay img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+}
+
+.svg-plugin-compare-captions {
+  display: flex;
+  gap: var(--size-4-4);
+}
+
+.svg-plugin-compare-captions > div {
+  flex: 1 1 0;
+}
+
+/* Phones: stack the two sides instead of squeezing them. */
+@media (max-width: 600px) {
+  .svg-plugin-compare-stage.is-side,
+  .svg-plugin-compare-captions {
+    flex-direction: column;
+  }
+}

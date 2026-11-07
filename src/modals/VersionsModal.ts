@@ -3,6 +3,7 @@ import type SvgPlugin from "../main";
 import type { SvgView } from "../view/SvgView";
 import type { DrawingSnapshot } from "../data/SvgData";
 import { ExportModal } from "./ExportModal";
+import { CompareModal } from "./CompareModal";
 import { MAX_DRAWING_SNAPSHOTS } from "../constants";
 
 /** A short relative-time label ("just now", "5m ago", "3h ago", "2d ago"). */
@@ -17,7 +18,7 @@ function formatRelativeTime(iso: string): string {
 
 /**
  * Drawing-versioning manager: lists up to MAX_DRAWING_SNAPSHOTS saved
- * snapshots of the current drawing with Restore/Rename/Replace/Delete/Export
+ * snapshots of the current drawing with Restore/Compare/Rename/Replace/Delete/Export
  * actions, plus saving the live canvas as a new version. When all slots are
  * full, "Replace with current" on an existing row is the only way to save new
  * content — the always-visible list doubles as the "pick a slot to replace"
@@ -79,6 +80,11 @@ export class VersionsModal extends Modal {
       .setDesc(`Saved ${formatRelativeTime(snapshot.createdAt)}`)
       .addButton((b) =>
         b.setButtonText("Restore").setCta().onClick(() => void this.doRestore(snapshot.id)),
+      )
+      .addButton((b) =>
+        b.setButtonText("Compare").onClick(() => {
+          new CompareModal(this.plugin, this.view, snapshot.id, () => this.close()).open();
+        }),
       )
       .addButton((b) =>
         b.setButtonText("Rename").onClick(() => {

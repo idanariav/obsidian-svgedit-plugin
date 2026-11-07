@@ -94,13 +94,14 @@ export function resolveExportJobs(
  * svgedit "comment" layers (`se:comment="true"` on a `<g class="layer">`) —
  * editor-only notes/annotations that must never appear in exported or
  * rendered output, regardless of whether the layer was left visible when the
- * drawing was saved. When `frameName` names a frame present in the drawing,
+ * drawing was saved (unless `keepCommentLayers`, for an on-screen comparison
+ * that shows them on request). When `frameName` names a frame present in the drawing,
  * the viewBox is narrowed to that frame's bounds and an explicit intrinsic
  * width/height is set (the raster path reads these to size the canvas) so
  * only that region is exported. If the name is empty or matches no frame, the
  * whole canvas is exported.
  */
-export function prepareSvgForExport(svgString: string, frameName = ""): string {
+export function prepareSvgForExport(svgString: string, frameName = "", keepCommentLayers = false): string {
   const doc = new DOMParser().parseFromString(svgString, "image/svg+xml");
   const root = doc.documentElement;
 
@@ -110,9 +111,11 @@ export function prepareSvgForExport(svgString: string, frameName = ""): string {
   // Frames mark export regions and must never appear in an exported image.
   root.querySelectorAll("[data-frame]").forEach((f) => f.remove());
 
-  root.querySelectorAll(".layer").forEach((layer) => {
-    if (layer.getAttributeNS(SVGEDIT_NS, "comment") === "true") layer.remove();
-  });
+  if (!keepCommentLayers) {
+    root.querySelectorAll(".layer").forEach((layer) => {
+      if (layer.getAttributeNS(SVGEDIT_NS, "comment") === "true") layer.remove();
+    });
+  }
 
   if (crop) {
     root.setAttribute("viewBox", `${crop.x} ${crop.y} ${crop.w} ${crop.h}`);

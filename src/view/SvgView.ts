@@ -964,6 +964,13 @@ export class SvgView extends TextFileView {
     return this.snapshots;
   }
 
+  /** The live canvas in the same form a snapshot stores it (canvas background
+   *  stamped on the root), so it can be shown next to saved versions. */
+  currentSvg(): string | null {
+    if (!this.svgEditor) return null;
+    return this.stampCanvasBg(this.svgEditor.svgCanvas.getSvgString());
+  }
+
   /** Save the live canvas as a new snapshot. Callers (VersionsModal) are
    *  responsible for only offering this action under MAX_DRAWING_SNAPSHOTS —
    *  at capacity, replaceSnapshot() is the way to save new content. */
