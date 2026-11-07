@@ -444,7 +444,7 @@ export class SvgSettingsTab extends PluginSettingTab {
       .setName("New drawing filename suffix")
       .setDesc(
         "Appended to the note's name by \"New drawing for this file\" (e.g. \"claim x\" "
-        + "→ \"claim x (drawing)\"). Filename clashes get a numeric suffix. Leave blank "
+        + "→ \"claim x (drawing)\"). Filename clashes get a number before the suffix (\"claim x 1 (drawing)\"). Leave blank "
         + "to use the note's name as-is.",
       )
       .addText((t) =>

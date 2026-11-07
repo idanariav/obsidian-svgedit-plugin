@@ -504,7 +504,6 @@ export async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): 
       await activeView.save();
     }
 
-    const baseName = `${noteFile.basename}${plugin.settings.newDrawingSuffix}`;
     // Resolve a name that's free in drawingsFolder before handing it to
     // Templater, rather than only checking uniqueness in the fallback branch
     // below — otherwise a colliding name reliably breaks templates that
@@ -524,7 +523,8 @@ export async function createDrawingForNote(plugin: SvgPlugin, noteFile: TFile): 
           plugin.app.vault.getAbstractFileByPath(normalizePath(p)) != null
           || takenBasenames.has(p.split("/").pop()!.replace(/\.md$/, "")),
         plugin.settings.drawingsFolder,
-        baseName,
+        noteFile.basename,
+        plugin.settings.newDrawingSuffix,
         "md",
       ),
     );
