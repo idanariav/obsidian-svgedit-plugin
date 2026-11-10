@@ -54,7 +54,7 @@
   grid-template-rows: minmax(56px, auto) 15px 1fr 56px !important;
   grid-template-columns: 56px 15px 50px 1fr 15px !important;
   grid-template-areas:
-    "main main   main   top    top"
+    "main main   top    top    top"
     "left corner rulerX rulerX side"
     "left rulerY workarea workarea side"
     "left bottom bottom bottom bottom" !important;
