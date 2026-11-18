@@ -20194,14 +20194,16 @@ const Yr = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
         ...k
       });
       const $ = this.elem.getAttribute("d");
-      if (this.elem.id && P !== null && $ !== null && P !== $) {
-        if (al(this.elem, "d", P), t.setElementAttributes(C ?? "Edit path", this.elem, { d: $ })) {
-          t.call("changed", [this.elem]);
-          return;
+      if (!(P !== null && P === $)) {
+        if (this.elem.id && P !== null && $ !== null && P !== $) {
+          if (al(this.elem, "d", P), t.setElementAttributes(C ?? "Edit path", this.elem, { d: $ })) {
+            t.call("changed", [this.elem]);
+            return;
+          }
+          al(this.elem, "d", $);
         }
-        al(this.elem, "d", $);
+        t.endChanges({ cmd: I, elem: this.elem });
       }
-      t.endChanges({ cmd: I, elem: this.elem });
     }
     addPtsToSelection(C) {
       Array.isArray(C) || (C = [C]), C.forEach(($) => {
@@ -26746,15 +26748,17 @@ const Dh = (e, t) => {
     return null;
   }, v = (H, W) => {
     const U = new Ve(W);
-    switch (t.setPaintOpacity(H, U.alpha / 100, !0), t.setCurProperties(`${H}_paint`, U), U.type) {
-      case "solidColor":
-        t.setColor(H, U.solidColor !== "none" ? `#${U.solidColor}` : "none");
-        break;
-      case "linearGradient":
-      case "radialGradient":
-        t.setCanvas(H + "Grad", U[U.type]), t.setGradient(H);
-        break;
-    }
+    t.transact(`Change ${H}`, () => {
+      switch (t.setPaintOpacity(H, U.alpha / 100, !1), t.setCurProperties(`${H}_paint`, U), U.type) {
+        case "solidColor":
+          t.setColor(H, U.solidColor !== "none" ? `#${U.solidColor}` : "none");
+          break;
+        case "linearGradient":
+        case "radialGradient":
+          t.setCanvas(H + "Grad", U[U.type]), t.setGradient(H);
+          break;
+      }
+    });
   }, _ = (H) => {
     const W = t.getSelectedElements();
     if (H === 0 && ["line", "path"].includes(t.getMode())) {
@@ -49652,7 +49656,7 @@ const Y3 = {
     return t.bind("selectedChanged", (_) => {
       for (const A of i()) t.refreshArtBrush(A);
       g();
-    }), t.bind("elementChanged", (_, A) => {
+    }), document.addEventListener("modeChange", g, { signal: e.listenerAbort.signal }), t.bind("elementChanged", (_, A) => {
       let M = !1;
       for (const S of A.elems.filter(Boolean)) M = t.refreshArtBrush(S) || M;
       (M || o()) && g();
@@ -49723,9 +49727,6 @@ const Y3 = {
         } }), $("brush_release", "release", { enabled: v, run: () => {
           t.releaseArtBrush(), g();
         } });
-      },
-      modeChange() {
-        g();
       }
     };
   }
@@ -49885,7 +49886,7 @@ const Y3 = {
     return t.bind("selectedChanged", ($) => {
       for (const E of o()) t.refreshBlend(E);
       k();
-    }), t.bind("elementChanged", ($, E) => {
+    }), document.addEventListener("modeChange", k, { signal: e.listenerAbort.signal }), t.bind("elementChanged", ($, E) => {
       if (E.restored) {
         k();
         return;
@@ -49962,9 +49963,6 @@ const Y3 = {
         }), H("blend_detach_spine", "detachSpine", { enabled: I, run: () => {
           t.detachBlendSpine(), k();
         } });
-      },
-      modeChange() {
-        k();
       }
     };
   }
@@ -52157,7 +52155,10 @@ const Zz = ye({
       (!D || D.contains(N.target)) && N.stopPropagation();
     };
     window.addEventListener("dblclick", r, { capture: !0, signal: e.listenerAbort.signal }), document.addEventListener("modeChange", (N) => {
-      N.detail.getMode() !== "curvature" && a && C(!1);
+      if (N.detail.getMode() !== "curvature" && a) {
+        const D = C(!1);
+        D && (t.undoMgr.addCommandToHistory(new t.history.InsertElementCommand(D)), t.call("elementInserted", [D]), t.call("changed", [D]));
+      }
     }, { signal: e.listenerAbort.signal });
     let i = [], o = null, a = !1, l = -1, c = null, h = -1, u = !1, p = -1;
     const f = (N, D, H, W) => Math.sqrt((N - H) ** 2 + (D - W) ** 2), g = () => t.getCurrentDrawing().getCurrentLayer(), b = () => 3 / t.getZoom(), v = (N, D) => {
@@ -52175,13 +52176,11 @@ const Zz = ye({
     }, S = () => {
       l = -1, c = null, h = -1, u = !1;
     }, C = (N) => {
-      if (E(), S(), i.length < 2) {
-        M(), i = [], a = !1;
-        return;
-      }
+      if (E(), S(), i.length < 2)
+        return M(), i = [], a = !1, null;
       const D = p5(i, null, N);
       M();
-      const { InsertElementCommand: H } = t.history, W = t.addSVGElementsFromJson({
+      const H = t.addSVGElementsFromJson({
         element: "path",
         curStyles: !0,
         attr: {
@@ -52191,7 +52190,7 @@ const Zz = ye({
           // override the /2 halving applied by curStyles
         }
       });
-      W && t.undoMgr.addCommandToHistory(new H(W)), i = [], a = !1, e.leftPanel.clickSelect();
+      return i = [], a = !1, H ?? null;
     };
     let k = [];
     const P = "http://www.w3.org/2000/svg", I = (N) => N === 0 || i[N - 1].end, $ = (N) => {
@@ -52240,15 +52239,16 @@ const Zz = ye({
       },
       pointerUp() {
         if (B) {
-          B = !1, C(!1);
-          return;
+          B = !1;
+          const N = C(!1);
+          return N ? { created: N } : void 0;
         }
         if (a) {
           if (l === 0 && h === 0) {
             const N = u;
             if (S(), !N && i.length >= 2) {
-              C(!0);
-              return;
+              const D = C(!0);
+              return D ? { created: D } : void 0;
             }
             F(), A(null, !1);
             return;

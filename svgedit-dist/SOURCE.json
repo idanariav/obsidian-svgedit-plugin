@@ -1,7 +1,5 @@
 {
-  "commit": null,
-  "dirty": false,
-  "release": "v7.4.1-fork.18",
-  "sha256": "4ec28be013af34fb8f2fe162ca3ee7251157ada27545334a25eff06473591499",
-  "syncedAt": "2026-11-18T11:25:53.487Z"
+  "commit": "5201a55df7ad36b924a83b53ffa248b12667b1cf",
+  "dirty": true,
+  "syncedAt": "2026-11-18T12:50:19.469Z"
 }
