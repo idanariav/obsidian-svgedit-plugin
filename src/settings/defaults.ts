@@ -25,6 +25,8 @@ export interface UserShapeEntry {
   bbox: { x: number; y: number; width: number; height: number };
   /** Provenance wikilink stamped onto inserted elements, when set. */
   linkedFile?: string;
+  /** Extra names the library search matches (e.g. "rock" for "stone"). */
+  aliases?: string[];
 }
 
 /** The saved shape library: ordered categories + their shapes. Matches the
