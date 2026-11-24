@@ -320,17 +320,23 @@ export class SvgView extends TextFileView {
       createSvgeditLogSink(this.plugin.debugLog, () => this.plugin._loaded !== false),
     );
 
-    // svgCanvas.bind() is backed by a native EventTarget: every bound handler
-    // fires, so this coexists with svgedit's own `changed` binding (which
-    // updates the context panel, the empty-canvas brand watermark, etc.)
-    // instead of replacing it.
-    this.svgEditor.svgCanvas.bind("changed", () => {
+    // `documentChanged` fires once per real change to the drawing (a step, an
+    // undo / redo, an edit outside the history), never for one that changed
+    // nothing nor for loading (svgedit's core/document-changes.ts). The editor's
+    // own `changed` event is a UI refresh: it also fired for drags that went
+    // nowhere, which marked untouched drawings dirty, and could miss an edit
+    // whose code forgot to raise it. svgCanvas.bind() is backed by a native
+    // EventTarget, so this coexists with svgedit's own bindings.
+    this.svgEditor.svgCanvas.bind("documentChanged", (_win: unknown, detail: unknown) => {
       // Just flag the edit; the edit-triggered autosave timer (and the explicit
       // flushes on switch-away / toggle / close / file-switch) own the actual
       // save+export. We deliberately don't save on every change — that would
       // re-run the PNG export constantly. setDirty arms the autosave timer.
       if (!this.isLoading) {
-        this.log("svg-changed", { bytes: this.svgEditor?.svgCanvas.getSvgString().length });
+        this.log("svg-changed", {
+          cause: (detail as { cause?: string } | undefined)?.cause,
+          bytes: this.svgEditor?.svgCanvas.getSvgString().length,
+        });
         this.setDirty(true);
       }
     });
