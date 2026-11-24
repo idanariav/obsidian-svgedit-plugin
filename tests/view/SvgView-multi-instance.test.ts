@@ -205,4 +205,18 @@ describe("SvgView leaf-close teardown", () => {
 
     expect(editor.destroyCalls).toBe(1);
   });
+
+  // Obsidian fires both in the same tick on a tab close (debug log: view-unload
+  // and view-close in the same ms, then two overlapping save-starts). The second
+  // used to pass waitForSave() before the first had begun saving, so the drawing
+  // and its companion export were written twice concurrently.
+  it("saves and destroys once when onClose() and onunload() fire together", async () => {
+    const { view, editor } = await openDrawing("Drawings/A.md", drawingFile(oneRectSvg));
+    const runSave = vi.spyOn(view as any, "runSave");
+
+    await Promise.all([view.onunload(), view.onClose()]);
+
+    expect(runSave).toHaveBeenCalledTimes(1);
+    expect(editor.destroyCalls).toBe(1);
+  });
 });

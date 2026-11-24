@@ -852,7 +852,20 @@ export class SvgView extends TextFileView {
    *  Idempotent: the `this.svgEditor` null-out at the end makes every guard
    *  above it a safe no-op on a second call, so it's harmless if Obsidian
    *  ends up invoking both for the same teardown. */
-  private async teardownEditor(): Promise<void> {
+  /** The teardown in progress, if any. Obsidian fires onClose() and onunload()
+   *  for the same leaf in the same tick; each used to run its own teardown, and
+   *  both passed waitForSave() before either had started saving, so the drawing
+   *  and its companion export were written twice at once. Both now await the one
+   *  teardown. Cleared when it ends, so a view that is opened again (setViewData
+   *  → initEditor) tears down afresh next time. */
+  private teardownPromise: Promise<void> | null = null;
+
+  private teardownEditor(): Promise<void> {
+    this.teardownPromise ??= this.runTeardown().finally(() => { this.teardownPromise = null; });
+    return this.teardownPromise;
+  }
+
+  private async runTeardown(): Promise<void> {
     this.clearAutosaveTimer();
     // Wait for any in-flight save before snapshotting/destroying the canvas, so
     // a running export can't read a torn-down editor.
